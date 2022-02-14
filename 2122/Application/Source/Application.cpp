@@ -123,6 +123,7 @@ void Application::Run()
 	scene2->Init();
 	bool changescene = false;
 	float timer = 0;
+	bool done = false;
 
 	m_timer.startTimer();    // Start timer to calculate how long it takes to render this frame
 	while (!glfwWindowShouldClose(m_window) && !IsKeyPressed(VK_ESCAPE))
@@ -155,11 +156,12 @@ void Application::Run()
 			timer = timer + 0.25;
 			Sleep(10);
 		}
-		if (timer >= 12)
+		if (timer >= 12 && done == false)
 		{
 			Sleep(50);
 			std::cout << "Change scene";
 			scene = scene2;
+			done = true;
 
 		}
 
