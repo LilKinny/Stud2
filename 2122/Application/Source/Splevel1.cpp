@@ -186,7 +186,7 @@ void Splevel1::Init()
 
 
 	meshList[GEO_BUILDING] = MeshBuilder::GenerateOBJMTL("modelBUIDLING",
-		"OBJ//Level_1.obj", "OBJ//Level_1.mtl");
+		"OBJ//LVL1_withfloor.obj", "OBJ//LVL1_withfloor.mtl");
 
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16,16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Image//Agency_FB.tga");

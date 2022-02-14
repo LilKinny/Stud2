@@ -84,9 +84,6 @@
     <ClCompile Include="Source\Scene12.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Assignment2.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Scene13.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

@@ -149,7 +149,7 @@ void Scene13::Init()
 	meshList[GEO_GRASS_V] = MeshBuilder::GenerateOBJMTL("model211", "OBJ//grassLarge.obj", "OBJ//grassLarge.mtl");
 
 
-	meshList[GEO_BUILDING] = MeshBuilder::GenerateOBJMTL("modelBUIDLING", "OBJ//Level_1.obj", "OBJ//Level_1.mtl");
+	meshList[GEO_BUILDING] = MeshBuilder::GenerateOBJMTL("modelBUIDLING", "OBJ//LVL1_withfloor.obj", "OBJ//LVL1_withfloor.mtl");
 	/*
 	meshList[GEO_NYP] = MeshBuilder::GenerateQuad("nyplogo", Color(1, 1, 1), 1.f);
 	meshList[GEO_NYP]->textureID = LoadTGA("Image//NYP.tga");
