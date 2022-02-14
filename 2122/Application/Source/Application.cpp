@@ -129,27 +129,28 @@ void Application::Run()
 	while (!glfwWindowShouldClose(m_window) && !IsKeyPressed(VK_ESCAPE))
 	{
 		static bool bLButtonState = false;
-		bLButtonState = true;
-		std::cout << "LBUTTON DOWN" << std::endl;
-
-		//Converting Viewport space to UI space
-		double x, y;
-		Application::GetCursorPos(&x, &y);
-		unsigned w = Application::GetWindowWidth();
-		unsigned h = Application::GetWindowHeight();
-		float posX = (x / w) * 80; //convert (0,800) to (0,80)
-		float posY = 60 - (y / h) * 60; //convert (600,0) to (0,60)
-		std::cout << "posX:" << posX << " , posY:" << posY << std::endl;
-		if (posX > 30 && posX < 50 && posY > 24 && posY < 40)
+		
+			//Converting Viewport space to UI space
+			double x, y;
+			Application::GetCursorPos(&x, &y);
+			unsigned w = Application::GetWindowWidth();
+			unsigned h = Application::GetWindowHeight();
+			float posX = (x / w) * 80; //convert (0,800) to (0,80)
+			float posY = 60 - (y / h) * 60; //convert (600,0) to (0,60)
+			std::cout << "posX:" << posX << " , posY:" << posY << std::endl;
+			if (!bLButtonState && Application::IsMousePressed(0))
 		{
-			std::cout << "Hit! transition start" << std::endl;
-			changescene = true;
+			if (posX > 30 && posX < 50 && posY > 24 && posY < 40)
+			{
+				std::cout << "Hit! transition start" << std::endl;
+				changescene = true;
 
-			//trigger user action or function
-		}
-		else
-		{
-			std::cout << "Miss!" << std::endl;
+				//trigger user action or function
+			}
+			else
+			{
+				std::cout << "Miss!" << std::endl;
+			}
 		}
 		if (timer < 12 && changescene == true)
 		{
