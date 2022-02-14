@@ -1,0 +1,1537 @@
+#include <iostream>
+
+#include "scene8.h"
+#include "GL\glew.h"
+
+#include "shader.hpp"
+#include "Mtx44.h"
+
+#include "Application.h"
+#include "MeshBuilder.h"
+#include "Utility.h"
+#include <string>
+#include "Light.h"
+#include "Material.h"
+#include <cstdlib>
+int Counter = 0;
+int LArmR;
+int RArmR;
+float LLegR2;
+float RLegR2;
+float RArmR2;
+float LArmR2;
+int LLegR;
+int RLegR;
+float PPY = -100;
+int CoX = 1;
+int CoY = 1;
+int CoZ = 1;
+float RHeadX;
+float RBodyX;
+float MoveX;
+float MoveZ;
+float MoveY = 16;
+float PX;
+float PZ;
+float WX;
+float WZ;
+float CoreRotateY;
+float Rblock;
+float BlockX = 11;
+float BlockY = -8;
+float BlockZ = 11;
+float Headx = 0;
+float Heady = 1;
+float Headz = 0;
+float PearlR;
+float PearlY = -100;
+float PearlX = 0;
+float PearlZ = 0;
+bool Pushback = false;
+bool Snap2Head = false;
+bool phase1 = true;
+bool phase2 = false;
+bool phase3 = false;
+bool phase4 = false;
+bool phase5 = false;
+bool phase6 = false;
+bool phase7 = false;
+bool onetime = false;
+scene8::scene8()
+{
+}
+
+scene8::~scene8()
+{
+}
+void scene8::Init()
+{
+	// Set background color to dark blue
+	glClearColor(0.4f, 0.4f, 0.4f, 0.4f);
+
+	//Enable depth buffer and depth testing
+	glEnable(GL_DEPTH_TEST);
+
+	//Enable back face culling
+	glEnable(GL_CULL_FACE);
+
+	//Default to fill mode
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+	// Generate a default VAO for now
+	glGenVertexArrays(1, &m_vertexArrayID);
+	glBindVertexArray(m_vertexArrayID);
+
+	//Load vertex and fragment shaders
+	m_programID = LoadShaders("Shader//Shading.vertexshader", "Shader//Shading.fragmentshader");
+	m_programID = LoadShaders("Shader//Shading.vertexshader", "Shader//LightSource.fragmentshader");
+
+	m_parameters[U_MVP] = glGetUniformLocation(m_programID, "MVP");
+	m_parameters[U_MODELVIEW] = glGetUniformLocation(m_programID, "MV");
+	m_parameters[U_MODELVIEW_INVERSE_TRANSPOSE] = glGetUniformLocation(m_programID, "MV_inverse_transpose");
+	m_parameters[U_MATERIAL_AMBIENT] = glGetUniformLocation(m_programID, "material.kAmbient");
+	m_parameters[U_MATERIAL_DIFFUSE] = glGetUniformLocation(m_programID, "material.kDiffuse");
+	m_parameters[U_MATERIAL_SPECULAR] = glGetUniformLocation(m_programID, "material.kSpecular");
+	m_parameters[U_MATERIAL_SHININESS] = glGetUniformLocation(m_programID, "material.kShininess");
+	m_parameters[U_LIGHT0_POSITION] = glGetUniformLocation(m_programID, "lights[0].position_cameraspace");
+	m_parameters[U_LIGHT0_COLOR] = glGetUniformLocation(m_programID, "lights[0].color");
+	m_parameters[U_LIGHT0_POWER] = glGetUniformLocation(m_programID, "lights[0].power");
+	m_parameters[U_LIGHT0_KC] = glGetUniformLocation(m_programID, "lights[0].kC");
+	m_parameters[U_LIGHT0_KL] = glGetUniformLocation(m_programID, "lights[0].kL");
+	m_parameters[U_LIGHT0_KQ] = glGetUniformLocation(m_programID, "lights[0].kQ");
+	m_parameters[U_LIGHTENABLED] = glGetUniformLocation(m_programID, "lightEnabled");
+	m_parameters[U_LIGHT0_TYPE] = glGetUniformLocation(m_programID, "lights[0].type");
+	m_parameters[U_LIGHT0_SPOTDIRECTION] = glGetUniformLocation(m_programID, "lights[0].spotDirection");
+	m_parameters[U_LIGHT0_COSCUTOFF] = glGetUniformLocation(m_programID, "lights[0].cosCutoff");
+	m_parameters[U_LIGHT0_COSINNER] = glGetUniformLocation(m_programID, "lights[0].cosInner");
+	m_parameters[U_LIGHT0_EXPONENT] = glGetUniformLocation(m_programID, "lights[0].exponent");
+	m_parameters[U_NUMLIGHTS] = glGetUniformLocation(m_programID,"numLights");
+
+	glUseProgram(m_programID);
+
+	glUniform1i(m_parameters[U_NUMLIGHTS], 1);
+
+
+	//Replace previous code
+	light[0].type = Light::LIGHT_SPOT;
+	light[0].position.Set(0, 20, 0);
+	light[0].color.Set(1, 1, 1);
+	light[0].power = 1;
+	light[0].kC = 1.f;
+	light[0].kL = 0.01f;
+	light[0].kQ = 0.001f;
+	light[0].cosCutoff = cos(Math::DegreeToRadian(45));
+	light[0].cosInner = cos(Math::DegreeToRadian(30));
+	light[0].exponent = 3.f;
+	light[0].spotDirection.Set(0.f, 1.f, 0.f);
+
+	glUniform1i(m_parameters[U_LIGHT0_TYPE], light[0].type);
+	glUniform3fv(m_parameters[U_LIGHT0_COLOR], 1, &light[0].color.r);
+	glUniform1f(m_parameters[U_LIGHT0_POWER], light[0].power);
+	glUniform1f(m_parameters[U_LIGHT0_KC], light[0].kC);
+	glUniform1f(m_parameters[U_LIGHT0_KL], light[0].kL);
+	glUniform1f(m_parameters[U_LIGHT0_KQ], light[0].kQ);
+	glUniform1f(m_parameters[U_LIGHT0_COSCUTOFF], light[0].cosCutoff);
+	glUniform1f(m_parameters[U_LIGHT0_COSINNER], light[0].cosInner);
+	glUniform1f(m_parameters[U_LIGHT0_EXPONENT], light[0].exponent);
+
+
+	//variable to rotate geometry
+	rotateAngle = 0;
+
+	//Initialize camera settings
+	camera.Init(Vector3(80, 50, 50), Vector3(0, 0, 0), Vector3(0, 1, 0));
+
+	// Init VBO
+	for (int i = 0; i < NUM_GEOMETRY; ++i)
+	{
+		meshList[i] = nullptr;
+	}
+	meshList[GEO_AXES] = MeshBuilder::GenerateAxes("reference", 1000, 1000, 1000);
+	meshList[GEO_QUAD] = MeshBuilder::GenerateQuad("quad", Color(0.1, 0.2, 0.2), 5.f);
+	meshList[GEO_QUAD]->material.kAmbient.Set(1.7f, 1.7f, 1.7f);
+	meshList[GEO_QUAD]->material.kDiffuse.Set(1.7f, 1.6f, 1.6f);
+	meshList[GEO_QUAD]->material.kSpecular.Set(1.37f, 0.3f, 0.3f);
+	meshList[GEO_QUAD]->material.kShininess = 100.f;
+	//meshList[GEO_CUBE] = MeshBuilder::GenerateCube("cube", Color(1, 0, 0), 1.f);
+	meshList[GEO_CIRCLE] = MeshBuilder::GenerateCircle("circle", Color(1, 0, 1), 20, 1.f);
+	meshList[GEO_SPHERE] = MeshBuilder::GenerateSphere("Sphere", Color(0.6, 0.1, 0.1), 1.0f);
+	meshList[GEO_SPHERE]->material.kAmbient.Set(5.7f, 5.7f, 5.7f);
+	meshList[GEO_SPHERE]->material.kDiffuse.Set(1.7f, 1.6f, 1.6f);
+	meshList[GEO_SPHERE]->material.kSpecular.Set(1.37f, 1.3f, 1.3f);
+	meshList[GEO_SPHERE]->material.kShininess = 70.f;
+
+	meshList[GEO_CUBE] = MeshBuilder::GenerateCube("BlackCube", Color(0.01, 0.01, 0.01), 1.0f);
+	meshList[GEO_CUBE]->material.kAmbient.Set(1.7f, 1.7f, 1.7f);
+	meshList[GEO_CUBE]->material.kDiffuse.Set(1.7f, 1.6f, 1.6f);
+	meshList[GEO_CUBE]->material.kSpecular.Set(0.37f, 0.3f, 0.3f);
+	meshList[GEO_CUBE]->material.kShininess = 1.0f;
+
+	meshList[GEO_CUBE_PURPLE] = MeshBuilder::GenerateCube("PurpleCube", Color(0.3, 0, 0.5), 1.0f);
+	meshList[GEO_CUBE_PURPLE]->material.kAmbient.Set(1.7f, 1.7f, 1.7f);
+	meshList[GEO_CUBE_PURPLE]->material.kDiffuse.Set(1.7f, 1.6f, 1.6f);
+	meshList[GEO_CUBE_PURPLE]->material.kSpecular.Set(1.37f, 1.3f, 1.3f);
+	meshList[GEO_CUBE_PURPLE]->material.kShininess = 1.0f;
+
+	meshList[GEO_CUBE_WHITE] = MeshBuilder::GenerateCube("WhiteCube", Color(1, 1, 1), 1.0f);
+	meshList[GEO_CUBE_WHITE]->material.kAmbient.Set(1.7f, 1.7f, 1.7f);
+	meshList[GEO_CUBE_WHITE]->material.kDiffuse.Set(1.7f, 1.6f, 1.6f);
+	meshList[GEO_CUBE_WHITE]->material.kSpecular.Set(1.37f, 1.3f, 1.3f);
+	meshList[GEO_CUBE_WHITE]->material.kShininess = 1.0f;
+
+	meshList[GEO_CUBE_GREEN] = MeshBuilder::GenerateCube("GreenCube", Color(0, 1, 0), 1.0f);
+	meshList[GEO_CUBE_GREEN]->material.kAmbient.Set(0.3f, 0.3f, 0.3f);
+	meshList[GEO_CUBE_GREEN]->material.kDiffuse.Set(1.7f, 1.6f, 1.6f);
+	meshList[GEO_CUBE_GREEN]->material.kSpecular.Set(1.37f, 1.3f, 1.3f);
+	meshList[GEO_CUBE_GREEN]->material.kShininess = 1.0f;
+
+	meshList[GEO_CUBE_BROWN] = MeshBuilder::GenerateCube("DirtCube", Color(1, .3, .3), 0.7f);
+	meshList[GEO_CUBE_BROWN]->material.kAmbient.Set(0.3f, 0.3f, 0.3f);
+	meshList[GEO_CUBE_BROWN]->material.kDiffuse.Set(1.7f, 1.6f, 1.6f);
+	meshList[GEO_CUBE_BROWN]->material.kSpecular.Set(1.37f, 1.3f, 1.3f);
+	meshList[GEO_CUBE_BROWN]->material.kShininess = 1.0f;
+
+	meshList[GEO_SPHERE_PEARL] = MeshBuilder::GenerateSphere("EnderPearlBase", Color(0, 0.3, 0), 1.0f);
+	meshList[GEO_SPHERE_PEARL]->material.kAmbient.Set(1.7f, 1.7f, 1.7f);
+	meshList[GEO_SPHERE_PEARL]->material.kDiffuse.Set(1.7f, 1.6f, 1.6f);
+	meshList[GEO_SPHERE_PEARL]->material.kSpecular.Set(1.37f, 1.3f, 1.3f);
+	meshList[GEO_SPHERE_PEARL]->material.kShininess = 1.f;
+
+	meshList[GEO_SPHERE_PEARL_INNER] = MeshBuilder::GenerateSphere("EnderPearlInner", Color(0.1, 0.1, 0.1), 1.0f);
+	meshList[GEO_SPHERE_PEARL_INNER]->material.kAmbient.Set(1.7f, 1.7f, 1.7f);
+	meshList[GEO_SPHERE_PEARL_INNER]->material.kDiffuse.Set(1.7f, 1.6f, 1.6f);
+	meshList[GEO_SPHERE_PEARL_INNER]->material.kSpecular.Set(1.37f, 1.3f, 1.3f);
+	meshList[GEO_SPHERE_PEARL_INNER]->material.kShininess = 1.f;
+
+
+	meshList[GEO_CUBE_GREY] = MeshBuilder::GenerateCube("CreyCube", Color(0.1, .1, .1), 1.0f);
+	meshList[GEO_CUBE_GREY]->material.kAmbient.Set(1.7f, 1.7f, 1.7f);
+	meshList[GEO_CUBE_GREY]->material.kDiffuse.Set(1.7f, 1.6f, 1.6f);
+	meshList[GEO_CUBE_GREY]->material.kSpecular.Set(1.37f, 1.3f, 1.3f);
+	meshList[GEO_CUBE_GREY]->material.kShininess = 1.0f;
+
+	meshList[GEO_SPHERE_JOINT] = MeshBuilder::GenerateSphere("Sphere", Color(0, 0, 0), 1.0f);
+	meshList[GEO_SPHERE_JOINT]->material.kAmbient.Set(5.7f, 5.7f, 5.7f);
+	meshList[GEO_SPHERE_JOINT]->material.kDiffuse.Set(1.7f, 1.6f, 1.6f);
+	meshList[GEO_SPHERE_JOINT]->material.kSpecular.Set(1.37f, 1.3f, 1.3f);
+	meshList[GEO_SPHERE_JOINT]->material.kShininess = 70.f;
+
+
+	meshList[GEO_LIGHTBALL] = MeshBuilder::GenerateSphere("lightball", Color(1, 1, 0), 1.f);
+
+	Mtx44 projection;
+	projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 1000.f);
+	projectionStack.LoadMatrix(projection);
+}
+
+void scene8::Update(double dt)
+{
+	//static const float 
+	if (Application::IsKeyPressed('1')) //enable back face culling
+		glEnable(GL_CULL_FACE);
+	if (Application::IsKeyPressed('2')) //disable back face culling
+		glDisable(GL_CULL_FACE);
+	if (Application::IsKeyPressed('3'))
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); //default fill mode
+	if (Application::IsKeyPressed('4'))
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); //wireframe mode
+
+	rotateAngle += (float)(30 * dt);
+
+	if (Application::IsKeyPressed('5'))
+	{
+		light[0].type = Light::LIGHT_POINT;
+		glUniform1i(m_parameters[U_LIGHT0_TYPE], light[0].type);
+	}
+	else if (Application::IsKeyPressed('6'))
+	{
+		light[0].type = Light::LIGHT_DIRECTIONAL;
+		glUniform1i(m_parameters[U_LIGHT0_TYPE], light[0].type);
+	}
+	else if (Application::IsKeyPressed('7'))
+	{
+		light[0].type = Light::LIGHT_SPOT;
+		glUniform1i(m_parameters[U_LIGHT0_TYPE], light[0].type);
+	}
+
+	camera.Update(10*dt);
+	if (Application::IsKeyPressed('I'))
+		light[0].position.z -= (float)(10 * dt);
+	if (Application::IsKeyPressed('K'))
+		light[0].position.z += (float)(10 * dt);
+	if (Application::IsKeyPressed('J'))
+		light[0].position.x -= (float)(10 * dt);
+	if (Application::IsKeyPressed('L'))
+		light[0].position.x += (float)(10 * dt);
+	if (Application::IsKeyPressed('O'))
+		light[0].position.y -= (float)(10 * dt);
+	if (Application::IsKeyPressed('P'))
+		light[0].position.y += (float)(10 * dt);
+
+	// Reset Position and variables
+	if (Application::IsKeyPressed('Z'))
+	{
+		RArmR2 = 5;
+		LArmR2 = 5;
+		PPY = -100;
+		MoveY = 16;
+		LArmR = 0;
+		RArmR = 0;
+		LLegR = 0;
+		RLegR = 0;
+		LLegR2 = 0;
+		RLegR2 = 0;
+		CoreRotateY = 0;
+		MoveX = 0;
+		MoveZ = 0;
+		RHeadX = 0;
+		Pushback = false;
+		Snap2Head = false;
+		CoX = 1;
+		PearlX = 0;
+		PearlY = -100;
+		PearlZ = 0;
+		CoY = 1;
+		CoZ = 1;
+		Headx = 0;
+		Heady = 1;
+		Headz = 0;
+		BlockX = 11;
+		BlockY = -8;
+		BlockZ = 11;
+		Rblock = 0;
+		phase1 = true;
+		phase2 = false;
+		phase3 = false;
+		phase4 = false;
+		phase5 = false;
+		phase6 = false;
+		phase7 = false;
+		onetime = false;
+	}
+
+	// Regular Walking // BASIC
+	if (Application::IsKeyPressed('X'))
+	{
+		CoX = 0;
+		CoY = 0;
+		CoZ = 1;
+		if (Pushback == false)
+		{
+			LArmR += 4;
+			LArmR2 += 1;
+			RArmR -= 4;
+			RArmR2 -= 0.5;
+			LLegR -= 4;
+			LLegR2 -= 0.5;
+			RLegR += 4;
+			RLegR2 += 0.1;
+			
+			CoreRotateY += 0.25;
+		}
+		if (LArmR >= 45)
+		{
+			Pushback = true;
+		}
+		if (Pushback == true)
+		{
+			LArmR -= 4;
+			LArmR2 -= 0.5;
+			RArmR2 += 1;
+			RArmR += 4;
+			LLegR += 4;
+			RLegR -= 4;
+			LLegR2 += 0.1;
+			RLegR2 -= 0.5;
+			CoreRotateY -= 0.25;
+		}
+		if (LArmR <= -45)
+		{
+			RLegR2 = -15;
+			LLegR2 = -15;
+			RArmR2 = 5;
+			LArmR2 = 5;
+			Pushback = false;
+		}
+		MoveX += 0.5f;
+	}
+		
+	// Pick block, move and place block, move away // ADVANCED
+	if (Application::IsKeyPressed('C'))
+	{
+		CoX = 0;
+		CoY = 1;
+		CoZ = 0;
+	
+		if (phase1 == true)
+		{
+			Headx = 0.5;
+			Heady = 1;
+			Headz = 0;
+			RHeadX += 3;
+		}
+		if (RHeadX >= 60 && phase1 == true)
+		{
+
+			phase1 = false;
+			phase2 = true;
+		}
+		if (phase2 == true)
+		{
+			CoreRotateY += 3;
+			RHeadX -= 3;
+		}
+		if (CoreRotateY >= 60 && phase2 == true)
+		{
+			phase2 = false;
+			phase3 = true;
+		}
+		if (MoveX >= 24.5 && phase3 == true)
+		{
+			phase3 = false;
+			phase4 = true;
+		}
+		if (phase3 == true)
+		{
+			if (onetime == false)
+			{
+				LArmR2 = 15;
+				RArmR2 = 15;
+				LArmR = 30;
+				RArmR = 30;
+				BlockX = 6.5;
+				BlockZ = 6.5;
+				BlockY = 4;
+				Rblock = 15;
+				onetime = true;
+			}
+			if (Pushback == false)
+			{
+				LLegR += 4;
+				RLegR -= 4;
+				RLegR2 -= 0.5;
+				LLegR += 0.25;
+			}
+			if (LLegR >= 45) Pushback = true;
+			if (Pushback == true)
+			{
+				LLegR -= 4;
+				RLegR += 4;
+				RLegR2 += 0.25;
+				LLegR -= 0.5;
+
+			}
+			if (LLegR <= -45)
+			{
+				Pushback = false;
+				RLegR2 = -15;
+				LLegR2 = -15;
+			}
+			MoveX += 0.354f;
+			MoveZ += 0.604f;
+			BlockZ += 0.5f;
+			BlockX += 0.5f;
+			
+		}
+		
+		if (phase4 == true)
+		{
+			RArmR2 = 5;
+			LArmR2 = 5;
+			RLegR2 = 0;
+			LLegR2 = 0;
+			LLegR = 0;
+			RLegR = 0;
+			Headx = 0;
+			Heady = 1;
+			Headz = 0;
+			BlockY = -6;
+			Rblock = 0;
+			BlockX = 50;
+			BlockZ = 30;
+			LArmR = 0;
+			RArmR = 0;
+			RHeadX -= 3;
+		}
+		if (RHeadX <= -150 && phase4 == true)
+		{
+			phase4 = false;
+			phase5 = true;
+		}
+		if (phase5 == true)
+		{
+			CoreRotateY -= 3;
+			RHeadX += 3;
+		}
+		if (CoreRotateY <= -90 && phase5 == true)
+		{
+			phase5 = false;
+			phase6 = true;
+		}
+		if (phase6 == true)
+		{
+			if (Pushback == false)
+			{
+				LArmR += 4;
+				RArmR -= 4;
+				LLegR -= 4;
+				RLegR += 4;
+				RLegR2 += 0.25;
+				LLegR2 -= 0.5;
+				CoreRotateY += 0.25;
+			}
+			if (LArmR >= 45)
+			{
+				Pushback = true;
+			}
+			if (Pushback == true)
+			{
+				LArmR -= 4;
+				RArmR += 4;	
+				LLegR += 4;
+				RLegR -= 4;
+				RLegR2 -= 0.5;
+				LLegR2 += 0.25;
+				CoreRotateY -= 0.25;
+			}
+			if (LArmR <= -45)
+			{
+				RLegR2 = -15;
+				LLegR2 = -15;
+				Pushback = false;
+			}
+			MoveZ += -0.5;
+		}
+
+		
+	}
+
+	// Teleport and leave behind particles // BASIC
+	if (Application::IsKeyPressed('V'))
+	{
+		if (onetime == false)
+		{
+			PX = MoveX;
+			PZ = MoveZ;
+			WX = 1000;
+			PPY = 2;
+			MoveX = 1000;
+			onetime = true;
+		}
+		PPY += 0.1;
+		if (PPY >= 15)
+		{
+			PPY = 1000;
+		}
+	}
+
+	// Enderman Killed , Dropps ender pearl// BASIC
+	if (Application::IsKeyPressed('B'))
+	{
+
+		if (Pushback == false)
+		{
+			LArmR += 8;
+			RArmR -= 8;
+			LLegR -= 8;
+			LLegR2 -= 1;
+			RLegR += 8;
+			RLegR2 += 0.2;
+		}
+		if (LArmR >= 45)
+		{
+			Pushback = true;
+		}
+		if (Pushback == true)
+		{
+			LArmR -= 8;
+			RArmR += 8;
+			LLegR += 8;
+			RLegR -= 8;
+			LLegR2 += 0.2;
+			RLegR2 -= 1;
+		}
+		if (LArmR <= -45)
+		{
+			RLegR2 = -15;
+			LLegR2 = -15;
+			Pushback = false;
+		}
+		CoX = 0;
+		CoY = 0;
+		CoZ = 1;
+		if (phase1 == true)
+		{
+			CoreRotateY += 2;
+			MoveX -= 1;
+			if (MoveY >= 35)
+			{
+				Pushback = true;
+			}
+			if (Pushback == true)
+			{
+				MoveY -= 1.25;
+			}
+			else MoveY += 1.5;
+		}
+		if (CoreRotateY >= 90 && phase1 == true)
+		{
+			onetime = false;
+			phase1 = false;
+			phase2 = true;
+			Pushback = false;
+		}
+		if (phase2 == true)
+		{
+			if (onetime == false)
+			{
+				MoveY = 1000;
+				WX = MoveX;
+				WZ = MoveZ;
+				PX = 1000;
+				PZ = 1000;
+				PearlX = MoveX;
+				PearlZ = MoveZ;
+				PearlY = 1;
+				PPY = 2;
+				onetime = true;
+			}
+			PPY += 0.1;
+			if (PPY >= 15)
+			{
+				PPY = 1000;
+			}
+			if (Pushback == false)
+			{
+				PearlY += 0.03;
+			}
+			if (PearlY >= 5)
+			{
+				Pushback = true;
+			}
+			if (Pushback == true)
+			{
+				PearlY -= 0.03;
+			}
+			if (PearlY <= 0.5)
+			{
+				Pushback = false;
+			}
+			PearlR += 1;
+		}
+	}
+
+	// Kick Block // BASIC
+	if (Application::IsKeyPressed('G'))
+	{
+		CoX = 0;
+		CoY = 1;
+		CoZ = 0;
+
+		if (phase1 == true)
+		{
+			Headx = 0.5;
+			Heady = 1;
+			Headz = 0;
+			RHeadX += 3;
+		}
+		if (RHeadX >= 60 && phase1 == true)
+		{
+
+			phase1 = false;
+			phase2 = true;
+		}
+		if (phase2 == true)
+		{
+			CoreRotateY += 3;
+			RHeadX -= 3;
+		}
+		if (CoreRotateY >= 60 && phase2 == true)
+		{
+			phase2 = false;
+			phase3 = true;
+		}
+		if (phase3 == true)
+		{
+			CoreRotateY -= 3;
+			LLegR -= 2;
+			LLegR2 -= 2;
+		}
+		if (CoreRotateY <= -10)
+		{
+			phase3 = false;
+			phase4 = true;
+		}
+		if (CoreRotateY >= 80 && phase4 == true)
+		{
+			phase4 = false;
+			phase5 = true;
+		}
+
+		if (phase4 == true)
+		{
+			CoreRotateY += 8;
+			LLegR += 13;
+			LLegR2 += 2;
+			if (CoreRotateY >= 40)
+			{
+				BlockZ += 9;
+				BlockX += 9;
+				Rblock += 2;
+			}
+		}
+		if (LArmR >= 180 && phase5 == true)
+		{
+			phase5 = false;
+		}
+		if (phase5 == true)
+		{
+			BlockZ += 9;
+			BlockX += 9;
+			Rblock += 2;
+			if (BlockX >= 200)
+			{
+				LArmR += 20;
+				RArmR += 20;
+				LLegR -= 12;
+				LLegR2 += 2.7;
+			}
+		}
+		
+		
+		
+		
+	}
+
+	// Somersault, put block on its head // ADVANCED
+	if (Application::IsKeyPressed('H'))
+	{
+		if (phase1 == true)
+		{
+			RArmR += 9;
+			LArmR -= 1;
+			LLegR += 1;
+			RLegR -= 1;
+			MoveY -= .03;
+		}
+		if (RArmR >= 165 && phase1 == true)
+		{
+			phase1 = false;
+			phase2 = true;
+		}
+		if (phase2 == true) MoveY -= .03;
+		if (MoveY <= 13 && phase2 == true)
+		{
+			phase2 = false;
+			phase3 = true;
+		}
+
+		if (MoveY >= 60 && phase3 == true)
+		{
+			CoreRotateY += 50;
+			MoveY += 1;
+			RArmR += 8;
+			LArmR += 8;
+			LLegR += 8;
+			RLegR += 8;
+		}
+		else if (phase3 == true)
+		{
+			MoveY += 5;
+			CoreRotateY += 50;
+			RArmR += 8;
+			LArmR += 8;
+			LLegR += 8;
+			RLegR += 8;
+		}
+		if (MoveY >= 100)
+		{
+			phase3 = false;
+			phase4 = true;
+		}
+		if (phase4 == true)
+		{
+			RArmR = 0;
+			LArmR = 0;
+			LLegR = 0;
+			RLegR = 0;
+			MoveY -= 10;
+		}
+		if (MoveY <= -5 && phase4 == true)
+		{
+			phase4 = false;
+			phase5 = true;
+		}
+		if (phase5 == true)
+		{
+			BlockY += 4;
+			BlockX += -0.1;
+			BlockZ += -0.1;
+		}
+		if (BlockY >= 50 && phase5 == true)
+		{
+			Pushback = true;
+		}
+		if (Pushback == true && phase5 == true)
+		{
+			BlockY -= 6;
+			BlockX += -0.10;
+			BlockZ += -0.25;
+		}
+		if (BlockY <= -3 && phase5 == true && Pushback == true)
+		{
+			phase5 = false;
+			phase6 = true;
+		}
+		if (phase6 == true)
+		{
+			RArmR += 2;
+			LArmR += 2;
+			RArmR2 += 3;
+			LArmR2 += 3;
+		}
+		if (RArmR2 >= 125)
+		{
+			phase6 = false;
+			phase7 = true;
+		}
+		if (phase7 == true)
+		{
+			RArmR -= 2;
+			LArmR -= 2;
+			LArmR2 -= 4;
+			RArmR -= 4;
+			BlockX -= 0.4;
+		}
+		if (BlockX <= -6)
+		{
+			phase7 = false;
+			RArmR2 = 4;
+			LArmR = 0;
+			LArmR2 = 4;
+			RArmR = 0;
+		}
+	}
+}
+
+void scene8::Render()
+{
+	// Render VBO here
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	//Temp variables
+	Mtx44 translate, rotate, scale;
+	Mtx44 MVP;
+	//These will be replaced by matrix stack soon
+	Mtx44 model;
+	Mtx44 view;
+	Mtx44 projection;
+
+	//Set all matrices to identity
+	translate.SetToIdentity();
+	rotate.SetToIdentity();
+	scale.SetToIdentity();
+	model.SetToIdentity();
+
+	//Set view matrix using camera settings
+	viewStack.LoadIdentity();
+	viewStack.LookAt(
+
+		camera.position.x, camera.position.y, camera.position.z,
+		camera.target.x, camera.target.y, camera.target.z,
+		camera.up.x, camera.up.y, camera.up.z);
+	modelStack.LoadIdentity();
+
+
+
+	Mtx44 mvp = projectionStack.Top() * viewStack.Top() * modelStack.Top();
+
+
+
+	Position lightPosition_cameraspace = viewStack.Top() * light[0].position;
+	glUniform3fv(m_parameters[U_LIGHT0_POSITION], 1, &lightPosition_cameraspace.x);
+	
+
+
+	if (light[0].type == Light::LIGHT_DIRECTIONAL)
+	{
+		Vector3 lightDir(light[0].position.x, light[0].position.y, light[0].position.z);
+		Vector3 lightDirection_cameraspace = viewStack.Top() * lightDir;
+		glUniform3fv(m_parameters[U_LIGHT0_POSITION], 1, &lightDirection_cameraspace.x);
+	}
+	else if (light[0].type == Light::LIGHT_SPOT)
+	{
+		Position lightPosition_cameraspace = viewStack.Top() * light[0].position;
+		glUniform3fv(m_parameters[U_LIGHT0_POSITION], 1, &lightPosition_cameraspace.x);
+		Vector3 spotDirection_cameraspace = viewStack.Top() * light[0].spotDirection;
+		glUniform3fv(m_parameters[U_LIGHT0_SPOTDIRECTION], 1, &spotDirection_cameraspace.x);
+	}
+	else
+	{
+		Position lightPosition_cameraspace = viewStack.Top() * light[0].position;
+		glUniform3fv(m_parameters[U_LIGHT0_POSITION], 1, &lightPosition_cameraspace.x);
+	}
+
+
+	RenderMesh(meshList[GEO_AXES], false);
+	modelStack.PushMatrix();
+	modelStack.Translate(light[0].position.x, light[0].position.y,light[0].position.z);
+	RenderMesh(meshList[GEO_LIGHTBALL], true);
+	modelStack.PopMatrix();
+	modelStack.PushMatrix();
+	modelStack.Rotate(180, 0, 180, 180);
+	modelStack.Translate(0, 0, -10);
+	modelStack.Scale(50, 50, 50);
+	RenderMesh(meshList[GEO_QUAD], true);
+	modelStack.PopMatrix();
+
+	// EnderMan
+	//Neck Joint / CORE
+	modelStack.PushMatrix();
+	modelStack.Translate(MoveZ, MoveY , MoveX);
+	modelStack.Scale(1, 1, 1);
+	modelStack.Rotate(CoreRotateY, CoX, CoY, CoZ);
+	MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
+	glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+	meshList[GEO_SPHERE_JOINT]->Render();
+	// Head
+	modelStack.PushMatrix();
+	modelStack.Rotate(RHeadX, Headx, Heady, Headz);
+	modelStack.Translate(0, 4, 0);
+	modelStack.Scale(6,6,6);
+	RenderMesh(meshList[GEO_CUBE], true);
+	//modelStack.PopMatrix();
+	// Left Eye
+	modelStack.PushMatrix();
+	modelStack.Rotate(0, 0, 1, 0);
+	modelStack.Translate(-0.2, 0.1, 0.5);
+	modelStack.Scale(0.2, .1, 0.1);
+	RenderMesh(meshList[GEO_CUBE_PURPLE], true);
+	modelStack.PopMatrix();
+	// Right Eye
+	modelStack.PushMatrix();
+	modelStack.Rotate(0, 0, 1, 0);
+	modelStack.Translate(0.2, 0.1, 0.5);
+	modelStack.Scale(0.2, .1, 0.1);
+	RenderMesh(meshList[GEO_CUBE_PURPLE], true);
+	modelStack.PopMatrix();
+	modelStack.PopMatrix();
+	//Body
+	modelStack.PushMatrix();
+	modelStack.Translate(0, -3, 0);
+	modelStack.Scale(5, 9, 5);
+	modelStack.Rotate(RBodyX, 1, 1, 0);
+	MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
+	glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+	meshList[GEO_CUBE]->Render();
+	modelStack.PopMatrix();
+	// R Arm Joint
+	modelStack.PushMatrix();
+	modelStack.Translate(3.1, -0.5, 0);
+	modelStack.Scale(1, 1, 1);
+	modelStack.Rotate(RArmR, -1, 0, 0);
+	MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
+	glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+	meshList[GEO_SPHERE_JOINT]->Render();
+	// R Arm
+	modelStack.PushMatrix();
+	modelStack.Translate(0.55, -2.5, 0);
+	modelStack.Scale(2.5, 7, 2.5);
+	modelStack.Rotate(0, -1, 0, 1);
+	MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
+	glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+	meshList[GEO_CUBE]->Render();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(0, -0.5, 0);
+	modelStack.Scale(0.5, 0.1, 0.5);
+	modelStack.Rotate(RArmR2, -1, 0, 0);
+	MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
+	glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+	meshList[GEO_SPHERE_JOINT]->Render();
+
+	// L Lower Elbow
+	modelStack.PushMatrix();
+	modelStack.Translate(-0, -4, 0);
+	modelStack.Scale(2, 9, 2);
+	modelStack.Rotate(0, -1, 0, 1);
+	MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
+	glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+	meshList[GEO_CUBE]->Render();
+
+	modelStack.PopMatrix();
+	modelStack.PopMatrix();
+	modelStack.PopMatrix();
+	modelStack.PopMatrix();
+	// L Arm Joint
+	modelStack.PushMatrix();
+	modelStack.Translate(-3.1, -0.5, 0);
+	modelStack.Scale(1, 1, 1);
+	modelStack.Rotate(LArmR, -1, 0, 0);
+	MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
+	glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+	meshList[GEO_SPHERE_JOINT]->Render();
+	// L Arm
+	modelStack.PushMatrix();
+	modelStack.Translate(-0.55, -2.5, 0);
+	modelStack.Scale(2.5, 7, 2.5);
+	modelStack.Rotate(0, -90, 0, 1);
+	MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
+	glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+	meshList[GEO_CUBE]->Render();
+
+	// L Lower Elbow joint
+	modelStack.PushMatrix();
+	modelStack.Translate(0, -0.5, 0);
+	modelStack.Scale(0.5, 0.1, 0.5);
+	modelStack.Rotate(LArmR2, -1, 0, 0);
+	MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
+	glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+	meshList[GEO_SPHERE_JOINT]->Render();
+
+	// L Lower Elbow
+	modelStack.PushMatrix();
+	modelStack.Translate(-0, -4, 0);
+	modelStack.Scale(2, 9, 2);
+	modelStack.Rotate(0, -1, 0, 1);
+	MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
+	glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+	meshList[GEO_CUBE]->Render();
+
+
+	modelStack.PopMatrix();
+	modelStack.PopMatrix();
+	modelStack.PopMatrix();
+	modelStack.PopMatrix();
+
+	// L Leg Joint Upper
+	modelStack.PushMatrix();
+	modelStack.Translate(-0.8, -7, 0);
+	modelStack.Scale(1, 1, 1);
+	modelStack.Rotate(LLegR, -1, 0, 0);
+	MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
+	glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+	meshList[GEO_SPHERE_JOINT]->Render();
+
+	// L Leg Upper
+	modelStack.PushMatrix();
+	modelStack.Translate(-0.55, -4.5, 0);
+	modelStack.Scale(2.4, 9, 2.4);
+	modelStack.Rotate(0, -1, 0, 1);
+	MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
+	glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+	meshList[GEO_CUBE]->Render();
+	
+	// L Leg Joint Lower
+	modelStack.PushMatrix();
+	modelStack.Translate(0, -0.5, 0);
+	modelStack.Scale(0.5, 0.1, 0.5);
+	modelStack.Rotate(LLegR2, -1, 0, 0);
+	MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
+	glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+	meshList[GEO_SPHERE_JOINT]->Render();
+	
+	// L leg joint Lower
+	modelStack.PushMatrix();
+	modelStack.Translate(-0, -4, 0);
+	modelStack.Scale(2.2, 9, 2.2);
+	modelStack.Rotate(0, -1, 0, 1);
+	MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
+	glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+	meshList[GEO_CUBE]->Render();
+
+	modelStack.PopMatrix();
+	modelStack.PopMatrix();
+	modelStack.PopMatrix();
+	modelStack.PopMatrix();
+
+
+	// R Leg Joint Upper
+	modelStack.PushMatrix();
+	modelStack.Translate(0.8, -7, 0);
+	modelStack.Scale(1, 1, 1);
+	modelStack.Rotate(RLegR, -1, 0, 0);
+	MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
+	glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+	meshList[GEO_SPHERE_JOINT]->Render();
+
+	// R Leg Upper
+	modelStack.PushMatrix();
+	modelStack.Translate(0.55, -4.5, 0);
+	modelStack.Scale(2.4, 9, 2.4);
+	modelStack.Rotate(1, -1, 0, 1);
+	MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
+	glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+	meshList[GEO_CUBE]->Render();
+
+	// R Leg Joint Lower
+	modelStack.PushMatrix();
+	modelStack.Translate(0, -0.5, 0);
+	modelStack.Scale(0.5, 0.1, 0.5);
+	modelStack.Rotate(RLegR2, -1, 0, 0);
+	MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
+	glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+	meshList[GEO_SPHERE_JOINT]->Render();
+
+	// L leg joint Lower
+	modelStack.PushMatrix();
+	modelStack.Translate(-0, -4, 0);
+	modelStack.Scale(2.2, 9, 2.2);
+	modelStack.Rotate(0, -1, 0, 1);
+	MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
+	glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+	meshList[GEO_CUBE]->Render();
+
+	modelStack.PopMatrix();
+	modelStack.PopMatrix();
+	modelStack.PopMatrix();
+	modelStack.PopMatrix();
+	modelStack.PopMatrix();
+
+	// Grass Dirt Block
+	// Brown Part
+	modelStack.PushMatrix();
+	modelStack.Rotate(Rblock, 0, 1, 0);
+	modelStack.Translate(BlockX, BlockY, BlockZ);
+	modelStack.Scale(9, 9, 9);
+	RenderMesh(meshList[GEO_CUBE_BROWN], true);
+	// Grass Part
+	modelStack.PushMatrix();
+	modelStack.Rotate(0, 0, 1, 0);
+	modelStack.Translate(0, 0.32, 0);
+	modelStack.Scale(0.71, 0.1, 0.71);
+	RenderMesh(meshList[GEO_CUBE_GREEN], true);
+	modelStack.PopMatrix();
+	modelStack.PopMatrix();
+
+	// Purple Smoke particle #1
+
+	//purple Smoke core
+	modelStack.PushMatrix();
+	modelStack.Translate(-9 + PZ, 2 * PPY, 0 + PX);
+	modelStack.Scale(1, 1, 1);
+	modelStack.Rotate(1, -1, 0, 1);
+	MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
+	glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+	meshList[GEO_CUBE_PURPLE]->Render();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(1, 1, 0);
+	modelStack.Scale(1, 1, 1);
+	modelStack.Rotate(1, -1, 0, 1);
+	MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
+	glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+	meshList[GEO_CUBE_PURPLE]->Render();
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(0, 1, -1);
+	modelStack.Scale(1, 1, 1);
+	modelStack.Rotate(1, -1, 0, 1);
+	MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
+	glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+	meshList[GEO_CUBE_PURPLE]->Render();
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(1, 2, 1);
+	modelStack.Scale(1, -1, 1);
+	modelStack.Rotate(1, -1, 0, 1);
+	MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
+	glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+	meshList[GEO_CUBE_PURPLE]->Render();
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(1, 0, 1);
+	modelStack.Scale(1, 1, 1);
+	modelStack.Rotate(1, -1, 0, 1);
+	MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
+	glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+	meshList[GEO_CUBE_PURPLE]->Render();
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(-1, 1, 1);
+	modelStack.Scale(1, 1, 1);
+	modelStack.Rotate(1, -1, 0, 1);
+	MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
+	glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+	meshList[GEO_CUBE_PURPLE]->Render();
+	modelStack.PopMatrix();
+	modelStack.PopMatrix();
+
+
+	// Purple Smoke particle #2
+
+	//purple Smoke core
+	modelStack.PushMatrix();
+	modelStack.Translate(9 + PZ, 3 * PPY, -8 + PX);
+	modelStack.Scale(1, 1, 1);
+	modelStack.Rotate(1, -1, 0, 1);
+	MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
+	glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+	meshList[GEO_CUBE_PURPLE]->Render();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(1, 1, 0);
+	modelStack.Scale(1, 1, 1);
+	modelStack.Rotate(1, -1, 0, 1);
+	MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
+	glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+	meshList[GEO_CUBE_PURPLE]->Render();
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(0, 1, -1);
+	modelStack.Scale(1, 1, 1);
+	modelStack.Rotate(1, -1, 0, 1);
+	MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
+	glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+	meshList[GEO_CUBE_PURPLE]->Render();
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(1, 2, 1);
+	modelStack.Scale(1, -1, 1);
+	modelStack.Rotate(1, -1, 0, 1);
+	MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
+	glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+	meshList[GEO_CUBE_PURPLE]->Render();
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(1, 0, 1);
+	modelStack.Scale(1, 1, 1);
+	modelStack.Rotate(1, -1, 0, 1);
+	MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
+	glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+	meshList[GEO_CUBE_PURPLE]->Render();
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(-1, 1, 1);
+	modelStack.Scale(1, 1, 1);
+	modelStack.Rotate(1, -1, 0, 1);
+	MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
+	glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+	meshList[GEO_CUBE_PURPLE]->Render();
+	modelStack.PopMatrix();
+	modelStack.PopMatrix();
+
+
+	// Purple Smoke particle #3
+
+	//purple Smoke core
+	modelStack.PushMatrix();
+	modelStack.Translate(12 + PZ, 1 * PPY, 5 + PX);
+	modelStack.Scale(1, 1, 1);
+	modelStack.Rotate(1, -1, 0, 1);
+	MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
+	glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+	meshList[GEO_CUBE_PURPLE]->Render();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(1, 1, 0);
+	modelStack.Scale(1, 1, 1);
+	modelStack.Rotate(1, -1, 0, 1);
+	MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
+	glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+	meshList[GEO_CUBE_PURPLE]->Render();
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(0, 1, -1);
+	modelStack.Scale(1, 1, 1);
+	modelStack.Rotate(1, -1, 0, 1);
+	MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
+	glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+	meshList[GEO_CUBE_PURPLE]->Render();
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(1, 2, 1);
+	modelStack.Scale(1, -1, 1);
+	modelStack.Rotate(1, -1, 0, 1);
+	MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
+	glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+	meshList[GEO_CUBE_PURPLE]->Render();
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(1, 0, 1);
+	modelStack.Scale(1, 1, 1);
+	modelStack.Rotate(1, -1, 0, 1);
+	MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
+	glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+	meshList[GEO_CUBE_PURPLE]->Render();
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(-1, 1, 1);
+	modelStack.Scale(1, 1, 1);
+	modelStack.Rotate(1, -1, 0, 1);
+	MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
+	glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+	meshList[GEO_CUBE_PURPLE]->Render();
+	modelStack.PopMatrix();
+	modelStack.PopMatrix();
+
+
+
+	// White Smoke #1
+
+	//White Smoke core
+	modelStack.PushMatrix();
+	modelStack.Translate(-9 + WZ, 2 * PPY, 0 + WX);
+	modelStack.Scale(1, 1, 1);
+	modelStack.Rotate(1, -1, 0, 1);
+	MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
+	glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+	meshList[GEO_CUBE_WHITE]->Render();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(1, 1, 0);
+	modelStack.Scale(1, 1, 1);
+	modelStack.Rotate(1, -1, 0, 1);
+	MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
+	glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+	meshList[GEO_CUBE_WHITE]->Render();
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(0, 1, -1);
+	modelStack.Scale(1, 1, 1);
+	modelStack.Rotate(1, -1, 0, 1);
+	MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
+	glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+	meshList[GEO_CUBE_WHITE]->Render();
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(1, 2, 1);
+	modelStack.Scale(1, -1, 1);
+	modelStack.Rotate(1, -1, 0, 1);
+	MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
+	glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+	meshList[GEO_CUBE_WHITE]->Render();
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(1, 0, 1);
+	modelStack.Scale(1, 1, 1);
+	modelStack.Rotate(1, -1, 0, 1);
+	MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
+	glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+	meshList[GEO_CUBE_WHITE]->Render();
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(-1, 1, 1);
+	modelStack.Scale(1, 1, 1);
+	modelStack.Rotate(1, -1, 0, 1);
+	MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
+	glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+	meshList[GEO_CUBE_WHITE]->Render();
+	modelStack.PopMatrix();
+	modelStack.PopMatrix();
+
+
+	// White Smoke particle #2
+
+	//White Smoke core
+	modelStack.PushMatrix();
+	modelStack.Translate(9 + WZ, 3 * PPY, -8 + WX);
+	modelStack.Scale(1, 1, 1);
+	modelStack.Rotate(1, -1, 0, 1);
+	MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
+	glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+	meshList[GEO_CUBE_WHITE]->Render();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(1, 1, 0);
+	modelStack.Scale(1, 1, 1);
+	modelStack.Rotate(1, -1, 0, 1);
+	MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
+	glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+	meshList[GEO_CUBE_WHITE]->Render();
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(0, 1, -1);
+	modelStack.Scale(1, 1, 1);
+	modelStack.Rotate(1, -1, 0, 1);
+	MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
+	glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+	meshList[GEO_CUBE_WHITE]->Render();
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(1, 2, 1);
+	modelStack.Scale(1, -1, 1);
+	modelStack.Rotate(1, -1, 0, 1);
+	MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
+	glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+	meshList[GEO_CUBE_WHITE]->Render();
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(1, 0, 1);
+	modelStack.Scale(1, 1, 1);
+	modelStack.Rotate(1, -1, 0, 1);
+	MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
+	glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+	meshList[GEO_CUBE_WHITE]->Render();
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(-1, 1, 1);
+	modelStack.Scale(1, 1, 1);
+	modelStack.Rotate(1, -1, 0, 1);
+	MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
+	glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+	meshList[GEO_CUBE_WHITE]->Render();
+	modelStack.PopMatrix();
+	modelStack.PopMatrix();
+
+
+	// White Smoke particle #3
+
+	//White Smoke core
+	modelStack.PushMatrix();
+	modelStack.Translate(12 + WZ, 1 * PPY, 5 + WX);
+	modelStack.Scale(1, 1, 1);
+	modelStack.Rotate(1, -1, 0, 1);
+	MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
+	glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+	meshList[GEO_CUBE_WHITE]->Render();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(1, 1, 0);
+	modelStack.Scale(1, 1, 1);
+	modelStack.Rotate(1, -1, 0, 1);
+	MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
+	glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+	meshList[GEO_CUBE_WHITE]->Render();
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(0, 1, -1);
+	modelStack.Scale(1, 1, 1);
+	modelStack.Rotate(1, -1, 0, 1);
+	MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
+	glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+	meshList[GEO_CUBE_WHITE]->Render();
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(1, 2, 1);
+	modelStack.Scale(1, -1, 1);
+	modelStack.Rotate(1, -1, 0, 1);
+	MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
+	glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+	meshList[GEO_CUBE_WHITE]->Render();
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(1, 0, 1);
+	modelStack.Scale(1, 1, 1);
+	modelStack.Rotate(1, -1, 0, 1);
+	MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
+	glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+	meshList[GEO_CUBE_WHITE]->Render();
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(-1, 1, 1);
+	modelStack.Scale(1, 1, 1);
+	modelStack.Rotate(1, -1, 0, 1);
+	MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
+	glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+	meshList[GEO_CUBE_WHITE]->Render();
+	modelStack.PopMatrix();
+	modelStack.PopMatrix();
+
+	// Ender Pearl
+	modelStack.PushMatrix();
+	modelStack.Translate(PearlZ, PearlY, PearlX);
+	modelStack.Scale(0.1, 2,2);
+	modelStack.Rotate(PearlR, 1, 1, 1);
+	MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
+	glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+	meshList[GEO_SPHERE_PEARL]->Render();
+	
+	modelStack.PushMatrix();
+	modelStack.Translate(0, 0, 0);
+	modelStack.Scale(1.5, 1, 0.5);
+	modelStack.Rotate(1, -1, 0, 1);
+	MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
+	glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+	meshList[GEO_SPHERE_PEARL_INNER]->Render();
+	modelStack.PopMatrix();
+	modelStack.PopMatrix();
+
+	// Rock Formation (purely for looks)
+	modelStack.PushMatrix();
+	modelStack.Translate(-35, 0, -35);
+	modelStack.Scale(25, 25, 25);
+	modelStack.Rotate(1, -1, 0, 1);
+	MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
+	glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+	meshList[GEO_CUBE_GREY]->Render();
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(-25, 0, -50);
+	modelStack.Scale(40, 20, 68);
+	modelStack.Rotate(1, -1, 0, 1);
+	MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
+	glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+	meshList[GEO_CUBE_GREY]->Render();
+	modelStack.PopMatrix();
+
+
+
+}
+
+void scene8::RenderMesh(Mesh* mesh, bool enableLight)
+{
+	Mtx44 MVP, modelView, modelView_inverse_transpose;
+
+	MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
+	glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+	modelView = viewStack.Top() * modelStack.Top();
+	glUniformMatrix4fv(m_parameters[U_MODELVIEW], 1, GL_FALSE, &modelView.a[0]);
+	if (enableLight)
+	{
+		glUniform1i(m_parameters[U_LIGHTENABLED], 1);
+		modelView_inverse_transpose = modelView.GetInverse().GetTranspose();
+		glUniformMatrix4fv(m_parameters[U_MODELVIEW_INVERSE_TRANSPOSE], 1, GL_FALSE, &modelView_inverse_transpose.a[0]);
+
+		//load material
+		glUniform3fv(m_parameters[U_MATERIAL_AMBIENT], 1, &mesh->material.kAmbient.r);
+		glUniform3fv(m_parameters[U_MATERIAL_DIFFUSE], 1, &mesh->material.kDiffuse.r);
+		glUniform3fv(m_parameters[U_MATERIAL_SPECULAR], 1, &mesh->material.kSpecular.r);
+		glUniform1f(m_parameters[U_MATERIAL_SHININESS], mesh->material.kShininess);
+	}
+	else
+	{
+		glUniform1i(m_parameters[U_LIGHTENABLED], 0);
+
+	}
+	mesh->Render();
+}
+
+void scene8::Exit()
+{
+	// Cleanup VBO here
+	for (int i = 0; i < NUM_GEOMETRY; ++i)
+	{
+		if (meshList[i])
+		{
+			delete meshList[i];
+		}
+	}
+	glDeleteVertexArrays(1, &m_vertexArrayID);
+	glDeleteProgram(m_programID);
+}

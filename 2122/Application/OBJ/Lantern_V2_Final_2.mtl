@@ -1,0 +1,13 @@
+# Blender MTL File: 'Lantern_V2_Final_2.blend'
+# Material Count: 2
+
+newmtl Lantern.Glass
+map_Bump SimpleBake_Bakes_24102021-0226\\Lantern.Glass_Bake1_pbr_normal.png
+map_Kd SimpleBake_Bakes_24102021-0226\\Lantern.Glass_Bake1_pbr_diffuse.png
+
+newmtl lantern
+map_Bump SimpleBake_Bakes_24102021-0208\\MergedBake_Bake1_pbr_normal.png
+map_Kd SimpleBake_Bakes_24102021-0208\\MergedBake_Bake1_pbr_diffuse.png
+map_Ks SimpleBake_Bakes_24102021-0208\\MergedBake_Bake1_pbr_specular.png
+map_Ns SimpleBake_Bakes_24102021-0208\\MergedBake_Bake1_pbr_roughness.png
+refl SimpleBake_Bakes_24102021-0208\\MergedBake_Bake1_pbr_metalness.png
