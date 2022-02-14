@@ -123,7 +123,7 @@ void Scene13::Init()
 		meshList[i] = nullptr;
 	}
 	meshList[GEO_AXES] = MeshBuilder::GenerateAxes("reference", 1000, 1000, 1000);
-	meshList[GEO_FRONT] = MeshBuilder::GenerateQuad("front", Color(1, 1, 1), 1.f);
+	/*meshList[GEO_FRONT] = MeshBuilder::GenerateQuad("front", Color(1, 1, 1), 1.f);
 	meshList[GEO_FRONT]->textureID = LoadTGA("Image//front.tga");
 
 	meshList[GEO_LEFT] = MeshBuilder::GenerateQuad("left", Color(1, 1, 1), 1.f);
@@ -145,14 +145,14 @@ void Scene13::Init()
 	meshList[GEO_NYP]->textureID = LoadTGA("Image//NYP.tga");
 
 	meshList[GEO_CUBE] = MeshBuilder::GenerateCube("Cube", Color(1, 1, 1), 1.f);
-
+ */
 	meshList[GEO_TITLEBUTTONS] = MeshBuilder::GenerateQuad("quad", Color(1, 1, 1), 1.f);
 	meshList[GEO_TITLEBUTTONS]->textureID = LoadTGA("Image//TitleButton.tga");
 
 	meshList[GEO_TITLE] = MeshBuilder::GenerateQuad("quad", Color(1, 1, 1), 1.f);
 	meshList[GEO_TITLE]->textureID = LoadTGA("Image//TitleFrame.tga");
 
-	meshList[GEO_LIGHTBALL] = MeshBuilder::GenerateSphere("lightball", Color(1, 1, 0), 1.f);
+	/*meshList[GEO_LIGHTBALL] = MeshBuilder::GenerateSphere("lightball", Color(1, 1, 0), 1.f);
 
 
 	meshList[GEO_CHAIR] = MeshBuilder::GenerateOBJ("model1","OBJ//chair.obj");
@@ -168,7 +168,7 @@ void Scene13::Init()
 	meshList[GEO_SHOE]->textureID = LoadTGA("Image//shoe.tga");
 
 	meshList[GEO_COTTAGE] = MeshBuilder::GenerateOBJMTL("model7",
-		"OBJ//cottage_obj.obj", "OBJ//cottage_obj.mtl");
+		"OBJ//cottage_obj.obj", "OBJ//cottage_obj.mtl");*/
 
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16,16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Image//Agency_FB.tga");
