@@ -370,52 +370,48 @@ void Scene13::RenderSkybox()
 	modelStack.PopMatrix();*/
 
 
+	CONST FLOAT OFFSET = 499;
+
 	modelStack.PushMatrix();
-	modelStack.Translate(0, 0, 498);
-	modelStack.Rotate(180, 0, 0, 1);
-	modelStack.Rotate(180, 0, 1, 0);
+	modelStack.Translate(0, 0, -OFFSET);
 	modelStack.Scale(1000, 1000, 1000);
 	RenderMesh(meshList[GEO_FRONT], false);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(0, 0, -498);
+	modelStack.Translate(0, 0, OFFSET);
 	modelStack.Rotate(180, 0, 1, 0);
-	modelStack.Rotate(180, 1, 0, 0);
 	modelStack.Scale(1000, 1000, 1000);
 	RenderMesh(meshList[GEO_BACK], false);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(498, 0, 0);
-	modelStack.Rotate(180, 0, 1, 0);
-	modelStack.Rotate(180, 1, 0, 1);
+	modelStack.Translate(-OFFSET, 0, 0);
+	modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Scale(1000, 1000, 1000);
 	RenderMesh(meshList[GEO_LEFT], false);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(-498, 0, 0);
-	modelStack.Rotate(90, 0, 1, 0);
-	modelStack.Rotate(180, 0, 0, 1);
+	modelStack.Translate(OFFSET, 0, 0);
+	modelStack.Rotate(-90, 0, 1, 0);
 	modelStack.Scale(1000, 1000, 1000);
 	RenderMesh(meshList[GEO_RIGHT], false);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(0, -250, 0);
-	modelStack.Rotate(90, 1, 0, 0);
-	modelStack.Rotate(180, 0, 1, 0);
-	modelStack.Scale(1000, 1000, 1000);
-	RenderMesh(meshList[GEO_BOTTOM], false);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	modelStack.Translate(0, 250, 0);
-	modelStack.Rotate(180, 0, 1, 0);
+	modelStack.Translate(0, OFFSET, 0);
 	modelStack.Rotate(90, 1, 0, 0);
 	modelStack.Scale(1000, 1000, 1000);
 	RenderMesh(meshList[GEO_TOP], false);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(0, -OFFSET, 0);
+	modelStack.Rotate(-90, 0, 1, 0);
+	modelStack.Rotate(-90, 1, 0, 0);
+	modelStack.Scale(1000, 1000, 1000);
+	RenderMesh(meshList[GEO_BOTTOM], false);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
