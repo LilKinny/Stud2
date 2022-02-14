@@ -146,7 +146,7 @@ void Application::Run()
 	delete scene1;
 	delete scene2;
 
-	delete scene;
+	scene = NULL;
 }
 
 void Application::Exit()
