@@ -171,7 +171,10 @@ void Splevel1::Init()
 	meshList[GEO_COTTAGE] = MeshBuilder::GenerateOBJMTL("model7",
 		"OBJ//cottage_obj.obj", "OBJ//cottage_obj.mtl");*/
 
-	
+	meshList[GEO_GRASS] = MeshBuilder::GenerateOBJMTL("model211", "OBJ//ground_grass.obj", "OBJ//ground_grass.mtl");
+
+	meshList[GEO_GRASS_V] = MeshBuilder::GenerateOBJMTL("model211", "OBJ//grassLarge.obj", "OBJ//grassLarge.mtl");
+
 
 	meshList[GEO_BUILDING] = MeshBuilder::GenerateOBJMTL("modelBUIDLING",
 		"OBJ//Level_1.obj", "OBJ//Level_1.mtl");
@@ -389,7 +392,7 @@ void Splevel1::Render()
 	modelStack.PushMatrix();
 	//modelStack.Rotate(-90, 1, 0, 0);
 	modelStack.Translate(0, 0, 0);
-	modelStack.Scale(1, 1, 1);
+	modelStack.Scale(10, 10, 10);
 
 	RenderMesh(meshList[GEO_BUILDING], true);
 	modelStack.PopMatrix();
@@ -457,6 +460,12 @@ void Splevel1::RenderSkybox()
 	RenderMesh(meshList[GEO_TOP], false);
 	modelStack.PopMatrix();
 
+	modelStack.PushMatrix();
+	modelStack.Translate(0, 0, 0);
+	modelStack.Scale(900, 10, 900);
+	modelStack.Rotate(90, 0, 1, 0);
+	RenderMesh(meshList[GEO_GRASS], true);
+	modelStack.PopMatrix();
 
 	/*modelStack.PushMatrix();
 	modelStack.Translate(0, 30, 0);
@@ -489,7 +498,7 @@ void Splevel1::RenderSkybox()
 	modelStack.PopMatrix();*/
 
 	modelStack.PushMatrix();
-	modelStack.Translate(0, 50, 0);
+	modelStack.Translate(light[0].position.x, light[0].position.y, light[0].position.z);
 	modelStack.Rotate(180, 0, 180, 180);
 	modelStack.Scale(5, 5, 5);
 	RenderMesh(meshList[GEO_LIGHTBALL], true);
@@ -522,7 +531,7 @@ void Splevel1::RenderMesh(Mesh* mesh, bool enableLight)
 	glUniformMatrix4fv(m_parameters[U_MODELVIEW], 1, GL_FALSE, &modelView.a[0]);
 	if (enableLight)
 	{
-		glUniform1i(m_parameters[U_LIGHTENABLED], 0);
+		glUniform1i(m_parameters[U_LIGHTENABLED],  1);
 		modelView_inverse_transpose = modelView.GetInverse().GetTranspose();
 		glUniformMatrix4fv(m_parameters[U_MODELVIEW_INVERSE_TRANSPOSE], 1, GL_FALSE, &modelView_inverse_transpose.a[0]);
 

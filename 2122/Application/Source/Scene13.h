@@ -43,7 +43,7 @@ class Scene13 : public Scene
 		GEO_DART,
 		GEO_COTTAGE,
 		GEO_TEXT,
-
+		GEO_BUILDING,
 		NUM_GEOMETRY,
 	};
 	enum UNIFORM_TYPE

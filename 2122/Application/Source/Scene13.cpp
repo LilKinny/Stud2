@@ -149,7 +149,7 @@ void Scene13::Init()
 	meshList[GEO_GRASS_V] = MeshBuilder::GenerateOBJMTL("model211", "OBJ//grassLarge.obj", "OBJ//grassLarge.mtl");
 
 
-
+	meshList[GEO_BUILDING] = MeshBuilder::GenerateOBJMTL("modelBUIDLING", "OBJ//Level_1.obj", "OBJ//Level_1.mtl");
 	/*
 	meshList[GEO_NYP] = MeshBuilder::GenerateQuad("nyplogo", Color(1, 1, 1), 1.f);
 	meshList[GEO_NYP]->textureID = LoadTGA("Image//NYP.tga");
@@ -418,12 +418,21 @@ void Scene13::RenderSkybox()
 	RenderMesh(meshList[GEO_TOP], false);
 	modelStack.PopMatrix();
 
-	//modelStack.PushMatrix();
-	//modelStack.Translate(-10, 45, 10);
-	//modelStack.Scale(900, 10, 300);
-	//modelStack.Rotate(90, 0, 1, 0);
-	//RenderMesh(meshList[GEO_GRASS], true);
-	//modelStack.PopMatrix();
+	modelStack.PushMatrix();
+	modelStack.Translate(0, 0, 0);
+	modelStack.Scale(900, 10, 900);
+	modelStack.Rotate(90, 0, 1, 0);
+	RenderMesh(meshList[GEO_GRASS], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	//modelStack.Rotate(-90, 1, 0, 0);
+	modelStack.Translate(0, 0, 0);
+	modelStack.Scale(4, 4, 4);
+
+	RenderMesh(meshList[GEO_BUILDING], true);
+	modelStack.PopMatrix();
+
 
 	/*modelStack.PushMatrix();
 	modelStack.Translate(0, 30, 0);
@@ -462,12 +471,12 @@ void Scene13::RenderSkybox()
 	RenderMesh(meshList[GEO_LIGHTBALL], true);
 	modelStack.PopMatrix();
 
-	modelStack.PushMatrix();
+	/*modelStack.PushMatrix();
 	modelStack.Translate(0, 0, -10);
 	modelStack.Rotate(180, 0, 1, 1);
 	modelStack.Scale(5, 5, 5);
 	RenderText(meshList[GEO_TEXT], "Hello world", Color(0, 1, 0));
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();*/
 
 	
 
@@ -476,7 +485,7 @@ void Scene13::RenderSkybox()
 
 	RenderMeshOnScreen(meshList[GEO_TITLE], 4, 5, 3, 1);
 	RenderTextOnScreen(meshList[GEO_TEXT], "Scammer tycoon", Color(1, 1, 1), 4, 26, 50);
-
+	RenderTextOnScreen(meshList[GEO_TEXT], "V1.0", Color(1, 1, 1), 2, 35, 46);
 	RenderMeshOnScreen(meshList[GEO_FADE_TO_BLACK], 4, 3, scalex, scalex);
 
 	}
@@ -490,7 +499,7 @@ void Scene13::RenderMesh(Mesh* mesh, bool enableLight)
 	glUniformMatrix4fv(m_parameters[U_MODELVIEW], 1, GL_FALSE, &modelView.a[0]);
 	if (enableLight)
 	{
-		glUniform1i(m_parameters[U_LIGHTENABLED], 0);
+		glUniform1i(m_parameters[U_LIGHTENABLED], 1);
 		modelView_inverse_transpose = modelView.GetInverse().GetTranspose();
 		glUniformMatrix4fv(m_parameters[U_MODELVIEW_INVERSE_TRANSPOSE], 1, GL_FALSE, &modelView_inverse_transpose.a[0]);
 
