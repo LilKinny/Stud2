@@ -127,6 +127,8 @@ private:
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
 	void RenderText(Mesh* mesh, std::string text, Color color);
 	Camera3 camera;
+
+	void RenderMeshOnScreen(Mesh* mesh, int x, int y, int sizex, int sizey);
 };
 
 #endif

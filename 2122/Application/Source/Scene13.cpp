@@ -146,8 +146,11 @@ void Scene13::Init()
 
 	meshList[GEO_CUBE] = MeshBuilder::GenerateCube("Cube", Color(1, 1, 1), 1.f);
 
-	meshList[GEO_QUAD] = MeshBuilder::GenerateQuad("quad", Color(1, 1, 1), 1.f);
-	meshList[GEO_QUAD]->textureID = LoadTGA("Image//Amogus.tga");
+	meshList[GEO_TITLEBUTTONS] = MeshBuilder::GenerateQuad("quad", Color(1, 1, 1), 1.f);
+	meshList[GEO_TITLEBUTTONS]->textureID = LoadTGA("Image//TitleButton.tga");
+
+	meshList[GEO_TITLE] = MeshBuilder::GenerateQuad("quad", Color(1, 1, 1), 1.f);
+	meshList[GEO_TITLE]->textureID = LoadTGA("Image//TitleFrame.tga");
 
 	meshList[GEO_LIGHTBALL] = MeshBuilder::GenerateSphere("lightball", Color(1, 1, 0), 1.f);
 
@@ -168,7 +171,7 @@ void Scene13::Init()
 		"OBJ//cottage_obj.obj", "OBJ//cottage_obj.mtl");
 
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16,16);
-	meshList[GEO_TEXT]->textureID = LoadTGA("Image//calibri.tga");
+	meshList[GEO_TEXT]->textureID = LoadTGA("Image//Agency_FB.tga");
 	Mtx44 projection;
 	projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 1000.f);
 	projectionStack.LoadMatrix(projection);
@@ -435,10 +438,12 @@ void Scene13::RenderSkybox()
 	RenderText(meshList[GEO_TEXT], "Hello world", Color(0, 1, 0));
 	modelStack.PopMatrix();
 
-	RenderTextOnScreen(meshList[GEO_TEXT], "FPS: ", Color(0, 1, 0), 4, 0, 0);
+	
 
-	RenderMeshOnScreen(meshList[GEO_QUAD], 4, 3, 20, 10);
+	RenderMeshOnScreen(meshList[GEO_TITLEBUTTONS], 4, 3, 2, 1);
 
+	RenderMeshOnScreen(meshList[GEO_TITLE], 4, 5, 3, 1);
+	RenderTextOnScreen(meshList[GEO_TEXT], "Scam tycoon", Color(0, 1, 0), 2, 30, 50);
 }
 void Scene13::RenderMesh(Mesh* mesh, bool enableLight)
 {
@@ -586,7 +591,7 @@ void Scene13::RenderMeshOnScreen(Mesh* mesh, int x, int y, int sizex, int sizey)
 	//to do: scale and translate accordingly
 
 	modelStack.Translate(x, y, 0);
-
+	modelStack.Scale(sizex, sizey, 0);
 
 	RenderMesh(mesh, false); //UI should not have light
 	projectionStack.PopMatrix();

@@ -15,7 +15,7 @@
 #include "Scene3.h"
 #include "Scene4.h"
 #include "Scene5.h"
-#include "Assignment2.h"
+#include "Scene13.h"
 
 
 GLFWwindow* m_window;
@@ -83,7 +83,7 @@ void Application::Init()
 
 
 	//Create a window and create its OpenGL context
-	m_window = glfwCreateWindow(800, 600, "Test Window", NULL, NULL);
+	m_window = glfwCreateWindow(1920, 1080, "Test Window", NULL, NULL);
 	glfwSetWindowSizeCallback(m_window, resize_callback);
 	//If the window couldn't be created
 	if (!m_window)
@@ -115,7 +115,7 @@ void Application::Init()
 
 void Application::Run()
 {
-	Scene* scene1 = new Assignment2();
+	Scene* scene1 = new Scene13();
 	Scene* scene2 = new Scene1();
 	Scene* scene = scene1;
 	scene1->Init();

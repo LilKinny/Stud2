@@ -12,6 +12,8 @@ class Scene13 : public Scene
 	{
 		GEO_AXES,
 		GEO_QUAD,
+		GEO_TITLE,
+		GEO_TITLEBUTTONS,
 		GEO_CUBE,
 		GEO_CUBE_PURPLE,
 		GEO_CUBE_GREEN,
