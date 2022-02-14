@@ -237,7 +237,7 @@ void Scene13::Update(double dt)
 		unsigned w = Application::GetWindowWidth();
 		unsigned h = Application::GetWindowHeight();
 		float posX = (x / w) * 80; //convert (0,800) to (0,80)
-		float posY = (y / h) *60; //convert (600,0) to (0,60)
+		float posY = 60 - (y / h) *60; //convert (600,0) to (0,60)
 		std::cout << "posX:" << posX << " , posY:" << posY << std::endl;
 		if (posX > 50 && posX < 83 && posY > 35 && posY < 48)
 		{

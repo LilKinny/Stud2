@@ -84,7 +84,7 @@ void Application::Init()
 
 	//Create a window and create its OpenGL context
 	m_window = glfwCreateWindow(1920, 1080, "Test Window", NULL, NULL);
-	glfwSetWindowSizeCallback(m_window, resize_callback);
+	resize_callback(m_window, 1920, 1080);
 	//If the window couldn't be created
 	if (!m_window)
 	{
