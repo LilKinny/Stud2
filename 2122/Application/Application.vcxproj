@@ -171,6 +171,7 @@
     <ClCompile Include="Source\Scene8.cpp" />
     <ClCompile Include="Source\Scene9.cpp" />
     <ClCompile Include="Source\shader.cpp" />
+    <ClCompile Include="Source\Splevel1.cpp" />
     <ClCompile Include="Source\Utility.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -200,6 +201,7 @@
     <ClInclude Include="Source\Scene8.h" />
     <ClInclude Include="Source\Scene9.h" />
     <ClInclude Include="Source\shader.hpp" />
+    <ClInclude Include="Source\Splevel1.h" />
     <ClInclude Include="Source\Utility.h" />
     <ClInclude Include="Source\vertex.h" />
   </ItemGroup>

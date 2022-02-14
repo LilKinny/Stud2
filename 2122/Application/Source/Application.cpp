@@ -16,6 +16,7 @@
 #include "Scene4.h"
 #include "Scene5.h"
 #include "Scene13.h"
+#include "Splevel1.h"
 
 
 GLFWwindow* m_window;
@@ -116,9 +117,10 @@ void Application::Init()
 void Application::Run()
 {
 	Scene* scene1 = new Scene13();
-	Scene* scene2 = new Scene1();
+	Scene* scene2 = new Splevel1();
 	Scene* scene = scene1;
 	scene1->Init();
+	scene2->Init();
 
 
 
