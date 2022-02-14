@@ -16,6 +16,7 @@
 #include "Scene4.h"
 #include "Scene5.h"
 #include "Scene13.h"
+#include "Scene12.h"
 
 
 GLFWwindow* m_window;
@@ -112,19 +113,57 @@ void Application::Init()
 
 	}
 }
-
+bool starttransition;
 void Application::Run()
 {
 	Scene* scene1 = new Scene13();
 	Scene* scene2 = new Scene1();
 	Scene* scene = scene1;
 	scene1->Init();
-
-
+	float time = 0;
+	static bool bLButtonState = false;
 
 	m_timer.startTimer();    // Start timer to calculate how long it takes to render this frame
 	while (!glfwWindowShouldClose(m_window) && !IsKeyPressed(VK_ESCAPE))
 	{
+		std::cout << time;
+		if (!bLButtonState && Application::IsMousePressed(0))
+		{
+			bLButtonState = true;
+			std::cout << "APPLICATION.CPP LMOUSE DOWN" << std::endl;
+
+			//Converting Viewport space to UI space
+			double x, y;
+			Application::GetCursorPos(&x, &y);
+			unsigned w = Application::GetWindowWidth();
+			unsigned h = Application::GetWindowHeight();
+			float posX = (x / w) * 80; //convert (0,800) to (0,80)
+			float posY = 60 - (y / h) * 60; //convert (600,0) to (0,60)
+			std::cout << "posX:" << posX << " , posY:" << posY << std::endl;
+			
+			if (posX > 30 && posX < 50 && posY > 24 && posY < 40)
+			{
+				starttransition = true;
+				
+				//trigger user action or function
+			}
+			else
+			{
+				std::cout << "Miss!" << std::endl;
+			}
+
+			
+		}
+
+		if (starttransition == true && time <= 4)
+		{
+			time = time + 0.1;
+			Sleep(20);
+		}
+		else if (time >= 4)
+		{
+			scene = scene2;
+		}
 
 		if (IsKeyPressed(VK_F1))
 			scene = scene1;

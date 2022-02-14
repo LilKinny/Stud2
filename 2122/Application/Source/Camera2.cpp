@@ -25,6 +25,13 @@ void Camera2::Update(double dt)
 {
 	static const float CAMERA_SPEED = 45.f;
 	static const float ZOOM_SPEED = 20.f;
+
+		float yaw = -CAMERA_SPEED * static_cast<float>(dt);
+		Mtx44 rotation;
+		rotation.SetToRotation(yaw / 20, 0, 0.01, 0);
+		position = rotation * position;
+		up = rotation * up;
+
 	if(Application::IsKeyPressed('A'))
 	{
 		float yaw = -CAMERA_SPEED * static_cast<float>(dt);

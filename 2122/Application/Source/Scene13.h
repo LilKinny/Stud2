@@ -2,7 +2,7 @@
 #define SCENE_11_H
 #include "MatrixStack.h"
 #include "Scene.h"
-#include "Camera3.h"
+#include "Camera2.h"
 #include "Mesh.h"
 #include "Light.h"
 #include "Material.h"
@@ -14,6 +14,8 @@ class Scene13 : public Scene
 		GEO_QUAD,
 		GEO_TITLE,
 		GEO_TITLEBUTTONS,
+		GEO_FADE_TO_BLACK,
+
 		GEO_CUBE,
 		GEO_CUBE_PURPLE,
 		GEO_CUBE_GREEN,
@@ -94,7 +96,7 @@ private:
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
 	void RenderText(Mesh* mesh, std::string text, Color color);
 	void RenderMeshOnScreen(Mesh* mesh, int x, int y, int sizex, int sizey);
-	Camera3 camera;
+	Camera2 camera;
 };
 
 #endif

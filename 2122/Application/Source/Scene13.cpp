@@ -15,6 +15,9 @@
 #include <cstdlib>
 #include <GLFW/glfw3.h>
 using namespace std;
+float scalex;
+bool transition;
+string transitiontoscene;
 Scene13::Scene13()
 {
 }
@@ -150,6 +153,10 @@ void Scene13::Init()
 	meshList[GEO_TITLEBUTTONS] = MeshBuilder::GenerateQuad("quad", Color(1, 1, 1), 1.f);
 	meshList[GEO_TITLEBUTTONS]->textureID = LoadTGA("Image//TitleButton.tga");
 
+	meshList[GEO_FADE_TO_BLACK] = MeshBuilder::GenerateQuad("quad", Color(1, 1, 1), 1.f);
+	meshList[GEO_FADE_TO_BLACK]->textureID = LoadTGA("Image//BlackPane.tga");
+
+
 	meshList[GEO_TITLE] = MeshBuilder::GenerateQuad("quad", Color(1, 1, 1), 1.f);
 	meshList[GEO_TITLE]->textureID = LoadTGA("Image//TitleFrame.tga");
 
@@ -180,7 +187,6 @@ void Scene13::Init()
 
 void Scene13::Update(double dt)
 {
-
 	//static const float 
 	if (Application::IsKeyPressed('1')) //enable back face culling
 		glEnable(GL_CULL_FACE);
@@ -240,9 +246,11 @@ void Scene13::Update(double dt)
 		float posX = (x / w) * 80; //convert (0,800) to (0,80)
 		float posY = 60 - (y / h) *60; //convert (600,0) to (0,60)
 		std::cout << "posX:" << posX << " , posY:" << posY << std::endl;
-		if (posX > 50 && posX < 83 && posY > 30 && posY < 40)
+		if (posX > 30 && posX < 50 && posY > 24 && posY < 40)
 		{
-			std::cout << "Hit! Change to next scene" << std::endl;
+			std::cout << "Hit! transition start" << std::endl;
+			transition = true;
+			
 			//trigger user action or function
 		}
 		else
@@ -267,7 +275,17 @@ void Scene13::Update(double dt)
 		bRButtonState = false;
 		std::cout << "RBUTTON UP" << std::endl;
 	}
-
+	if (scalex < 20 && transition == true)
+	{
+		scalex = scalex + 0.25;
+		Sleep(10);
+	}
+	if (scalex >= 10)
+	{
+		Sleep(50);
+		cout << "Change scene";
+		
+	}
 }
 
 void Scene13::Render()
@@ -442,13 +460,14 @@ void Scene13::RenderSkybox()
 	
 
 	RenderMeshOnScreen(meshList[GEO_TITLEBUTTONS], 4, 3, 2, 1);
-	RenderTextOnScreen(meshList[GEO_TEXT], "PLAY", Color(0, 1, 0), 2, 36, 30);
+	RenderTextOnScreen(meshList[GEO_TEXT], "PLAY", Color(0, 1, 0), 4, 36, 30);
 
 	RenderMeshOnScreen(meshList[GEO_TITLE], 4, 5, 3, 1);
-	RenderTextOnScreen(meshList[GEO_TEXT], "Scammer tycoon", Color(0, 1, 0), 2, 26, 50);
+	RenderTextOnScreen(meshList[GEO_TEXT], "Scammer tycoon", Color(1, 1, 1), 4, 26, 50);
 
+	RenderMeshOnScreen(meshList[GEO_FADE_TO_BLACK], 4, 3, scalex, scalex);
 
-}
+	}
 void Scene13::RenderMesh(Mesh* mesh, bool enableLight)
 {
 	Mtx44 MVP, modelView, modelView_inverse_transpose;
@@ -564,7 +583,7 @@ void Scene13::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, floa
 	{
 		Mtx44 characterSpacing;
 		//Change this line inside for loop
-		characterSpacing.SetToTranslation(0.5f + i * 1.0f, 0.5f, 0);
+		characterSpacing.SetToTranslation(0.5f + i * 0.5f, 0.5f, 0);
 		Mtx44 MVP = projectionStack.Top() * viewStack.Top() *
 			modelStack.Top() * characterSpacing;
 		glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE,
