@@ -236,12 +236,12 @@ void Scene13::Update(double dt)
 		Application::GetCursorPos(&x, &y);
 		unsigned w = Application::GetWindowWidth();
 		unsigned h = Application::GetWindowHeight();
-		float posX = x / 10; //convert (0,800) to (0,80)
-		float posY = y / 10; //convert (600,0) to (0,60)
+		float posX = (x / w) * 80; //convert (0,800) to (0,80)
+		float posY = (y / h) *60; //convert (600,0) to (0,60)
 		std::cout << "posX:" << posX << " , posY:" << posY << std::endl;
-		if (posX > 35 && posX < 45 && posY > 25 && posY < 35)
+		if (posX > 50 && posX < 83 && posY > 35 && posY < 48)
 		{
-			std::cout << "Hit!" << std::endl;
+			std::cout << "Hit! Change to next scene" << std::endl;
 			//trigger user action or function
 		}
 		else
@@ -441,9 +441,12 @@ void Scene13::RenderSkybox()
 	
 
 	RenderMeshOnScreen(meshList[GEO_TITLEBUTTONS], 4, 3, 2, 1);
+	RenderTextOnScreen(meshList[GEO_TEXT], "PLAY", Color(0, 1, 0), 2, 36, 30);
 
 	RenderMeshOnScreen(meshList[GEO_TITLE], 4, 5, 3, 1);
-	RenderTextOnScreen(meshList[GEO_TEXT], "Scam tycoon", Color(0, 1, 0), 2, 30, 50);
+	RenderTextOnScreen(meshList[GEO_TEXT], "Scammer tycoon", Color(0, 1, 0), 2, 26, 50);
+
+
 }
 void Scene13::RenderMesh(Mesh* mesh, bool enableLight)
 {
