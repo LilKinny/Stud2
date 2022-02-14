@@ -1,12 +1,12 @@
-#ifndef SCENE_11_H
-#define SCENE_11_H
+#ifndef Splevel1_H
+#define Splevel1_H
 #include "MatrixStack.h"
 #include "Scene.h"
-#include "Camera2.h"
+#include "Camera3.h"
 #include "Mesh.h"
 #include "Light.h"
 #include "Material.h"
-class Scene13 : public Scene
+class Splevel1 : public Scene
 {
 	enum GEOMETRY_TYPE
 	{
@@ -14,9 +14,6 @@ class Scene13 : public Scene
 		GEO_QUAD,
 		GEO_TITLE,
 		GEO_TITLEBUTTONS,
-		GEO_FADE_TO_BLACK,
-		GEO_GRASS,
-		GEO_GRASS_V,
 		GEO_CUBE,
 		GEO_CUBE_PURPLE,
 		GEO_CUBE_GREEN,
@@ -43,6 +40,8 @@ class Scene13 : public Scene
 		GEO_DART,
 		GEO_COTTAGE,
 		GEO_TEXT,
+		GEO_BUILDING,
+		
 
 		NUM_GEOMETRY,
 	};
@@ -76,8 +75,8 @@ class Scene13 : public Scene
 		U_TOTAL,
 	};
 public:
-	Scene13();
-	~Scene13();
+	Splevel1();
+	~Splevel1();
 	virtual void Init();
 	virtual void Update(double dt);
 	virtual void Render();
@@ -97,7 +96,7 @@ private:
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
 	void RenderText(Mesh* mesh, std::string text, Color color);
 	void RenderMeshOnScreen(Mesh* mesh, int x, int y, int sizex, int sizey);
-	Camera2 camera;
+	Camera3 camera;
 };
 
 #endif

@@ -1,6 +1,6 @@
 #include <iostream>
 #include <string>
-#include "Scene13.h"
+#include "Splevel1.h"
 #include "GL\glew.h"
 #include "LoadTGA.h"
 #include "shader.hpp"
@@ -15,17 +15,14 @@
 #include <cstdlib>
 #include <GLFW/glfw3.h>
 using namespace std;
-float scalex;
-bool transition;
-string transitiontoscene;
-Scene13::Scene13()
+Splevel1::Splevel1()
 {
 }
 
-Scene13::~Scene13()
+Splevel1::~Splevel1()
 {
 }
-void Scene13::Init()
+void Splevel1::Init()
 {
 	// Set background color to dark blue
 	glClearColor(0.2f, 0.2f, 0.2f, 0.2f);
@@ -144,12 +141,6 @@ void Scene13::Init()
 	meshList[GEO_BOTTOM] = MeshBuilder::GenerateQuad("bottom", Color(1, 1, 1), 1.f);
 	meshList[GEO_BOTTOM]->textureID = LoadTGA("Image//bottom.tga");
 
-	meshList[GEO_GRASS] = MeshBuilder::GenerateOBJMTL("model211", "OBJ//ground_grass.obj", "OBJ//ground_grass.mtl");
-
-	meshList[GEO_GRASS_V] = MeshBuilder::GenerateOBJMTL("model211", "OBJ//grassLarge.obj", "OBJ//grassLarge.mtl");
-
-
-
 	/*
 	meshList[GEO_NYP] = MeshBuilder::GenerateQuad("nyplogo", Color(1, 1, 1), 1.f);
 	meshList[GEO_NYP]->textureID = LoadTGA("Image//NYP.tga");
@@ -158,10 +149,6 @@ void Scene13::Init()
  */
 	meshList[GEO_TITLEBUTTONS] = MeshBuilder::GenerateQuad("quad", Color(1, 1, 1), 1.f);
 	meshList[GEO_TITLEBUTTONS]->textureID = LoadTGA("Image//TitleButton.tga");
-
-	meshList[GEO_FADE_TO_BLACK] = MeshBuilder::GenerateQuad("quad", Color(1, 1, 1), 1.f);
-	meshList[GEO_FADE_TO_BLACK]->textureID = LoadTGA("Image//BlackPane.tga");
-
 
 	meshList[GEO_TITLE] = MeshBuilder::GenerateQuad("quad", Color(1, 1, 1), 1.f);
 	meshList[GEO_TITLE]->textureID = LoadTGA("Image//TitleFrame.tga");
@@ -184,6 +171,11 @@ void Scene13::Init()
 	meshList[GEO_COTTAGE] = MeshBuilder::GenerateOBJMTL("model7",
 		"OBJ//cottage_obj.obj", "OBJ//cottage_obj.mtl");*/
 
+	
+
+	meshList[GEO_BUILDING] = MeshBuilder::GenerateOBJMTL("modelBUIDLING",
+		"OBJ//Level_1.obj", "OBJ//Level_1.mtl");
+
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16,16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Image//Agency_FB.tga");
 	Mtx44 projection;
@@ -191,8 +183,9 @@ void Scene13::Init()
 	projectionStack.LoadMatrix(projection);
 }
 
-void Scene13::Update(double dt)
+void Splevel1::Update(double dt)
 {
+
 	//static const float 
 	if (Application::IsKeyPressed('1')) //enable back face culling
 		glEnable(GL_CULL_FACE);
@@ -252,11 +245,9 @@ void Scene13::Update(double dt)
 		float posX = (x / w) * 80; //convert (0,800) to (0,80)
 		float posY = 60 - (y / h) *60; //convert (600,0) to (0,60)
 		std::cout << "posX:" << posX << " , posY:" << posY << std::endl;
-		if (posX > 30 && posX < 50 && posY > 24 && posY < 40)
+		if (posX > 50 && posX < 83 && posY > 30 && posY < 40)
 		{
-			std::cout << "Hit! transition start" << std::endl;
-			transition = true;
-			
+			std::cout << "Hit! Change to next scene" << std::endl;
 			//trigger user action or function
 		}
 		else
@@ -281,58 +272,95 @@ void Scene13::Update(double dt)
 		bRButtonState = false;
 		std::cout << "RBUTTON UP" << std::endl;
 	}
-	if (scalex < 20 && transition == true)
-	{
-		scalex = scalex + 0.25;
-		Sleep(10);
-	}
-	if (scalex >= 10)
-	{
-		Sleep(50);
-		cout << "Change scene";
-		
-	}
+
 }
 
-void Scene13::Render()
+void Splevel1::Render()
 {
 	
-	// Render VBO here
+	//// Render VBO here
+	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	//RenderSkybox();
+	//RenderLevel();
+	////Temp variables
+	//Mtx44 translate, rotate, scale;
+	//Mtx44 MVP;
+	////These will be replaced by matrix stack soon
+	//Mtx44 model;
+	//Mtx44 view;
+	//Mtx44 projection;
+
+	////Set all matrices to identity
+	//translate.SetToIdentity();
+	//rotate.SetToIdentity();
+	//scale.SetToIdentity();
+	//model.SetToIdentity();
+
+	////Set view matrix using camera settings
+	//viewStack.LoadIdentity();
+	//viewStack.LookAt(
+
+	//	camera.position.x, camera.position.y, camera.position.z,
+	//	camera.target.x, camera.target.y, camera.target.z,
+	//	camera.up.x, camera.up.y, camera.up.z);
+	//modelStack.LoadIdentity();
+
+
+
+	//Mtx44 mvp = projectionStack.Top() * viewStack.Top() * modelStack.Top();
+
+
+
+	//Position lightPosition_cameraspace = viewStack.Top() * light[0].position;
+	//glUniform3fv(m_parameters[U_LIGHT0_POSITION], 1, &lightPosition_cameraspace.x);
+	//
+
+
+	//if (light[0].type == Light::LIGHT_DIRECTIONAL)
+	//{
+	//	Vector3 lightDir(light[0].position.x, light[0].position.y, light[0].position.z);
+	//	Vector3 lightDirection_cameraspace = viewStack.Top() * lightDir;
+	//	glUniform3fv(m_parameters[U_LIGHT0_POSITION], 1, &lightDirection_cameraspace.x);
+	//}
+	//else if (light[0].type == Light::LIGHT_SPOT)
+	//{
+	//	Position lightPosition_cameraspace = viewStack.Top() * light[0].position;
+	//	glUniform3fv(m_parameters[U_LIGHT0_POSITION], 1, &lightPosition_cameraspace.x);
+	//	Vector3 spotDirection_cameraspace = viewStack.Top() * light[0].spotDirection;
+	//	glUniform3fv(m_parameters[U_LIGHT0_SPOTDIRECTION], 1, &spotDirection_cameraspace.x);
+	//}
+	//else
+	//{
+	//	Position lightPosition_cameraspace = viewStack.Top() * light[0].position;
+	//	glUniform3fv(m_parameters[U_LIGHT0_POSITION], 1, &lightPosition_cameraspace.x);
+	//}
+
+	//modelStack.PushMatrix();
+	////scale, translate, rotate
+
+	/*------------------------------------------PREVIOUS CODE---------------------------------*/
+
+
+	//Clear color & depth buffer every frame
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	RenderSkybox();
-	//Temp variables
-	Mtx44 translate, rotate, scale;
-	Mtx44 MVP;
-	//These will be replaced by matrix stack soon
-	Mtx44 model;
-	Mtx44 view;
-	Mtx44 projection;
 
-	//Set all matrices to identity
-	translate.SetToIdentity();
-	rotate.SetToIdentity();
-	scale.SetToIdentity();
-	model.SetToIdentity();
+	//glEnableVertexAttribArray(0); // 1st attribute buffer : vertices
+	//glEnableVertexAttribArray(1);
 
-	//Set view matrix using camera settings
+
+
+
 	viewStack.LoadIdentity();
 	viewStack.LookAt(
-
 		camera.position.x, camera.position.y, camera.position.z,
 		camera.target.x, camera.target.y, camera.target.z,
 		camera.up.x, camera.up.y, camera.up.z);
 	modelStack.LoadIdentity();
 
 
-
-	Mtx44 mvp = projectionStack.Top() * viewStack.Top() * modelStack.Top();
-
-
-
-	Position lightPosition_cameraspace = viewStack.Top() * light[0].position;
-	glUniform3fv(m_parameters[U_LIGHT0_POSITION], 1, &lightPosition_cameraspace.x);
-	
-
+	Vector3 lightDir(light[1].position.x, light[1].position.y, light[1].position.z);
+	Vector3 lightDirection_cameraspace = viewStack.Top() * lightDir;
+	glUniform3fv(m_parameters[U_LIGHT0_POSITION], 1, &lightDirection_cameraspace.x);
 
 	if (light[0].type == Light::LIGHT_DIRECTIONAL)
 	{
@@ -353,11 +381,22 @@ void Scene13::Render()
 		glUniform3fv(m_parameters[U_LIGHT0_POSITION], 1, &lightPosition_cameraspace.x);
 	}
 
+
+
+	RenderMesh(meshList[GEO_AXES], false);
+	RenderSkybox();
+
 	modelStack.PushMatrix();
-	//scale, translate, rotate
+	//modelStack.Rotate(-90, 1, 0, 0);
+	modelStack.Translate(0, 0, 0);
+	modelStack.Scale(1, 1, 1);
+
+	RenderMesh(meshList[GEO_BUILDING], true);
+	modelStack.PopMatrix();
+
 }
 
-void Scene13::RenderSkybox()
+void Splevel1::RenderSkybox()
 {
 
 	
@@ -418,12 +457,6 @@ void Scene13::RenderSkybox()
 	RenderMesh(meshList[GEO_TOP], false);
 	modelStack.PopMatrix();
 
-	//modelStack.PushMatrix();
-	//modelStack.Translate(-10, 45, 10);
-	//modelStack.Scale(900, 10, 300);
-	//modelStack.Rotate(90, 0, 1, 0);
-	//RenderMesh(meshList[GEO_GRASS], true);
-	//modelStack.PopMatrix();
 
 	/*modelStack.PushMatrix();
 	modelStack.Translate(0, 30, 0);
@@ -471,16 +504,15 @@ void Scene13::RenderSkybox()
 
 	
 
-	RenderMeshOnScreen(meshList[GEO_TITLEBUTTONS], 4, 3, 2, 1);
-	RenderTextOnScreen(meshList[GEO_TEXT], "PLAY", Color(0, 1, 0), 4, 36, 30);
+	/*RenderMeshOnScreen(meshList[GEO_TITLEBUTTONS], 4, 3, 2, 1);
+	RenderTextOnScreen(meshList[GEO_TEXT], "PLAY", Color(0, 1, 0), 2, 36, 30);
 
 	RenderMeshOnScreen(meshList[GEO_TITLE], 4, 5, 3, 1);
-	RenderTextOnScreen(meshList[GEO_TEXT], "Scammer tycoon", Color(1, 1, 1), 4, 26, 50);
+	RenderTextOnScreen(meshList[GEO_TEXT], "Scammer tycoon", Color(0, 1, 0), 2, 26, 50);*/
 
-	RenderMeshOnScreen(meshList[GEO_FADE_TO_BLACK], 4, 3, scalex, scalex);
 
-	}
-void Scene13::RenderMesh(Mesh* mesh, bool enableLight)
+}
+void Splevel1::RenderMesh(Mesh* mesh, bool enableLight)
 {
 	Mtx44 MVP, modelView, modelView_inverse_transpose;
 
@@ -528,7 +560,7 @@ void Scene13::RenderMesh(Mesh* mesh, bool enableLight)
 	}
 }
 
-void Scene13::Exit()
+void Splevel1::Exit()
 {
 	// Cleanup VBO here
 	for (int i = 0; i < NUM_GEOMETRY; ++i)
@@ -542,7 +574,7 @@ void Scene13::Exit()
 	glDeleteProgram(m_programID);
 }
 
-void Scene13::RenderText(Mesh* mesh, std::string text, Color color)
+void Splevel1::RenderText(Mesh* mesh, std::string text, Color color)
 {
 	if (!mesh || mesh->textureID <= 0) //Proper error check
 		return;
@@ -569,7 +601,7 @@ void Scene13::RenderText(Mesh* mesh, std::string text, Color color)
 	glEnable(GL_DEPTH_TEST); 
 }
 
-void Scene13::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y)
+void Splevel1::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y)
 {
 	if (!mesh || mesh->textureID <= 0) //Proper error check
 		return;
@@ -595,7 +627,7 @@ void Scene13::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, floa
 	{
 		Mtx44 characterSpacing;
 		//Change this line inside for loop
-		characterSpacing.SetToTranslation(0.5f + i * 0.5f, 0.5f, 0);
+		characterSpacing.SetToTranslation(0.5f + i * 1.0f, 0.5f, 0);
 		Mtx44 MVP = projectionStack.Top() * viewStack.Top() *
 			modelStack.Top() * characterSpacing;
 		glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE,
@@ -612,7 +644,7 @@ void Scene13::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, floa
 }
 
 
-void Scene13::RenderMeshOnScreen(Mesh* mesh, int x, int y, int sizex, int sizey)
+void Splevel1::RenderMeshOnScreen(Mesh* mesh, int x, int y, int sizex, int sizey)
 {
 	glDisable(GL_DEPTH_TEST);
 	Mtx44 ortho;
