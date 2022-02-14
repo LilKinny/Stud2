@@ -176,11 +176,17 @@ void Splevel1::Init()
 	meshList[GEO_BUILDING] = MeshBuilder::GenerateOBJMTL("modelBUIDLING",
 		"OBJ//Level_1.obj", "OBJ//Level_1.mtl");
 
+	meshList[GEO_LAPTOP] = MeshBuilder::GenerateOBJMTL("modellaptop",
+		"OBJ//Laptop.obj", "OBJ//Laptop.mtl");
+
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16,16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Image//Agency_FB.tga");
 	Mtx44 projection;
 	projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 1000.f);
 	projectionStack.LoadMatrix(projection);
+
+
+	//bEnableLight = true;
 }
 
 void Splevel1::Update(double dt)
@@ -358,7 +364,7 @@ void Splevel1::Render()
 	modelStack.LoadIdentity();
 
 
-	Vector3 lightDir(light[1].position.x, light[1].position.y, light[1].position.z);
+	Vector3 lightDir(light[0].position.x, light[0].position.y, light[0].position.z);
 	Vector3 lightDirection_cameraspace = viewStack.Top() * lightDir;
 	glUniform3fv(m_parameters[U_LIGHT0_POSITION], 1, &lightDirection_cameraspace.x);
 
@@ -382,17 +388,25 @@ void Splevel1::Render()
 	}
 
 
-
 	RenderMesh(meshList[GEO_AXES], false);
 	RenderSkybox();
 
 	modelStack.PushMatrix();
 	//modelStack.Rotate(-90, 1, 0, 0);
 	modelStack.Translate(0, 0, 0);
-	modelStack.Scale(1, 1, 1);
+	modelStack.Scale(10, 10, 10);
 
 	RenderMesh(meshList[GEO_BUILDING], true);
 	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	//modelStack.Rotate(-90, 1, 0, 0);
+	modelStack.Translate(10, 0, 0);
+	modelStack.Scale(20, 20, 20);
+
+	RenderMesh(meshList[GEO_LAPTOP], true);
+	modelStack.PopMatrix();
+	
 
 }
 
@@ -407,6 +421,8 @@ void Splevel1::RenderSkybox()
 	modelStack.Scale(500, 500, 500);
 	RenderMesh(meshList[GEO_QUAD], false);
 	modelStack.PopMatrix();*/
+
+	
 
 
 	modelStack.PushMatrix();
@@ -522,7 +538,7 @@ void Splevel1::RenderMesh(Mesh* mesh, bool enableLight)
 	glUniformMatrix4fv(m_parameters[U_MODELVIEW], 1, GL_FALSE, &modelView.a[0]);
 	if (enableLight)
 	{
-		glUniform1i(m_parameters[U_LIGHTENABLED], 0);
+		glUniform1i(m_parameters[U_LIGHTENABLED], 1);
 		modelView_inverse_transpose = modelView.GetInverse().GetTranspose();
 		glUniformMatrix4fv(m_parameters[U_MODELVIEW_INVERSE_TRANSPOSE], 1, GL_FALSE, &modelView_inverse_transpose.a[0]);
 
