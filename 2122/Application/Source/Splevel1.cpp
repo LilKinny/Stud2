@@ -114,6 +114,8 @@ void Splevel1::Init()
 	//variable to rotate geometry
 	rotateAngle = 0;
 
+	RenderUI = 0;
+	PageNum = 1;
 	//Initialize camera settings
 	camera.Init(Vector3(80, 50, 50), Vector3(0, 0, 0), Vector3(0, 1, 0));
 
@@ -140,6 +142,13 @@ void Splevel1::Init()
 
 	meshList[GEO_BOTTOM] = MeshBuilder::GenerateQuad("bottom", Color(1, 1, 1), 1.f);
 	meshList[GEO_BOTTOM]->textureID = LoadTGA("Image//bottom.tga");
+
+
+	meshList[GEO_TopUI] = MeshBuilder::GenerateRec("TopUI", Color(1, 1, 1), 5.f, 1.f);
+	meshList[GEO_TopUI]->textureID = LoadTGA("Image//SP2_TopUI.tga");
+
+	meshList[GEO_BotUI] = MeshBuilder::GenerateRec("BotUI", Color(1, 1, 1), 5.f, 1.f);
+	meshList[GEO_BotUI]->textureID = LoadTGA("Image//SP2_BotUI.tga");
 
 	/*
 	meshList[GEO_NYP] = MeshBuilder::GenerateQuad("nyplogo", Color(1, 1, 1), 1.f);
@@ -257,6 +266,35 @@ void Splevel1::Update(double dt)
 		{
 			std::cout << "Miss!" << std::endl;
 		}
+		if ((posY <= 59 && posY >= 53.5) && (posX >= 1.5 && posX <= 12.5)) //Clck Store
+		{
+			PageNum = 1;
+			RenderUI = 1;
+		}
+		if ((posY <= 59 && posY >= 53.5) && (posX >= 15.5 && posX <= 26.5)) //Click Owned
+		{
+			PageNum = 1;
+			RenderUI = 2;
+		}
+
+		if ((posY >= 46 && posY <= 48.5) && (posX >= 27.5 && posX <= 29)) //Left Button
+		{
+			if (PageNum != 1)
+			{
+				--PageNum;
+			}
+		}
+		if ((posY >= 46 && posY <= 48.5) && (posX >= 50.5 && posX <= 52)) //Right Button
+		{
+			if (PageNum != 3)
+			{
+				++PageNum;
+			}
+		}
+		if ((posY >= 46 && posY <= 48.5) && (posX >= 62 && posX <= 63.5)) //Click Cross Button
+		{
+			RenderUI = 0;
+		}
 	
 	}
 	else if (bLButtonState && !Application::IsMousePressed(0))
@@ -350,7 +388,7 @@ void Splevel1::Render()
 	//glEnableVertexAttribArray(0); // 1st attribute buffer : vertices
 	//glEnableVertexAttribArray(1);
 
-
+	
 
 
 	viewStack.LoadIdentity();
@@ -384,7 +422,7 @@ void Splevel1::Render()
 		glUniform3fv(m_parameters[U_LIGHT0_POSITION], 1, &lightPosition_cameraspace.x);
 	}
 
-
+	
 
 	RenderMesh(meshList[GEO_AXES], false);
 	RenderSkybox();
@@ -396,7 +434,36 @@ void Splevel1::Render()
 
 	RenderMesh(meshList[GEO_BUILDING], true);
 	modelStack.PopMatrix();
+	//TopUI
+	modelStack.PushMatrix();
+	RenderMeshOnScreen(meshList[GEO_TopUI], 40, 30, 16, 54, true);
+	modelStack.PopMatrix();
 
+	if (RenderUI == 1)
+	{
+		//BotUI
+		modelStack.PushMatrix();
+		RenderMeshOnScreen(meshList[GEO_BotUI], 40, 30, 16, 54, true);
+		modelStack.PopMatrix();
+
+		//Text
+		modelStack.PushMatrix();
+		RenderTextOnScreen(meshList[GEO_TEXT], "Store Page: " + std::to_string(PageNum), Color(1, 1, 0), 2, 30, 43);
+		modelStack.PopMatrix();
+	}
+	else if (RenderUI == 2)
+	{
+		//BotUI
+		modelStack.PushMatrix();
+		RenderMeshOnScreen(meshList[GEO_BotUI], 40, 30, 16, 54, true);
+		modelStack.PopMatrix();
+
+
+		//Text
+		modelStack.PushMatrix();
+		RenderTextOnScreen(meshList[GEO_TEXT], "Owned Page: " + std::to_string(PageNum), Color(1, 1, 0), 2, 30, 43);
+		modelStack.PopMatrix();
+	}
 }
 
 void Splevel1::RenderSkybox()
@@ -632,7 +699,7 @@ void Splevel1::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, flo
 	{
 		Mtx44 characterSpacing;
 		//Change this line inside for loop
-		characterSpacing.SetToTranslation(0.5f + i * 1.0f, 0.5f, 0);
+		characterSpacing.SetToTranslation(0.5f + i * 0.5f, 0.5f, 0);
 		Mtx44 MVP = projectionStack.Top() * viewStack.Top() *
 			modelStack.Top() * characterSpacing;
 		glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE,
@@ -648,23 +715,24 @@ void Splevel1::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, flo
 	
 }
 
-
-void Splevel1::RenderMeshOnScreen(Mesh* mesh, int x, int y, int sizex, int sizey)
+void Splevel1::RenderMeshOnScreen(Mesh* mesh, int x, int y, int sizex, int sizey, bool RotateX)
 {
 	glDisable(GL_DEPTH_TEST);
 	Mtx44 ortho;
-	ortho.SetToOrtho(0, 8, 0, 6, -1, 1); //size of screen UI
+	ortho.SetToOrtho(0, 80, 0, 60, -10, 10); //size of screen UI
 	projectionStack.PushMatrix();
 	projectionStack.LoadMatrix(ortho);
 	viewStack.PushMatrix();
 	viewStack.LoadIdentity(); //No need camera for ortho mode
 	modelStack.PushMatrix();
-	modelStack.LoadIdentity();
-	//to do: scale and translate accordingly
-
+	modelStack.LoadIdentity();//to do: scale and translate accordingly
 	modelStack.Translate(x, y, 0);
-	modelStack.Scale(sizex, sizey, 0);
-
+	if (RotateX == true)
+	{
+		modelStack.Rotate(180, 0, 0, 1);
+		modelStack.Rotate(180, 0, 1, 0);
+	}
+	modelStack.Scale(sizex, sizey, 1);
 	RenderMesh(mesh, false); //UI should not have light
 	projectionStack.PopMatrix();
 	viewStack.PopMatrix();

@@ -44,6 +44,8 @@ class Splevel1 : public Scene
 		GEO_TEXT,
 		GEO_BUILDING,
 		GEO_LAPTOP,
+		GEO_TopUI,
+		GEO_BotUI,
 		
 
 		NUM_GEOMETRY,
@@ -97,10 +99,13 @@ private:
 	float rotateAngleF;
 	float rotateAngleSF;
 	bool bEnableLight;
+
+	int RenderUI;
+	int PageNum;
 	
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
 	void RenderText(Mesh* mesh, std::string text, Color color);
-	void RenderMeshOnScreen(Mesh* mesh, int x, int y, int sizex, int sizey);
+	void RenderMeshOnScreen(Mesh* mesh, int x, int y, int sizex, int sizey, bool RotateX = false);
 	Camera3 camera;
 };
 
