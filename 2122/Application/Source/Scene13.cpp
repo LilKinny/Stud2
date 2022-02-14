@@ -144,6 +144,12 @@ void Scene13::Init()
 	meshList[GEO_BOTTOM] = MeshBuilder::GenerateQuad("bottom", Color(1, 1, 1), 1.f);
 	meshList[GEO_BOTTOM]->textureID = LoadTGA("Image//bottom.tga");
 
+	meshList[GEO_GRASS] = MeshBuilder::GenerateOBJMTL("model211", "OBJ//ground_grass.obj", "OBJ//ground_grass.mtl");
+
+	meshList[GEO_GRASS_V] = MeshBuilder::GenerateOBJMTL("model211", "OBJ//grassLarge.obj", "OBJ//grassLarge.mtl");
+
+
+
 	/*
 	meshList[GEO_NYP] = MeshBuilder::GenerateQuad("nyplogo", Color(1, 1, 1), 1.f);
 	meshList[GEO_NYP]->textureID = LoadTGA("Image//NYP.tga");
@@ -412,6 +418,12 @@ void Scene13::RenderSkybox()
 	RenderMesh(meshList[GEO_TOP], false);
 	modelStack.PopMatrix();
 
+	//modelStack.PushMatrix();
+	//modelStack.Translate(-10, 45, 10);
+	//modelStack.Scale(900, 10, 300);
+	//modelStack.Rotate(90, 0, 1, 0);
+	//RenderMesh(meshList[GEO_GRASS], true);
+	//modelStack.PopMatrix();
 
 	/*modelStack.PushMatrix();
 	modelStack.Translate(0, 30, 0);
