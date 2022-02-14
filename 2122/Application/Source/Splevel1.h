@@ -43,6 +43,7 @@ class Splevel1 : public Scene
 		GEO_COTTAGE,
 		GEO_TEXT,
 		GEO_BUILDING,
+		GEO_LAPTOP,
 		
 
 		NUM_GEOMETRY,
@@ -95,6 +96,8 @@ private:
 	float rotateAngle;
 	float rotateAngleF;
 	float rotateAngleSF;
+	bool bEnableLight;
+	
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
 	void RenderText(Mesh* mesh, std::string text, Color color);
 	void RenderMeshOnScreen(Mesh* mesh, int x, int y, int sizex, int sizey);
