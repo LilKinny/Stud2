@@ -141,7 +141,7 @@ void Application::Run()
 			float posY = 60 - (y / h) * 60; //convert (600,0) to (0,60)
 			std::cout << "posX:" << posX << " , posY:" << posY << std::endl;
 			
-			if (posX > 30 && posX < 50 && posY > 24 && posY < 40)
+			if (posX > 30 && posX < 50 && posY > 24 && posY < 40 && startransition == false)
 			{
 				starttransition = true;
 				
