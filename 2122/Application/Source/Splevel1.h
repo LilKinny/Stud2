@@ -49,11 +49,17 @@ class Splevel1 : public Scene
 		GEO_LAPTOP,
 		GEO_TopUI,
 		GEO_BotUI,
+<<<<<<< Updated upstream
 		GEO_SideUIBig,
 		GEO_SideUISmall,
 		GEO_MaxPrestige,
 		GEO_GreenUpgrade,
 		GEO_GrayUpgrade,
+=======
+		GEO_Table,
+		
+
+>>>>>>> Stashed changes
 		NUM_GEOMETRY,
 	};
 	enum UNIFORM_TYPE
