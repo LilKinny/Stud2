@@ -9,10 +9,11 @@ public:
 	int LuckyCatUpgrade;
 	int MoneyPlantUpgrade;
 	int PrestigeLvl;
+	float Money;
 	Equipment* EquipArray[18];
 	EquipmentManager();
 	~EquipmentManager();
-	int UpgradePrestige(void);
+	int UpgradePrestige(bool Upgrade);
 	int CalculateTotalIncome(void);
 };
 
