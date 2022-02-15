@@ -509,13 +509,27 @@ void Splevel1::Render()
 	//kjcode
 	{
 		modelStack.PushMatrix();
-		//modelStack.Rotate(-90, 1, 0, 0);
-		modelStack.Translate(0, 0, 0);
+		modelStack.Translate(50, 0, 45);
+		modelStack.Rotate(90, 0, 1, 0);
 		modelStack.Scale(10, 10, 10);
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(-1.5, 2.05, 0);
+			modelStack.Rotate(90, 0, 0, 1);
+			modelStack.Scale(0.5, 0.25, 0.5);
+			{
+				//modelStack.PushMatrix();
+				//modelStack.Translate(-1.5, 0, 0);
+				///*modelStack.Rotate(90, 0, 0, 1);*/
+				//modelStack.Scale(1, 1, 1);
+				//RenderMesh(meshList[GEO_Phone1], true);
+				//modelStack.PopMatrix();
+			}
+			RenderMesh(meshList[GEO_PAPER], true);
+			modelStack.PopMatrix();
+		}
 		RenderMesh(meshList[GEO_Table], true);
 		modelStack.PopMatrix();
-
-
 
 	}
 
