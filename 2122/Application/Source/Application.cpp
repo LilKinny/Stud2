@@ -129,7 +129,6 @@ void Application::Run()
 	while (!glfwWindowShouldClose(m_window) && !IsKeyPressed(VK_ESCAPE))
 	{
 		static bool bLButtonState = false;
-		std::cout << "LBUTTON DOWN" << std::endl;
 
 		//Converting Viewport space to UI space
 		double x, y;

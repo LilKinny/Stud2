@@ -117,7 +117,7 @@ void Splevel1::Init()
 	RenderUI = 0;
 	PageNum = 1;
 	//Initialize camera settings
-	camera.Init(Vector3(80, 50, 50), Vector3(0, 0, 0), Vector3(0, 1, 0));
+	camera.Init(Vector3(80, 30, 50), Vector3(0, 0, 0), Vector3(0, 1, 0));
 
 	// Init VBO
 	for (int i = 0; i < NUM_GEOMETRY; ++i)
@@ -185,8 +185,10 @@ void Splevel1::Init()
 	meshList[GEO_GRASS_V] = MeshBuilder::GenerateOBJMTL("model211", "OBJ//grassLarge.obj", "OBJ//grassLarge.mtl");
 
 
-	meshList[GEO_BUILDING] = MeshBuilder::GenerateOBJMTL("modelBUIDLING",
-		"OBJ//LVL1_withfloor.obj", "OBJ//LVL1_withfloor.mtl");
+	meshList[GEO_BUILDING] = MeshBuilder::GenerateOBJMTL("modelBUIDLING","OBJ//LVL1_withfloor.obj", "OBJ//LVL1_withfloor.mtl");
+
+	meshList[GEO_PAPER] = MeshBuilder::GenerateOBJ("modelBUIDLING", "OBJ//Paper.obj");
+	meshList[GEO_PAPER]->textureID = LoadTGA("Image//.Notelines.tga");
 
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16,16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Image//Agency_FB.tga");
@@ -194,9 +196,23 @@ void Splevel1::Init()
 	projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 1000.f);
 	projectionStack.LoadMatrix(projection);
 }
-
+bool police = false;
+double scaleevidence = 0;
+float pposx, pposy, pposx2, pposy2, pposx3, pposy3, rotateangle;
 void Splevel1::Update(double dt)
 {
+	rotateangle = rotateangle + 0.1;
+	int mg1_start = rand() % 3000 + 1;
+	cout << mg1_start << " , ";
+	if (mg1_start == 3000)
+	{
+		police = true;
+	}
+	if (police == true)
+	{
+		pposx = (rand() % 10 + 0) / 10;
+		scaleevidence = 1;
+	}
 
 	//static const float 
 	if (Application::IsKeyPressed('1')) //enable back face culling
@@ -556,6 +572,14 @@ void Splevel1::RenderSkybox()
 	modelStack.Rotate(180, 0, 180, 180);
 	modelStack.Scale(5, 5, 5);
 	RenderMesh(meshList[GEO_LIGHTBALL], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(0, 15, 0);
+	modelStack.Rotate(90, 1, 0, 0);
+	modelStack.Rotate(rotateangle * 10, 0, 0, 1);
+	modelStack.Scale(5, 5, 5);
+	RenderMesh(meshList[GEO_PAPER], true);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
