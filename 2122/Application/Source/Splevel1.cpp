@@ -117,7 +117,7 @@ void Splevel1::Init()
 	RenderUI = 0;
 	PageNum = 1;
 	//Initialize camera settings
-	camera.Init(Vector3(80, 50, 50), Vector3(0, 0, 0), Vector3(0, 1, 0));
+	camera.Init(Vector3(80, 30, 50), Vector3(0, 0, 0), Vector3(0, 1, 0));
 
 	// Init VBO
 	for (int i = 0; i < NUM_GEOMETRY; ++i)
@@ -143,12 +143,26 @@ void Splevel1::Init()
 	meshList[GEO_BOTTOM] = MeshBuilder::GenerateQuad("bottom", Color(1, 1, 1), 1.f);
 	meshList[GEO_BOTTOM]->textureID = LoadTGA("Image//bottom.tga");
 
-
 	meshList[GEO_TopUI] = MeshBuilder::GenerateRec("TopUI", Color(1, 1, 1), 5.f, 1.f);
 	meshList[GEO_TopUI]->textureID = LoadTGA("Image//SP2_TopUI.tga");
 
 	meshList[GEO_BotUI] = MeshBuilder::GenerateRec("BotUI", Color(1, 1, 1), 5.f, 1.f);
 	meshList[GEO_BotUI]->textureID = LoadTGA("Image//SP2_BotUI.tga");
+
+	meshList[GEO_SideUISmall] = MeshBuilder::GenerateRec("SideUISmall", Color(1, 1, 1), 5.f, 1.f);
+	meshList[GEO_SideUISmall]->textureID = LoadTGA("Image//SP2_SideUI_Small.tga");
+
+	meshList[GEO_SideUIBig] = MeshBuilder::GenerateRec("SideUIBig", Color(1, 1, 1), 5.f, 1.f);
+	meshList[GEO_SideUIBig]->textureID = LoadTGA("Image//SP2_SideUI_Big.tga");
+
+	meshList[GEO_MaxPrestige] = MeshBuilder::GenerateRec("MaxPrestige", Color(1, 1, 1), 5.f, 1.f);
+	meshList[GEO_MaxPrestige]->textureID = LoadTGA("Image//SP2_SideUI_Max.tga");
+
+	meshList[GEO_GreenUpgrade] = MeshBuilder::GenerateRec("GreenUpgrade", Color(1, 1, 1), 5.f, 1.f);
+	meshList[GEO_GreenUpgrade]->textureID = LoadTGA("Image//SP2_SideUI_GreenUpgrade.tga");
+
+	meshList[GEO_GrayUpgrade] = MeshBuilder::GenerateRec("GrayUpgrade", Color(1, 1, 1), 5.f, 1.f);
+	meshList[GEO_GrayUpgrade]->textureID = LoadTGA("Image//SP2_SideUI_GrayUpgrade.tga");
 
 	/*
 	meshList[GEO_NYP] = MeshBuilder::GenerateQuad("nyplogo", Color(1, 1, 1), 1.f);
@@ -185,8 +199,11 @@ void Splevel1::Init()
 	meshList[GEO_GRASS_V] = MeshBuilder::GenerateOBJMTL("model211", "OBJ//grassLarge.obj", "OBJ//grassLarge.mtl");
 
 
-	meshList[GEO_BUILDING] = MeshBuilder::GenerateOBJMTL("modelBUIDLING",
-		"OBJ//LVL1_withfloor.obj", "OBJ//LVL1_withfloor.mtl");
+	meshList[GEO_BUILDING] = MeshBuilder::GenerateOBJMTL("modelBUIDLING","OBJ//LVL1_withfloor.obj", "OBJ//LVL1_withfloor.mtl");
+	meshList[GEO_Table] = MeshBuilder::GenerateOBJMTL("modelBUIDLING", "OBJ//simple_table.obj", "OBJ//simple_table.mtl");
+
+	meshList[GEO_PAPER] = MeshBuilder::GenerateOBJ("modelBUIDLING", "OBJ//Paper.obj");
+	meshList[GEO_PAPER]->textureID = LoadTGA("Image//Notelines.tga");
 
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16,16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Image//Agency_FB.tga");
@@ -194,9 +211,37 @@ void Splevel1::Init()
 	projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 1000.f);
 	projectionStack.LoadMatrix(projection);
 }
-
+bool setuppolice = false, clearpolice;
+double scaleevidence = 0;
+float pposx, pposz, pposx2, pposz2, pposx3, pposz3, rotateangle, pposy;
+int mg1_start;
 void Splevel1::Update(double dt)
 {
+	rotateangle = rotateangle + 0.1;
+	if (setuppolice == false && clearpolice == false)
+	{
+		mg1_start = rand() % 30 + 1;
+		/*cout << mg1_start << " , ";*/
+	}
+	if (mg1_start == 30 && clearpolice == false) setuppolice = true;
+	if (setuppolice == true)
+	{
+		pposz = 19;
+		pposx = (rand() % 100 + 0) - 50;
+		pposz = (rand() % 100 + 0) - 50;
+		pposx2 = (rand() % 100 + 0) - 50;
+		pposz2 = (rand() % 100 + 0) - 50;
+		pposx3 = (rand() % 100 + 0) - 50;
+		pposz3 = (rand() % 100 + 0) - 50;
+		pposy = 15;
+		scaleevidence = 3;
+		clearpolice = true;
+		setuppolice = false;
+	}
+	if (clearpolice == true)
+	{
+
+	}
 
 	//static const float 
 	if (Application::IsKeyPressed('1')) //enable back face culling
@@ -455,6 +500,17 @@ void Splevel1::Render()
 		RenderTextOnScreen(meshList[GEO_TEXT], "Owned Page: " + std::to_string(PageNum), Color(1, 1, 0), 2, 30, 43);
 		modelStack.PopMatrix();
 	}
+
+	//kjcode
+	{
+		modelStack.PushMatrix();
+		//modelStack.Rotate(-90, 1, 0, 0);
+		modelStack.Translate(0, 0, 0);
+		modelStack.Scale(10, 10, 10);
+
+		RenderMesh(meshList[GEO_Table], true);
+		modelStack.PopMatrix();
+	}
 }
 
 void Splevel1::RenderSkybox()
@@ -556,6 +612,14 @@ void Splevel1::RenderSkybox()
 	modelStack.Rotate(180, 0, 180, 180);
 	modelStack.Scale(5, 5, 5);
 	RenderMesh(meshList[GEO_LIGHTBALL], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(pposx, pposy, pposz);
+	modelStack.Rotate(90, 1, 0, 0);
+	modelStack.Rotate(rotateangle * 10, 0, 0, 1);
+	modelStack.Scale(5, 5, 5);
+	RenderMesh(meshList[GEO_PAPER], true);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();

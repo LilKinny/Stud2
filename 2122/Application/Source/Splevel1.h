@@ -6,6 +6,8 @@
 #include "Mesh.h"
 #include "Light.h"
 #include "Material.h"
+#include "EquipmentManager.h"
+
 class Splevel1 : public Scene
 {
 	enum GEOMETRY_TYPE
@@ -21,6 +23,7 @@ class Splevel1 : public Scene
 		GEO_CUBE_GREEN,
 		GEO_CUBE_BROWN,
 		GEO_CUBE_WHITE,
+		GEO_PAPER,
 		GEO_CUBE_GREY,
 		GEO_SPHERE_JOINT,
 		GEO_CIRCLE,
@@ -46,8 +49,17 @@ class Splevel1 : public Scene
 		GEO_LAPTOP,
 		GEO_TopUI,
 		GEO_BotUI,
+<<<<<<< Updated upstream
+		GEO_SideUIBig,
+		GEO_SideUISmall,
+		GEO_MaxPrestige,
+		GEO_GreenUpgrade,
+		GEO_GrayUpgrade,
+=======
+		GEO_Table,
 		
 
+>>>>>>> Stashed changes
 		NUM_GEOMETRY,
 	};
 	enum UNIFORM_TYPE
@@ -100,8 +112,9 @@ private:
 	float rotateAngleSF;
 	bool bEnableLight;
 
-
+	EquipmentManager Manager;
 	int RenderUI;
+	int RenderPrestige;
 	int PageNum;
 	
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
