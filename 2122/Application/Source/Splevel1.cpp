@@ -210,22 +210,36 @@ void Splevel1::Init()
 	projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 1000.f);
 	projectionStack.LoadMatrix(projection);
 }
-bool police = false;
+bool setuppolice = false, clearpolice;
 double scaleevidence = 0;
-float pposx, pposy, pposx2, pposy2, pposx3, pposy3, rotateangle;
+float pposx, pposz, pposx2, pposz2, pposx3, pposz3, rotateangle, pposy;
+int mg1_start;
 void Splevel1::Update(double dt)
 {
 	rotateangle = rotateangle + 0.1;
-	int mg1_start = rand() % 3000 + 1;
-	cout << mg1_start << " , ";
-	if (mg1_start == 3000)
+	if (setuppolice == false && clearpolice == false)
 	{
-		police = true;
+		mg1_start = rand() % 30 + 1;
+		/*cout << mg1_start << " , ";*/
 	}
-	if (police == true)
+	if (mg1_start == 30 && clearpolice == false) setuppolice = true;
+	if (setuppolice == true)
 	{
-		pposx = (rand() % 10 + 0) / 10;
-		scaleevidence = 1;
+		pposz = 19;
+		pposx = (rand() % 100 + 0) - 50;
+		pposz = (rand() % 100 + 0) - 50;
+		pposx2 = (rand() % 100 + 0) - 50;
+		pposz2 = (rand() % 100 + 0) - 50;
+		pposx3 = (rand() % 100 + 0) - 50;
+		pposz3 = (rand() % 100 + 0) - 50;
+		pposy = 15;
+		scaleevidence = 3;
+		clearpolice = true;
+		setuppolice = false;
+	}
+	if (clearpolice == true)
+	{
+
 	}
 
 	//static const float 
@@ -589,7 +603,7 @@ void Splevel1::RenderSkybox()
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(0, 15, 0);
+	modelStack.Translate(pposx, pposy, pposz);
 	modelStack.Rotate(90, 1, 0, 0);
 	modelStack.Rotate(rotateangle * 10, 0, 0, 1);
 	modelStack.Scale(5, 5, 5);
