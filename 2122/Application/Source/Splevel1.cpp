@@ -232,6 +232,8 @@ void Splevel1::Init()
 
 	meshList[GEO_Tree] = MeshBuilder::GenerateOBJMTL("Tree", "OBJ//TreeTall.obj", "OBJ//TreeTall.mtl");
 
+	meshList[GEO_Lift] = MeshBuilder::GenerateOBJ("modelBUIDLING", "OBJ//Elevator.obj");
+	meshList[GEO_Lift]->textureID = LoadTGA("Image//Elevator.tga");
 
 	meshList[GEO_PAPER] = MeshBuilder::GenerateOBJ("modelBUIDLING", "OBJ//Paper.obj");
 	meshList[GEO_PAPER]->textureID = LoadTGA("Image//Notelines.tga");
@@ -461,21 +463,21 @@ void Splevel1::Update(double dt)
 				
 			}
 		}
-		if (questions == true)
-		{
-			if (posX > 45 && posX < 64 && posY > 43 && posY < 53)
-			{
+		//if (questions == true)
+		//{
+		//	if (posX > 45 && posX < 64 && posY > 43 && posY < 53)
+		//	{
 
-			}
-			if (posX > 45 && posX < 64 && posY > 48 && posY < 38)
-			{
+		//	}
+		//	if (posX > 45 && posX < 64 && posY > 48 && posY < 38)
+		//	{
 
-			}
-			if (posX > 45 && posX < 64 && posY > 13 && posY < 23)
-			{
+		//	}
+		//	if (posX > 45 && posX < 64 && posY > 13 && posY < 23)
+		//	{
 
-			}
-		}
+		//	}
+		//}
 		
 	}
 	else if (bLButtonState && !Application::IsMousePressed(0))
@@ -519,9 +521,11 @@ void Splevel1::Update(double dt)
 				if (Application::IsKeyPressed('E'))
 				{
 					questions = true;
+					
 				}
 			}
 		}
+		
 	}
 }
 
@@ -556,9 +560,6 @@ void Splevel1::Render()
 	//	camera.target.x, camera.target.y, camera.target.z,
 	//	camera.up.x, camera.up.y, camera.up.z);
 	//modelStack.LoadIdentity();
-
-
-
 	//Mtx44 mvp = projectionStack.Top() * viewStack.Top() * modelStack.Top();
 
 
@@ -589,7 +590,6 @@ void Splevel1::Render()
 
 	//modelStack.PushMatrix();
 	////scale, translate, rotate
-
 	/*------------------------------------------PREVIOUS CODE---------------------------------*/
 
 
@@ -639,12 +639,20 @@ void Splevel1::Render()
 	RenderSkybox();
 
 	modelStack.PushMatrix();
-	//modelStack.Rotate(-90, 1, 0, 0);
 	modelStack.Translate(0, 0, 0);
 	modelStack.Scale(10, 10, 10);
-
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(6.52, 3, -7);
+		modelStack.Rotate(90, 0, 0, 1);
+		modelStack.Scale(1.5, 0.9, 1);
+		RenderMesh(meshList[GEO_Lift], true);
+		modelStack.PopMatrix();
+	}
 	RenderMesh(meshList[GEO_BUILDING], true);
 	modelStack.PopMatrix();
+
+
 
 	//Render trees
 	{
@@ -726,6 +734,18 @@ void Splevel1::Render()
 			if (questions == false)
 			{
 				RenderTextOnScreen(meshList[GEO_TEXT], "Press 'E' to start phone", Color(0, 1, 0), 4, 10, 30);
+			}
+		}
+		//lift
+		if (camera.position.x > 25 && camera.position.x < 60 &&(camera.position.z < -50 && camera.position.z > -60))
+		{
+			if (Manager.PrestigeLvl >= 1)
+			{
+				RenderTextOnScreen(meshList[GEO_TEXT], "Press 'E' to L2", Color(0, 1, 0), 4, 10, 30);
+			}
+			else
+			{
+				RenderTextOnScreen(meshList[GEO_TEXT], "Reach prestiege for lift access", Color(0, 1, 0), 4, 10, 30);
 			}
 		}
 		
@@ -932,7 +952,7 @@ void Splevel1::Render()
 
 		if (questions == true)
 		{
-			modelStack.PushMatrix();
+
 			RenderMeshOnScreen(meshList[GEO_Screen], 40, 30, 20, 10, true);
 
 			if (Manager.PrestigeLvl == 2|| Manager.PrestigeLvl == 3)
@@ -941,7 +961,7 @@ void Splevel1::Render()
 				int pos[4] = { 48,38,28,18 };
 				for (int i = 0; i < 3; i++)
 				{
-					if (pos[i] = rnd - 1)
+					if (pos[i] == rnd - 1)
 					{
 						RenderMeshOnScreen(meshList[GEO_op1], 55, pos[i], 20, 10, true);//correct answer
 					}
@@ -955,9 +975,9 @@ void Splevel1::Render()
 			{
 				rnd = Random(3);
 				int pos[3] = { 48,38,28 };
-				for (int i = 0; i < 2; i++)
+				for (int i = 0; i < 3; i++)
 				{
-					if (pos[i] = rnd - 1)
+					if (pos[i] == rnd - 1)
 					{
 						RenderMeshOnScreen(meshList[GEO_op1], 55, pos[i], 20, 10, true);//correct answer
 					}
@@ -972,7 +992,7 @@ void Splevel1::Render()
 			{
 				RenderMeshOnScreen(meshList[GEO_op3], 55, 18, 20, 10, true);
 			}
-			modelStack.PopMatrix();
+			
 		}
 	}
 
