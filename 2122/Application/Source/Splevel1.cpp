@@ -444,6 +444,8 @@ void Splevel1::Update(double dt)
 				lose = false;
 				timerstart = false;
 				clearpolice = false;
+				float takeaway = Manager.Money / 5;
+				Manager.Money = Manager.Money - takeaway;
 				
 			}
 		}
