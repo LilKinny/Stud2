@@ -12,7 +12,7 @@ EquipmentManager::EquipmentManager()
 
 EquipmentManager::~EquipmentManager()
 {
-	DeleteEquipArray;
+	DeleteEquipArray();
 }
 
 int EquipmentManager::UpgradePrestige(bool Upgrade)
@@ -97,10 +97,18 @@ std::string EquipmentManager::ConvertMoneyToSuitableAmounts(void) //Return Edite
 
 int EquipmentManager::UnlockPhone(bool unlock, float money)
 {
+	Equipment* Temp;
 	//Checks if got space for Phone
 	for(int i = 0; i < PrestigeLvl*6;++i)
 	{
-		EquipArray*[i]->money;
+		Temp = EquipArray[i];
+		if (Temp->PhoneLvl)
+		{
+			if (unlock == true)
+			{
+				
+			}
+		}
 	}
 	return 0;
 }
@@ -136,7 +144,6 @@ int EquipmentManager::UpgradeComputer(bool upgrade, float money)
 
 void EquipmentManager::DeleteEquipArray(void)
 {
-	;
 	for (int i = 0; i < 18; ++i)
 	{
 		Equipment* Temp = EquipArray[i];
