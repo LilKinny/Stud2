@@ -599,20 +599,24 @@ void Splevel1::Render()
 			modelStack.Translate(-1.5, 2.05, 0);
 			modelStack.Rotate(90, 0, 0, 1);
 			modelStack.Scale(0.5, 0.25, 0.5);
-			{
-				//modelStack.PushMatrix();
-				//modelStack.Translate(-1.5, 0, 0);
-				///*modelStack.Rotate(90, 0, 0, 1);*/
-				//modelStack.Scale(1, 1, 1);
-				//RenderMesh(meshList[GEO_Phone1], true);
-				//modelStack.PopMatrix();
-			}
 			RenderMesh(meshList[GEO_PAPER], true);
 			modelStack.PopMatrix();
 		}
 		RenderMesh(meshList[GEO_Table], true);
 		modelStack.PopMatrix();
 
+		if (camera.position.x > 30 && camera.position.x < 45 &&(camera.position.z > 55 && camera.position.z <65))
+		{
+			RenderTextOnScreen(meshList[GEO_TEXT], "Press 'E' to start evidence", Color(0, 1, 0), 4, 10, 30);
+		}
+		if (camera.position.x > 30 && camera.position.x < 45 && (camera.position.z > 40 && camera.position.z < 55))
+		{
+			RenderTextOnScreen(meshList[GEO_TEXT], "Press 'E' to start laptop", Color(0, 1, 0), 4, 10, 30);
+		}
+		if (camera.position.x > 30 && camera.position.x < 45 && (camera.position.z > 30 && camera.position.z < 40))
+		{
+			RenderTextOnScreen(meshList[GEO_TEXT], "Press 'E' to start phone", Color(0, 1, 0), 4, 10, 30);
+		}
 	}
 
 	//Koh Win Code
