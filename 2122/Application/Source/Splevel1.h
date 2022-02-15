@@ -55,12 +55,8 @@ class Splevel1 : public Scene
 		GEO_GreenUpgrade,
 		GEO_GrayUpgrade,
 		GEO_Table,
-<<<<<<< HEAD
 		
-=======
-		GEO_Phone1,
-		GEO_Laptop,
->>>>>>> 0ce32ba443c1ae53ff3b059656c2ba8fc8749d69
+
 		NUM_GEOMETRY,
 	};
 	enum UNIFORM_TYPE
