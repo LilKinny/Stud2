@@ -14,4 +14,5 @@ EquipmentManager::~EquipmentManager()
 
 int EquipmentManager::UpgradePrestige(void)
 {
+	return PrestigeLvl;
 }
