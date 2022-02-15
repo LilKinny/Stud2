@@ -55,6 +55,8 @@ class Splevel1 : public Scene
 		GEO_GreenUpgrade,
 		GEO_GrayUpgrade,
 		GEO_Table,
+		GEO_Laptop,
+		GEO_Tree,
 		
 
 		NUM_GEOMETRY,

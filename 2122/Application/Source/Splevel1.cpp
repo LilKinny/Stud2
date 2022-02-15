@@ -202,7 +202,9 @@ void Splevel1::Init()
 	meshList[GEO_BUILDING] = MeshBuilder::GenerateOBJMTL("modelBUIDLING","OBJ//LVL1_withfloor.obj", "OBJ//LVL1_withfloor.mtl");
 	meshList[GEO_Table] = MeshBuilder::GenerateOBJMTL("modelBUIDLING", "OBJ//simple_table.obj", "OBJ//simple_table.mtl");
 	/*meshList[GEO_Phone1] = MeshBuilder::GenerateOBJMTL("modelBUIDLING", "OBJ//Phone1.obj", "OBJ//Phone1.mtl");*/
-	meshList[GEO_Laptop] = MeshBuilder::GenerateOBJMTL("modelBUIDLING", "OBJ//Laptop.obj", "OBJ//Laptop.mtl");
+	/*meshList[GEO_Laptop] = MeshBuilder::GenerateOBJMTL("modelBUIDLING", "OBJ//Laptop.obj", "OBJ//Laptop.mtl");*/
+
+	meshList[GEO_Tree] = MeshBuilder::GenerateOBJMTL("Tree", "OBJ//TreeTall.obj", "OBJ//TreeTall.mtl");
 
 
 	meshList[GEO_PAPER] = MeshBuilder::GenerateOBJ("modelBUIDLING", "OBJ//Paper.obj");
@@ -223,7 +225,7 @@ void Splevel1::Update(double dt)
 {
 	float cposx = camera.position.x;
 	float cposz = camera.position.z;
-	cout << cposx;
+	//cout << cposx;
 	rotateangle = rotateangle + 0.1;
 	if (setuppolice == false && clearpolice == false)
 	{
@@ -277,6 +279,18 @@ void Splevel1::Update(double dt)
 		light[0].type = Light::LIGHT_SPOT;
 		glUniform1i(m_parameters[U_LIGHT0_TYPE], light[0].type);
 	}
+
+	static bool bstate = false;
+	if (!bstate && Application::IsKeyPressed('9'))
+	{
+		bstate = true;
+		bEnableLight = !bEnableLight;
+	}
+	else if (bstate && !Application::IsKeyPressed('9'))
+	{
+		bstate = false;
+	}
+
 	camera.Update(10*dt);
 	if (Application::IsKeyPressed('I'))
 		light[0].position.z -= (float)(10 * dt);
@@ -476,6 +490,55 @@ void Splevel1::Render()
 
 	RenderMesh(meshList[GEO_BUILDING], true);
 	modelStack.PopMatrix();
+
+	//Render trees
+	for (int i = 0; i < 30; i++)
+	{
+		modelStack.PushMatrix();
+		//modelStack.Rotate(-90, 1, 0, 0);
+		modelStack.Translate(-450 + (i *30), 0, -450);
+		modelStack.Scale(70, 70, 70);
+
+		RenderMesh(meshList[GEO_Tree], true);
+		modelStack.PopMatrix();
+	}
+
+	for (int i = 0; i < 30; i++)
+	{
+		modelStack.PushMatrix();
+		//modelStack.Rotate(-90, 1, 0, 0);
+		modelStack.Translate(-450 + (i * 30), 0, 450);
+		modelStack.Scale(70, 70, 70);
+
+		RenderMesh(meshList[GEO_Tree], true);
+		modelStack.PopMatrix();
+	}
+
+	for (int i = 0; i < 30; i++)
+	{
+		modelStack.PushMatrix();
+		//modelStack.Rotate(-90, 1, 0, 0);
+		modelStack.Translate(-450, 0, -450 + (i * 30));
+		modelStack.Scale(70, 70, 70);
+
+		RenderMesh(meshList[GEO_Tree], true);
+		modelStack.PopMatrix();
+	}
+
+	for (int i = 0; i < 30; i++)
+	{
+		modelStack.PushMatrix();
+		//modelStack.Rotate(-90, 1, 0, 0);
+		modelStack.Translate(450, 0, -450 + (i * 30));
+		modelStack.Scale(70, 70, 70);
+
+		RenderMesh(meshList[GEO_Tree], true);
+		modelStack.PopMatrix();
+	}
+
+
+
+
 	//TopUI
 	modelStack.PushMatrix();
 	RenderMeshOnScreen(meshList[GEO_TopUI], 40, 30, 16, 54, true);
@@ -519,6 +582,13 @@ void Splevel1::Render()
 
 		
 	}
+
+	float pox = camera.position.x;
+	float poz = camera.position.z;
+
+
+	RenderTextOnScreen(meshList[GEO_TEXT], "Pos X:" + std::to_string(pox), Color(1, 1, 0), 2, 0, 43);
+	RenderTextOnScreen(meshList[GEO_TEXT], "Pos Z: " + std::to_string(poz), Color(1, 1, 0), 2, 0, 45);
 }
 
 void Splevel1::RenderSkybox()
