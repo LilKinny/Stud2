@@ -201,6 +201,9 @@ void Splevel1::Init()
 
 	meshList[GEO_BUILDING] = MeshBuilder::GenerateOBJMTL("modelBUIDLING","OBJ//LVL1_withfloor.obj", "OBJ//LVL1_withfloor.mtl");
 	meshList[GEO_Table] = MeshBuilder::GenerateOBJMTL("modelBUIDLING", "OBJ//simple_table.obj", "OBJ//simple_table.mtl");
+	/*meshList[GEO_Phone1] = MeshBuilder::GenerateOBJMTL("modelBUIDLING", "OBJ//Phone1.obj", "OBJ//Phone1.mtl");*/
+	meshList[GEO_Laptop] = MeshBuilder::GenerateOBJMTL("modelBUIDLING", "OBJ//Laptop.obj", "OBJ//Laptop.mtl");
+
 
 	meshList[GEO_PAPER] = MeshBuilder::GenerateOBJ("modelBUIDLING", "OBJ//Paper.obj");
 	meshList[GEO_PAPER]->textureID = LoadTGA("Image//Notelines.tga");
@@ -212,11 +215,15 @@ void Splevel1::Init()
 	projectionStack.LoadMatrix(projection);
 }
 bool setuppolice = false, clearpolice;
-double scaleevidence = 0;
+double scaleevidence = 0.1;
 float pposx, pposz, pposx2, pposz2, pposx3, pposz3, rotateangle, pposy;
+
 int mg1_start;
 void Splevel1::Update(double dt)
 {
+	float cposx = camera.position.x;
+	float cposz = camera.position.z;
+	cout << cposx;
 	rotateangle = rotateangle + 0.1;
 	if (setuppolice == false && clearpolice == false)
 	{
@@ -233,14 +240,14 @@ void Splevel1::Update(double dt)
 		pposz2 = (rand() % 100 + 0) - 50;
 		pposx3 = (rand() % 100 + 0) - 50;
 		pposz3 = (rand() % 100 + 0) - 50;
-		pposy = 15;
-		scaleevidence = 3;
+		pposy = 18;
+		scaleevidence = 2;
 		clearpolice = true;
 		setuppolice = false;
 	}
 	if (clearpolice == true)
 	{
-
+		/*if(camera.position.x > pposx - 5 && camera.position.x < pposx + 5 && camera.position.z > pposz )*/
 	}
 
 	//static const float 
@@ -270,7 +277,6 @@ void Splevel1::Update(double dt)
 		light[0].type = Light::LIGHT_SPOT;
 		glUniform1i(m_parameters[U_LIGHT0_TYPE], light[0].type);
 	}
-
 	camera.Update(10*dt);
 	if (Application::IsKeyPressed('I'))
 		light[0].position.z -= (float)(10 * dt);
@@ -507,9 +513,11 @@ void Splevel1::Render()
 		//modelStack.Rotate(-90, 1, 0, 0);
 		modelStack.Translate(0, 0, 0);
 		modelStack.Scale(10, 10, 10);
-
 		RenderMesh(meshList[GEO_Table], true);
 		modelStack.PopMatrix();
+
+
+		
 	}
 }
 
@@ -618,7 +626,23 @@ void Splevel1::RenderSkybox()
 	modelStack.Translate(pposx, pposy, pposz);
 	modelStack.Rotate(90, 1, 0, 0);
 	modelStack.Rotate(rotateangle * 10, 0, 0, 1);
-	modelStack.Scale(5, 5, 5);
+	modelStack.Scale(scaleevidence, scaleevidence, scaleevidence);
+	RenderMesh(meshList[GEO_PAPER], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(pposx2, pposy, pposz2);
+	modelStack.Rotate(90, 1, 0, 0);
+	modelStack.Rotate(rotateangle * 10, 0, 0, 1);
+	modelStack.Scale(scaleevidence, scaleevidence, scaleevidence);
+	RenderMesh(meshList[GEO_PAPER], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(pposx3, pposy, pposz3);
+	modelStack.Rotate(90, 1, 0, 0);
+	modelStack.Rotate(rotateangle * 10, 0, 0, 1);
+	modelStack.Scale(scaleevidence, scaleevidence, scaleevidence);
 	RenderMesh(meshList[GEO_PAPER], true);
 	modelStack.PopMatrix();
 
