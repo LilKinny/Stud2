@@ -1,6 +1,7 @@
 #ifndef EQUIPMENTMANAGER_H
 #define EQUIPMENTMANAGER_H
 #include "Equipment.h"	
+#include <string>
 
 class EquipmentManager
 {
@@ -15,6 +16,7 @@ public:
 	~EquipmentManager();
 	int UpgradePrestige(bool Upgrade);
 	int CalculateTotalIncome(void);
+	std::string ConvertMoneyToSuitableAmounts(void);
 };
 
 

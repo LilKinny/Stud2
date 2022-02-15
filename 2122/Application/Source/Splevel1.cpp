@@ -684,7 +684,7 @@ void Splevel1::Render()
 		modelStack.PushMatrix();
 		RenderMeshOnScreen(meshList[GEO_TopUI], 40, 30, 16, 54, true);
 		modelStack.PopMatrix();
-		RenderTextOnScreen(meshList[GEO_TEXT], std::to_string(round(Manager.Money)), Color(1, 1, 0), 3, 61.5, 51);
+		RenderTextOnScreen(meshList[GEO_TEXT], Manager.ConvertMoneyToSuitableAmounts(), Color(1, 1, 0), 3, 61.5, 51);
 
 		if (RenderPrestige == 0)
 		{
