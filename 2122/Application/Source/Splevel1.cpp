@@ -84,10 +84,10 @@ void Splevel1::Init()
 	glUniform1i(m_parameters[U_NUMLIGHTS], 1);
 
 	//Replace previous code
-	light[0].type = Light::LIGHT_SPOT;
+	light[0].type = Light::LIGHT_DIRECTIONAL;
 	light[0].position.Set(0, 20, 0);
 	light[0].color.Set(1, 1, 1);
-	light[0].power = 1;
+	light[0].power = 0.5;
 	light[0].kC = 1.f;
 	light[0].kL = 0.01f;
 	light[0].kQ = 0.001f;
@@ -257,15 +257,6 @@ void Splevel1::Update(double dt)
 		float posX = (x / w) * 80; //convert (0,800) to (0,80)
 		float posY = 60 - (y / h) *60; //convert (600,0) to (0,60)
 		std::cout << "posX:" << posX << " , posY:" << posY << std::endl;
-		if (posX > 50 && posX < 83 && posY > 30 && posY < 40)
-		{
-			std::cout << "Hit! Change to next scene" << std::endl;
-			//trigger user action or function
-		}
-		else
-		{
-			std::cout << "Miss!" << std::endl;
-		}
 		if ((posY <= 59 && posY >= 53.5) && (posX >= 1.5 && posX <= 12.5)) //Clck Store
 		{
 			PageNum = 1;

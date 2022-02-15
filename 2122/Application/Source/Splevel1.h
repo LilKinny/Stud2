@@ -100,6 +100,7 @@ private:
 	float rotateAngleSF;
 	bool bEnableLight;
 
+
 	int RenderUI;
 	int PageNum;
 	
