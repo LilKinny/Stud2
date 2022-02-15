@@ -5,7 +5,6 @@
 #include "LoadTGA.h"
 #include "shader.hpp"
 #include "Mtx44.h"
-
 #include "Application.h"
 #include "MeshBuilder.h"
 #include "Utility.h"
@@ -599,6 +598,8 @@ void Splevel1::Render()
 		modelStack.PushMatrix();
 		RenderMeshOnScreen(meshList[GEO_TopUI], 40, 30, 16, 54, true);
 		modelStack.PopMatrix();
+		RenderTextOnScreen(meshList[GEO_TEXT], std::to_string(round(Manager.Money)), Color(1, 1, 0), 3, 61.5, 51);
+
 		if (RenderPrestige == 0)
 		{
 			//Small UI
@@ -945,4 +946,3 @@ void Splevel1::RenderMeshOnScreen(Mesh* mesh, int x, int y, int sizex, int sizey
 	modelStack.PopMatrix();
 	glEnable(GL_DEPTH_TEST);
 }
-
