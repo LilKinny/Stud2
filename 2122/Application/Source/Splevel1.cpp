@@ -14,6 +14,7 @@
 #include <cstdlib>
 #include <GLFW/glfw3.h>
 #include <ctime>
+#include "../Puzzle.h"
 
 
 using namespace std;
@@ -118,6 +119,9 @@ void Splevel1::Init()
 
 	RenderUI = 0;
 	PageNum = 1;
+
+	puzzle.Init();
+
 	//Initialize camera settings
 	camera.Init(Vector3(80, 30, 50), Vector3(0, 0, 0), Vector3(0, 1, 0));
 
@@ -243,6 +247,16 @@ void Splevel1::Init()
 
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16,16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Image//Agency_FB.tga");
+
+	meshList[GEO_Puzzlebg] = MeshBuilder::GenerateQuad("puzzlebg", Color(1, 1, 1), 1.f);
+	meshList[GEO_Puzzlebg]->textureID = LoadTGA("Image//Puzzlebg.tga");
+
+	meshList[GEO_PuzzlePlayer] = MeshBuilder::GenerateQuad("puzzlebg", Color(1, 1, 1), 1.f);
+	meshList[GEO_PuzzlePlayer]->textureID = LoadTGA("Image//PuzzlePlayer.tga");
+
+	meshList[GEO_PuzzlePaper] = MeshBuilder::GenerateQuad("puzzlebg", Color(1, 1, 1), 1.f);
+	meshList[GEO_PuzzlePaper]->textureID = LoadTGA("Image//PuzzlePaper.tga");
+
 	Mtx44 projection;
 	projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 1000.f);
 	projectionStack.LoadMatrix(projection);
@@ -379,6 +393,15 @@ void Splevel1::Update(double dt)
 	// Reset Position and variables
 
 	//Mouse Inputs
+	double x, y;
+	Application::GetCursorPos(&x, &y);
+	unsigned w = Application::GetWindowWidth();
+	unsigned h = Application::GetWindowHeight();
+	float posX = (x / w) * 80; //convert (0,800) to (0,80)
+	float posY = 60 - (y / h) * 60; //convert (600,0) to (0,60)
+	debugmouseposx = posX;
+	debugmouseposy = posY;
+
 	static bool bLButtonState = false;
 	if (!bLButtonState && Application::IsMousePressed(0))
 	{
@@ -390,7 +413,7 @@ void Splevel1::Update(double dt)
 		unsigned w = Application::GetWindowWidth();
 		unsigned h = Application::GetWindowHeight();
 		float posX = (x / w) * 80; //convert (0,800) to (0,80)
-		float posY = 60 - (y / h) *60; //convert (600,0) to (0,60)
+		float posY = 60 - (y / h) * 60; //convert (600,0) to (0,60)
 		std::cout << "posX:" << posX << " , posY:" << posY << std::endl;
 		if ((posY <= 59 && posY >= 53.5) && (posX >= 1.5 && posX <= 12.5)) //Clck Store
 		{
@@ -996,13 +1019,16 @@ void Splevel1::Render()
 		}
 	}
 
-
+	//PuzzleRender();
 
 	// -------------------------------------------------POSITION DEBUG----------------------------------------------
 	float pox = camera.position.x;
 	float poz = camera.position.z;
 	RenderTextOnScreen(meshList[GEO_TEXT], "Pos X:" + std::to_string(pox), Color(1, 1, 0), 2, 0, 43);
 	RenderTextOnScreen(meshList[GEO_TEXT], "Pos Z: " + std::to_string(poz), Color(1, 1, 0), 2, 0, 45);
+
+	RenderTextOnScreen(meshList[GEO_TEXT], "Pos X:" + std::to_string(debugmouseposx), Color(1, 1, 0), 2, 0, 30);
+	RenderTextOnScreen(meshList[GEO_TEXT], "Pos y: " + std::to_string(debugmouseposy), Color(1, 1, 0), 2, 0, 33);
 
 }
 
@@ -1123,6 +1149,21 @@ void Splevel1::RenderSkybox()
 	RenderTextOnScreen(meshList[GEO_TEXT], "Scammer tycoon", Color(0, 1, 0), 2, 26, 50);*/
 
 
+}
+
+void Splevel1::PuzzleRender()
+{
+	RenderMeshOnScreen(meshList[GEO_Puzzlebg], 40, 25, 40, 40);
+
+	for (int i = 0; i < 10; i++)
+	{
+		int paperposx = puzzle.Paper[i]->position.x;
+		int paperposy = puzzle.Paper[i]->position.y;
+
+		RenderMeshOnScreen(meshList[GEO_PuzzlePaper], 18 + (paperposx * 4), 3 + (paperposy * 4), 3, 3);
+	}
+
+	RenderMeshOnScreen(meshList[GEO_PuzzlePlayer], 18 + (puzzle.Player->position.x * 4), 3 + (puzzle.Player->position.y * 4), 3, 3);
 }
 
 void Splevel1::RenderMesh(Mesh* mesh, bool enableLight)
