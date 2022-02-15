@@ -1,66 +1,29 @@
 newmtl aiStandardSurface2SG
-illum 4
 Kd 0.00 0.00 0.00
-Ka 0.00 0.00 0.00
-Tf 1.00 1.00 1.00
-Ni 1.00
-Ks 1.00 1.00 1.00
+
 newmtl aiStandardSurface3SG
-illum 4
 Kd 0.03 0.03 0.03
-Ka 0.00 0.00 0.00
-Tf 1.00 1.00 1.00
-Ni 1.00
-Ks 1.00 1.00 1.00
+
 newmtl aiStandardSurface4SG
-illum 4
 Kd 0.50 0.50 0.50
-Ka 0.00 0.00 0.00
-Tf 0.05 0.05 0.05
-Ni 1.00
-Ks 1.00 1.00 1.00
+
 newmtl aiStandardSurface5SG
-illum 4
 Kd 0.06 0.06 0.06
-Ka 0.00 0.00 0.00
-Tf 1.00 1.00 1.00
-Ni 1.00
-Ks 1.00 1.00 1.00
+
 newmtl aiStandardSurface6SG
-illum 4
 Kd 0.75 0.75 0.75
-Ka 0.00 0.00 0.00
-Tf 1.00 1.00 1.00
-Ni 1.00
-Ks 1.00 1.00 1.00
+
 newmtl aiStandardSurface8SG
-illum 4
 Kd 0.50 0.50 0.50
-Ka 0.00 0.00 0.00
-Tf 0.01 0.01 0.01
-Ni 1.00
-Ks 1.00 1.00 1.00
+
 newmtl aiStandardSurface9SG
-illum 4
 Kd 0.00 0.00 0.00
-Ka 0.00 0.00 0.00
-Tf 1.00 1.00 1.00
-map_Kd body_txt.jpg
-Ni 1.00
-Ks 1.00 1.00 1.00
+
+
 newmtl aiStandardSurface10SG
-illum 4
 Kd 0.00 0.00 0.00
-Ka 0.00 0.00 0.00
-Tf 1.00 1.00 1.00
-map_Kd keyboard_txt.jpg
-Ni 1.00
-Ks 1.00 1.00 1.00
+
+
 newmtl aiStandardSurface11SG
-illum 4
 Kd 0.00 0.00 0.00
-Ka 0.00 0.00 0.00
-Tf 1.00 1.00 1.00
-map_Kd display_txt.jpg
-Ni 1.00
-Ks 1.00 1.00 1.00
+

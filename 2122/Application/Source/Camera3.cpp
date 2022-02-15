@@ -71,18 +71,34 @@ void Camera3::Update(double dt)
 	if (Application::IsKeyPressed('W'))
 	{
 		position = position + view * ZOOM_SPEED * static_cast<float>(dt);
+		if (position.x > 445 || position.x < -445 || position.z > 445 || position.z < -445)
+		{
+			position -= view * ZOOM_SPEED * static_cast<float>(dt);
+		}
 	}
 	if (Application::IsKeyPressed('S'))
 	{
 		position = position - view * ZOOM_SPEED * static_cast<float>(dt);
+		if (position.x > 445 || position.x < -445 || position.z > 445 || position.z < -445)
+		{
+			position += view * ZOOM_SPEED * static_cast<float>(dt);
+		}
 	}
 	if (Application::IsKeyPressed('A'))
 	{
 		position = position - right * ZOOM_SPEED * static_cast<float>(dt);
+		if (position.x > 445 || position.x < -445 || position.z > 445 || position.z < -445)
+		{
+			position += right * ZOOM_SPEED * static_cast<float>(dt);
+		}
 	}
 	if (Application::IsKeyPressed('D'))
 	{
 		position = position + right * ZOOM_SPEED * static_cast<float>(dt);
+		if (position.x > 445 || position.x < -445 || position.z > 445 || position.z < -445)
+		{
+			position -= right * ZOOM_SPEED * static_cast<float>(dt);
+		}
 	}
 	position.y = defaultPosition.y;
 	target = position + view;
