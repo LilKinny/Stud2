@@ -802,7 +802,7 @@ void Splevel1::Render()
 			//Equipment
 			//GrayButton
 			modelStack.PushMatrix();
-			RenderMeshOnScreen(meshList[GEO_BotUI], 40, 30, 16, 54, true);
+			RenderMeshOnScreen(meshList[GEO_GRAYBUTTON], 40, 30, 16, 54, true);
 			modelStack.PopMatrix();
 		}
 		else if (RenderUI == 2)

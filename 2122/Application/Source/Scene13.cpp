@@ -87,7 +87,7 @@ void Scene13::Init()
 	glUniform1i(m_parameters[U_NUMLIGHTS], 1);
 
 	//Replace previous code
-	light[0].type = Light::LIGHT_SPOT;
+	light[0].type = Light::LIGHT_DIRECTIONAL;
 	light[0].position.Set(0, 20, 0);
 	light[0].color.Set(1, 1, 1);
 	light[0].power = 1;
