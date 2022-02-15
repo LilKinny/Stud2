@@ -5,7 +5,6 @@
 #include "LoadTGA.h"
 #include "shader.hpp"
 #include "Mtx44.h"
-
 #include "Application.h"
 #include "MeshBuilder.h"
 #include "Utility.h"
@@ -204,6 +203,8 @@ void Splevel1::Init()
 	/*meshList[GEO_Phone1] = MeshBuilder::GenerateOBJMTL("modelBUIDLING", "OBJ//Phone1.obj", "OBJ//Phone1.mtl");*/
 	/*meshList[GEO_Laptop] = MeshBuilder::GenerateOBJMTL("modelBUIDLING", "OBJ//Laptop.obj", "OBJ//Laptop.mtl");*/
 
+	meshList[GEO_Tree] = MeshBuilder::GenerateOBJMTL("Tree", "OBJ//TreeTall.obj", "OBJ//TreeTall.mtl");
+
 
 	meshList[GEO_PAPER] = MeshBuilder::GenerateOBJ("modelBUIDLING", "OBJ//Paper.obj");
 	meshList[GEO_PAPER]->textureID = LoadTGA("Image//Notelines.tga");
@@ -293,7 +294,12 @@ void Splevel1::Update(double dt)
 		light[0].type = Light::LIGHT_SPOT;
 		glUniform1i(m_parameters[U_LIGHT0_TYPE], light[0].type);
 	}
-	camera.Update(10*dt);
+
+
+	camera.Update(dt);
+
+
+
 	if (Application::IsKeyPressed('I'))
 		light[0].position.z -= (float)(10 * dt);
 	if (Application::IsKeyPressed('K'))
@@ -506,6 +512,51 @@ void Splevel1::Render()
 	RenderMesh(meshList[GEO_BUILDING], true);
 	modelStack.PopMatrix();
 
+	//Render trees
+	for (int i = 0; i < 30; i++)
+	{
+		modelStack.PushMatrix();
+		//modelStack.Rotate(-90, 1, 0, 0);
+		modelStack.Translate(-450 + (i * 30), 0, -450);
+		modelStack.Scale(70, 70, 70);
+
+		RenderMesh(meshList[GEO_Tree], true);
+		modelStack.PopMatrix();
+	}
+
+	for (int i = 0; i < 30; i++)
+	{
+		modelStack.PushMatrix();
+		//modelStack.Rotate(-90, 1, 0, 0);
+		modelStack.Translate(-450 + (i * 30), 0, 450);
+		modelStack.Scale(70, 70, 70);
+
+		RenderMesh(meshList[GEO_Tree], true);
+		modelStack.PopMatrix();
+	}
+
+	for (int i = 0; i < 30; i++)
+	{
+		modelStack.PushMatrix();
+		//modelStack.Rotate(-90, 1, 0, 0);
+		modelStack.Translate(-450, 0, -450 + (i * 30));
+		modelStack.Scale(70, 70, 70);
+
+		RenderMesh(meshList[GEO_Tree], true);
+		modelStack.PopMatrix();
+	}
+
+	for (int i = 0; i < 30; i++)
+	{
+		modelStack.PushMatrix();
+		//modelStack.Rotate(-90, 1, 0, 0);
+		modelStack.Translate(450, 0, -450 + (i * 30));
+		modelStack.Scale(70, 70, 70);
+
+		RenderMesh(meshList[GEO_Tree], true);
+		modelStack.PopMatrix();
+	}
+
 	//kjcode
 	{
 		modelStack.PushMatrix();
@@ -566,6 +617,8 @@ void Splevel1::Render()
 		modelStack.PushMatrix();
 		RenderMeshOnScreen(meshList[GEO_TopUI], 40, 30, 16, 54, true);
 		modelStack.PopMatrix();
+		RenderTextOnScreen(meshList[GEO_TEXT], std::to_string(round(Manager.Money)), Color(1, 1, 0), 3, 61.5, 51);
+
 		if (RenderPrestige == 0)
 		{
 			//Small UI
@@ -629,7 +682,13 @@ void Splevel1::Render()
 			modelStack.PopMatrix();
 		}
 	}
-	
+
+	// -------------------------------------------------POSITION DEBUG----------------------------------------------
+	float pox = camera.position.x;
+	float poz = camera.position.z;
+	RenderTextOnScreen(meshList[GEO_TEXT], "Pos X:" + std::to_string(pox), Color(1, 1, 0), 2, 0, 43);
+	RenderTextOnScreen(meshList[GEO_TEXT], "Pos Z: " + std::to_string(poz), Color(1, 1, 0), 2, 0, 45);
+
 }
 
 void Splevel1::RenderSkybox()
@@ -906,4 +965,3 @@ void Splevel1::RenderMeshOnScreen(Mesh* mesh, int x, int y, int sizex, int sizey
 	modelStack.PopMatrix();
 	glEnable(GL_DEPTH_TEST);
 }
-
