@@ -225,6 +225,7 @@ void Splevel1::Update(double dt)
 	float cposz = camera.position.z;
 	cout << cposx;
 	rotateangle = rotateangle + 0.1;
+<<<<<<< Updated upstream
 	if (setuppolice == false && clearpolice == false)
 	{
 		mg1_start = rand() % 30 + 1;
@@ -232,6 +233,11 @@ void Splevel1::Update(double dt)
 	}
 	if (mg1_start == 30 && clearpolice == false) setuppolice = true;
 	if (setuppolice == true)
+=======
+	int mg1_start = rand() % 3000 + 1;
+	//cout << mg1_start << " , ";
+	if (mg1_start == 3000)
+>>>>>>> Stashed changes
 	{
 		pposz = 19;
 		pposx = (rand() % 100 + 0) - 50;
@@ -336,6 +342,14 @@ void Splevel1::Update(double dt)
 		if ((posY >= 46 && posY <= 48.5) && (posX >= 62 && posX <= 63.5)) //Click Cross Button
 		{
 			RenderUI = 0;
+		}
+		if ((posY >= 32 && posY <= 35.5) && (posX >= 76.5 && posX <= 78)) //Side Open Arrow Button
+		{
+			RenderPrestige = 1;
+		}
+		if ((posY >= 32 && posY <= 35.5) && (posX >= 67 && posX <= 68.5)) //Side Close Arrow Button
+		{
+			RenderPrestige = 0;
 		}
 	
 	}
@@ -480,6 +494,20 @@ void Splevel1::Render()
 	modelStack.PushMatrix();
 	RenderMeshOnScreen(meshList[GEO_TopUI], 40, 30, 16, 54, true);
 	modelStack.PopMatrix();
+	if (RenderPrestige == 0)
+	{
+		//Small UI
+		modelStack.PushMatrix();
+		RenderMeshOnScreen(meshList[GEO_SideUISmall], 40, 30, 16, 54, true);
+		modelStack.PopMatrix();
+	}
+	if (RenderPrestige == 1)
+	{
+		//Big UI
+		modelStack.PushMatrix();
+		RenderMeshOnScreen(meshList[GEO_SideUIBig], 40, 30, 16, 54, true);
+		modelStack.PopMatrix();
+	}
 
 	if (RenderUI == 1)
 	{
