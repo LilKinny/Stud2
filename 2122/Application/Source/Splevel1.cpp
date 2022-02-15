@@ -201,6 +201,9 @@ void Splevel1::Init()
 
 	meshList[GEO_BUILDING] = MeshBuilder::GenerateOBJMTL("modelBUIDLING","OBJ//LVL1_withfloor.obj", "OBJ//LVL1_withfloor.mtl");
 	meshList[GEO_Table] = MeshBuilder::GenerateOBJMTL("modelBUIDLING", "OBJ//simple_table.obj", "OBJ//simple_table.mtl");
+	/*meshList[GEO_Phone1] = MeshBuilder::GenerateOBJMTL("modelBUIDLING", "OBJ//Phone1.obj", "OBJ//Phone1.mtl");*/
+	meshList[GEO_Laptop] = MeshBuilder::GenerateOBJMTL("modelBUIDLING", "OBJ//Laptop.obj", "OBJ//Laptop.mtl");
+
 
 	meshList[GEO_PAPER] = MeshBuilder::GenerateOBJ("modelBUIDLING", "OBJ//Paper.obj");
 	meshList[GEO_PAPER]->textureID = LoadTGA("Image//Notelines.tga");
@@ -507,9 +510,11 @@ void Splevel1::Render()
 		//modelStack.Rotate(-90, 1, 0, 0);
 		modelStack.Translate(0, 0, 0);
 		modelStack.Scale(10, 10, 10);
-
 		RenderMesh(meshList[GEO_Table], true);
 		modelStack.PopMatrix();
+
+
+		
 	}
 }
 
