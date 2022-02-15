@@ -225,7 +225,6 @@ void Splevel1::Update(double dt)
 	float cposz = camera.position.z;
 	cout << cposx;
 	rotateangle = rotateangle + 0.1;
-<<<<<<< Updated upstream
 	if (setuppolice == false && clearpolice == false)
 	{
 		mg1_start = rand() % 30 + 1;
@@ -233,11 +232,6 @@ void Splevel1::Update(double dt)
 	}
 	if (mg1_start == 30 && clearpolice == false) setuppolice = true;
 	if (setuppolice == true)
-=======
-	int mg1_start = rand() % 3000 + 1;
-	//cout << mg1_start << " , ";
-	if (mg1_start == 3000)
->>>>>>> Stashed changes
 	{
 		pposz = 19;
 		pposx = (rand() % 100 + 0) - 50;
