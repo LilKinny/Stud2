@@ -7,6 +7,7 @@
 #include "Light.h"
 #include "Material.h"
 #include "EquipmentManager.h"
+#include "../Puzzle.h"
 
 class Splevel1 : public Scene
 {
@@ -59,6 +60,8 @@ class Splevel1 : public Scene
 		GEO_Laptop,
 		GEO_Tree,
 		GEO_Puzzlebg,
+		GEO_PuzzlePlayer,
+		GEO_PuzzlePaper,
 		
 
 		NUM_GEOMETRY,
@@ -113,10 +116,18 @@ private:
 	float rotateAngleSF;
 	bool bEnableLight;
 
+	void PuzzleRender();
+
 	EquipmentManager Manager;
+
+	Puzzle puzzle;
+
 	int RenderUI;
 	int RenderPrestige;
 	int PageNum;
+
+	float debugmouseposx;
+	float debugmouseposy;
 	
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
 	void RenderText(Mesh* mesh, std::string text, Color color);
