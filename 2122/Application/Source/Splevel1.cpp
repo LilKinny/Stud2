@@ -214,15 +214,18 @@ void Splevel1::Init()
 	meshList[GEO_PAPER] = MeshBuilder::GenerateOBJ("modelBUIDLING", "OBJ//Paper.obj");
 	meshList[GEO_PAPER]->textureID = LoadTGA("Image//Notelines.tga");
 
+	meshList[GEO_EMPTYBOX] = MeshBuilder::GenerateQuad("quad", Color(1, 1, 1), 1.f);
+	meshList[GEO_EMPTYBOX]->textureID = LoadTGA("Image//TitleFrame.tga");
+
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16,16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Image//Agency_FB.tga");
 	Mtx44 projection;
 	projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 1000.f);
 	projectionStack.LoadMatrix(projection);
 }
-bool setuppolice = false, clearpolice, paper1, paper2, paper3;
+bool setuppolice = false, clearpolice, paper1, paper2, paper3, timerstart, win, lose;
 double scaleevidence = 0.1;
-float pposx, pposz, pposx2, pposz2, pposx3, pposz3, rotateangle, pposy, pposy2, pposy3;
+float pposx, pposz, pposx2, pposz2, pposx3, pposz3, rotateangle, pposy, pposy2, pposy3, pushaway;
 
 int mg1_start;
 void Splevel1::Update(double dt)
@@ -233,11 +236,11 @@ void Splevel1::Update(double dt)
 	rotateangle = rotateangle + 0.1;
 	if (setuppolice == false && clearpolice == false)
 	{
-		mg1_start = rand() % 30 + 1;
+		mg1_start = rand() % 300 + 1;
 		/*cout << mg1_start << " , ";*/
 	}
-	if (mg1_start == 30 && clearpolice == false) setuppolice = true;
-	if (setuppolice == true)
+	if (mg1_start == 300 && clearpolice == false) setuppolice = true;
+	if (setuppolice == true && clearpolice == false)
 	{
 		pposz = 19;
 		pposx = (rand() % 100 + 0) - 50;
@@ -251,7 +254,7 @@ void Splevel1::Update(double dt)
 		pposy3 = 18;
 		scaleevidence = 2;
 		clearpolice = true;
-		setuppolice = false;
+		
 	}
 	if (clearpolice == true)
 	{
@@ -269,6 +272,16 @@ void Splevel1::Update(double dt)
 		{
 			paper3 = true;
 			pposy3 = 0;
+		}
+		if (paper1 == true && paper2 == true && paper3 == true)
+		{
+			win = true;
+			clearpolice = false;
+
+			paper1 = false;
+			paper2 = false;
+			paper3 = false;
+			timerstart = false;
 		}
 	}
 
@@ -382,6 +395,24 @@ void Splevel1::Update(double dt)
 				Manager.UpgradePrestige(true);
 			}
 		}
+		//
+		if (posX > 35 && posX < 45 && posY > 8 && posY < 14)
+		{
+			if (setuppolice == true)
+			{
+				timerstart = true;
+				setuppolice = false;
+			}
+			else if (win == true)
+			{
+				win = false;
+			}
+			else if (lose == true)
+			{
+				lose = false;
+			}
+		}
+		//
 	}
 	else if (bLButtonState && !Application::IsMousePressed(0))
 	{
@@ -568,14 +599,47 @@ void Splevel1::Render()
 	//kjcode
 	{
 		modelStack.PushMatrix();
-		//modelStack.Rotate(-90, 1, 0, 0);
-		modelStack.Translate(0, 0, 0);
+		modelStack.Translate(50, 0, 45);
+		modelStack.Rotate(90, 0, 1, 0);
 		modelStack.Scale(10, 10, 10);
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(-1.5, 2.05, 0);
+			modelStack.Rotate(90, 0, 0, 1);
+			modelStack.Scale(0.5, 0.25, 0.5);
+			RenderMesh(meshList[GEO_PAPER], true);
+			modelStack.PopMatrix();
+		}
 		RenderMesh(meshList[GEO_Table], true);
 		modelStack.PopMatrix();
+		//Evidence mini game
+		if (camera.position.x > 30 && camera.position.x < 45 &&(camera.position.z > 55 && camera.position.z <65))
+		{
+			RenderTextOnScreen(meshList[GEO_TEXT], "Press 'E' to start evidence", Color(0, 1, 0), 4, 10, 30);
+			if (Application::IsKeyPressed('E'))
+			{
+				setuppolice = true;
+			}
+		}
+		//Laptop mini game
+		if (camera.position.x > 30 && camera.position.x < 45 && (camera.position.z > 40 && camera.position.z < 55))
+		{
+			RenderTextOnScreen(meshList[GEO_TEXT], "Press 'E' to start laptop", Color(0, 1, 0), 4, 10, 30);
+			if (Application::IsKeyPressed('E'))
+			{
 
+			}
+		}
+		//Phone mini game
+		if (camera.position.x > 30 && camera.position.x < 45 && (camera.position.z > 30 && camera.position.z < 40))
+		{
+			RenderTextOnScreen(meshList[GEO_TEXT], "Press 'E' to start phone", Color(0, 1, 0), 4, 10, 30);
+			if (Application::IsKeyPressed('E'))
+			{
 
+			}
 
+		}
 	}
 
 	//Koh Win Code
@@ -603,6 +667,42 @@ void Splevel1::Render()
 		modelStack.Scale(scaleevidence, scaleevidence, scaleevidence);
 		RenderMesh(meshList[GEO_PAPER], true);
 		modelStack.PopMatrix();
+
+		if (setuppolice == true)
+		{
+			RenderMeshOnScreen(meshList[GEO_EMPTYBOX], 40, 25, 40, 40);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Minigame: Hide the Evidence!", Color(1, 1, 1), 2, 27, 40);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Someone has filed a search warrant", Color(1, 1, 1), 2, 23, 35);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Against you for running a scam center", Color(1, 1, 1), 2, 22, 32);
+			RenderTextOnScreen(meshList[GEO_TEXT], "You have to hide the evidence papers", Color(1, 1, 1), 2, 22, 29);
+			RenderTextOnScreen(meshList[GEO_TEXT], "before the police arrive.", Color(1, 1, 1), 2, 24, 26);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Reward: +15% income boost for 30s", Color(1, 1, 1), 2, 22, 21);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Penalty: -20% of all cash", Color(1, 1, 1), 2, 24, 18);
+			RenderMeshOnScreen(meshList[GEO_EMPTYBOX], 40, 10, 10, 6);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Start!", Color(1, 1, 1), 2, 37, 9);
+		}
+		else if (win == true)
+		{
+			RenderMeshOnScreen(meshList[GEO_EMPTYBOX], 40, 25, 40, 40);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Congratulations!", Color(1, 1, 1), 2, 27, 40);
+			RenderTextOnScreen(meshList[GEO_TEXT], "You managed to hide all the evidence", Color(1, 1, 1), 2, 23, 35);
+			RenderTextOnScreen(meshList[GEO_TEXT], "The police find you innocent", Color(1, 1, 1), 2, 24, 32);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Your workers feel motivated by this", Color(1, 1, 1), 2, 22, 29);
+			RenderTextOnScreen(meshList[GEO_TEXT], "They will now work harder ", Color(1, 1, 1), 2, 24, 26);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Reward: +15% income boost for 30s", Color(1, 1, 1), 2, 22, 21);
+			RenderMeshOnScreen(meshList[GEO_EMPTYBOX], 40, 10, 10, 6);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Hooray!", Color(1, 1, 1), 2, 37, 9);
+		}
+		else if (lose == true)
+		{
+			RenderMeshOnScreen(meshList[GEO_EMPTYBOX], 40, 25, 40, 40);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Ouch!", Color(1, 1, 1), 2, 29, 40);
+			RenderTextOnScreen(meshList[GEO_TEXT], "You didnt hide all the evidence in time", Color(1, 1, 1), 2, 23, 35);
+			RenderTextOnScreen(meshList[GEO_TEXT], "The police has fined you 20% of your income", Color(1, 1, 1), 2, 22, 32);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Penalty: -20% of all cash", Color(1, 1, 1), 2, 24, 18);
+			RenderMeshOnScreen(meshList[GEO_EMPTYBOX], 40, 10, 10, 6);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Pay up", Color(1, 1, 1), 2, 37, 9);
+		}
 	}
 
 	//UI
@@ -611,7 +711,7 @@ void Splevel1::Render()
 		modelStack.PushMatrix();
 		RenderMeshOnScreen(meshList[GEO_TopUI], 40, 30, 16, 54, true);
 		modelStack.PopMatrix();
-		RenderTextOnScreen(meshList[GEO_TEXT], std::to_string(round(Manager.Money)), Color(1, 1, 0), 3, 61.5, 51);
+		RenderTextOnScreen(meshList[GEO_TEXT], Manager.ConvertMoneyToSuitableAmounts(), Color(1, 1, 0), 3, 61.5, 51);
 
 		if (RenderPrestige == 0)
 		{

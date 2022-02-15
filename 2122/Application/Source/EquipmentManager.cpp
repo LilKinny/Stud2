@@ -56,3 +56,39 @@ int EquipmentManager::UpgradePrestige(bool Upgrade)
 	}
 	return 0;
 }
+
+std::string EquipmentManager::ConvertMoneyToSuitableAmounts(void) //Return Edited String
+{
+	float Temp = Money;
+	if (Money >= 1000000)
+	{
+		Temp = Temp * 0.000001;
+	}
+	else if (Money >= 1000)
+	{
+		Temp = Temp * 0.001;
+	}
+	std::string Temporary = std::to_string(Temp);
+	int Stoppos = -1;
+	for (unsigned int i = 0; i < Temporary.length(); ++i)
+	{
+		if (Temporary[i] == '.')
+		{
+			Stoppos = i;
+		}
+	}
+	Temporary += "0000";
+	if (Stoppos > 0)
+	{
+		Temporary = Temporary.substr(0, Stoppos + 3);
+	}
+	if (Money >= 1000000)
+	{
+		Temporary += 'mil';
+	}
+	else if (Money >= 1000)
+	{
+		Temporary += 'k';
+	}
+	return Temporary;
+}
