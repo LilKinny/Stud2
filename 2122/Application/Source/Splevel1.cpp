@@ -201,8 +201,8 @@ void Splevel1::Init()
 
 	meshList[GEO_BUILDING] = MeshBuilder::GenerateOBJMTL("modelBUIDLING","OBJ//LVL1_withfloor.obj", "OBJ//LVL1_withfloor.mtl");
 	meshList[GEO_Table] = MeshBuilder::GenerateOBJMTL("modelBUIDLING", "OBJ//simple_table.obj", "OBJ//simple_table.mtl");
-	/*meshList[GEO_Phone1] = MeshBuilder::GenerateOBJMTL("modelBUIDLING", "OBJ//Phone1.obj", "OBJ//Phone1.mtl");*/
-	meshList[GEO_Laptop] = MeshBuilder::GenerateOBJMTL("modelBUIDLING", "OBJ//Laptop.obj", "OBJ//Laptop.mtl");
+	/*meshList[GEO_Phone1] = MeshBuilder::GenerateOBJMTL("modelBUIDLING", "OBJ//Phone1.obj", "OBJ//Phone1.mtl");*//*
+	meshList[GEO_Laptop] = MeshBuilder::GenerateOBJMTL("modelBUIDLING", "OBJ//Laptop.obj", "OBJ//Laptop.mtl");*/
 
 
 	meshList[GEO_PAPER] = MeshBuilder::GenerateOBJ("modelBUIDLING", "OBJ//Paper.obj");
@@ -223,7 +223,7 @@ void Splevel1::Update(double dt)
 {
 	float cposx = camera.position.x;
 	float cposz = camera.position.z;
-	cout << cposx;
+	//cout << cposx;
 	rotateangle = rotateangle + 0.1;
 	if (setuppolice == false && clearpolice == false)
 	{
@@ -344,6 +344,13 @@ void Splevel1::Update(double dt)
 		if ((posY >= 32 && posY <= 35.5) && (posX >= 67 && posX <= 68.5)) //Side Close Arrow Button
 		{
 			RenderPrestige = 0;
+		}
+		if (RenderPrestige == 1)
+		{
+			if ((posY >= 27 && posY <= 30) && (posX >= 70 && posX <= 78))
+			{
+				Manager.UpgradePrestige(true);
+			}
 		}
 	
 	}
@@ -501,6 +508,27 @@ void Splevel1::Render()
 		modelStack.PushMatrix();
 		RenderMeshOnScreen(meshList[GEO_SideUIBig], 40, 30, 16, 54, true);
 		modelStack.PopMatrix();
+		if (Manager.PrestigeLvl == 3)
+		{
+			//Max button Text
+			modelStack.PushMatrix();
+			RenderMeshOnScreen(meshList[GEO_MaxPrestige], 40, 30, 16, 54, true);
+			modelStack.PopMatrix();
+		}
+		else if (Manager.UpgradePrestige(false) == 0)
+		{
+			//Gray Button Upgrade Text
+			modelStack.PushMatrix();
+			RenderMeshOnScreen(meshList[GEO_GrayUpgrade], 40, 30, 16, 54, true);
+			modelStack.PopMatrix();
+		}
+		else if (Manager.UpgradePrestige(false) == 1)
+		{
+			//Green Button Upgrade Text
+			modelStack.PushMatrix();
+			RenderMeshOnScreen(meshList[GEO_GreenUpgrade], 40, 30, 16, 54, true);
+			modelStack.PopMatrix();
+		}
 	}
 
 	if (RenderUI == 1)
@@ -529,18 +557,18 @@ void Splevel1::Render()
 		modelStack.PopMatrix();
 	}
 
-	//kjcode
-	{
-		modelStack.PushMatrix();
-		//modelStack.Rotate(-90, 1, 0, 0);
-		modelStack.Translate(0, 0, 0);
-		modelStack.Scale(10, 10, 10);
-		RenderMesh(meshList[GEO_Table], true);
-		modelStack.PopMatrix();
+	////kjcode
+	//{
+	//	modelStack.PushMatrix();
+	//	//modelStack.Rotate(-90, 1, 0, 0);
+	//	modelStack.Translate(0, 0, 0);
+	//	modelStack.Scale(10, 10, 10);
+	//	RenderMesh(meshList[GEO_Table], true);
+	//	modelStack.PopMatrix();
 
 
-		
-	}
+	//	
+	//}
 }
 
 void Splevel1::RenderSkybox()
