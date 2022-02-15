@@ -235,8 +235,9 @@ void Splevel1::Init()
 	projectionStack.LoadMatrix(projection);
 }
 bool setuppolice = false, clearpolice, paper1, paper2, paper3, timerstart, win, lose;
-double scaleevidence = 0.1;
+double scaleevidence = 0.1, countdown, timer;
 float pposx, pposz, pposx2, pposz2, pposx3, pposz3, rotateangle, pposy, pposy2, pposy3, pushaway;
+string timerstring;
 
 int mg1_start;
 void Splevel1::Update(double dt)
@@ -245,11 +246,7 @@ void Splevel1::Update(double dt)
 	float cposz = camera.position.z;
 	//cout << cposx;
 	rotateangle = rotateangle + 0.1;
-	if (setuppolice == false && clearpolice == false)
-	{
-		mg1_start = rand() % 300 + 1;
-		/*cout << mg1_start << " , ";*/
-	}
+
 	if (mg1_start == 300 && clearpolice == false) setuppolice = true;
 	if (setuppolice == true && clearpolice == false)
 	{
@@ -264,8 +261,8 @@ void Splevel1::Update(double dt)
 		pposy2 = 18;
 		pposy3 = 18;
 		scaleevidence = 2;
+		countdown = 600;
 		clearpolice = true;
-		
 	}
 	if (clearpolice == true)
 	{
@@ -295,7 +292,27 @@ void Splevel1::Update(double dt)
 			timerstart = false;
 		}
 	}
+	if (timerstart == true)
+	{
+		Sleep(5);
+		countdown--;
+		timer = countdown / 10;
+		timerstring = to_string(timer);
 
+		
+	}
+	if (timer < 0)
+	{
+		lose = true;
+		timer = 0;
+		countdown = 0;
+		pposy = 0;
+		pposy2 = 0;
+		pposy3 = 0;
+		paper1 = false;
+		paper2 = false;
+		paper3 = false;
+	}
 	//static const float 
 	if (Application::IsKeyPressed('1')) //enable back face culling
 		glEnable(GL_CULL_FACE);
@@ -352,7 +369,6 @@ void Splevel1::Update(double dt)
 	if (!bLButtonState && Application::IsMousePressed(0))
 	{
 		bLButtonState = true;
-		std::cout << "LBUTTON DOWN" << std::endl;
 
 		//Converting Viewport space to UI space
 		double x, y;
@@ -415,14 +431,20 @@ void Splevel1::Update(double dt)
 			{
 				timerstart = true;
 				setuppolice = false;
+
 			}
 			else if (win == true)
 			{
 				win = false;
+				timerstart = false;
+				clearpolice = false;
 			}
 			else if (lose == true)
 			{
 				lose = false;
+				timerstart = false;
+				clearpolice = false;
+				
 			}
 		}
 		//
@@ -430,18 +452,15 @@ void Splevel1::Update(double dt)
 	else if (bLButtonState && !Application::IsMousePressed(0))
 	{
 		bLButtonState = false;
-		std::cout << "LBUTTON UP" << std::endl;
 	}
 	static bool bRButtonState = false;
 	if (!bRButtonState && Application::IsMousePressed(1))
 	{
 		bRButtonState = true;
-		std::cout << "RBUTTON DOWN" << std::endl;
 	}
 	else if (bRButtonState && !Application::IsMousePressed(1))
 	{
 		bRButtonState = false;
-		std::cout << "RBUTTON UP" << std::endl;
 	}
 }
 
@@ -632,6 +651,7 @@ void Splevel1::Render()
 			if (Application::IsKeyPressed('E'))
 			{
 				setuppolice = true;
+
 			}
 		}
 		//Laptop mini game
@@ -681,7 +701,9 @@ void Splevel1::Render()
 		RenderMesh(meshList[GEO_PAPER], true);
 		modelStack.PopMatrix();
 
-		if (setuppolice == true)
+		if(timerstart == true) RenderTextOnScreen(meshList[GEO_TEXT], "Time left: " + timerstring , Color(1, 1, 1), 2, 37, 5);
+
+		else if (setuppolice == true)
 		{
 			RenderMeshOnScreen(meshList[GEO_EMPTYBOX], 40, 25, 40, 40);
 			RenderTextOnScreen(meshList[GEO_TEXT], "Minigame: Hide the Evidence!", Color(1, 1, 1), 2, 27, 40);
@@ -694,7 +716,7 @@ void Splevel1::Render()
 			RenderMeshOnScreen(meshList[GEO_EMPTYBOX], 40, 10, 10, 6);
 			RenderTextOnScreen(meshList[GEO_TEXT], "Start!", Color(1, 1, 1), 2, 37, 9);
 		}
-		else if (win == true)
+		if (win == true)
 		{
 			RenderMeshOnScreen(meshList[GEO_EMPTYBOX], 40, 25, 40, 40);
 			RenderTextOnScreen(meshList[GEO_TEXT], "Congratulations!", Color(1, 1, 1), 2, 27, 40);
@@ -710,8 +732,8 @@ void Splevel1::Render()
 		{
 			RenderMeshOnScreen(meshList[GEO_EMPTYBOX], 40, 25, 40, 40);
 			RenderTextOnScreen(meshList[GEO_TEXT], "Ouch!", Color(1, 1, 1), 2, 29, 40);
-			RenderTextOnScreen(meshList[GEO_TEXT], "You didnt hide all the evidence in time", Color(1, 1, 1), 2, 23, 35);
-			RenderTextOnScreen(meshList[GEO_TEXT], "The police has fined you 20% of your income", Color(1, 1, 1), 2, 22, 32);
+			RenderTextOnScreen(meshList[GEO_TEXT], "You didnt hide all the evidence in time", Color(1, 1, 1), 2, 21.2, 35);
+			RenderTextOnScreen(meshList[GEO_TEXT], "The police has fined 20% of your income", Color(1, 1, 1), 2, 21.2, 32);
 			RenderTextOnScreen(meshList[GEO_TEXT], "Penalty: -20% of all cash", Color(1, 1, 1), 2, 24, 18);
 			RenderMeshOnScreen(meshList[GEO_EMPTYBOX], 40, 10, 10, 6);
 			RenderTextOnScreen(meshList[GEO_TEXT], "Pay up", Color(1, 1, 1), 2, 37, 9);
@@ -795,10 +817,6 @@ void Splevel1::Render()
 			modelStack.PopMatrix();
 		}
 	}
-
-	
-	RenderMeshOnScreen(meshList[GEO_Puzzlebg], 30, 30, 10, 10, true);
-	
 
 	// -------------------------------------------------POSITION DEBUG----------------------------------------------
 	float pox = camera.position.x;
