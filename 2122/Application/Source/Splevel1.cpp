@@ -201,8 +201,8 @@ void Splevel1::Init()
 
 	meshList[GEO_BUILDING] = MeshBuilder::GenerateOBJMTL("modelBUIDLING","OBJ//LVL1_withfloor.obj", "OBJ//LVL1_withfloor.mtl");
 	meshList[GEO_Table] = MeshBuilder::GenerateOBJMTL("modelBUIDLING", "OBJ//simple_table.obj", "OBJ//simple_table.mtl");
-	/*meshList[GEO_Phone1] = MeshBuilder::GenerateOBJMTL("modelBUIDLING", "OBJ//Phone1.obj", "OBJ//Phone1.mtl");*//*
-	meshList[GEO_Laptop] = MeshBuilder::GenerateOBJMTL("modelBUIDLING", "OBJ//Laptop.obj", "OBJ//Laptop.mtl");*/
+	/*meshList[GEO_Phone1] = MeshBuilder::GenerateOBJMTL("modelBUIDLING", "OBJ//Phone1.obj", "OBJ//Phone1.mtl");*/
+	/*meshList[GEO_Laptop] = MeshBuilder::GenerateOBJMTL("modelBUIDLING", "OBJ//Laptop.obj", "OBJ//Laptop.mtl");*/
 
 
 	meshList[GEO_PAPER] = MeshBuilder::GenerateOBJ("modelBUIDLING", "OBJ//Paper.obj");
@@ -214,16 +214,16 @@ void Splevel1::Init()
 	projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 1000.f);
 	projectionStack.LoadMatrix(projection);
 }
-bool setuppolice = false, clearpolice;
+bool setuppolice = false, clearpolice, paper1, paper2, paper3;
 double scaleevidence = 0.1;
-float pposx, pposz, pposx2, pposz2, pposx3, pposz3, rotateangle, pposy;
+float pposx, pposz, pposx2, pposz2, pposx3, pposz3, rotateangle, pposy, pposy2, pposy3;
 
 int mg1_start;
 void Splevel1::Update(double dt)
 {
 	float cposx = camera.position.x;
 	float cposz = camera.position.z;
-	//cout << cposx;
+	cout << cposx;
 	rotateangle = rotateangle + 0.1;
 	if (setuppolice == false && clearpolice == false)
 	{
@@ -241,13 +241,29 @@ void Splevel1::Update(double dt)
 		pposx3 = (rand() % 100 + 0) - 50;
 		pposz3 = (rand() % 100 + 0) - 50;
 		pposy = 18;
+		pposy2 = 18;
+		pposy3 = 18;
 		scaleevidence = 2;
 		clearpolice = true;
 		setuppolice = false;
 	}
 	if (clearpolice == true)
 	{
-		/*if(camera.position.x > pposx - 5 && camera.position.x < pposx + 5 && camera.position.z > pposz )*/
+		if (cposx > pposx - 10 && cposx < pposx + 10 && cposz > pposz - 10 && cposz < pposz + 10 && paper1 == false)
+		{
+			paper1 = true;
+			pposy = 0;
+		}
+		else if (cposx > pposx2 - 10 && cposx < pposx2 + 10 && cposz > pposz2 - 10 && cposz < pposz2 + 10 && paper2 == false)
+		{
+			paper2 = true;
+			pposy2 = 0;
+		}
+		else if (cposx > pposx3 - 10 && cposx < pposx3 + 10 && cposz > pposz3 - 10 && cposz < pposz3 + 10 && paper3 == false)
+		{
+			paper3 = true;
+			pposy3 = 0;
+		}
 	}
 
 	//static const float 
@@ -344,13 +360,6 @@ void Splevel1::Update(double dt)
 		if ((posY >= 32 && posY <= 35.5) && (posX >= 67 && posX <= 68.5)) //Side Close Arrow Button
 		{
 			RenderPrestige = 0;
-		}
-		if (RenderPrestige == 1)
-		{
-			if ((posY >= 27 && posY <= 30) && (posX >= 70 && posX <= 78))
-			{
-				Manager.UpgradePrestige(true);
-			}
 		}
 	
 	}
@@ -508,27 +517,6 @@ void Splevel1::Render()
 		modelStack.PushMatrix();
 		RenderMeshOnScreen(meshList[GEO_SideUIBig], 40, 30, 16, 54, true);
 		modelStack.PopMatrix();
-		if (Manager.PrestigeLvl == 3)
-		{
-			//Max button Text
-			modelStack.PushMatrix();
-			RenderMeshOnScreen(meshList[GEO_MaxPrestige], 40, 30, 16, 54, true);
-			modelStack.PopMatrix();
-		}
-		else if (Manager.UpgradePrestige(false) == 0)
-		{
-			//Gray Button Upgrade Text
-			modelStack.PushMatrix();
-			RenderMeshOnScreen(meshList[GEO_GrayUpgrade], 40, 30, 16, 54, true);
-			modelStack.PopMatrix();
-		}
-		else if (Manager.UpgradePrestige(false) == 1)
-		{
-			//Green Button Upgrade Text
-			modelStack.PushMatrix();
-			RenderMeshOnScreen(meshList[GEO_GreenUpgrade], 40, 30, 16, 54, true);
-			modelStack.PopMatrix();
-		}
 	}
 
 	if (RenderUI == 1)
@@ -557,18 +545,45 @@ void Splevel1::Render()
 		modelStack.PopMatrix();
 	}
 
-	////kjcode
-	//{
-	//	modelStack.PushMatrix();
-	//	//modelStack.Rotate(-90, 1, 0, 0);
-	//	modelStack.Translate(0, 0, 0);
-	//	modelStack.Scale(10, 10, 10);
-	//	RenderMesh(meshList[GEO_Table], true);
-	//	modelStack.PopMatrix();
+	//kjcode
+	{
+		modelStack.PushMatrix();
+		//modelStack.Rotate(-90, 1, 0, 0);
+		modelStack.Translate(0, 0, 0);
+		modelStack.Scale(10, 10, 10);
+		RenderMesh(meshList[GEO_Table], true);
+		modelStack.PopMatrix();
 
 
-	//	
-	//}
+		
+	}
+
+	//Koh Win Code
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(pposx, pposy, pposz);
+		modelStack.Rotate(90, 1, 0, 0);
+		modelStack.Rotate(rotateangle * 10, 0, 0, 1);
+		modelStack.Scale(scaleevidence, scaleevidence, scaleevidence);
+		RenderMesh(meshList[GEO_PAPER], true);
+		modelStack.PopMatrix();
+
+		modelStack.PushMatrix();
+		modelStack.Translate(pposx2, pposy2, pposz2);
+		modelStack.Rotate(90, 1, 0, 0);
+		modelStack.Rotate(rotateangle * 10, 0, 0, 1);
+		modelStack.Scale(scaleevidence, scaleevidence, scaleevidence);
+		RenderMesh(meshList[GEO_PAPER], true);
+		modelStack.PopMatrix();
+
+		modelStack.PushMatrix();
+		modelStack.Translate(pposx3, pposy3, pposz3);
+		modelStack.Rotate(90, 1, 0, 0);
+		modelStack.Rotate(rotateangle * 10, 0, 0, 1);
+		modelStack.Scale(scaleevidence, scaleevidence, scaleevidence);
+		RenderMesh(meshList[GEO_PAPER], true);
+		modelStack.PopMatrix();
+	}
 }
 
 void Splevel1::RenderSkybox()
@@ -670,30 +685,6 @@ void Splevel1::RenderSkybox()
 	modelStack.Rotate(180, 0, 180, 180);
 	modelStack.Scale(5, 5, 5);
 	RenderMesh(meshList[GEO_LIGHTBALL], true);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	modelStack.Translate(pposx, pposy, pposz);
-	modelStack.Rotate(90, 1, 0, 0);
-	modelStack.Rotate(rotateangle * 10, 0, 0, 1);
-	modelStack.Scale(scaleevidence, scaleevidence, scaleevidence);
-	RenderMesh(meshList[GEO_PAPER], true);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	modelStack.Translate(pposx2, pposy, pposz2);
-	modelStack.Rotate(90, 1, 0, 0);
-	modelStack.Rotate(rotateangle * 10, 0, 0, 1);
-	modelStack.Scale(scaleevidence, scaleevidence, scaleevidence);
-	RenderMesh(meshList[GEO_PAPER], true);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	modelStack.Translate(pposx3, pposy, pposz3);
-	modelStack.Rotate(90, 1, 0, 0);
-	modelStack.Rotate(rotateangle * 10, 0, 0, 1);
-	modelStack.Scale(scaleevidence, scaleevidence, scaleevidence);
-	RenderMesh(meshList[GEO_PAPER], true);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
