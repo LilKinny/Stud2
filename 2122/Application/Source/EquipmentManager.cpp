@@ -57,7 +57,7 @@ int EquipmentManager::UpgradePrestige(bool Upgrade)
 	return 0;
 }
 
-std::string EquipmentManager::ConvertMoneyToSuitableAmounts(void)
+std::string EquipmentManager::ConvertMoneyToSuitableAmounts(void) //Return Edited String
 {
 	float Temp = Money;
 	if (Money >= 1000000)
