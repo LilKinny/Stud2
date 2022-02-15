@@ -13,8 +13,7 @@
 #include "Material.h"
 #include <cstdlib>
 #include <GLFW/glfw3.h>
-
-#include "../Puzzle.h"
+#include <ctime>
 
 
 using namespace std;
@@ -119,9 +118,6 @@ void Splevel1::Init()
 
 	RenderUI = 0;
 	PageNum = 1;
-
-	puzzle.Init();
-
 	//Initialize camera settings
 	camera.Init(Vector3(80, 30, 50), Vector3(0, 0, 0), Vector3(0, 1, 0));
 
@@ -155,17 +151,8 @@ void Splevel1::Init()
 	meshList[GEO_BotUI] = MeshBuilder::GenerateRec("BotUI", Color(1, 1, 1), 5.f, 1.f);
 	meshList[GEO_BotUI]->textureID = LoadTGA("Image//SP2_BotUI.tga");
 
-	
-
-	meshList[GEO_Puzzlebg] = MeshBuilder::GenerateQuad("puzzlebg", Color(1, 1, 1), 1.f);
-	meshList[GEO_Puzzlebg]->textureID = LoadTGA("Image//Puzzlebg.tga");
-
-	meshList[GEO_PuzzlePlayer] = MeshBuilder::GenerateQuad("puzzlebg", Color(1, 1, 1), 1.f);
-	meshList[GEO_PuzzlePlayer]->textureID = LoadTGA("Image//PuzzlePlayer.tga");
-
-	meshList[GEO_PuzzlePaper] = MeshBuilder::GenerateQuad("puzzlebg", Color(1, 1, 1), 1.f);
-	meshList[GEO_PuzzlePaper]->textureID = LoadTGA("Image//PuzzlePaper.tga");
-
+	meshList[GEO_Puzzlebg] = MeshBuilder::GenerateQuad("Quad", Color(1, 1, 1), 1.f);
+	meshList[GEO_Puzzlebg]->textureID = LoadTGA("Image//TitleFrame.tga");
 
 	meshList[GEO_SideUISmall] = MeshBuilder::GenerateRec("SideUISmall", Color(1, 1, 1), 5.f, 1.f);
 	meshList[GEO_SideUISmall]->textureID = LoadTGA("Image//SP2_SideUI_Small.tga");
@@ -182,6 +169,15 @@ void Splevel1::Init()
 	meshList[GEO_GrayUpgrade] = MeshBuilder::GenerateRec("GrayUpgrade", Color(1, 1, 1), 5.f, 1.f);
 	meshList[GEO_GrayUpgrade]->textureID = LoadTGA("Image//SP2_SideUI_GrayUpgrade.tga");
 
+	meshList[GEO_GREENBUTTON] = MeshBuilder::GenerateRec("GreenButton", Color(0, 1, 0.16), 0.3f, 1.f);
+
+	meshList[GEO_GRAYBUTTON] = MeshBuilder::GenerateRec("GrayButton", Color(0.39, 0.39, 0.39), 0.3f, 1.f);
+
+	meshList[GEO_UNLOCKTEXT] = MeshBuilder::GenerateRec("UnlockText", Color(1, 1, 1), 5.f, 1.f);
+	meshList[GEO_UNLOCKTEXT]->textureID = LoadTGA("Image//UnlockText.tga");
+
+	meshList[GEO_UPGRADETEXT] = MeshBuilder::GenerateRec("UpgradeText", Color(1, 1, 1), 5.f, 1.f);
+	meshList[GEO_UPGRADETEXT]->textureID = LoadTGA("Image//UpgradeText.tga");
 	/*
 	meshList[GEO_NYP] = MeshBuilder::GenerateQuad("nyplogo", Color(1, 1, 1), 1.f);
 	meshList[GEO_NYP]->textureID = LoadTGA("Image//NYP.tga");
@@ -213,19 +209,31 @@ void Splevel1::Init()
 		"OBJ//cottage_obj.obj", "OBJ//cottage_obj.mtl");*/
 
 	meshList[GEO_GRASS] = MeshBuilder::GenerateOBJMTL("model211", "OBJ//ground_grass.obj", "OBJ//ground_grass.mtl");
-
 	meshList[GEO_GRASS_V] = MeshBuilder::GenerateOBJMTL("model211", "OBJ//grassLarge.obj", "OBJ//grassLarge.mtl");
 
 
 	meshList[GEO_BUILDING] = MeshBuilder::GenerateOBJMTL("modelBUIDLING","OBJ//LVL1_withfloor.obj", "OBJ//LVL1_withfloor.mtl");
 	meshList[GEO_Table] = MeshBuilder::GenerateOBJMTL("modelBUIDLING", "OBJ//simple_table.obj", "OBJ//simple_table.mtl");
-	/*meshList[GEO_Phone1] = MeshBuilder::GenerateOBJMTL("modelBUIDLING", "OBJ//Phone1.obj", "OBJ//Phone1.mtl");*/
-	/*meshList[GEO_Laptop] = MeshBuilder::GenerateOBJMTL("modelBUIDLING", "OBJ//Laptop.obj", "OBJ//Laptop.mtl");*/
+
+	meshList[GEO_Screen] = MeshBuilder::GenerateRec("Rec", Color(1, 1, 1), 3.f, 5.f);
+	meshList[GEO_Screen]->textureID = LoadTGA("Image//Phone.tga");
+
+	meshList[GEO_op1] = MeshBuilder::GenerateRec("Rec", Color(1, 1, 1), 1.f, 1.f);
+	meshList[GEO_op1]->textureID = LoadTGA("Image//TextOP1.tga");
+
+	meshList[GEO_op2] = MeshBuilder::GenerateRec("Rec", Color(1, 1, 1), 1.f, 1.f);
+	meshList[GEO_op2]->textureID = LoadTGA("Image//TextOP2.tga");
+
+	meshList[GEO_op3] = MeshBuilder::GenerateRec("Rec", Color(1, 1, 1), 1.f, 1.f);
+	meshList[GEO_op3]->textureID = LoadTGA("Image//TextOP3.tga");
+
+	meshList[GEO_op4] = MeshBuilder::GenerateRec("Rec", Color(1, 1, 1), 1.f, 1.f);
+	meshList[GEO_op4]->textureID = LoadTGA("Image//TextOP4.tga");
 
 	meshList[GEO_Tree] = MeshBuilder::GenerateOBJMTL("Tree", "OBJ//TreeTall.obj", "OBJ//TreeTall.mtl");
 
-	
-
+	meshList[GEO_Lift] = MeshBuilder::GenerateOBJ("modelBUIDLING", "OBJ//Elevator.obj");
+	meshList[GEO_Lift]->textureID = LoadTGA("Image//Elevator.tga");
 
 	meshList[GEO_PAPER] = MeshBuilder::GenerateOBJ("modelBUIDLING", "OBJ//Paper.obj");
 	meshList[GEO_PAPER]->textureID = LoadTGA("Image//Notelines.tga");
@@ -238,29 +246,21 @@ void Splevel1::Init()
 	Mtx44 projection;
 	projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 1000.f);
 	projectionStack.LoadMatrix(projection);
-
-	/*Puzzle* puzzle;
-	puzzle = new Puzzle();
-	puzzle->Init();*/
-	
-	
 }
 bool setuppolice = false, clearpolice, paper1, paper2, paper3, timerstart, win, lose;
-double scaleevidence = 0.1;
+double scaleevidence = 0.1, countdown, timer;
 float pposx, pposz, pposx2, pposz2, pposx3, pposz3, rotateangle, pposy, pposy2, pposy3, pushaway;
+string timerstring;
 
 int mg1_start;
+bool questions,Reaply1,Reply2,Reply3;
 void Splevel1::Update(double dt)
 {
 	float cposx = camera.position.x;
 	float cposz = camera.position.z;
 	//cout << cposx;
 	rotateangle = rotateangle + 0.1;
-	if (setuppolice == false && clearpolice == false)
-	{
-		mg1_start = rand() % 300 + 1;
-		/*cout << mg1_start << " , ";*/
-	}
+
 	if (mg1_start == 300 && clearpolice == false) setuppolice = true;
 	if (setuppolice == true && clearpolice == false)
 	{
@@ -275,10 +275,9 @@ void Splevel1::Update(double dt)
 		pposy2 = 18;
 		pposy3 = 18;
 		scaleevidence = 2;
+		countdown = 600;
 		clearpolice = true;
-		
 	}
-	
 	if (clearpolice == true)
 	{
 		if (cposx > pposx - 10 && cposx < pposx + 10 && cposz > pposz - 10 && cposz < pposz + 10 && paper1 == false)
@@ -307,7 +306,27 @@ void Splevel1::Update(double dt)
 			timerstart = false;
 		}
 	}
+	if (timerstart == true)
+	{
+		Sleep(5);
+		countdown--;
+		timer = countdown / 10;
+		timerstring = to_string(timer);
 
+		
+	}
+	if (timer < 0)
+	{
+		lose = true;
+		timer = 0;
+		countdown = 0;
+		pposy = 0;
+		pposy2 = 0;
+		pposy3 = 0;
+		paper1 = false;
+		paper2 = false;
+		paper3 = false;
+	}
 	//static const float 
 	if (Application::IsKeyPressed('1')) //enable back face culling
 		glEnable(GL_CULL_FACE);
@@ -360,34 +379,19 @@ void Splevel1::Update(double dt)
 	// Reset Position and variables
 
 	//Mouse Inputs
-	double x, y;
-	Application::GetCursorPos(&x, &y);
-	unsigned w = Application::GetWindowWidth();
-	unsigned h = Application::GetWindowHeight();
-	float posX = (x / w) * 80; //convert (0,800) to (0,80)
-	float posY = 60 - (y / h) * 60; //convert (600,0) to (0,60)
-	//std::cout << "posX:" << posX << " , posY:" << posY << std::endl;
-	debugmouseposx = posX;
-	debugmouseposy = posY;
-
-
 	static bool bLButtonState = false;
 	if (!bLButtonState && Application::IsMousePressed(0))
 	{
 		bLButtonState = true;
-		std::cout << "LBUTTON DOWN" << std::endl;
 
 		//Converting Viewport space to UI space
-		//double x, y;
-		//Application::GetCursorPos(&x, &y);
-		//unsigned w = Application::GetWindowWidth();
-		//unsigned h = Application::GetWindowHeight();
-		//float posX = (x / w) * 80; //convert (0,800) to (0,80)
-		//float posY = 60 - (y / h) *60; //convert (600,0) to (0,60)
-		//std::cout << "posX:" << posX << " , posY:" << posY << std::endl;
-		//debugmouseposx = posX;
-		//debugmouseposy = posY;
-
+		double x, y;
+		Application::GetCursorPos(&x, &y);
+		unsigned w = Application::GetWindowWidth();
+		unsigned h = Application::GetWindowHeight();
+		float posX = (x / w) * 80; //convert (0,800) to (0,80)
+		float posY = 60 - (y / h) *60; //convert (600,0) to (0,60)
+		std::cout << "posX:" << posX << " , posY:" << posY << std::endl;
 		if ((posY <= 59 && posY >= 53.5) && (posX >= 1.5 && posX <= 12.5)) //Clck Store
 		{
 			PageNum = 1;
@@ -398,19 +402,21 @@ void Splevel1::Update(double dt)
 			PageNum = 1;
 			RenderUI = 2;
 		}
-
-		if ((posY >= 46 && posY <= 48.5) && (posX >= 27.5 && posX <= 29)) //Left Button
+		if (RenderUI == 2)
 		{
-			if (PageNum != 1)
+			if ((posY >= 46 && posY <= 48.5) && (posX >= 27.5 && posX <= 29)) //Left Button
 			{
-				--PageNum;
+				if (PageNum != 1)
+				{
+					--PageNum;
+				}
 			}
-		}
-		if ((posY >= 46 && posY <= 48.5) && (posX >= 50.5 && posX <= 52)) //Right Button
-		{
-			if (PageNum != 3)
+			if ((posY >= 46 && posY <= 48.5) && (posX >= 50.5 && posX <= 52)) //Right Button
 			{
-				++PageNum;
+				if (PageNum != 3)
+				{
+					++PageNum;
+				}
 			}
 		}
 		if ((posY >= 46 && posY <= 48.5) && (posX >= 62 && posX <= 63.5)) //Click Cross Button
@@ -439,35 +445,91 @@ void Splevel1::Update(double dt)
 			{
 				timerstart = true;
 				setuppolice = false;
+
 			}
 			else if (win == true)
 			{
 				win = false;
+				timerstart = false;
+				clearpolice = false;
 			}
 			else if (lose == true)
 			{
 				lose = false;
+				timerstart = false;
+				clearpolice = false;
+				float takeaway = Manager.Money / 5;
+				Manager.Money = Manager.Money - takeaway;
+				
 			}
 		}
-		//
+		//if (questions == true)
+		//{
+		//	if (posX > 45 && posX < 64 && posY > 43 && posY < 53)
+		//	{
+
+		//	}
+		//	if (posX > 45 && posX < 64 && posY > 48 && posY < 38)
+		//	{
+
+		//	}
+		//	if (posX > 45 && posX < 64 && posY > 13 && posY < 23)
+		//	{
+
+		//	}
+		//}
+		
 	}
 	else if (bLButtonState && !Application::IsMousePressed(0))
 	{
 		bLButtonState = false;
-		std::cout << "LBUTTON UP" << std::endl;
 	}
 	static bool bRButtonState = false;
 	if (!bRButtonState && Application::IsMousePressed(1))
 	{
 		bRButtonState = true;
-		std::cout << "RBUTTON DOWN" << std::endl;
 	}
 	else if (bRButtonState && !Application::IsMousePressed(1))
 	{
 		bRButtonState = false;
-		std::cout << "RBUTTON UP" << std::endl;
+	}
+
+	//player table
+	{
+		//Evidence mini game
+		if (camera.position.x > 30 && camera.position.x < 45 && (camera.position.z > 55 && camera.position.z < 65))
+		{
+			if (Application::IsKeyPressed('E'))
+			{
+				setuppolice = true;
+			}
+		}
+		//Laptop mini game
+		if (camera.position.x > 30 && camera.position.x < 45 && (camera.position.z > 40 && camera.position.z < 55))
+		{
+			if (Application::IsKeyPressed('E'))
+			{
+
+			}
+		}
+		//Phone mini game
+		if (camera.position.x > 30 && camera.position.x < 45 && (camera.position.z > 30 && camera.position.z < 40))
+		{
+			if (questions == false)
+			{
+				RenderTextOnScreen(meshList[GEO_TEXT], "Press 'E' to start phone", Color(0, 1, 0), 4, 10, 30);
+				if (Application::IsKeyPressed('E'))
+				{
+					questions = true;
+					
+				}
+			}
+		}
+		
 	}
 }
+
+
 
 void Splevel1::Render()
 {
@@ -498,9 +560,6 @@ void Splevel1::Render()
 	//	camera.target.x, camera.target.y, camera.target.z,
 	//	camera.up.x, camera.up.y, camera.up.z);
 	//modelStack.LoadIdentity();
-
-
-
 	//Mtx44 mvp = projectionStack.Top() * viewStack.Top() * modelStack.Top();
 
 
@@ -531,7 +590,6 @@ void Splevel1::Render()
 
 	//modelStack.PushMatrix();
 	////scale, translate, rotate
-
 	/*------------------------------------------PREVIOUS CODE---------------------------------*/
 
 
@@ -581,60 +639,70 @@ void Splevel1::Render()
 	RenderSkybox();
 
 	modelStack.PushMatrix();
-	//modelStack.Rotate(-90, 1, 0, 0);
 	modelStack.Translate(0, 0, 0);
 	modelStack.Scale(10, 10, 10);
-
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(6.52, 3, -7);
+		modelStack.Rotate(90, 0, 0, 1);
+		modelStack.Scale(1.5, 0.9, 1);
+		RenderMesh(meshList[GEO_Lift], true);
+		modelStack.PopMatrix();
+	}
 	RenderMesh(meshList[GEO_BUILDING], true);
 	modelStack.PopMatrix();
 
+
+
 	//Render trees
-	for (int i = 0; i < 30; i++)
 	{
-		modelStack.PushMatrix();
-		//modelStack.Rotate(-90, 1, 0, 0);
-		modelStack.Translate(-450 + (i * 30), 0, -450);
-		modelStack.Scale(70, 70, 70);
+		for (int i = 0; i < 30; i++)
+		{
+			modelStack.PushMatrix();
+			//modelStack.Rotate(-90, 1, 0, 0);
+			modelStack.Translate(-450 + (i * 30), 0, -450);
+			modelStack.Scale(70, 70, 70);
 
-		RenderMesh(meshList[GEO_Tree], true);
-		modelStack.PopMatrix();
+			RenderMesh(meshList[GEO_Tree], true);
+			modelStack.PopMatrix();
+		}
+
+		for (int i = 0; i < 30; i++)
+		{
+			modelStack.PushMatrix();
+			//modelStack.Rotate(-90, 1, 0, 0);
+			modelStack.Translate(-450 + (i * 30), 0, 450);
+			modelStack.Scale(70, 70, 70);
+
+			RenderMesh(meshList[GEO_Tree], true);
+			modelStack.PopMatrix();
+		}
+
+		for (int i = 0; i < 30; i++)
+		{
+			modelStack.PushMatrix();
+			//modelStack.Rotate(-90, 1, 0, 0);
+			modelStack.Translate(-450, 0, -450 + (i * 30));
+			modelStack.Scale(70, 70, 70);
+
+			RenderMesh(meshList[GEO_Tree], true);
+			modelStack.PopMatrix();
+		}
+
+		for (int i = 0; i < 30; i++)
+		{
+			modelStack.PushMatrix();
+			//modelStack.Rotate(-90, 1, 0, 0);
+			modelStack.Translate(450, 0, -450 + (i * 30));
+			modelStack.Scale(70, 70, 70);
+
+			RenderMesh(meshList[GEO_Tree], true);
+			modelStack.PopMatrix();
+		}
 	}
-
-	for (int i = 0; i < 30; i++)
-	{
-		modelStack.PushMatrix();
-		//modelStack.Rotate(-90, 1, 0, 0);
-		modelStack.Translate(-450 + (i * 30), 0, 450);
-		modelStack.Scale(70, 70, 70);
-
-		RenderMesh(meshList[GEO_Tree], true);
-		modelStack.PopMatrix();
-	}
-
-	for (int i = 0; i < 30; i++)
-	{
-		modelStack.PushMatrix();
-		//modelStack.Rotate(-90, 1, 0, 0);
-		modelStack.Translate(-450, 0, -450 + (i * 30));
-		modelStack.Scale(70, 70, 70);
-
-		RenderMesh(meshList[GEO_Tree], true);
-		modelStack.PopMatrix();
-	}
-
-	for (int i = 0; i < 30; i++)
-	{
-		modelStack.PushMatrix();
-		//modelStack.Rotate(-90, 1, 0, 0);
-		modelStack.Translate(450, 0, -450 + (i * 30));
-		modelStack.Scale(70, 70, 70);
-
-		RenderMesh(meshList[GEO_Tree], true);
-		modelStack.PopMatrix();
-	}
-
 	//kjcode
 	{
+		
 		modelStack.PushMatrix();
 		modelStack.Translate(50, 0, 45);
 		modelStack.Rotate(90, 0, 1, 0);
@@ -649,34 +717,39 @@ void Splevel1::Render()
 		}
 		RenderMesh(meshList[GEO_Table], true);
 		modelStack.PopMatrix();
+		
 		//Evidence mini game
-		if (camera.position.x > 30 && camera.position.x < 45 &&(camera.position.z > 55 && camera.position.z <65))
+		if (camera.position.x > 30 && camera.position.x < 45 && (camera.position.z > 55 && camera.position.z < 65))
 		{
-			RenderTextOnScreen(meshList[GEO_TEXT], "Press 'E' to start evidence", Color(0, 1, 0), 4, 10, 30);
-			if (Application::IsKeyPressed('E'))
-			{
-				setuppolice = true;
-			}
+			RenderTextOnScreen(meshList[GEO_TEXT], "Press 'E' to start Evidence", Color(0, 1, 0), 4, 10, 30);
 		}
 		//Laptop mini game
 		if (camera.position.x > 30 && camera.position.x < 45 && (camera.position.z > 40 && camera.position.z < 55))
 		{
-			RenderTextOnScreen(meshList[GEO_TEXT], "Press 'E' to start laptop", Color(0, 1, 0), 4, 10, 30);
-			if (Application::IsKeyPressed('E'))
-			{
-
-			}
+			RenderTextOnScreen(meshList[GEO_TEXT], "Press 'E' to start Laptop", Color(0, 1, 0), 4, 10, 30);
 		}
 		//Phone mini game
 		if (camera.position.x > 30 && camera.position.x < 45 && (camera.position.z > 30 && camera.position.z < 40))
 		{
-			RenderTextOnScreen(meshList[GEO_TEXT], "Press 'E' to start phone", Color(0, 1, 0), 4, 10, 30);
-			if (Application::IsKeyPressed('E'))
+			if (questions == false)
 			{
-
+				RenderTextOnScreen(meshList[GEO_TEXT], "Press 'E' to start phone", Color(0, 1, 0), 4, 10, 30);
 			}
-
 		}
+		//lift
+		if (camera.position.x > 25 && camera.position.x < 60 &&(camera.position.z < -50 && camera.position.z > -60))
+		{
+			if (Manager.PrestigeLvl >= 1)
+			{
+				RenderTextOnScreen(meshList[GEO_TEXT], "Press 'E' to L2", Color(0, 1, 0), 4, 10, 30);
+			}
+			else
+			{
+				RenderTextOnScreen(meshList[GEO_TEXT], "Reach prestiege for lift access", Color(0, 1, 0), 4, 10, 30);
+			}
+		}
+		
+
 	}
 
 	//Koh Win Code
@@ -705,7 +778,9 @@ void Splevel1::Render()
 		RenderMesh(meshList[GEO_PAPER], true);
 		modelStack.PopMatrix();
 
-		if (setuppolice == true)
+		if(timerstart == true) RenderTextOnScreen(meshList[GEO_TEXT], "Time left: " + timerstring , Color(1, 1, 1), 2, 37, 5);
+
+		else if (setuppolice == true)
 		{
 			RenderMeshOnScreen(meshList[GEO_EMPTYBOX], 40, 25, 40, 40);
 			RenderTextOnScreen(meshList[GEO_TEXT], "Minigame: Hide the Evidence!", Color(1, 1, 1), 2, 27, 40);
@@ -718,7 +793,7 @@ void Splevel1::Render()
 			RenderMeshOnScreen(meshList[GEO_EMPTYBOX], 40, 10, 10, 6);
 			RenderTextOnScreen(meshList[GEO_TEXT], "Start!", Color(1, 1, 1), 2, 37, 9);
 		}
-		else if (win == true)
+		if (win == true)
 		{
 			RenderMeshOnScreen(meshList[GEO_EMPTYBOX], 40, 25, 40, 40);
 			RenderTextOnScreen(meshList[GEO_TEXT], "Congratulations!", Color(1, 1, 1), 2, 27, 40);
@@ -734,8 +809,8 @@ void Splevel1::Render()
 		{
 			RenderMeshOnScreen(meshList[GEO_EMPTYBOX], 40, 25, 40, 40);
 			RenderTextOnScreen(meshList[GEO_TEXT], "Ouch!", Color(1, 1, 1), 2, 29, 40);
-			RenderTextOnScreen(meshList[GEO_TEXT], "You didnt hide all the evidence in time", Color(1, 1, 1), 2, 23, 35);
-			RenderTextOnScreen(meshList[GEO_TEXT], "The police has fined you 20% of your income", Color(1, 1, 1), 2, 22, 32);
+			RenderTextOnScreen(meshList[GEO_TEXT], "You didnt hide all the evidence in time", Color(1, 1, 1), 2, 21.2, 35);
+			RenderTextOnScreen(meshList[GEO_TEXT], "The police has fined 20% of your income", Color(1, 1, 1), 2, 21.2, 32);
 			RenderTextOnScreen(meshList[GEO_TEXT], "Penalty: -20% of all cash", Color(1, 1, 1), 2, 24, 18);
 			RenderMeshOnScreen(meshList[GEO_EMPTYBOX], 40, 10, 10, 6);
 			RenderTextOnScreen(meshList[GEO_TEXT], "Pay up", Color(1, 1, 1), 2, 37, 9);
@@ -798,6 +873,63 @@ void Splevel1::Render()
 			modelStack.PushMatrix();
 			RenderTextOnScreen(meshList[GEO_TEXT], "Store Page: " + std::to_string(PageNum), Color(1, 1, 0), 2, 30, 43);
 			modelStack.PopMatrix();
+
+			//Equipment
+			//Gray Button
+			{
+				//GrayButton Left Top
+				modelStack.PushMatrix();
+				RenderMeshOnScreen(meshList[GEO_GRAYBUTTON], 24, 29, 24, 3, true);
+				modelStack.PopMatrix();
+				//GrayButton Mid Top
+				modelStack.PushMatrix();
+				RenderMeshOnScreen(meshList[GEO_GRAYBUTTON], 40, 29, 24, 3, true);
+				modelStack.PopMatrix();
+				//GrayButton Right Top
+				modelStack.PushMatrix();
+				RenderMeshOnScreen(meshList[GEO_GRAYBUTTON], 56, 29, 24, 3, true);
+				modelStack.PopMatrix();
+				//GrayButton Left Bot
+				modelStack.PushMatrix();
+				RenderMeshOnScreen(meshList[GEO_GRAYBUTTON], 24, 16, 24, 3, true);
+				modelStack.PopMatrix();
+				//GrayButton Mid Top
+				modelStack.PushMatrix();
+				RenderMeshOnScreen(meshList[GEO_GRAYBUTTON], 40, 16, 24, 3, true);
+				modelStack.PopMatrix();
+				//GrayButton Right Top
+				modelStack.PushMatrix();
+				RenderMeshOnScreen(meshList[GEO_GRAYBUTTON], 56, 16, 24, 3, true);
+				modelStack.PopMatrix();
+			}
+
+			//Green Button
+			{
+				//GrayButton Left Top
+				modelStack.PushMatrix();
+				RenderMeshOnScreen(meshList[GEO_GREENBUTTON], 24, 29, 24, 3, true);
+				modelStack.PopMatrix();
+				//GrayButton Mid Top
+				modelStack.PushMatrix();
+				RenderMeshOnScreen(meshList[GEO_GREENBUTTON], 40, 29, 24, 3, true);
+				modelStack.PopMatrix();
+				//GrayButton Right Top
+				modelStack.PushMatrix();
+				RenderMeshOnScreen(meshList[GEO_GREENBUTTON], 56, 29, 24, 3, true);
+				modelStack.PopMatrix();
+				//GrayButton Left Bot
+				modelStack.PushMatrix();
+				RenderMeshOnScreen(meshList[GEO_GREENBUTTON], 24, 16, 24, 3, true);
+				modelStack.PopMatrix();
+				//GrayButton Mid Top
+				modelStack.PushMatrix();
+				RenderMeshOnScreen(meshList[GEO_GREENBUTTON], 40, 16, 24, 3, true);
+				modelStack.PopMatrix();
+				//GrayButton Right Top
+				modelStack.PushMatrix();
+				RenderMeshOnScreen(meshList[GEO_GREENBUTTON], 56, 16, 24, 3, true);
+				modelStack.PopMatrix();
+			}
 		}
 		else if (RenderUI == 2)
 		{
@@ -814,18 +946,63 @@ void Splevel1::Render()
 		}
 	}
 
-	
-	
-	PuzzleRender();
+	//lovescam
+	{
+		int rnd;
+
+		if (questions == true)
+		{
+
+			RenderMeshOnScreen(meshList[GEO_Screen], 40, 30, 20, 10, true);
+
+			if (Manager.PrestigeLvl == 2|| Manager.PrestigeLvl == 3)
+			{
+				rnd = Random(4);
+				int pos[4] = { 48,38,28,18 };
+				for (int i = 0; i < 3; i++)
+				{
+					if (pos[i] == rnd - 1)
+					{
+						RenderMeshOnScreen(meshList[GEO_op1], 55, pos[i], 20, 10, true);//correct answer
+					}
+					else
+					{
+						RenderMeshOnScreen(meshList[GEO_op2], 55, pos[i], 20, 10, true);
+					}
+				}
+			}
+			else
+			{
+				rnd = Random(3);
+				int pos[3] = { 48,38,28 };
+				for (int i = 0; i < 3; i++)
+				{
+					if (pos[i] == rnd - 1)
+					{
+						RenderMeshOnScreen(meshList[GEO_op1], 55, pos[i], 20, 10, true);//correct answer
+					}
+					else
+					{
+						RenderMeshOnScreen(meshList[GEO_op4], 55, pos[i], 20, 10, true);
+					}
+				}
+			}
+
+			if (Manager.PrestigeLvl == 2)
+			{
+				RenderMeshOnScreen(meshList[GEO_op3], 55, 18, 20, 10, true);
+			}
+			
+		}
+	}
+
+
 
 	// -------------------------------------------------POSITION DEBUG----------------------------------------------
 	float pox = camera.position.x;
 	float poz = camera.position.z;
 	RenderTextOnScreen(meshList[GEO_TEXT], "Pos X:" + std::to_string(pox), Color(1, 1, 0), 2, 0, 43);
 	RenderTextOnScreen(meshList[GEO_TEXT], "Pos Z: " + std::to_string(poz), Color(1, 1, 0), 2, 0, 45);
-
-	RenderTextOnScreen(meshList[GEO_TEXT], "Pos X:" + std::to_string(debugmouseposx), Color(1, 1, 0), 2, 0, 30);
-	RenderTextOnScreen(meshList[GEO_TEXT], "Pos y: " + std::to_string(debugmouseposy), Color(1, 1, 0), 2, 0, 33);
 
 }
 
@@ -945,23 +1122,6 @@ void Splevel1::RenderSkybox()
 	RenderMeshOnScreen(meshList[GEO_TITLE], 4, 5, 3, 1);
 	RenderTextOnScreen(meshList[GEO_TEXT], "Scammer tycoon", Color(0, 1, 0), 2, 26, 50);*/
 
-
-}
-
-void Splevel1::PuzzleRender()
-{
-	RenderMeshOnScreen(meshList[GEO_Puzzlebg], 40, 25, 40, 40);
-	
-	for (int i = 0; i < 10; i++)
-	{
-		int paperposx = puzzle.Paper[i]->position.x;
-		int paperposy = puzzle.Paper[i]->position.y;
-
-		RenderMeshOnScreen(meshList[GEO_PuzzlePaper], 18 + (paperposx * 4),3 + (paperposy * 4), 3, 3);
-	}
-	
-	RenderMeshOnScreen(meshList[GEO_PuzzlePlayer], 18 + (puzzle.Player->position.x * 4), 3 +(puzzle.Player->position.y * 4), 3, 3);
-	
 
 }
 
@@ -1119,4 +1279,11 @@ void Splevel1::RenderMeshOnScreen(Mesh* mesh, int x, int y, int sizex, int sizey
 	viewStack.PopMatrix();
 	modelStack.PopMatrix();
 	glEnable(GL_DEPTH_TEST);
+}
+
+int Splevel1::Random(int range)
+{
+	srand(time(0));  // Initialize random number generator.
+
+	return rand()%range;
 }
