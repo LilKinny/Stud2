@@ -122,6 +122,12 @@ void Splevel1::Init()
 
 	puzzle.Init();
 
+	PuzzleActive = false;
+
+	PuzzlePlayerPickup = false;
+
+	gamestate = Splevel1::Gamestate::MainGame;
+
 	//Initialize camera settings
 	camera.Init(Vector3(80, 30, 50), Vector3(0, 0, 0), Vector3(0, 1, 0));
 
@@ -257,6 +263,8 @@ void Splevel1::Init()
 	meshList[GEO_PuzzlePaper] = MeshBuilder::GenerateQuad("puzzlebg", Color(1, 1, 1), 1.f);
 	meshList[GEO_PuzzlePaper]->textureID = LoadTGA("Image//PuzzlePaper.tga");
 
+	
+
 	Mtx44 projection;
 	projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 1000.f);
 	projectionStack.LoadMatrix(projection);
@@ -268,12 +276,22 @@ string timerstring;
 
 int mg1_start;
 bool questions,Reaply1,Reply2,Reply3;
+
 void Splevel1::Update(double dt)
 {
 	float cposx = camera.position.x;
 	float cposz = camera.position.z;
 	//cout << cposx;
 	rotateangle = rotateangle + 0.1;
+
+	if (PuzzleActive == true)
+	{
+		gamestate = Splevel1::Gamestate::PuzzleGame;
+	}
+	else
+	{
+		gamestate = Splevel1::Gamestate::MainGame;
+	}
 
 	if (mg1_start == 300 && clearpolice == false) setuppolice = true;
 	if (setuppolice == true && clearpolice == false)
@@ -402,120 +420,19 @@ void Splevel1::Update(double dt)
 	debugmouseposx = posX;
 	debugmouseposy = posY;
 
-	static bool bLButtonState = false;
-	if (!bLButtonState && Application::IsMousePressed(0))
+
+	switch (gamestate)
 	{
-		bLButtonState = true;
-
-		//Converting Viewport space to UI space
-		double x, y;
-		Application::GetCursorPos(&x, &y);
-		unsigned w = Application::GetWindowWidth();
-		unsigned h = Application::GetWindowHeight();
-		float posX = (x / w) * 80; //convert (0,800) to (0,80)
-		float posY = 60 - (y / h) * 60; //convert (600,0) to (0,60)
-		std::cout << "posX:" << posX << " , posY:" << posY << std::endl;
-		if ((posY <= 59 && posY >= 53.5) && (posX >= 1.5 && posX <= 12.5)) //Clck Store
-		{
-			PageNum = 1;
-			RenderUI = 1;
-		}
-		if ((posY <= 59 && posY >= 53.5) && (posX >= 15.5 && posX <= 26.5)) //Click Owned
-		{
-			PageNum = 1;
-			RenderUI = 2;
-		}
-		if (RenderUI == 2)
-		{
-			if ((posY >= 46 && posY <= 48.5) && (posX >= 27.5 && posX <= 29)) //Left Button
-			{
-				if (PageNum != 1)
-				{
-					--PageNum;
-				}
-			}
-			if ((posY >= 46 && posY <= 48.5) && (posX >= 50.5 && posX <= 52)) //Right Button
-			{
-				if (PageNum != 3)
-				{
-					++PageNum;
-				}
-			}
-		}
-		if ((posY >= 46 && posY <= 48.5) && (posX >= 62 && posX <= 63.5)) //Click Cross Button
-		{
-			RenderUI = 0;
-		}
-		if ((posY >= 32 && posY <= 35.5) && (posX >= 76.5 && posX <= 78)) //Side Open Arrow Button
-		{
-			RenderPrestige = 1;
-		}
-		if ((posY >= 32 && posY <= 35.5) && (posX >= 67 && posX <= 68.5)) //Side Close Arrow Button
-		{
-			RenderPrestige = 0;
-		}
-		if (RenderPrestige == 1)
-		{
-			if ((posY >= 30 && posY <= 33) && (posX >= 70 && posX <= 78))
-			{
-				Manager.UpgradePrestige(true);
-			}
-		}
-		//
-		if (posX > 35 && posX < 45 && posY > 8 && posY < 14)
-		{
-			if (setuppolice == true)
-			{
-				timerstart = true;
-				setuppolice = false;
-
-			}
-			else if (win == true)
-			{
-				win = false;
-				timerstart = false;
-				clearpolice = false;
-			}
-			else if (lose == true)
-			{
-				lose = false;
-				timerstart = false;
-				clearpolice = false;
-				float takeaway = Manager.Money / 5;
-				Manager.Money = Manager.Money - takeaway;
-				
-			}
-		}
-		//if (questions == true)
-		//{
-		//	if (posX > 45 && posX < 64 && posY > 43 && posY < 53)
-		//	{
-
-		//	}
-		//	if (posX > 45 && posX < 64 && posY > 48 && posY < 38)
-		//	{
-
-		//	}
-		//	if (posX > 45 && posX < 64 && posY > 13 && posY < 23)
-		//	{
-
-		//	}
-		//}
-		
+	case Splevel1::Gamestate::MainGame:
+		UpdateMainControls();
+		break;
+	case Splevel1::Gamestate::PuzzleGame:
+		UpdatePuzzleControls();
+		break;
+	default:
+		break;
 	}
-	else if (bLButtonState && !Application::IsMousePressed(0))
-	{
-		bLButtonState = false;
-	}
-	static bool bRButtonState = false;
-	if (!bRButtonState && Application::IsMousePressed(1))
-	{
-		bRButtonState = true;
-	}
-	else if (bRButtonState && !Application::IsMousePressed(1))
-	{
-		bRButtonState = false;
-	}
+
 
 	//player table
 	{
@@ -1019,7 +936,12 @@ void Splevel1::Render()
 		}
 	}
 
-	//PuzzleRender();
+
+	if (PuzzleActive == true)
+	{
+		PuzzleRender();
+	}
+	
 
 	// -------------------------------------------------POSITION DEBUG----------------------------------------------
 	float pox = camera.position.x;
@@ -1163,7 +1085,176 @@ void Splevel1::PuzzleRender()
 		RenderMeshOnScreen(meshList[GEO_PuzzlePaper], 18 + (paperposx * 4), 3 + (paperposy * 4), 3, 3);
 	}
 
-	RenderMeshOnScreen(meshList[GEO_PuzzlePlayer], 18 + (puzzle.Player->position.x * 4), 3 + (puzzle.Player->position.y * 4), 3, 3);
+	if (PuzzlePlayerPickup == true)
+	{
+		RenderMeshOnScreen(meshList[GEO_PuzzlePlayer],puzzle.playeractualpox, puzzle.playeractualpoy, 3, 3);
+	}
+	else
+	{
+		RenderMeshOnScreen(meshList[GEO_PuzzlePlayer], 18 + (puzzle.Player->position.x * 4), 3 + (puzzle.Player->position.y * 4), 3, 3);
+		puzzle.playeractualpox = 18 + (puzzle.Player->position.x * 4);
+		puzzle.playeractualpoy = 3 + (puzzle.Player->position.y * 4);
+	}
+	
+}
+
+void Splevel1::UpdatePuzzleControls()
+{
+	//static bool bLButtonState = false;
+	if (Application::IsMousePressed(0))
+	{
+		//bLButtonState = true;
+
+		//Converting Viewport space to UI space
+		double x, y;
+		Application::GetCursorPos(&x, &y);
+		unsigned w = Application::GetWindowWidth();
+		unsigned h = Application::GetWindowHeight();
+		float posX = (x / w) * 80; //convert (0,800) to (0,80)
+		float posY = 60 - (y / h) * 60; //convert (600,0) to (0,60)
+		
+		//player
+		if ((posY <= puzzle.playeractualpoy + 1.5 && posY >= puzzle.playeractualpoy - 1.5) && (posX >= puzzle.playeractualpox -2 && posX <= puzzle.playeractualpox + 2)) //Clck Store
+		{
+			PuzzlePlayerPickup = true;
+			puzzle.playeractualpox = posX;
+			puzzle.playeractualpoy = posY;
+		}
+		
+	}
+	else if (!Application::IsMousePressed(0))
+	{
+		puzzle.pickupstatus = false;
+		PuzzlePlayerPickup = false;
+		//bLButtonState = false;
+	}
+	static bool bRButtonState = false;
+	if (!bRButtonState && Application::IsMousePressed(1))
+	{
+		bRButtonState = true;
+	}
+	else if (bRButtonState && !Application::IsMousePressed(1))
+	{
+		bRButtonState = false;
+	}
+}
+
+void Splevel1::UpdateMainControls()
+{
+	static bool bLButtonState = false;
+	if (!bLButtonState && Application::IsMousePressed(0))
+	{
+		bLButtonState = true;
+
+		//Converting Viewport space to UI space
+		double x, y;
+		Application::GetCursorPos(&x, &y);
+		unsigned w = Application::GetWindowWidth();
+		unsigned h = Application::GetWindowHeight();
+		float posX = (x / w) * 80; //convert (0,800) to (0,80)
+		float posY = 60 - (y / h) * 60; //convert (600,0) to (0,60)
+		std::cout << "posX:" << posX << " , posY:" << posY << std::endl;
+		if ((posY <= 59 && posY >= 53.5) && (posX >= 1.5 && posX <= 12.5)) //Clck Store
+		{
+			PageNum = 1;
+			RenderUI = 1;
+		}
+		if ((posY <= 59 && posY >= 53.5) && (posX >= 15.5 && posX <= 26.5)) //Click Owned
+		{
+			PageNum = 1;
+			RenderUI = 2;
+		}
+		if (RenderUI == 2)
+		{
+			if ((posY >= 46 && posY <= 48.5) && (posX >= 27.5 && posX <= 29)) //Left Button
+			{
+				if (PageNum != 1)
+				{
+					--PageNum;
+				}
+			}
+			if ((posY >= 46 && posY <= 48.5) && (posX >= 50.5 && posX <= 52)) //Right Button
+			{
+				if (PageNum != 3)
+				{
+					++PageNum;
+				}
+			}
+		}
+		if ((posY >= 46 && posY <= 48.5) && (posX >= 62 && posX <= 63.5)) //Click Cross Button
+		{
+			RenderUI = 0;
+		}
+		if ((posY >= 32 && posY <= 35.5) && (posX >= 76.5 && posX <= 78)) //Side Open Arrow Button
+		{
+			RenderPrestige = 1;
+		}
+		if ((posY >= 32 && posY <= 35.5) && (posX >= 67 && posX <= 68.5)) //Side Close Arrow Button
+		{
+			RenderPrestige = 0;
+		}
+		if (RenderPrestige == 1)
+		{
+			if ((posY >= 30 && posY <= 33) && (posX >= 70 && posX <= 78))
+			{
+				Manager.UpgradePrestige(true);
+			}
+		}
+		//
+		if (posX > 35 && posX < 45 && posY > 8 && posY < 14)
+		{
+			if (setuppolice == true)
+			{
+				timerstart = true;
+				setuppolice = false;
+
+			}
+			else if (win == true)
+			{
+				win = false;
+				timerstart = false;
+				clearpolice = false;
+			}
+			else if (lose == true)
+			{
+				lose = false;
+				timerstart = false;
+				clearpolice = false;
+				float takeaway = Manager.Money / 5;
+				Manager.Money = Manager.Money - takeaway;
+
+			}
+		}
+		//if (questions == true)
+		//{
+		//	if (posX > 45 && posX < 64 && posY > 43 && posY < 53)
+		//	{
+
+		//	}
+		//	if (posX > 45 && posX < 64 && posY > 48 && posY < 38)
+		//	{
+
+		//	}
+		//	if (posX > 45 && posX < 64 && posY > 13 && posY < 23)
+		//	{
+
+		//	}
+		//}
+
+	}
+	else if (bLButtonState && !Application::IsMousePressed(0))
+	{
+		bLButtonState = false;
+	}
+	static bool bRButtonState = false;
+	if (!bRButtonState && Application::IsMousePressed(1))
+	{
+		bRButtonState = true;
+	}
+	else if (bRButtonState && !Application::IsMousePressed(1))
+	{
+		bRButtonState = false;
+	}
 }
 
 void Splevel1::RenderMesh(Mesh* mesh, bool enableLight)

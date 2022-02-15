@@ -127,10 +127,17 @@ private:
 	bool bEnableLight;
 
 	void PuzzleRender();
+	void UpdatePuzzleControls();
+	void UpdateMainControls();
 
 	EquipmentManager Manager;
 
 	Puzzle puzzle;
+	bool PuzzleActive;
+
+	bool PuzzlePlayerPickup;
+
+	enum class Gamestate {MainGame,PuzzleGame}gamestate;
 
 	int RenderUI;
 	int RenderPrestige;

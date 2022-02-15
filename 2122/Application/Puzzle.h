@@ -15,6 +15,9 @@ public:
 	PuzzleEntity* Paper[10]{};
 
 	PuzzleEntity* Player;
+
+	float playeractualpox;
+	float playeractualpoy;
 private:
 	
 };
