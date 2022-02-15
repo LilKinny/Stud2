@@ -169,9 +169,9 @@ void Splevel1::Init()
 	meshList[GEO_GrayUpgrade] = MeshBuilder::GenerateRec("GrayUpgrade", Color(1, 1, 1), 5.f, 1.f);
 	meshList[GEO_GrayUpgrade]->textureID = LoadTGA("Image//SP2_SideUI_GrayUpgrade.tga");
 
-	meshList[GEO_GREENBUTTON] = MeshBuilder::GenerateRec("GreenButton", Color(0.47, 0.75, 0.13), 5.f, 1.f);
+	meshList[GEO_GREENBUTTON] = MeshBuilder::GenerateRec("GreenButton", Color(0, 1, 0.16), 0.3f, 1.f);
 
-	meshList[GEO_GRAYBUTTON] = MeshBuilder::GenerateRec("GrayButton", Color(0.85, 0.85, 0.84), 0.3f, 1.f);
+	meshList[GEO_GRAYBUTTON] = MeshBuilder::GenerateRec("GrayButton", Color(0.39, 0.39, 0.39), 0.3f, 1.f);
 
 	meshList[GEO_UNLOCKTEXT] = MeshBuilder::GenerateRec("UnlockText", Color(1, 1, 1), 5.f, 1.f);
 	meshList[GEO_UNLOCKTEXT]->textureID = LoadTGA("Image//UnlockText.tga");
@@ -523,9 +523,6 @@ void Splevel1::Update(double dt)
 			}
 		}
 	}
-
-	Random(4);
-
 }
 
 
@@ -650,50 +647,51 @@ void Splevel1::Render()
 	modelStack.PopMatrix();
 
 	//Render trees
-	for (int i = 0; i < 30; i++)
 	{
-		modelStack.PushMatrix();
-		//modelStack.Rotate(-90, 1, 0, 0);
-		modelStack.Translate(-450 + (i * 30), 0, -450);
-		modelStack.Scale(70, 70, 70);
+		for (int i = 0; i < 30; i++)
+		{
+			modelStack.PushMatrix();
+			//modelStack.Rotate(-90, 1, 0, 0);
+			modelStack.Translate(-450 + (i * 30), 0, -450);
+			modelStack.Scale(70, 70, 70);
 
-		RenderMesh(meshList[GEO_Tree], true);
-		modelStack.PopMatrix();
+			RenderMesh(meshList[GEO_Tree], true);
+			modelStack.PopMatrix();
+		}
+
+		for (int i = 0; i < 30; i++)
+		{
+			modelStack.PushMatrix();
+			//modelStack.Rotate(-90, 1, 0, 0);
+			modelStack.Translate(-450 + (i * 30), 0, 450);
+			modelStack.Scale(70, 70, 70);
+
+			RenderMesh(meshList[GEO_Tree], true);
+			modelStack.PopMatrix();
+		}
+
+		for (int i = 0; i < 30; i++)
+		{
+			modelStack.PushMatrix();
+			//modelStack.Rotate(-90, 1, 0, 0);
+			modelStack.Translate(-450, 0, -450 + (i * 30));
+			modelStack.Scale(70, 70, 70);
+
+			RenderMesh(meshList[GEO_Tree], true);
+			modelStack.PopMatrix();
+		}
+
+		for (int i = 0; i < 30; i++)
+		{
+			modelStack.PushMatrix();
+			//modelStack.Rotate(-90, 1, 0, 0);
+			modelStack.Translate(450, 0, -450 + (i * 30));
+			modelStack.Scale(70, 70, 70);
+
+			RenderMesh(meshList[GEO_Tree], true);
+			modelStack.PopMatrix();
+		}
 	}
-
-	for (int i = 0; i < 30; i++)
-	{
-		modelStack.PushMatrix();
-		//modelStack.Rotate(-90, 1, 0, 0);
-		modelStack.Translate(-450 + (i * 30), 0, 450);
-		modelStack.Scale(70, 70, 70);
-
-		RenderMesh(meshList[GEO_Tree], true);
-		modelStack.PopMatrix();
-	}
-
-	for (int i = 0; i < 30; i++)
-	{
-		modelStack.PushMatrix();
-		//modelStack.Rotate(-90, 1, 0, 0);
-		modelStack.Translate(-450, 0, -450 + (i * 30));
-		modelStack.Scale(70, 70, 70);
-
-		RenderMesh(meshList[GEO_Tree], true);
-		modelStack.PopMatrix();
-	}
-
-	for (int i = 0; i < 30; i++)
-	{
-		modelStack.PushMatrix();
-		//modelStack.Rotate(-90, 1, 0, 0);
-		modelStack.Translate(450, 0, -450 + (i * 30));
-		modelStack.Scale(70, 70, 70);
-
-		RenderMesh(meshList[GEO_Tree], true);
-		modelStack.PopMatrix();
-	}
-
 	//kjcode
 	{
 		
@@ -857,22 +855,61 @@ void Splevel1::Render()
 			modelStack.PopMatrix();
 
 			//Equipment
-			//GrayButton Left Top
-			modelStack.PushMatrix();
-			RenderMeshOnScreen(meshList[GEO_GRAYBUTTON], 24, 29, 24, 3, true);
-			modelStack.PopMatrix();
-			//GrayButton Mid Top
-			modelStack.PushMatrix();
-			RenderMeshOnScreen(meshList[GEO_GRAYBUTTON], 40, 29, 24, 3, true);
-			modelStack.PopMatrix();
-			//GrayButton Right Top
-			modelStack.PushMatrix();
-			RenderMeshOnScreen(meshList[GEO_GRAYBUTTON], 56, 29, 24, 3, true);
-			modelStack.PopMatrix();
-			//Left Bot
-			modelStack.PushMatrix();
-			RenderMeshOnScreen(meshList[GEO_GRAYBUTTON], 24, 16, 24, 3, true);
-			modelStack.PopMatrix();
+			//Gray Button
+			{
+				//GrayButton Left Top
+				modelStack.PushMatrix();
+				RenderMeshOnScreen(meshList[GEO_GRAYBUTTON], 24, 29, 24, 3, true);
+				modelStack.PopMatrix();
+				//GrayButton Mid Top
+				modelStack.PushMatrix();
+				RenderMeshOnScreen(meshList[GEO_GRAYBUTTON], 40, 29, 24, 3, true);
+				modelStack.PopMatrix();
+				//GrayButton Right Top
+				modelStack.PushMatrix();
+				RenderMeshOnScreen(meshList[GEO_GRAYBUTTON], 56, 29, 24, 3, true);
+				modelStack.PopMatrix();
+				//GrayButton Left Bot
+				modelStack.PushMatrix();
+				RenderMeshOnScreen(meshList[GEO_GRAYBUTTON], 24, 16, 24, 3, true);
+				modelStack.PopMatrix();
+				//GrayButton Mid Top
+				modelStack.PushMatrix();
+				RenderMeshOnScreen(meshList[GEO_GRAYBUTTON], 40, 16, 24, 3, true);
+				modelStack.PopMatrix();
+				//GrayButton Right Top
+				modelStack.PushMatrix();
+				RenderMeshOnScreen(meshList[GEO_GRAYBUTTON], 56, 16, 24, 3, true);
+				modelStack.PopMatrix();
+			}
+
+			//Green Button
+			{
+				//GrayButton Left Top
+				modelStack.PushMatrix();
+				RenderMeshOnScreen(meshList[GEO_GREENBUTTON], 24, 29, 24, 3, true);
+				modelStack.PopMatrix();
+				//GrayButton Mid Top
+				modelStack.PushMatrix();
+				RenderMeshOnScreen(meshList[GEO_GREENBUTTON], 40, 29, 24, 3, true);
+				modelStack.PopMatrix();
+				//GrayButton Right Top
+				modelStack.PushMatrix();
+				RenderMeshOnScreen(meshList[GEO_GREENBUTTON], 56, 29, 24, 3, true);
+				modelStack.PopMatrix();
+				//GrayButton Left Bot
+				modelStack.PushMatrix();
+				RenderMeshOnScreen(meshList[GEO_GREENBUTTON], 24, 16, 24, 3, true);
+				modelStack.PopMatrix();
+				//GrayButton Mid Top
+				modelStack.PushMatrix();
+				RenderMeshOnScreen(meshList[GEO_GREENBUTTON], 40, 16, 24, 3, true);
+				modelStack.PopMatrix();
+				//GrayButton Right Top
+				modelStack.PushMatrix();
+				RenderMeshOnScreen(meshList[GEO_GREENBUTTON], 56, 16, 24, 3, true);
+				modelStack.PopMatrix();
+			}
 		}
 		else if (RenderUI == 2)
 		{
