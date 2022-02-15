@@ -148,6 +148,9 @@ void Splevel1::Init()
 	meshList[GEO_BotUI] = MeshBuilder::GenerateRec("BotUI", Color(1, 1, 1), 5.f, 1.f);
 	meshList[GEO_BotUI]->textureID = LoadTGA("Image//SP2_BotUI.tga");
 
+	meshList[GEO_Puzzlebg] = MeshBuilder::GenerateQuad("Quad", Color(1, 1, 1), 1.f);
+	meshList[GEO_Puzzlebg]->textureID = LoadTGA("Image//TitleFrame.tga");
+
 	meshList[GEO_SideUISmall] = MeshBuilder::GenerateRec("SideUISmall", Color(1, 1, 1), 5.f, 1.f);
 	meshList[GEO_SideUISmall]->textureID = LoadTGA("Image//SP2_SideUI_Small.tga");
 
@@ -204,6 +207,8 @@ void Splevel1::Init()
 	/*meshList[GEO_Laptop] = MeshBuilder::GenerateOBJMTL("modelBUIDLING", "OBJ//Laptop.obj", "OBJ//Laptop.mtl");*/
 
 	meshList[GEO_Tree] = MeshBuilder::GenerateOBJMTL("Tree", "OBJ//TreeTall.obj", "OBJ//TreeTall.mtl");
+
+	
 
 
 	meshList[GEO_PAPER] = MeshBuilder::GenerateOBJ("modelBUIDLING", "OBJ//Paper.obj");
@@ -295,8 +300,11 @@ void Splevel1::Update(double dt)
 		glUniform1i(m_parameters[U_LIGHT0_TYPE], light[0].type);
 	}
 
-
-	camera.Update(dt);
+	if (camera.minigamestatus == false)
+	{
+		camera.Update(dt);
+	}
+	
 
 
 
@@ -668,6 +676,10 @@ void Splevel1::Render()
 			modelStack.PopMatrix();
 		}
 	}
+
+	
+	RenderMeshOnScreen(meshList[GEO_Puzzlebg], 30, 30, 10, 10, true);
+	
 
 	// -------------------------------------------------POSITION DEBUG----------------------------------------------
 	float pox = camera.position.x;

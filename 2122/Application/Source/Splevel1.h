@@ -57,6 +57,7 @@ class Splevel1 : public Scene
 		GEO_Table,
 		GEO_Laptop,
 		GEO_Tree,
+		GEO_Puzzlebg,
 		
 
 		NUM_GEOMETRY,
