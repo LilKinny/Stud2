@@ -200,9 +200,10 @@ void Splevel1::Init()
 
 
 	meshList[GEO_BUILDING] = MeshBuilder::GenerateOBJMTL("modelBUIDLING","OBJ//LVL1_withfloor.obj", "OBJ//LVL1_withfloor.mtl");
+	meshList[GEO_Table] = MeshBuilder::GenerateOBJMTL("modelBUIDLING", "OBJ//simple_table.obj", "OBJ//simple_table.mtl");
 
 	meshList[GEO_PAPER] = MeshBuilder::GenerateOBJ("modelBUIDLING", "OBJ//Paper.obj");
-	meshList[GEO_PAPER]->textureID = LoadTGA("Image//.Notelines.tga");
+	meshList[GEO_PAPER]->textureID = LoadTGA("Image//Notelines.tga");
 
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16,16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Image//Agency_FB.tga");
@@ -497,6 +498,17 @@ void Splevel1::Render()
 		//Text
 		modelStack.PushMatrix();
 		RenderTextOnScreen(meshList[GEO_TEXT], "Owned Page: " + std::to_string(PageNum), Color(1, 1, 0), 2, 30, 43);
+		modelStack.PopMatrix();
+	}
+
+	//kjcode
+	{
+		modelStack.PushMatrix();
+		//modelStack.Rotate(-90, 1, 0, 0);
+		modelStack.Translate(0, 0, 0);
+		modelStack.Scale(10, 10, 10);
+
+		RenderMesh(meshList[GEO_Table], true);
 		modelStack.PopMatrix();
 	}
 }
