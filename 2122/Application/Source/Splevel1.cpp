@@ -166,11 +166,9 @@ void Splevel1::Init()
 	meshList[GEO_GrayUpgrade] = MeshBuilder::GenerateRec("GrayUpgrade", Color(1, 1, 1), 5.f, 1.f);
 	meshList[GEO_GrayUpgrade]->textureID = LoadTGA("Image//SP2_SideUI_GrayUpgrade.tga");
 
-	meshList[GEO_GREENBUTTON] = MeshBuilder::GenerateRec("GreenButton", Color(1, 1, 1), 5.f, 1.f);
-	meshList[GEO_GREENBUTTON]->textureID = LoadTGA("Image//GreenButton.tga");
+	meshList[GEO_GREENBUTTON] = MeshBuilder::GenerateRec("GreenButton", Color(0.47, 0.75, 0.13), 5.f, 1.f);
 
-	meshList[GEO_GRAYBUTTON] = MeshBuilder::GenerateRec("GrayButton", Color(1, 1, 1), 5.f, 1.f);
-	meshList[GEO_GRAYBUTTON]->textureID = LoadTGA("Image//GrayButton.tga");
+	meshList[GEO_GRAYBUTTON] = MeshBuilder::GenerateRec("GrayButton", Color(0.85, 0.85, 0.84), 0.3f, 1.f);
 
 	meshList[GEO_UNLOCKTEXT] = MeshBuilder::GenerateRec("UnlockText", Color(1, 1, 1), 5.f, 1.f);
 	meshList[GEO_UNLOCKTEXT]->textureID = LoadTGA("Image//UnlockText.tga");
@@ -800,9 +798,21 @@ void Splevel1::Render()
 			modelStack.PopMatrix();
 
 			//Equipment
-			//GrayButton
+			//GrayButton Left Top
 			modelStack.PushMatrix();
-			RenderMeshOnScreen(meshList[GEO_GRAYBUTTON], 40, 30, 16, 54, true);
+			RenderMeshOnScreen(meshList[GEO_GRAYBUTTON], 24, 29, 24, 3, true);
+			modelStack.PopMatrix();
+			//GrayButton Mid Top
+			modelStack.PushMatrix();
+			RenderMeshOnScreen(meshList[GEO_GRAYBUTTON], 40, 29, 24, 3, true);
+			modelStack.PopMatrix();
+			//GrayButton Right Top
+			modelStack.PushMatrix();
+			RenderMeshOnScreen(meshList[GEO_GRAYBUTTON], 56, 29, 24, 3, true);
+			modelStack.PopMatrix();
+			//Left Bot
+			modelStack.PushMatrix();
+			RenderMeshOnScreen(meshList[GEO_GRAYBUTTON], 24, 16, 24, 3, true);
 			modelStack.PopMatrix();
 		}
 		else if (RenderUI == 2)
