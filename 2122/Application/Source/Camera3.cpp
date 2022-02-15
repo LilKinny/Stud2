@@ -19,6 +19,7 @@ void Camera3::Init(const Vector3& pos, const Vector3& target, const Vector3& up)
 	right.y = 0;
 	right.Normalize();
 	this->up = defaultUp = right.Cross(view).Normalized();
+	this->minigamestatus = false;
 	Reset();
 }
 
@@ -116,6 +117,11 @@ void Camera3::Update(double dt)
 	{
 		Reset();
 	}
+}
+
+void Camera3::UpdateMini(double dt)
+{
+
 }
 
 void Camera3::Reset()

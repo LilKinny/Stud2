@@ -7,10 +7,12 @@ EquipmentManager::EquipmentManager()
 	MoneyPlantUpgrade = 0;
 	PrestigeLvl = 0;
 	Money = 5000;
+	InitEquipArray();
 }
 
 EquipmentManager::~EquipmentManager()
 {
+	DeleteEquipArray();
 }
 
 int EquipmentManager::UpgradePrestige(bool Upgrade)
@@ -92,3 +94,68 @@ std::string EquipmentManager::ConvertMoneyToSuitableAmounts(void) //Return Edite
 	}
 	return Temporary;
 }
+
+int EquipmentManager::UnlockPhone(bool unlock, float money)
+{
+	Equipment* Temp;
+	//Checks if got space for Phone
+	for(int i = 0; i < PrestigeLvl*6;++i)
+	{
+		Temp = EquipArray[i];
+		if (Temp->PhoneLvl)
+		{
+			if (unlock == true)
+			{
+				
+			}
+		}
+	}
+	return 0;
+}
+
+int EquipmentManager::UnlockComputer(bool unlock, float money)
+{
+	return 0;
+}
+
+int EquipmentManager::UpgradePhone(bool upgrade, float money)
+{
+
+	/*if (EquipmentPhoneLvl == 1)
+	{
+		if (money >= 50)
+		{
+			if (upgrade == true)
+			{
+				money -= 50;
+				++PrestigeLvl;
+				LuckyCatUpgrade = MoneyPlantUpgrade = 0;
+			}
+			return 1;
+		}
+	}*/
+	return 0;
+}
+
+int EquipmentManager::UpgradeComputer(bool upgrade, float money)
+{
+	return 0;
+}
+
+void EquipmentManager::DeleteEquipArray(void)
+{
+	for (int i = 0; i < 18; ++i)
+	{
+		Equipment* Temp = EquipArray[i];
+		delete Temp;
+	}
+}
+
+void EquipmentManager::InitEquipArray(void)
+{
+	for (int i = 0; i < 18; ++i)
+	{
+		EquipArray[i] = nullptr;
+	}
+}
+
