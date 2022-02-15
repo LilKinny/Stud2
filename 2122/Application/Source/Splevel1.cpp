@@ -366,6 +366,10 @@ void Splevel1::Update(double dt)
 		{
 			RenderPrestige = 0;
 		}
+		if ((posY >= 70 && posY <= 78) && (posX >= 27 && posX <= 30))
+		{
+			Manager.UpgradePrestige(true);
+		}
 	
 	}
 	else if (bLButtonState && !Application::IsMousePressed(0))
@@ -505,84 +509,18 @@ void Splevel1::Render()
 
 	RenderMesh(meshList[GEO_BUILDING], true);
 	modelStack.PopMatrix();
-	//TopUI
-	modelStack.PushMatrix();
-	RenderMeshOnScreen(meshList[GEO_TopUI], 40, 30, 16, 54, true);
-	modelStack.PopMatrix();
-	if (RenderPrestige == 0)
-	{
-		//Small UI
-		modelStack.PushMatrix();
-		RenderMeshOnScreen(meshList[GEO_SideUISmall], 40, 30, 16, 54, true);
-		modelStack.PopMatrix();
-	}
-	if (RenderPrestige == 1)
-	{
-		//Big UI
-		modelStack.PushMatrix();
-		RenderMeshOnScreen(meshList[GEO_SideUIBig], 40, 30, 16, 54, true);
-		modelStack.PopMatrix();
-	}
-
-	if (RenderUI == 1)
-	{
-		//BotUI
-		modelStack.PushMatrix();
-		RenderMeshOnScreen(meshList[GEO_BotUI], 40, 30, 16, 54, true);
-		modelStack.PopMatrix();
-
-		//Text
-		modelStack.PushMatrix();
-		RenderTextOnScreen(meshList[GEO_TEXT], "Store Page: " + std::to_string(PageNum), Color(1, 1, 0), 2, 30, 43);
-		modelStack.PopMatrix();
-	}
-	else if (RenderUI == 2)
-	{
-		//BotUI
-		modelStack.PushMatrix();
-		RenderMeshOnScreen(meshList[GEO_BotUI], 40, 30, 16, 54, true);
-		modelStack.PopMatrix();
-
-
-		//Text
-		modelStack.PushMatrix();
-		RenderTextOnScreen(meshList[GEO_TEXT], "Owned Page: " + std::to_string(PageNum), Color(1, 1, 0), 2, 30, 43);
-		modelStack.PopMatrix();
-	}
 
 	//kjcode
 	{
 		modelStack.PushMatrix();
-		modelStack.Translate(50, 0, 45);
-		modelStack.Rotate(90, 0, 1, 0);
+		//modelStack.Rotate(-90, 1, 0, 0);
+		modelStack.Translate(0, 0, 0);
 		modelStack.Scale(10, 10, 10);
-		{
-			modelStack.PushMatrix();
-			modelStack.Translate(-1.5, 2.05, 0);
-			modelStack.Rotate(90, 0, 0, 1);
-			modelStack.Scale(0.5, 0.25, 0.5);
-			{
-				modelStack.PushMatrix();
-				modelStack.Translate(-1.5, 0, 0);
-				/*modelStack.Rotate(90, 0, 0, 1);*/
-				modelStack.Scale(1, 1, 1);
-				RenderMesh(meshList[GEO_Phone1], true);
-				modelStack.PopMatrix();
-			}
-			RenderMesh(meshList[GEO_PAPER], true);
-			modelStack.PopMatrix();
-		}
 		RenderMesh(meshList[GEO_Table], true);
 		modelStack.PopMatrix();
 
-		modelStack.PushMatrix();
-		modelStack.Translate(pposx, pposy, pposz);
-		modelStack.Rotate(90, 1, 0, 0);
-		modelStack.Rotate(rotateangle * 10, 0, 0, 1);
-		modelStack.Scale(5, 5, 5);
-		RenderMesh(meshList[GEO_PAPER], true);
-		modelStack.PopMatrix();
-		
+
+
 	}
 
 	//Koh Win Code
@@ -611,6 +549,77 @@ void Splevel1::Render()
 		RenderMesh(meshList[GEO_PAPER], true);
 		modelStack.PopMatrix();
 	}
+
+	//UI
+	{
+		//TopUI
+		modelStack.PushMatrix();
+		RenderMeshOnScreen(meshList[GEO_TopUI], 40, 30, 16, 54, true);
+		modelStack.PopMatrix();
+		if (RenderPrestige == 0)
+		{
+			//Small UI
+			modelStack.PushMatrix();
+			RenderMeshOnScreen(meshList[GEO_SideUISmall], 40, 30, 16, 54, true);
+			modelStack.PopMatrix();
+		}
+		if (RenderPrestige == 1)
+		{
+			//Big UI
+			modelStack.PushMatrix();
+			RenderMeshOnScreen(meshList[GEO_SideUIBig], 40, 30, 16, 54, true);
+			modelStack.PopMatrix();
+
+			if (Manager.PrestigeLvl == 3)
+			{
+				//Max Button
+				modelStack.PushMatrix();
+				RenderMeshOnScreen(meshList[GEO_MaxPrestige], 40, 30, 16, 54, true);
+				modelStack.PopMatrix();
+			}
+			else if (Manager.UpgradePrestige(false) == 0)
+			{
+				//Gray Upgrade Button
+				modelStack.PushMatrix();
+				RenderMeshOnScreen(meshList[GEO_GrayUpgrade], 40, 30, 16, 54, true);
+				modelStack.PopMatrix();
+			}
+			else if (Manager.UpgradePrestige(false) == 1)
+			{
+				//Green Upgrade Button
+				modelStack.PushMatrix();
+				RenderMeshOnScreen(meshList[GEO_GreenUpgrade], 40, 30, 16, 54, true);
+				modelStack.PopMatrix();
+			}
+		}
+
+		if (RenderUI == 1)
+		{
+			//BotUI
+			modelStack.PushMatrix();
+			RenderMeshOnScreen(meshList[GEO_BotUI], 40, 30, 16, 54, true);
+			modelStack.PopMatrix();
+
+			//Text
+			modelStack.PushMatrix();
+			RenderTextOnScreen(meshList[GEO_TEXT], "Store Page: " + std::to_string(PageNum), Color(1, 1, 0), 2, 30, 43);
+			modelStack.PopMatrix();
+		}
+		else if (RenderUI == 2)
+		{
+			//BotUI
+			modelStack.PushMatrix();
+			RenderMeshOnScreen(meshList[GEO_BotUI], 40, 30, 16, 54, true);
+			modelStack.PopMatrix();
+
+
+			//Text
+			modelStack.PushMatrix();
+			RenderTextOnScreen(meshList[GEO_TEXT], "Owned Page: " + std::to_string(PageNum), Color(1, 1, 0), 2, 30, 43);
+			modelStack.PopMatrix();
+		}
+	}
+	
 }
 
 void Splevel1::RenderSkybox()
