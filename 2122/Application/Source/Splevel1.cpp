@@ -200,13 +200,8 @@ void Splevel1::Init()
 
 
 	meshList[GEO_BUILDING] = MeshBuilder::GenerateOBJMTL("modelBUIDLING","OBJ//LVL1_withfloor.obj", "OBJ//LVL1_withfloor.mtl");
-<<<<<<< Updated upstream
-	meshList[GEO_Table] = MeshBuilder::GenerateOBJMTL("modelBUIDLING", "OBJ//simple_table.obj", "OBJ//simple_table.mtl");
-	/*meshList[GEO_Phone1] = MeshBuilder::GenerateOBJMTL("modelBUIDLING", "OBJ//Phone1.obj", "OBJ//Phone1.mtl");*/
-=======
 	meshList[GEO_Table] = MeshBuilder::GenerateOBJMTL("modelTable", "OBJ//simple_table.obj", "OBJ//simple_table.mtl");
 	meshList[GEO_Phone1] = MeshBuilder::GenerateOBJ("modelPhone", "OBJ//Phone1.obj");
->>>>>>> Stashed changes
 	/*meshList[GEO_Laptop] = MeshBuilder::GenerateOBJMTL("modelBUIDLING", "OBJ//Laptop.obj", "OBJ//Laptop.mtl");*/
 
 
@@ -613,13 +608,46 @@ void Splevel1::Render()
 			modelStack.PopMatrix();
 
 
-			//Text
+		//Text
+		modelStack.PushMatrix();
+		RenderTextOnScreen(meshList[GEO_TEXT], "Owned Page: " + std::to_string(PageNum), Color(1, 1, 0), 2, 30, 43);
+		modelStack.PopMatrix();
+	}
+
+	//kjcode
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(50, 0, 45);
+		modelStack.Rotate(90, 0, 1, 0);
+		modelStack.Scale(10, 10, 10);
+		{
 			modelStack.PushMatrix();
-			RenderTextOnScreen(meshList[GEO_TEXT], "Owned Page: " + std::to_string(PageNum), Color(1, 1, 0), 2, 30, 43);
+			modelStack.Translate(-1.5, 2.05, 0);
+			modelStack.Rotate(90, 0, 0, 1);
+			modelStack.Scale(0.5, 0.25, 0.5);
+			{
+				modelStack.PushMatrix();
+				modelStack.Translate(-1.5, 0, 0);
+				/*modelStack.Rotate(90, 0, 0, 1);*/
+				modelStack.Scale(1, 1, 1);
+				RenderMesh(meshList[GEO_Phone1], true);
+				modelStack.PopMatrix();
+			}
+			RenderMesh(meshList[GEO_PAPER], true);
 			modelStack.PopMatrix();
 		}
+		RenderMesh(meshList[GEO_Table], true);
+		modelStack.PopMatrix();
+
+		modelStack.PushMatrix();
+		modelStack.Translate(pposx, pposy, pposz);
+		modelStack.Rotate(90, 1, 0, 0);
+		modelStack.Rotate(rotateangle * 10, 0, 0, 1);
+		modelStack.Scale(5, 5, 5);
+		RenderMesh(meshList[GEO_PAPER], true);
+		modelStack.PopMatrix();
+		
 	}
-	
 }
 
 void Splevel1::RenderSkybox()
@@ -723,8 +751,6 @@ void Splevel1::RenderSkybox()
 	RenderMesh(meshList[GEO_LIGHTBALL], true);
 	modelStack.PopMatrix();
 
-<<<<<<< Updated upstream
-=======
 	
 
 >>>>>>> Stashed changes
