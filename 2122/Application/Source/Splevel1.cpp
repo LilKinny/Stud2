@@ -294,7 +294,12 @@ void Splevel1::Update(double dt)
 		light[0].type = Light::LIGHT_SPOT;
 		glUniform1i(m_parameters[U_LIGHT0_TYPE], light[0].type);
 	}
-	camera.Update(10*dt);
+
+
+	camera.Update(dt);
+
+
+
 	if (Application::IsKeyPressed('I'))
 		light[0].position.z -= (float)(10 * dt);
 	if (Application::IsKeyPressed('K'))
