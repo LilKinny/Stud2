@@ -58,7 +58,11 @@ class Splevel1 : public Scene
 		GEO_Table,
 		GEO_Laptop,
 		GEO_Tree,
-		
+		GEO_Screen,
+		GEO_op1,
+		GEO_op2,
+		GEO_op3,
+		GEO_op4,
 
 		NUM_GEOMETRY,
 	};
@@ -120,6 +124,7 @@ private:
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
 	void RenderText(Mesh* mesh, std::string text, Color color);
 	void RenderMeshOnScreen(Mesh* mesh, int x, int y, int sizex, int sizey, bool RotateX = false);
+	int Random(int range);
 	Camera3 camera;
 };
 

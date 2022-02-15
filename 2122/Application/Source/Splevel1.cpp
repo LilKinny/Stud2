@@ -13,6 +13,9 @@
 #include "Material.h"
 #include <cstdlib>
 #include <GLFW/glfw3.h>
+#include <ctime>
+
+
 using namespace std;
 Splevel1::Splevel1()
 {
@@ -194,19 +197,31 @@ void Splevel1::Init()
 		"OBJ//cottage_obj.obj", "OBJ//cottage_obj.mtl");*/
 
 	meshList[GEO_GRASS] = MeshBuilder::GenerateOBJMTL("model211", "OBJ//ground_grass.obj", "OBJ//ground_grass.mtl");
-
 	meshList[GEO_GRASS_V] = MeshBuilder::GenerateOBJMTL("model211", "OBJ//grassLarge.obj", "OBJ//grassLarge.mtl");
 
 
 	meshList[GEO_BUILDING] = MeshBuilder::GenerateOBJMTL("modelBUIDLING","OBJ//LVL1_withfloor.obj", "OBJ//LVL1_withfloor.mtl");
 	meshList[GEO_Table] = MeshBuilder::GenerateOBJMTL("modelBUIDLING", "OBJ//simple_table.obj", "OBJ//simple_table.mtl");
-	/*meshList[GEO_Phone1] = MeshBuilder::GenerateOBJMTL("modelBUIDLING", "OBJ//Phone1.obj", "OBJ//Phone1.mtl");*/
-	/*meshList[GEO_Laptop] = MeshBuilder::GenerateOBJMTL("modelBUIDLING", "OBJ//Laptop.obj", "OBJ//Laptop.mtl");*/
+
+	meshList[GEO_Screen] = MeshBuilder::GenerateRec("Rec", Color(1, 1, 1), 3.f, 5.f);
+	meshList[GEO_Screen]->textureID = LoadTGA("Image//Phone.tga");
+
+	meshList[GEO_op1] = MeshBuilder::GenerateRec("Rec", Color(1, 1, 1), 1.f, 1.f);
+	meshList[GEO_op1]->textureID = LoadTGA("Image//TextOP1.tga");
+
+	meshList[GEO_op2] = MeshBuilder::GenerateRec("Rec", Color(1, 1, 1), 1.f, 1.f);
+	meshList[GEO_op2]->textureID = LoadTGA("Image//TextOP2.tga");
+
+	meshList[GEO_op3] = MeshBuilder::GenerateRec("Rec", Color(1, 1, 1), 1.f, 1.f);
+	meshList[GEO_op3]->textureID = LoadTGA("Image//TextOP3.tga");
+
+	meshList[GEO_op4] = MeshBuilder::GenerateRec("Rec", Color(1, 1, 1), 1.f, 1.f);
+	meshList[GEO_op4]->textureID = LoadTGA("Image//TextOP4.tga");
 
 	meshList[GEO_Tree] = MeshBuilder::GenerateOBJMTL("Tree", "OBJ//TreeTall.obj", "OBJ//TreeTall.mtl");
 
 
-	meshList[GEO_PAPER] = MeshBuilder::GenerateOBJ("modelBUIDLING", "OBJ//Paper.obj");
+	meshList[GEO_PAPER] = MeshBuilder::GenerateOBJ("modelPaper", "OBJ//Paper.obj");
 	meshList[GEO_PAPER]->textureID = LoadTGA("Image//Notelines.tga");
 
 	meshList[GEO_EMPTYBOX] = MeshBuilder::GenerateQuad("quad", Color(1, 1, 1), 1.f);
@@ -223,6 +238,7 @@ double scaleevidence = 0.1;
 float pposx, pposz, pposx2, pposz2, pposx3, pposz3, rotateangle, pposy, pposy2, pposy3, pushaway;
 
 int mg1_start;
+bool questions,Reaply1,Reply2,Reply3;
 void Splevel1::Update(double dt)
 {
 	float cposx = camera.position.x;
@@ -404,7 +420,22 @@ void Splevel1::Update(double dt)
 				lose = false;
 			}
 		}
-		//
+		if (questions == true)
+		{
+			if (posX > 45 && posX < 64 && posY > 43 && posY < 53)
+			{
+
+			}
+			if (posX > 45 && posX < 64 && posY > 48 && posY < 38)
+			{
+
+			}
+			if (posX > 45 && posX < 64 && posY > 13 && posY < 23)
+			{
+
+			}
+		}
+		
 	}
 	else if (bLButtonState && !Application::IsMousePressed(0))
 	{
@@ -422,7 +453,44 @@ void Splevel1::Update(double dt)
 		bRButtonState = false;
 		std::cout << "RBUTTON UP" << std::endl;
 	}
+
+	//player table
+	{
+		//Evidence mini game
+		if (camera.position.x > 30 && camera.position.x < 45 && (camera.position.z > 55 && camera.position.z < 65))
+		{
+			if (Application::IsKeyPressed('E'))
+			{
+				setuppolice = true;
+			}
+		}
+		//Laptop mini game
+		if (camera.position.x > 30 && camera.position.x < 45 && (camera.position.z > 40 && camera.position.z < 55))
+		{
+			if (Application::IsKeyPressed('E'))
+			{
+
+			}
+		}
+		//Phone mini game
+		if (camera.position.x > 30 && camera.position.x < 45 && (camera.position.z > 30 && camera.position.z < 40))
+		{
+			if (questions == false)
+			{
+				RenderTextOnScreen(meshList[GEO_TEXT], "Press 'E' to start phone", Color(0, 1, 0), 4, 10, 30);
+				if (Application::IsKeyPressed('E'))
+				{
+					questions = true;
+				}
+			}
+		}
+	}
+
+	Random(4);
+
 }
+
+
 
 void Splevel1::Render()
 {
@@ -590,6 +658,7 @@ void Splevel1::Render()
 
 	//kjcode
 	{
+		
 		modelStack.PushMatrix();
 		modelStack.Translate(50, 0, 45);
 		modelStack.Rotate(90, 0, 1, 0);
@@ -604,34 +673,27 @@ void Splevel1::Render()
 		}
 		RenderMesh(meshList[GEO_Table], true);
 		modelStack.PopMatrix();
+		
 		//Evidence mini game
-		if (camera.position.x > 30 && camera.position.x < 45 &&(camera.position.z > 55 && camera.position.z <65))
+		if (camera.position.x > 30 && camera.position.x < 45 && (camera.position.z > 55 && camera.position.z < 65))
 		{
-			RenderTextOnScreen(meshList[GEO_TEXT], "Press 'E' to start evidence", Color(0, 1, 0), 4, 10, 30);
-			if (Application::IsKeyPressed('E'))
-			{
-				setuppolice = true;
-			}
+			RenderTextOnScreen(meshList[GEO_TEXT], "Press 'E' to start Evidence", Color(0, 1, 0), 4, 10, 30);
 		}
 		//Laptop mini game
 		if (camera.position.x > 30 && camera.position.x < 45 && (camera.position.z > 40 && camera.position.z < 55))
 		{
-			RenderTextOnScreen(meshList[GEO_TEXT], "Press 'E' to start laptop", Color(0, 1, 0), 4, 10, 30);
-			if (Application::IsKeyPressed('E'))
-			{
-
-			}
+			RenderTextOnScreen(meshList[GEO_TEXT], "Press 'E' to start Laptop", Color(0, 1, 0), 4, 10, 30);
 		}
 		//Phone mini game
 		if (camera.position.x > 30 && camera.position.x < 45 && (camera.position.z > 30 && camera.position.z < 40))
 		{
-			RenderTextOnScreen(meshList[GEO_TEXT], "Press 'E' to start phone", Color(0, 1, 0), 4, 10, 30);
-			if (Application::IsKeyPressed('E'))
+			if (questions == false)
 			{
-
+				RenderTextOnScreen(meshList[GEO_TEXT], "Press 'E' to start phone", Color(0, 1, 0), 4, 10, 30);
 			}
-
 		}
+		
+
 	}
 
 	//Koh Win Code
@@ -768,6 +830,58 @@ void Splevel1::Render()
 			modelStack.PopMatrix();
 		}
 	}
+
+	//lovescam
+	{
+		int rnd;
+
+		if (questions == true)
+		{
+			modelStack.PushMatrix();
+			RenderMeshOnScreen(meshList[GEO_Screen], 40, 30, 20, 10, true);
+
+			if (Manager.PrestigeLvl == 2|| Manager.PrestigeLvl == 3)
+			{
+				rnd = Random(4);
+				int pos[4] = { 48,38,28,18 };
+				for (int i = 0; i < 3; i++)
+				{
+					if (pos[i] = rnd - 1)
+					{
+						RenderMeshOnScreen(meshList[GEO_op1], 55, pos[i], 20, 10, true);//correct answer
+					}
+					else
+					{
+						RenderMeshOnScreen(meshList[GEO_op2], 55, pos[i], 20, 10, true);
+					}
+				}
+			}
+			else
+			{
+				rnd = Random(3);
+				int pos[3] = { 48,38,28 };
+				for (int i = 0; i < 2; i++)
+				{
+					if (pos[i] = rnd - 1)
+					{
+						RenderMeshOnScreen(meshList[GEO_op1], 55, pos[i], 20, 10, true);//correct answer
+					}
+					else
+					{
+						RenderMeshOnScreen(meshList[GEO_op4], 55, pos[i], 20, 10, true);
+					}
+				}
+			}
+
+			if (Manager.PrestigeLvl == 2)
+			{
+				RenderMeshOnScreen(meshList[GEO_op3], 55, 18, 20, 10, true);
+			}
+			modelStack.PopMatrix();
+		}
+	}
+
+
 
 	// -------------------------------------------------POSITION DEBUG----------------------------------------------
 	float pox = camera.position.x;
@@ -1050,4 +1164,11 @@ void Splevel1::RenderMeshOnScreen(Mesh* mesh, int x, int y, int sizex, int sizey
 	viewStack.PopMatrix();
 	modelStack.PopMatrix();
 	glEnable(GL_DEPTH_TEST);
+}
+
+int Splevel1::Random(int range)
+{
+	srand(time(0));  // Initialize random number generator.
+
+	return rand()%range;
 }
