@@ -223,7 +223,7 @@ void Splevel1::Update(double dt)
 {
 	float cposx = camera.position.x;
 	float cposz = camera.position.z;
-	cout << cposx;
+	//cout << cposx;
 	rotateangle = rotateangle + 0.1;
 	if (setuppolice == false && clearpolice == false)
 	{
@@ -361,11 +361,13 @@ void Splevel1::Update(double dt)
 		{
 			RenderPrestige = 0;
 		}
-		if ((posY >= 70 && posY <= 78) && (posX >= 27 && posX <= 30))
+		if (RenderPrestige == 1)
 		{
-			Manager.UpgradePrestige(true);
+			if ((posY >= 30 && posY <= 33) && (posX >= 70 && posX <= 78))
+			{
+				Manager.UpgradePrestige(true);
+			}
 		}
-	
 	}
 	else if (bLButtonState && !Application::IsMousePressed(0))
 	{
@@ -383,7 +385,6 @@ void Splevel1::Update(double dt)
 		bRButtonState = false;
 		std::cout << "RBUTTON UP" << std::endl;
 	}
-
 }
 
 void Splevel1::Render()
@@ -735,6 +736,7 @@ void Splevel1::RenderSkybox()
 
 
 }
+
 void Splevel1::RenderMesh(Mesh* mesh, bool enableLight)
 {
 	Mtx44 MVP, modelView, modelView_inverse_transpose;
