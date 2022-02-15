@@ -604,18 +604,33 @@ void Splevel1::Render()
 		}
 		RenderMesh(meshList[GEO_Table], true);
 		modelStack.PopMatrix();
-
+		//Evidence mini game
 		if (camera.position.x > 30 && camera.position.x < 45 &&(camera.position.z > 55 && camera.position.z <65))
 		{
 			RenderTextOnScreen(meshList[GEO_TEXT], "Press 'E' to start evidence", Color(0, 1, 0), 4, 10, 30);
+			if (Application::IsKeyPressed('E'))
+			{
+				setuppolice = true;
+			}
 		}
+		//Laptop mini game
 		if (camera.position.x > 30 && camera.position.x < 45 && (camera.position.z > 40 && camera.position.z < 55))
 		{
 			RenderTextOnScreen(meshList[GEO_TEXT], "Press 'E' to start laptop", Color(0, 1, 0), 4, 10, 30);
+			if (Application::IsKeyPressed('E'))
+			{
+
+			}
 		}
+		//Phone mini game
 		if (camera.position.x > 30 && camera.position.x < 45 && (camera.position.z > 30 && camera.position.z < 40))
 		{
 			RenderTextOnScreen(meshList[GEO_TEXT], "Press 'E' to start phone", Color(0, 1, 0), 4, 10, 30);
+			if (Application::IsKeyPressed('E'))
+			{
+
+			}
+
 		}
 	}
 
