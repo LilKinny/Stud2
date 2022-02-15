@@ -166,6 +166,17 @@ void Splevel1::Init()
 	meshList[GEO_GrayUpgrade] = MeshBuilder::GenerateRec("GrayUpgrade", Color(1, 1, 1), 5.f, 1.f);
 	meshList[GEO_GrayUpgrade]->textureID = LoadTGA("Image//SP2_SideUI_GrayUpgrade.tga");
 
+	meshList[GEO_GREENBUTTON] = MeshBuilder::GenerateRec("GreenButton", Color(1, 1, 1), 5.f, 1.f);
+	meshList[GEO_GREENBUTTON]->textureID = LoadTGA("Image//GreenButton.tga");
+
+	meshList[GEO_GRAYBUTTON] = MeshBuilder::GenerateRec("GrayButton", Color(1, 1, 1), 5.f, 1.f);
+	meshList[GEO_GRAYBUTTON]->textureID = LoadTGA("Image//GrayButton.tga");
+
+	meshList[GEO_UNLOCKTEXT] = MeshBuilder::GenerateRec("UnlockText", Color(1, 1, 1), 5.f, 1.f);
+	meshList[GEO_UNLOCKTEXT]->textureID = LoadTGA("Image//UnlockText.tga");
+
+	meshList[GEO_UPGRADETEXT] = MeshBuilder::GenerateRec("UpgradeText", Color(1, 1, 1), 5.f, 1.f);
+	meshList[GEO_UPGRADETEXT]->textureID = LoadTGA("Image//UpgradeText.tga");
 	/*
 	meshList[GEO_NYP] = MeshBuilder::GenerateQuad("nyplogo", Color(1, 1, 1), 1.f);
 	meshList[GEO_NYP]->textureID = LoadTGA("Image//NYP.tga");
@@ -361,19 +372,21 @@ void Splevel1::Update(double dt)
 			PageNum = 1;
 			RenderUI = 2;
 		}
-
-		if ((posY >= 46 && posY <= 48.5) && (posX >= 27.5 && posX <= 29)) //Left Button
+		if (RenderUI == 2)
 		{
-			if (PageNum != 1)
+			if ((posY >= 46 && posY <= 48.5) && (posX >= 27.5 && posX <= 29)) //Left Button
 			{
-				--PageNum;
+				if (PageNum != 1)
+				{
+					--PageNum;
+				}
 			}
-		}
-		if ((posY >= 46 && posY <= 48.5) && (posX >= 50.5 && posX <= 52)) //Right Button
-		{
-			if (PageNum != 3)
+			if ((posY >= 46 && posY <= 48.5) && (posX >= 50.5 && posX <= 52)) //Right Button
 			{
-				++PageNum;
+				if (PageNum != 3)
+				{
+					++PageNum;
+				}
 			}
 		}
 		if ((posY >= 46 && posY <= 48.5) && (posX >= 62 && posX <= 63.5)) //Click Cross Button
@@ -760,6 +773,12 @@ void Splevel1::Render()
 			//Text
 			modelStack.PushMatrix();
 			RenderTextOnScreen(meshList[GEO_TEXT], "Store Page: " + std::to_string(PageNum), Color(1, 1, 0), 2, 30, 43);
+			modelStack.PopMatrix();
+
+			//Equipment
+			//GrayButton
+			modelStack.PushMatrix();
+			RenderMeshOnScreen(meshList[GEO_BotUI], 40, 30, 16, 54, true);
 			modelStack.PopMatrix();
 		}
 		else if (RenderUI == 2)
