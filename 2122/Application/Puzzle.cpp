@@ -61,6 +61,11 @@ void Puzzle::Init()
 		}
 	}
 
+
+	//y offset by 4
+	playeractualpox = (18 + (Player->position.x * 4));
+	playeractualpoy = (8 + (Player->position.y * 4));
+
 	pickupstatus = false;
 
 
