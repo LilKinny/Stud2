@@ -23,11 +23,12 @@ int EquipmentManager::UpgradePrestige(bool Upgrade)
 		{
 			if (Upgrade == true)
 			{
-				Money = 0;
 				++PrestigeLvl;
 				LuckyCatUpgrade = MoneyPlantUpgrade = 0;
 				DeleteEquipArray();
 				InitEquipArray();
+				CalculateTotalIncome();
+				Money = 0;
 			}
 			return 1;
 		}
@@ -38,11 +39,12 @@ int EquipmentManager::UpgradePrestige(bool Upgrade)
 		{
 			if (Upgrade == true)
 			{
-				Money = 0;
 				++PrestigeLvl;
 				LuckyCatUpgrade = MoneyPlantUpgrade = 0;
 				DeleteEquipArray();
 				InitEquipArray();
+				CalculateTotalIncome();
+				Money = 0;
 			}
 			return 1;
 		}
@@ -53,11 +55,12 @@ int EquipmentManager::UpgradePrestige(bool Upgrade)
 		{
 			if (Upgrade == true)
 			{
-				Money = 0;
 				++PrestigeLvl;
 				LuckyCatUpgrade = MoneyPlantUpgrade = 0;
 				DeleteEquipArray();
-				InitEquipArray();
+				InitEquipArray(); 
+				CalculateTotalIncome();
+				Money = 0;
 			}
 			return 1;
 		}
@@ -108,7 +111,10 @@ void EquipmentManager::CalculateTotalIncome(void)
 
 void EquipmentManager::UpdateMoney(float dt)
 {
-	Money += TotalIncomePerSecond*dt;
+	if (TotalIncomePerSecond != 0)
+	{
+		Money += TotalIncomePerSecond * dt;
+	}
 }
 
 std::string EquipmentManager::ConvertMoneyToSuitableAmounts(void) //Return Edited String
@@ -138,7 +144,7 @@ std::string EquipmentManager::ConvertMoneyToSuitableAmounts(void) //Return Edite
 	}
 	if (Money >= 1000000)
 	{
-		Temporary += 'mil';
+		Temporary += 'm';
 	}
 	else if (Money >= 1000)
 	{

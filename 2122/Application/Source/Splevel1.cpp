@@ -276,14 +276,14 @@ void Splevel1::Init()
 	projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 1000.f);
 	projectionStack.LoadMatrix(projection);
 }
-bool setuppolice = false, clearpolice, paper1, paper2, paper3, timerstart, win, lose, startlaptop = false;
+bool setuppolice = false, clearpolice, paper1, paper2, paper3, paper4, timerstart, win, lose, startlaptop = false, evidence_won_bonus;
 double scaleevidence = 0.1, countdown, timer;
-float pposx, pposz, pposx2, pposz2, pposx3, pposz3, rotateangle, pposy, pposy2, pposy3, pushaway;
+float pposx, pposz, pposx2, pposz2, pposx4, pposx3, pposz3, pposz4, rotateangle, pposy, pposy2, pposy3, pposy4, pushaway;
 string timerstring, beetsinstringform;
-int totalbeets = 0;
+int totalbeets = 0, countdownbonus = 1500;
 
 int mg1_start;
-bool OP1, OP2, OP3,OP1check, OP2check,OP3check,deleterest;
+bool OP1, OP2, OP3,OP1check, OP2check,OP3check,deleterest,LS_start,LS_Win,LS_Lose;
 
 void Splevel1::Update(double dt)
 {
@@ -305,19 +305,41 @@ void Splevel1::Update(double dt)
 	if (mg1_start == 300 && clearpolice == false) setuppolice = true;
 	if (setuppolice == true && clearpolice == false)
 	{
-		pposz = 19;
-		pposx = (rand() % 100 + 0) - 50;
-		pposz = (rand() % 100 + 0) - 50;
-		pposx2 = (rand() % 100 + 0) - 50;
-		pposz2 = (rand() % 100 + 0) - 50;
-		pposx3 = (rand() % 100 + 0) - 50;
-		pposz3 = (rand() % 100 + 0) - 50;
-		pposy = 18;
-		pposy2 = 18;
-		pposy3 = 18;
-		scaleevidence = 2;
-		countdown = 600;
-		clearpolice = true;
+		if (Manager.PrestigeLvl <= 2)
+		{
+			pposz = 19;
+			pposx = (rand() % 100 + 0) - 50;
+			pposz = (rand() % 100 + 0) - 50;
+			pposx2 = (rand() % 100 + 0) - 50;
+			pposz2 = (rand() % 100 + 0) - 50;
+			pposx3 = (rand() % 100 + 0) - 50;
+			pposz3 = (rand() % 100 + 0) - 50;
+			pposy = 18;
+			pposy2 = 18;
+			pposy3 = 18;
+			scaleevidence = 2;
+			countdown = 600;
+			clearpolice = true;
+		}
+		else
+		{
+			pposz = 19;
+			pposx = (rand() % 100 + 0) - 50;
+			pposz = (rand() % 100 + 0) - 50;
+			pposx2 = (rand() % 100 + 0) - 50;
+			pposz2 = (rand() % 100 + 0) - 50;
+			pposx3 = (rand() % 100 + 0) - 50;
+			pposz3 = (rand() % 100 + 0) - 50;
+			pposx4 = (rand() % 100 + 0) - 50;
+			pposz4 = (rand() % 100 + 0) - 50;
+			pposy = 18;
+			pposy2 = 18;
+			pposy3 = 18;
+			pposy4 = 18;
+			scaleevidence = 2;
+			countdown = 550;
+			clearpolice = true;
+		}
 	}
 	if (clearpolice == true)
 	{
@@ -336,15 +358,37 @@ void Splevel1::Update(double dt)
 			paper3 = true;
 			pposy3 = 0;
 		}
-		if (paper1 == true && paper2 == true && paper3 == true)
+		else if (cposx > pposx4 - 10 && cposx < pposx4 + 10 && cposz > pposz4 - 10 && cposz < pposz4 + 10 && paper4 == false)
 		{
-			win = true;
-			clearpolice = false;
+			paper4 = true;
+			pposy4 = 0;
+		}
 
-			paper1 = false;
-			paper2 = false;
-			paper3 = false;
-			timerstart = false;
+		if (Manager.PrestigeLvl <= 2)
+		{
+			if (paper1 == true && paper2 == true && paper3 == true)
+			{
+				win = true;
+				clearpolice = false;
+
+				paper1 = false;
+				paper2 = false;
+				paper3 = false;
+				timerstart = false;
+			}
+		}
+		else
+		{
+			if (paper1 == true && paper2 == true && paper3 == true && paper4 == true)
+			{
+				win = true;
+				clearpolice = false;
+
+				paper1 = false;
+				paper2 = false;
+				paper3 = false;
+				timerstart = false;
+			}
 		}
 	}
 
@@ -357,8 +401,7 @@ void Splevel1::Update(double dt)
 			{
 				bLButtonState = true;
 				totalbeets++;
-				Manager.Money++;
-				cout << "Clicked beet";
+				Manager.Money = Manager.Money + 10;
 				beetsinstringform = to_string(totalbeets);
 			}
 			else if (bLButtonState && !Application::IsMousePressed(0))
@@ -470,6 +513,21 @@ void Splevel1::Update(double dt)
 		break;
 	}
 
+	if (evidence_won_bonus == true)
+	{
+		int timerbonus = 0;
+		Sleep(10);
+		countdownbonus--;
+		timerbonus = countdownbonus / 10;
+		timerstring = to_string(timerbonus);
+
+		if (timerbonus < 0)
+		{
+			Manager.TotalIncomePerSecond -= Manager.TotalIncomePerSecond / 100 * 15;
+			evidence_won_bonus = false;
+		}
+
+	}
 
 	//player table
 	{
@@ -492,14 +550,30 @@ void Splevel1::Update(double dt)
 		//Phone mini game
 		if (camera.position.x > 30 && camera.position.x < 45 && (camera.position.z > 30 && camera.position.z < 40))
 		{
-				RenderTextOnScreen(meshList[GEO_TEXT], "Press 'E' to start phone", Color(0, 1, 0), 4, 10, 30);
-				if (Application::IsKeyPressed('E'))
+			RenderTextOnScreen(meshList[GEO_TEXT], "Press 'E' to start phone", Color(0, 1, 0), 4, 10, 30);
+			if (Application::IsKeyPressed('E'))
+			{
+				LS_start = true;
+			}
+			if (questions == true)
+			{
+				if (deleterest == false)
 				{
-					questions = true;
-					if (deleterest == false)
+					int rnd = rand() % 3 + 0;
+					cout << rnd;
+					if (rnd == 0 && OP1check == false && OP2 != true && OP3 != true)
+					{
+						OP1 = true;
+						deleterest = true;
+					}
+					if (rnd == 1 && OP2check == false && OP3 != true && OP1 != true)
+					{
+						OP2 = true;
+						deleterest = true;
+					}
+					if (rnd == 2 && OP3check == false && OP2 != true && OP1 != true)
 					{
 						int rnd = rand() % 2 + 1;
-						cout << rnd;
 						if (rnd == 0 && OP1check == false && OP2 != true && OP3 != true)
 						{
 							OP1 = true;
@@ -515,18 +589,120 @@ void Splevel1::Update(double dt)
 							OP3 = true;
 							deleterest = true;
 						}
+
+						OP3 = true;
+						deleterest = true;
+
 					}
 				}
-				else if (deleterest == true)
+			}
+			else if (deleterest == true)
+			{
+				cout << "PressedE->deleterest true";
+				OP1 = false;
+				OP2 = false;
+				OP3 = false;
+				deleterest = false;
+			}
+		}
+		static bool bLButtonState = false;
+		if (!bLButtonState && Application::IsMousePressed(0))
+		{
+			bLButtonState = true;
+			std::cout << "LBUTTON DOWN" << std::endl;
+			//Converting Viewport space to UI space
+			double x, y;
+			Application::GetCursorPos(&x, &y);
+			unsigned w = Application::GetWindowWidth();
+			unsigned h = Application::GetWindowHeight();
+			float posX = x / w * 80; //convert (0,800) to (0,80)
+			float posY = 60 - y / h * 60; //convert (600,0) to (0,60)
+			std::cout << "posX:" << posX << " , posY:" << posY << std::endl;
+			if (LS_start == true)
+			{
+				if (posX > 35 && posX < 45 && posY > 8 && posY < 14)
+				{
+					questions = true;
+					LS_start = false;
+				}
+			}
+			
+			if (OP1 == true)
+			{
+				if (posX > 47 && posX < 62 &&(posY > 42 && posY < 55))//op1
 				{
 					questions = false;
-					cout << "PressedE->deleterest true";
-					OP1 = false;
-					OP2 = false;
-					OP3 = false;
-					deleterest = false;
+					LS_Win = true;
 				}
+				else if (posX > 47 && posX < 62 && (posY > 25 && posY < 37))//op2
+				{
+					questions = false;
+					LS_Lose = true;
+				}
+				else if (posX > 47 && posX < 62 && (posY > 8 && posY < 20))//op3
+				{
+					questions = false;
+					LS_Lose = true;
+				}
+			}
+			if (OP2 == true)
+			{
+				if (posX > 47 && posX < 62 && (posY > 25 && posY <37))//op2
+				{
+					questions = false;
+					LS_Win = true;
+				}
+				else if (posX > 47 && posX < 62 && (posY > 42 && posY < 55))//op1
+				{
+					questions = false;
+					LS_Lose = true;
+				}
+				else if (posX > 47 && posX < 62 && (posY > 8 && posY < 20))//op3
+				{
+					questions = false;
+					LS_Lose = true;
+				}
+			}
+			if (OP3 == true)
+			{
+				if (posX > 47 && posX < 62 && (posY > 8 && posY < 20))//op3
+				{
+					questions = false;
+					LS_Win = true;
+				}
+				else if (posX > 47 && posX < 62 && (posY > 25 && posY < 37))//op2
+				{
+					questions = false;
+					LS_Lose = true;
+				}
+				else if (posX > 47 && posX < 62 && (posY > 42 && posY < 55))//op1
+				{
+					questions = false;
+					LS_Lose = true;
+				}
+			}
+			if (LS_Win == true)
+			{
+				if (posX > 35 && posX < 44 && (posY > 8 && posY < 13))
+				{
+					Manager.Money = Manager.Money + 50;
+					LS_Win = false;
+				}
+			}
+			if (LS_Lose == true)
+			{
+				if (posX > 35 && posX < 44 && (posY > 8 && posY < 13))
+				{
+					Manager.Money = Manager.Money - 100;
+					LS_Lose = false;
+				}
+			}
 			
+		}
+		else if (bLButtonState && !Application::IsMousePressed(0))
+		{
+			bLButtonState = false;
+			std::cout << "LBUTTON UP" << std::endl;
 		}
 		
 	}
@@ -703,9 +879,9 @@ void Splevel1::Render()
 			modelStack.PopMatrix();
 		}
 	}
+
 	//kjcode
 	{
-		
 		modelStack.PushMatrix();
 		modelStack.Translate(50, 0, 45);
 		modelStack.Rotate(90, 0, 1, 0);
@@ -771,26 +947,61 @@ void Splevel1::Render()
 			}
 		}
 		//Lovescam mini game
+		if (LS_start == true)
+		{
+			RenderMeshOnScreen(meshList[GEO_EMPTYBOX], 40, 25, 40, 40);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Minigame: Lovers Scam!", Color(1, 1, 1), 2, 30, 40);
+			RenderTextOnScreen(meshList[GEO_TEXT], "You have a data base of random numbers", Color(1, 1, 1), 2, 21, 35);
+			RenderTextOnScreen(meshList[GEO_TEXT], "you must use your scam skills to pick", Color(1, 1, 1), 2, 21, 32);
+			RenderTextOnScreen(meshList[GEO_TEXT], "the most convincing answer without", Color(1, 1, 1), 2, 21, 29);
+			RenderTextOnScreen(meshList[GEO_TEXT], "raising suspicion.", Color(1, 1, 1), 2, 21, 26);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Reward: $50", Color(1, 1, 1), 2, 21, 21);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Penalty: -$100", Color(1, 1, 1), 2, 21, 18);
+			RenderMeshOnScreen(meshList[GEO_EMPTYBOX], 40, 10, 10, 6);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Start!", Color(1, 1, 1), 2, 37, 9);
+		}
+		if (LS_Win == true)
+		{
+			RenderMeshOnScreen(meshList[GEO_EMPTYBOX], 40, 25, 40, 40);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Congratulations!", Color(1, 1, 1), 2, 32, 40);
+			RenderTextOnScreen(meshList[GEO_TEXT], "You managed to earn your", Color(1, 1, 1), 2, 21, 35);
+			RenderTextOnScreen(meshList[GEO_TEXT], "targets trust and scam their money.", Color(1, 1, 1), 2, 21, 32);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Reward: $50", Color(1, 1, 1), 2, 21, 21);
+			RenderMeshOnScreen(meshList[GEO_EMPTYBOX], 40, 10, 10, 6);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Hooray!", Color(1, 1, 1), 2, 37, 9);
+		}
+		if (LS_Lose == true)
+		{
+			RenderMeshOnScreen(meshList[GEO_EMPTYBOX], 40, 25, 40, 40);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Oh No!", Color(1, 1, 1), 2, 37, 40);
+			RenderTextOnScreen(meshList[GEO_TEXT], "You didn't manage to convince", Color(1, 1, 1), 2, 21, 35);
+			RenderTextOnScreen(meshList[GEO_TEXT], "the target they've reported you and", Color(1, 1, 1), 2, 21, 32);
+			RenderTextOnScreen(meshList[GEO_TEXT], "have to pay a fine.", Color(1, 1, 1), 2, 21, 29);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Penalty: -$100", Color(1, 1, 1), 2, 21, 18);
+			RenderMeshOnScreen(meshList[GEO_EMPTYBOX], 40, 10, 10, 6);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Pay up", Color(1, 1, 1), 2, 37, 9);
+		}
 		if (questions == true)
 		{
 			if (OP1 == true && OP1check == false)
 			{
 				RenderMeshOnScreen(meshList[GEO_Screen], 40, 30, 16, 54, true);
-				RenderMeshOnScreen(meshList[GEO_op1], 40, 30, 16, 54, true);
+				RenderMeshOnScreen(meshList[GEO_op1], 55, 30, 16, 54, true);
 				std::cout << "OP1";
+
 				
 			}
 			else if (OP2 == true && OP2check == false)
 			{
 				RenderMeshOnScreen(meshList[GEO_Screen], 40, 30, 16, 54, true);
-				RenderMeshOnScreen(meshList[GEO_op2], 40, 30, 16, 54, true);
+				RenderMeshOnScreen(meshList[GEO_op2], 55, 30, 16, 54, true);
 				std::cout << "OP2";
 				
 			}
 			else if (OP3 == true && OP3check == false)
 			{
 				RenderMeshOnScreen(meshList[GEO_Screen], 40, 30, 16, 54, true);
-				RenderMeshOnScreen(meshList[GEO_op3], 40, 30, 16, 54, true);
+				RenderMeshOnScreen(meshList[GEO_op3], 55, 30, 16, 54, true);
 				std::cout << "OP3";
 				
 			}
@@ -828,6 +1039,14 @@ void Splevel1::Render()
 		RenderMesh(meshList[GEO_PAPER], true);
 		modelStack.PopMatrix();
 
+		modelStack.PushMatrix();
+		modelStack.Translate(pposx4, pposy4, pposz4);
+		modelStack.Rotate(90, 1, 0, 0);
+		modelStack.Rotate(rotateangle * 10, 0, 0, 1);
+		modelStack.Scale(scaleevidence, scaleevidence, scaleevidence);
+		RenderMesh(meshList[GEO_PAPER], true);
+		modelStack.PopMatrix();
+
 		if(timerstart == true) RenderTextOnScreen(meshList[GEO_TEXT], "Time left: " + timerstring , Color(1, 1, 1), 2, 37, 5);
 
 		else if (setuppolice == true)
@@ -854,6 +1073,7 @@ void Splevel1::Render()
 			RenderTextOnScreen(meshList[GEO_TEXT], "Reward: +15% income boost for 30s", Color(1, 1, 1), 2, 22, 21);
 			RenderMeshOnScreen(meshList[GEO_EMPTYBOX], 40, 10, 10, 6);
 			RenderTextOnScreen(meshList[GEO_TEXT], "Hooray!", Color(1, 1, 1), 2, 37, 9);
+			Manager.TotalIncomePerSecond += Manager.TotalIncomePerSecond / 100 * 15;
 		}
 		else if (lose == true)
 		{
@@ -934,99 +1154,100 @@ void Splevel1::Render()
 			RenderTextOnScreen(meshList[GEO_TEXT], "Store Page: " + std::to_string(PageNum), Color(1, 1, 0), 2, 30, 43);
 			modelStack.PopMatrix();
 
-
-			//Equipment
-			//Gray Button
+			//Equipment Store
 			{
-				if (Manager.UnlockComputer(false) == 0)
+				//Gray Button
 				{
-					//GrayButton Left Top
+					if (Manager.UnlockComputer(false) == 0)
+					{
+						//GrayButton Left Top
+						modelStack.PushMatrix();
+						RenderMeshOnScreen(meshList[GEO_GRAYBUTTON], 24, 29, 24, 3, true);
+						modelStack.PopMatrix();
+					}
+					if (Manager.UnlockPhone(false) == 0)
+					{
+						//GrayButton Mid Top
+						modelStack.PushMatrix();
+						RenderMeshOnScreen(meshList[GEO_GRAYBUTTON], 40, 29, 24, 3, true);
+						modelStack.PopMatrix();
+					}
+					if (Manager.UnlockLuckyCat(false) == 0)
+					{
+						//GrayButton Right Top
+						modelStack.PushMatrix();
+						RenderMeshOnScreen(meshList[GEO_GRAYBUTTON], 56, 29, 24, 3, true);
+						modelStack.PopMatrix();
+					}
+					if (Manager.UnlockMoneyPlant(false) == 0)
+					{
+						//GrayButton Left Bot
+						modelStack.PushMatrix();
+						RenderMeshOnScreen(meshList[GEO_GRAYBUTTON], 24, 16, 24, 3, true);
+						modelStack.PopMatrix();
+					}
+				}
+				//Green Button
+				{
+					if (Manager.UnlockComputer(false) == 1)
+					{
+						//GreenButton Left Top
+						modelStack.PushMatrix();
+						RenderMeshOnScreen(meshList[GEO_GREENBUTTON], 24, 29, 24, 3, true);
+						modelStack.PopMatrix();
+					}
+					if (Manager.UnlockPhone(false) == 1)
+					{
+						//GreenButton Mid Top
+						modelStack.PushMatrix();
+						RenderMeshOnScreen(meshList[GEO_GREENBUTTON], 40, 29, 24, 3, true);
+						modelStack.PopMatrix();
+					}
+					if (Manager.UnlockLuckyCat(false) == 1)
+					{
+						//GreenButton Right Top
+						modelStack.PushMatrix();
+						RenderMeshOnScreen(meshList[GEO_GREENBUTTON], 56, 29, 24, 3, true);
+						modelStack.PopMatrix();
+					}
+					if (Manager.UnlockMoneyPlant(false) == 1)
+					{
+						//GreenButton Left Bot
+						modelStack.PushMatrix();
+						RenderMeshOnScreen(meshList[GEO_GREENBUTTON], 24, 16, 24, 3, true);
+						modelStack.PopMatrix();
+					}
+				}
+				//Unlock
+				{
+					//Text
 					modelStack.PushMatrix();
-					RenderMeshOnScreen(meshList[GEO_GRAYBUTTON], 24, 29, 24, 3, true);
+					RenderTextOnScreen(meshList[GEO_TEXT], "Unlock", Color(1, 0, 0), 2, 21, 28);
+					RenderTextOnScreen(meshList[GEO_TEXT], "Unlock", Color(1, 0, 0), 2, 37, 28);
+					RenderTextOnScreen(meshList[GEO_TEXT], "Unlock", Color(1, 0, 0), 2, 53, 28);
+					RenderTextOnScreen(meshList[GEO_TEXT], "Unlock", Color(1, 0, 0), 2, 21, 15);
 					modelStack.PopMatrix();
 				}
-				if (Manager.UnlockPhone(false) == 0)
+				//Description
 				{
-					//GrayButton Mid Top
 					modelStack.PushMatrix();
-					RenderMeshOnScreen(meshList[GEO_GRAYBUTTON], 40, 29, 24, 3, true);
-					modelStack.PopMatrix();
-				}
-				if (Manager.UnlockLuckyCat(false) == 0)
-				{
-					//GrayButton Right Top
-					modelStack.PushMatrix();
-					RenderMeshOnScreen(meshList[GEO_GRAYBUTTON], 56, 29, 24, 3, true);
-					modelStack.PopMatrix();
-				}
-				if (Manager.UnlockMoneyPlant(false) == 0)
-				{
-					//GrayButton Left Bot
-					modelStack.PushMatrix();
-					RenderMeshOnScreen(meshList[GEO_GRAYBUTTON], 24, 16, 24, 3, true);
-					modelStack.PopMatrix();
-				}
-			}
-			//Green Button
-			{
-				if (Manager.UnlockComputer(false) == 1)
-				{
-					//GreenButton Left Top
-					modelStack.PushMatrix();
-					RenderMeshOnScreen(meshList[GEO_GREENBUTTON], 24, 29, 24, 3, true);
-					modelStack.PopMatrix();
-				}
-				if (Manager.UnlockPhone(false) == 1)
-				{
-					//GreenButton Mid Top
-					modelStack.PushMatrix();
-					RenderMeshOnScreen(meshList[GEO_GREENBUTTON], 40, 29, 24, 3, true);
-					modelStack.PopMatrix();
-				}
-				if (Manager.UnlockLuckyCat(false) == 1)
-				{
-					//GreenButton Right Top
-					modelStack.PushMatrix();
-					RenderMeshOnScreen(meshList[GEO_GREENBUTTON], 56, 29, 24, 3, true);
-					modelStack.PopMatrix();
-				}
-				if (Manager.UnlockMoneyPlant(false) == 1)
-				{
-					//GreenButton Left Bot
-					modelStack.PushMatrix();
-					RenderMeshOnScreen(meshList[GEO_GREENBUTTON], 24, 16, 24, 3, true);
-					modelStack.PopMatrix();
-				}
-			}
-			//Unlock
-			{
-				//Text
-				modelStack.PushMatrix();
-				RenderTextOnScreen(meshList[GEO_TEXT], "Unlock", Color(1, 0, 0), 2, 21, 28);
-				RenderTextOnScreen(meshList[GEO_TEXT], "Unlock", Color(1, 0, 0), 2, 37, 28);
-				RenderTextOnScreen(meshList[GEO_TEXT], "Unlock", Color(1, 0, 0), 2, 53, 28);
-				RenderTextOnScreen(meshList[GEO_TEXT], "Unlock", Color(1, 0, 0), 2, 21, 15);
-				modelStack.PopMatrix();
-			}
-			//Description
-			{
-				modelStack.PushMatrix();
-				RenderTextOnScreen(meshList[GEO_TEXT], "Computer", Color(0.5, 0, 0.5), 1, 18, 36);
-				RenderTextOnScreen(meshList[GEO_TEXT], "Income: $1/s", Color(0.5, 0, 0.5), 1, 18, 34);
-				RenderTextOnScreen(meshList[GEO_TEXT], "Price: $50", Color(0.5, 0, 0.5), 1, 18, 32);
+					RenderTextOnScreen(meshList[GEO_TEXT], "Computer", Color(0.5, 0, 0.5), 1, 18, 36);
+					RenderTextOnScreen(meshList[GEO_TEXT], "Income: $1/s", Color(0.5, 0, 0.5), 1, 18, 34);
+					RenderTextOnScreen(meshList[GEO_TEXT], "Price: $50", Color(0.5, 0, 0.5), 1, 18, 32);
 
-				RenderTextOnScreen(meshList[GEO_TEXT], "Phone", Color(0.5, 0, 0.5), 1, 34, 36);
-				RenderTextOnScreen(meshList[GEO_TEXT], "Income: $1/s", Color(0.5, 0, 0.5), 1, 34, 34);
-				RenderTextOnScreen(meshList[GEO_TEXT], "Price: $50", Color(0.5, 0, 0.5), 1, 34, 32);
+					RenderTextOnScreen(meshList[GEO_TEXT], "Phone", Color(0.5, 0, 0.5), 1, 34, 36);
+					RenderTextOnScreen(meshList[GEO_TEXT], "Income: $1/s", Color(0.5, 0, 0.5), 1, 34, 34);
+					RenderTextOnScreen(meshList[GEO_TEXT], "Price: $50", Color(0.5, 0, 0.5), 1, 34, 32);
 
-				RenderTextOnScreen(meshList[GEO_TEXT], "Lucky Cat", Color(0.5, 0, 0.5), 1, 50, 36);
-				RenderTextOnScreen(meshList[GEO_TEXT], "Each Equipment Income x 2 ", Color(0.5, 0, 0.5), 1, 50, 34);
-				RenderTextOnScreen(meshList[GEO_TEXT], "Price: $10000, Prestige: 2", Color(0.5, 0, 0.5), 1, 50, 32);
+					RenderTextOnScreen(meshList[GEO_TEXT], "Lucky Cat", Color(0.5, 0, 0.5), 1, 50, 36);
+					RenderTextOnScreen(meshList[GEO_TEXT], "Each Equipment Income x 2 ", Color(0.5, 0, 0.5), 1, 50, 34);
+					RenderTextOnScreen(meshList[GEO_TEXT], "Price: $10000, Prestige: 2", Color(0.5, 0, 0.5), 1, 50, 32);
 
-				RenderTextOnScreen(meshList[GEO_TEXT], "Money Plant", Color(0.5, 0, 0.5), 1, 18, 23);
-				RenderTextOnScreen(meshList[GEO_TEXT], "+$2/s for each equipment", Color(0.5, 0, 0.5), 1, 18, 21);
-				RenderTextOnScreen(meshList[GEO_TEXT], "Price: $5000, Prestige: 1", Color(0.5, 0, 0.5), 1, 18, 19);
-				modelStack.PopMatrix();
+					RenderTextOnScreen(meshList[GEO_TEXT], "Money Plant", Color(0.5, 0, 0.5), 1, 18, 23);
+					RenderTextOnScreen(meshList[GEO_TEXT], "+$2/s for each equipment", Color(0.5, 0, 0.5), 1, 18, 21);
+					RenderTextOnScreen(meshList[GEO_TEXT], "Price: $5000, Prestige: 1", Color(0.5, 0, 0.5), 1, 18, 19);
+					modelStack.PopMatrix();
+				}
 			}
 		}
 		else if (RenderUI == 2)
@@ -1040,7 +1261,89 @@ void Splevel1::Render()
 			RenderTextOnScreen(meshList[GEO_TEXT], "Owned Page: " + std::to_string(PageNum), Color(1, 1, 0), 2, 30, 43);
 			modelStack.PopMatrix();
 
-			//Equipment
+			//Equipment Owned
+			{
+				//Gray Button
+				{
+					//GrayButton Left Top
+					modelStack.PushMatrix();
+					RenderMeshOnScreen(meshList[GEO_GRAYBUTTON], 24, 29, 24, 3, true);
+					modelStack.PopMatrix();
+					//GrayButton Mid Top
+					modelStack.PushMatrix();
+					RenderMeshOnScreen(meshList[GEO_GRAYBUTTON], 40, 29, 24, 3, true);
+					modelStack.PopMatrix();
+					//GrayButton Right Top
+					modelStack.PushMatrix();
+					RenderMeshOnScreen(meshList[GEO_GRAYBUTTON], 56, 29, 24, 3, true);
+					modelStack.PopMatrix();
+					//GrayButton Left Bot
+					modelStack.PushMatrix();
+					RenderMeshOnScreen(meshList[GEO_GRAYBUTTON], 24, 16, 24, 3, true);
+					modelStack.PopMatrix();
+					//GrayButton Mid Top
+					modelStack.PushMatrix();
+					RenderMeshOnScreen(meshList[GEO_GRAYBUTTON], 40, 16, 24, 3, true);
+					modelStack.PopMatrix();
+					//GrayButton Right Top
+					modelStack.PushMatrix();
+					RenderMeshOnScreen(meshList[GEO_GRAYBUTTON], 56, 16, 24, 3, true);
+					modelStack.PopMatrix();
+				}
+
+				//Green Button
+				{
+					//GreenButton Left Top
+					modelStack.PushMatrix();
+					RenderMeshOnScreen(meshList[GEO_GREENBUTTON], 24, 29, 24, 3, true);
+					modelStack.PopMatrix();
+					//GreenButton Mid Top
+					modelStack.PushMatrix();
+					RenderMeshOnScreen(meshList[GEO_GREENBUTTON], 40, 29, 24, 3, true);
+					modelStack.PopMatrix();
+					//GreenButton Right Top
+					modelStack.PushMatrix();
+					RenderMeshOnScreen(meshList[GEO_GREENBUTTON], 56, 29, 24, 3, true);
+					modelStack.PopMatrix();
+					//GreenButton Left Bot
+					modelStack.PushMatrix();
+					RenderMeshOnScreen(meshList[GEO_GREENBUTTON], 24, 16, 24, 3, true);
+					modelStack.PopMatrix();
+					//GreenButton Mid Top
+					modelStack.PushMatrix();
+					RenderMeshOnScreen(meshList[GEO_GREENBUTTON], 40, 16, 24, 3, true);
+					modelStack.PopMatrix();
+					//GreenButton Right Top
+					modelStack.PushMatrix();
+					RenderMeshOnScreen(meshList[GEO_GREENBUTTON], 56, 16, 24, 3, true);
+					modelStack.PopMatrix();
+				}
+			}
+			//Switch for Phone and Computer
+			{
+				//GrayButton Top
+				modelStack.PushMatrix();
+				RenderMeshOnScreen(meshList[GEO_GRAYBUTTON], 22, 44, 24, 3, true);
+				modelStack.PopMatrix();
+				//GreenButton Bot
+				modelStack.PushMatrix();
+				RenderMeshOnScreen(meshList[GEO_GREENBUTTON], 22, 41, 24, 3, true);
+				modelStack.PopMatrix();
+			}
+		}
+		else if (RenderUI == 3)
+		{
+		//BotUI
+		modelStack.PushMatrix();
+		RenderMeshOnScreen(meshList[GEO_BotUI], 40, 30, 16, 54, true);
+		modelStack.PopMatrix();
+		//Text
+		modelStack.PushMatrix();
+		RenderTextOnScreen(meshList[GEO_TEXT], "Owned Page: " + std::to_string(PageNum), Color(1, 1, 0), 2, 30, 43);
+		modelStack.PopMatrix();
+
+		//Equipment Owned
+		{
 			//Gray Button
 			{
 				//GrayButton Left Top
@@ -1096,6 +1399,29 @@ void Splevel1::Render()
 				RenderMeshOnScreen(meshList[GEO_GREENBUTTON], 56, 16, 24, 3, true);
 				modelStack.PopMatrix();
 			}
+		}
+			//Switch for Phone and Computer
+			{
+				//GrayButton Bot
+				modelStack.PushMatrix();
+				RenderMeshOnScreen(meshList[GEO_GRAYBUTTON], 22, 41, 24, 3, true);
+				modelStack.PopMatrix();
+				//GreenButton Top
+				modelStack.PushMatrix();
+				RenderMeshOnScreen(meshList[GEO_GREENBUTTON], 22, 44, 24, 3, true);
+				modelStack.PopMatrix();
+			}
+		}
+		if (RenderUI == 2 || RenderUI == 3)
+		{
+			//Computer Text
+			modelStack.PushMatrix();
+			RenderTextOnScreen(meshList[GEO_TEXT], "Computer", Color(1, 0, 0), 1.5, 19, 40);
+			modelStack.PopMatrix();
+			//Phone Text
+			modelStack.PushMatrix();
+			RenderTextOnScreen(meshList[GEO_TEXT], "Phone", Color(1, 0, 0), 1.5, 19, 43);
+			modelStack.PopMatrix();
 		}
 	}
 
@@ -1348,10 +1674,17 @@ void Splevel1::UpdateMainControls()
 		}
 		if ((posY <= 59 && posY >= 53.5) && (posX >= 15.5 && posX <= 26.5)) //Click Owned
 		{
-			PageNum = 1;
 			RenderUI = 2;
 		}
-		if (RenderUI == 2)
+		if ((posY >= 46 && posY <= 49) && (posX >= 18.5 && posX <= 25.5)) //Top Computer clicked
+		{
+			RenderUI = 2;
+		}
+		if ((posY >= 43 && posY <= 46) && (posX >= 18.5 && posX <= 25.5)) //Bot Phone Clicked
+		{
+			RenderUI = 3;
+		}
+		if (RenderUI == 2 || RenderUI == 3)
 		{
 			if ((posY >= 46 && posY <= 48.5) && (posX >= 27.5 && posX <= 29)) //Left Button
 			{
@@ -1437,6 +1770,7 @@ void Splevel1::UpdateMainControls()
 				win = false;
 				timerstart = false;
 				clearpolice = false;
+				evidence_won_bonus = true;
 			}
 			else if (lose == true)
 			{
