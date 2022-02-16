@@ -226,7 +226,12 @@ void Splevel1::Init()
 	meshList[GEO_Table] = MeshBuilder::GenerateOBJMTL("modelBUIDLING", "OBJ//simple_table.obj", "OBJ//simple_table.mtl");
 
 	meshList[GEO_Screen] = MeshBuilder::GenerateRec("Rec", Color(1, 1, 1), 3.f, 5.f);
-	meshList[GEO_Screen]->textureID = LoadTGA("Image//Phone.tga");
+	meshList[GEO_Screen]->textureID = LoadTGA("Image//Phone.tga"); // beats me
+	//whatever
+
+	meshList[GEO_LAPTOP_UI] = MeshBuilder::GenerateQuad("quad", Color(1, 1, 1), 1.f);
+	meshList[GEO_LAPTOP_UI]->textureID = LoadTGA("Image//Beetcoin.tga");
+
 
 	meshList[GEO_op1] = MeshBuilder::GenerateRec("Rec", Color(1, 1, 1), 1.f, 1.f);
 	meshList[GEO_op1]->textureID = LoadTGA("Image//OP1.tga");
@@ -269,10 +274,11 @@ void Splevel1::Init()
 	projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 1000.f);
 	projectionStack.LoadMatrix(projection);
 }
-bool setuppolice = false, clearpolice, paper1, paper2, paper3, timerstart, win, lose;
+bool setuppolice = false, clearpolice, paper1, paper2, paper3, timerstart, win, lose, startlaptop = false;
 double scaleevidence = 0.1, countdown, timer;
 float pposx, pposz, pposx2, pposz2, pposx3, pposz3, rotateangle, pposy, pposy2, pposy3, pushaway;
-string timerstring;
+string timerstring, beetsinstringform;
+int totalbeets = 0;
 
 int mg1_start;
 static bool questions;
@@ -337,6 +343,34 @@ void Splevel1::Update(double dt)
 			paper2 = false;
 			paper3 = false;
 			timerstart = false;
+		}
+	}
+
+	if (startlaptop == true)
+	{
+		static bool bLButtonState = false;
+		if (debugmouseposx > 35 && debugmouseposx < 48 && debugmouseposy > 18 && debugmouseposy < 30)
+		{
+			if (!bLButtonState && Application::IsMousePressed(0))
+			{
+				bLButtonState = true;
+				totalbeets++;
+				Manager.Money++;
+				cout << "Clicked beet";
+				beetsinstringform = to_string(totalbeets);
+			}
+			else if (bLButtonState && !Application::IsMousePressed(0))
+			{
+				bLButtonState = false;
+			}
+		}
+
+		if (debugmouseposx > 55 && debugmouseposx < 59 && debugmouseposy > 6 && debugmouseposy < 10)
+		{
+			if (!bLButtonState && Application::IsMousePressed(0))
+			{
+				startlaptop = false;
+			}
 		}
 	}
 	if (timerstart == true)
@@ -450,7 +484,8 @@ void Splevel1::Update(double dt)
 		{
 			if (Application::IsKeyPressed('E'))
 			{
-
+				startlaptop = true;
+				Manager.Money = Manager.Money + 1;
 			}
 		}
 		//Phone mini game
@@ -701,6 +736,7 @@ void Splevel1::Render()
 		if (camera.position.x > 30 && camera.position.x < 45 && (camera.position.z > 40 && camera.position.z < 55))
 		{
 			RenderTextOnScreen(meshList[GEO_TEXT], "Press 'E' to start Laptop", Color(0, 1, 0), 4, 10, 30);
+			
 		}
 		//Phone mini game
 		if (camera.position.x > 30 && camera.position.x < 45 && (camera.position.z > 30 && camera.position.z < 40))
@@ -801,11 +837,21 @@ void Splevel1::Render()
 		{
 			RenderMeshOnScreen(meshList[GEO_EMPTYBOX], 40, 25, 40, 40);
 			RenderTextOnScreen(meshList[GEO_TEXT], "Ouch!", Color(1, 1, 1), 2, 29, 40);
-			RenderTextOnScreen(meshList[GEO_TEXT], "You didnt hide all the evidence in time", Color(1, 1, 1), 2, 21.2, 35);
-			RenderTextOnScreen(meshList[GEO_TEXT], "The police has fined 20% of your income", Color(1, 1, 1), 2, 21.2, 32);
+			RenderTextOnScreen(meshList[GEO_TEXT], "You didnt hide all the evidence in time", Color(1, 1, 1), 2, 21, 35);
+			RenderTextOnScreen(meshList[GEO_TEXT], "The police has fined 20% of your income", Color(1, 1, 1), 2, 21, 32);
 			RenderTextOnScreen(meshList[GEO_TEXT], "Penalty: -20% of all cash", Color(1, 1, 1), 2, 24, 18);
 			RenderMeshOnScreen(meshList[GEO_EMPTYBOX], 40, 10, 10, 6);
 			RenderTextOnScreen(meshList[GEO_TEXT], "Pay up", Color(1, 1, 1), 2, 37, 9);
+		}
+
+
+		if (startlaptop == true)
+		{
+			RenderMeshOnScreen(meshList[GEO_LAPTOP_UI], 40, 25, 38, 40);
+			RenderTextOnScreen(meshList[GEO_TEXT], "COMG OS", Color(0.5, 0.5, 1), 3, 24, 41);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Beetcoin clicker Legacy 2.0 deluxe (Free)", Color(1, 1, 1), 1.5, 25, 38);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Click the beet to earn beetcoins (worth $1)", Color(1, 1, 1), 1.5, 24.1, 34.5);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Total beetcoins earned: " + beetsinstringform, Color(1, 1, 1), 1.5, 29.1, 12);
 		}
 	}
 
