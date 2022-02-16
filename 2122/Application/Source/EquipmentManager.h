@@ -17,10 +17,12 @@ public:
 	int UpgradePrestige(bool Upgrade);
 	int CalculateTotalIncome(void);
 	std::string ConvertMoneyToSuitableAmounts(void);
-	int UnlockPhone(bool unlock, float money);
-	int UnlockComputer(bool unlock, float money);
-	int UpgradePhone(bool upgrade, float money);   //return cost for upgrading phone
-	int UpgradeComputer(bool upgrade, float money); //return cost for upgrading computer
+	int UnlockPhone(bool unlock);
+	int UnlockComputer(bool unlock);
+	int UnlockLuckyCat(bool unlock);
+	int UnlockMoneyPlant(bool unlock);
+	int UpgradePhone(bool upgrade, int WorkStation);   
+	int UpgradeComputer(bool upgrade, int WorkStation);
 	void DeleteEquipArray(void);
 	void InitEquipArray(void);
 };

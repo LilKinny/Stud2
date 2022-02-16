@@ -26,6 +26,8 @@ int EquipmentManager::UpgradePrestige(bool Upgrade)
 				Money = 0;
 				++PrestigeLvl;
 				LuckyCatUpgrade = MoneyPlantUpgrade = 0;
+				DeleteEquipArray();
+				InitEquipArray();
 			}
 			return 1;
 		}
@@ -39,6 +41,8 @@ int EquipmentManager::UpgradePrestige(bool Upgrade)
 				Money = 0;
 				++PrestigeLvl;
 				LuckyCatUpgrade = MoneyPlantUpgrade = 0;
+				DeleteEquipArray();
+				InitEquipArray();
 			}
 			return 1;
 		}
@@ -52,11 +56,24 @@ int EquipmentManager::UpgradePrestige(bool Upgrade)
 				Money = 0;
 				++PrestigeLvl;
 				LuckyCatUpgrade = MoneyPlantUpgrade = 0;
+				DeleteEquipArray();
+				InitEquipArray();
 			}
 			return 1;
 		}
 	}
 	return 0;
+}
+
+int EquipmentManager::CalculateTotalIncome(void)
+{
+	int TotalIncome = 0;
+	for (int i = 0; i < PrestigeLvl * 6; ++i)
+	{
+		EquipArray[i]->CalculateIncomePerSecondCalculateIncomePerSecond();
+		TotalIncome += EquipArray[i]->IncomePerSecond;
+	}
+	return TotalIncome
 }
 
 std::string EquipmentManager::ConvertMoneyToSuitableAmounts(void) //Return Edited String
@@ -95,50 +112,167 @@ std::string EquipmentManager::ConvertMoneyToSuitableAmounts(void) //Return Edite
 	return Temporary;
 }
 
-int EquipmentManager::UnlockPhone(bool unlock, float money)
+int EquipmentManager::UnlockPhone(bool unlock)
 {
-	Equipment* Temp;
 	//Checks if got space for Phone
 	for(int i = 0; i < PrestigeLvl*6;++i)
 	{
-		Temp = EquipArray[i];
-		if (Temp->PhoneLvl)
+		//Check if Equip Array got empty "Work station"
+		if (EquipArray[i] == nullptr)
 		{
-			if (unlock == true)
+			EquipArray[i] = new Equipment;
+			i = PrestigeLvl * 6;
+		}
+		//if Phonelvl is 0 which means not unlocked
+		if(EquipArray[i]->PhoneLvl == 0)
+		{
+			//If got money show can unlock
+			if (Money >= 50)
 			{
-				
+				//if unlock is true , unlock the phone
+				if (unlock == true)
+				{
+					Money -= 50;
+					EquipArray[i]->PhoneLvl = 1;
+				}
+				return 1;
 			}
+			i = PrestigeLvl * 6;
 		}
 	}
 	return 0;
 }
 
-int EquipmentManager::UnlockComputer(bool unlock, float money)
+int EquipmentManager::UnlockComputer(bool unlock)
 {
+	//Checks if got space for Computer
+	for (int i = 0; i < PrestigeLvl * 6; ++i)
+	{
+		//Check if Equip Array got empty "Work station"
+		if (EquipArray[i] == nullptr)
+		{
+			EquipArray[i] = new Equipment;
+			i = PrestigeLvl * 6;
+		}
+		//if Computerlvl is 0 which means not unlocked
+		if (EquipArray[i]->ComputerLvl == 0)
+		{
+			//If got money show can unlock
+			if (Money >= 50)
+			{
+				//if unlock is true , unlock the Computer
+				if (unlock == true)
+				{
+					Money -= 50;
+					EquipArray[i]->ComputerLvl = 1;
+				}
+				return 1;
+			}
+			i = PrestigeLvl * 6;
+		}
+	}
 	return 0;
 }
 
-int EquipmentManager::UpgradePhone(bool upgrade, float money)
+int EquipmentManager::UnlockLuckyCat(bool unlock)
 {
-
-	/*if (EquipmentPhoneLvl == 1)
+	//Checks if Lucky Cat Unlocked
+	if (LuckyCatUpgrade == 0)
 	{
-		if (money >= 50)
+		if (Money >= 10000 && PrestigeLvl >= 2)
 		{
-			if (upgrade == true)
+			if (unlock == true)
 			{
-				money -= 50;
-				++PrestigeLvl;
-				LuckyCatUpgrade = MoneyPlantUpgrade = 0;
+				Money -= 10000;
+				LuckyCatUpgrade = 1;
 			}
 			return 1;
 		}
-	}*/
+	}
 	return 0;
 }
 
-int EquipmentManager::UpgradeComputer(bool upgrade, float money)
+int EquipmentManager::UnlockMoneyPlant(bool unlock)
 {
+	//Checks if Money Plant Unlocked
+	if (MoneyPlantUpgrade == 0)
+	{
+		if (Money >= 5000 && PrestigeLvl >= 1)
+		{
+			if (unlock == true)
+			{
+				Money -= 5000;
+				MoneyPlantUpgrade = 1;
+			}
+			return 1;
+		}
+	}
+	return 0;
+}
+
+int EquipmentManager::UpgradePhone(bool upgrade, int WorkStation)
+{
+	if (EquipArray[WorkStation]->PhoneLvl == 1) //Can Upgrade to 1
+	{
+		if (Money >= 250)
+		{
+			if (upgrade == true)
+			{
+				Money -= 250;
+				EquipArray[WorkStation]->PhoneLvl = 2;
+			}
+			return 1;
+		}
+	}
+	if (EquipArray[WorkStation]->PhoneLvl == 2) //Can Upgrade to 2
+	{
+		if (Money >= 1250)
+		{
+			if (upgrade == true)
+			{
+				Money -= 1250;
+				EquipArray[WorkStation]->PhoneLvl = 3;
+			}
+			return 1;
+		}
+	}
+	if (EquipArray[WorkStation]->PhoneLvl == 3) //Maxed Cannot upgrade
+	{
+		return 2;
+	}
+	return 0;
+}
+
+int EquipmentManager::UpgradeComputer(bool upgrade, int WorkStation)
+{
+	if (EquipArray[WorkStation]->ComputerLvl == 1) //Can Upgrade to 1
+	{
+		if (Money >= 500)
+		{
+			if (upgrade == true)
+			{
+				Money -= 500;
+				EquipArray[WorkStation]->ComputerLvl = 2;
+			}
+			return 1;
+		}
+	}
+	if (EquipArray[WorkStation]->ComputerLvl == 2) //Can Upgrade to 2
+	{
+		if (Money >= 5000)
+		{
+			if (upgrade == true)
+			{
+				Money -= 5000;
+				EquipArray[WorkStation]->ComputerLvl = 3;
+			}
+			return 1;
+		}
+	}
+	if (EquipArray[WorkStation]->ComputerLvl == 3) //Maxed Cannot upgrade
+	{
+		return 2;
+	}
 	return 0;
 }
 
