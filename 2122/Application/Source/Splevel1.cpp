@@ -573,7 +573,6 @@ void Splevel1::Update(double dt)
 					}
 					if (rnd == 2 && OP3check == false && OP2 != true && OP1 != true)
 					{
-<<<<<<< Updated upstream
 						int rnd = rand() % 2 + 1;
 						if (rnd == 0 && OP1check == false && OP2 != true && OP3 != true)
 						{
@@ -590,10 +589,10 @@ void Splevel1::Update(double dt)
 							OP3 = true;
 							deleterest = true;
 						}
-=======
+
 						OP3 = true;
 						deleterest = true;
->>>>>>> Stashed changes
+
 					}
 				}
 			}
@@ -987,34 +986,23 @@ void Splevel1::Render()
 			if (OP1 == true && OP1check == false)
 			{
 				RenderMeshOnScreen(meshList[GEO_Screen], 40, 30, 16, 54, true);
-<<<<<<< Updated upstream
-				RenderMeshOnScreen(meshList[GEO_op1], 40, 30, 16, 54, true);
-=======
 				RenderMeshOnScreen(meshList[GEO_op1], 55, 30, 16, 54, true);
 				std::cout << "OP1";
->>>>>>> Stashed changes
+
 				
 			}
 			else if (OP2 == true && OP2check == false)
 			{
 				RenderMeshOnScreen(meshList[GEO_Screen], 40, 30, 16, 54, true);
-<<<<<<< Updated upstream
-				RenderMeshOnScreen(meshList[GEO_op2], 40, 30, 16, 54, true);
-=======
 				RenderMeshOnScreen(meshList[GEO_op2], 55, 30, 16, 54, true);
 				std::cout << "OP2";
->>>>>>> Stashed changes
 				
 			}
 			else if (OP3 == true && OP3check == false)
 			{
 				RenderMeshOnScreen(meshList[GEO_Screen], 40, 30, 16, 54, true);
-<<<<<<< Updated upstream
-				RenderMeshOnScreen(meshList[GEO_op3], 40, 30, 16, 54, true);
-=======
 				RenderMeshOnScreen(meshList[GEO_op3], 55, 30, 16, 54, true);
 				std::cout << "OP3";
->>>>>>> Stashed changes
 				
 			}
 			else
