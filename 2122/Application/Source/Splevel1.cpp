@@ -283,7 +283,7 @@ string timerstring, beetsinstringform;
 int totalbeets = 0;
 
 int mg1_start;
-bool questions, OP1, OP2, OP3,OP1check, OP2check,OP3check,deleterest;
+bool OP1, OP2, OP3,OP1check, OP2check,OP3check,deleterest;
 
 void Splevel1::Update(double dt)
 {
@@ -494,7 +494,7 @@ void Splevel1::Update(double dt)
 				RenderTextOnScreen(meshList[GEO_TEXT], "Press 'E' to start phone", Color(0, 1, 0), 4, 10, 30);
 				if (Application::IsKeyPressed('E'))
 				{
-					
+					questions = true;
 					if (deleterest == false)
 					{
 						int rnd = rand() % 2 + 1;
@@ -518,6 +518,7 @@ void Splevel1::Update(double dt)
 				}
 				else if (deleterest == true)
 				{
+					questions = false;
 					cout << "PressedE->deleterest true";
 					OP1 = false;
 					OP2 = false;
@@ -768,29 +769,35 @@ void Splevel1::Render()
 				RenderTextOnScreen(meshList[GEO_TEXT], "Reach prestiege for lift access", Color(0, 1, 0), 4, 10, 30);
 			}
 		}
-
-			if (OP1 == true &&OP1check == false)
+		//Lovescam mini game
+		if (questions == true)
+		{
+			if (OP1 == true && OP1check == false)
 			{
 				RenderMeshOnScreen(meshList[GEO_Screen], 40, 30, 16, 54, true);
 				RenderMeshOnScreen(meshList[GEO_op1], 40, 30, 16, 54, true);
 				std::cout << "OP1";
+				
 			}
 			else if (OP2 == true && OP2check == false)
 			{
 				RenderMeshOnScreen(meshList[GEO_Screen], 40, 30, 16, 54, true);
 				RenderMeshOnScreen(meshList[GEO_op2], 40, 30, 16, 54, true);
 				std::cout << "OP2";
+				
 			}
 			else if (OP3 == true && OP3check == false)
 			{
 				RenderMeshOnScreen(meshList[GEO_Screen], 40, 30, 16, 54, true);
 				RenderMeshOnScreen(meshList[GEO_op3], 40, 30, 16, 54, true);
 				std::cout << "OP3";
+				
 			}
 			else
 			{
 
 			}
+		}
 		
 	}
 

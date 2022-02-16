@@ -127,6 +127,7 @@ private:
 	float rotateAngleF;
 	float rotateAngleSF;
 	bool bEnableLight;
+	bool questions;
 
 	void PuzzleRender();
 	void UpdatePuzzleControls();
