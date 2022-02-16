@@ -122,7 +122,7 @@ void Splevel1::Init()
 
 	puzzle.Init();
 
-	PuzzleActive = true;
+	PuzzleActive = false;
 
 	PuzzlePlayerPickup = false;
 
@@ -290,12 +290,12 @@ int totalbeets = 0, countdownbonus = 1500;
 
 int mg1_start;
 bool OP1, OP2, OP3,OP1check, OP2check,OP3check,deleterest,LS_start,LS_Win,LS_Lose;
-
+float cposx, cposz;
 void Splevel1::Update(double dt)
 {
 	Manager.UpdateMoney(dt);
-	float cposx = camera.position.x;
-	float cposz = camera.position.z;
+	 cposx = camera.position.x;
+	cposz = camera.position.z;
 	//cout << cposx;
 	rotateangle = rotateangle + 0.1;
 
@@ -529,7 +529,7 @@ void Splevel1::Update(double dt)
 
 		if (timerbonus < 0)
 		{
-			Manager.TotalIncomePerSecond -= Manager.TotalIncomePerSecond / 100 * 15;
+			Manager.MinigameBuffs -= 15;
 			evidence_won_bonus = false;
 		}
 
@@ -1101,7 +1101,7 @@ void Splevel1::Render()
 			RenderTextOnScreen(meshList[GEO_TEXT], "Reward: +15% income boost for 30s", Color(1, 1, 1), 2, 22, 21);
 			RenderMeshOnScreen(meshList[GEO_EMPTYBOX], 40, 10, 10, 6);
 			RenderTextOnScreen(meshList[GEO_TEXT], "Hooray!", Color(1, 1, 1), 2, 37, 9);
-			Manager.TotalIncomePerSecond += Manager.TotalIncomePerSecond / 100 * 15;
+			Manager.MinigameBuffs += 15;
 		}
 		else if (lose == true)
 		{
@@ -1486,44 +1486,43 @@ void Splevel1::RenderSkybox()
 	modelStack.PopMatrix();*/
 
 
-	CONST FLOAT OFFSET = 499;
 
 	modelStack.PushMatrix();
-	modelStack.Translate(0, 0, -OFFSET);
+	modelStack.Translate(cposx, 0, -499 + cposz);
 	modelStack.Scale(1000, 1000, 1000);
 	RenderMesh(meshList[GEO_FRONT], false);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(0, 0, OFFSET);
+	modelStack.Translate(cposx, 0, 499 + cposz);
 	modelStack.Rotate(180, 0, 1, 0);
 	modelStack.Scale(1000, 1000, 1000);
 	RenderMesh(meshList[GEO_BACK], false);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(-OFFSET, 0, 0);
+	modelStack.Translate(-499 + cposx, 0, cposz);
 	modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Scale(1000, 1000, 1000);
 	RenderMesh(meshList[GEO_LEFT], false);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(OFFSET, 0, 0);
+	modelStack.Translate(499 + cposx, 0, cposz);
 	modelStack.Rotate(-90, 0, 1, 0);
 	modelStack.Scale(1000, 1000, 1000);
 	RenderMesh(meshList[GEO_RIGHT], false);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(0, OFFSET, 0);
+	modelStack.Translate(cposx, 499, cposz);
 	modelStack.Rotate(90, 1, 0, 0);
 	modelStack.Scale(1000, 1000, 1000);
 	RenderMesh(meshList[GEO_TOP], false);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(0, -OFFSET, 0);
+	modelStack.Translate(cposx, -499, cposz);
 	modelStack.Rotate(-90, 0, 1, 0);
 	modelStack.Rotate(-90, 1, 0, 0);
 	modelStack.Scale(1000, 1000, 1000);
@@ -1532,7 +1531,7 @@ void Splevel1::RenderSkybox()
 
 	modelStack.PushMatrix();
 	modelStack.Translate(0, 0, 0);
-	modelStack.Scale(900, 10, 900);
+	modelStack.Scale(9000, 10, 9000);
 	modelStack.Rotate(90, 0, 1, 0);
 	RenderMesh(meshList[GEO_GRASS], true);
 	modelStack.PopMatrix();
