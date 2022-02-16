@@ -275,7 +275,8 @@ float pposx, pposz, pposx2, pposz2, pposx3, pposz3, rotateangle, pposy, pposy2, 
 string timerstring;
 
 int mg1_start;
-bool questions, OP1, OP2, OP3,OP1check, OP2check,OP3check;
+static bool questions;
+bool OP1, OP2, OP3,OP1check, OP2check,OP3check;
 
 void Splevel1::Update(double dt)
 {
@@ -474,20 +475,29 @@ void Splevel1::Update(double dt)
 		if (questions == true)
 		{
 			rnd = Random(2);
-			if (rnd == 0 && OP1check == false)
+			if (rnd == 0 && OP1check == false && OP2 != true && OP3 != true)
 			{
 				OP1 = true;
-				
+				if (Application::IsKeyPressed('E'))
+				{
+					questions = false;
+				}
 			}
-			if (rnd == 1 && OP2check==false)
+			if (rnd == 1 && OP2check == false && OP3 != true && OP1 != true)
 			{
 				OP2 = true;
-				
+				if (Application::IsKeyPressed('E'))
+				{
+					questions = false;
+				}
 			}
-			if (rnd == 2 && OP3check == false)
+			if (rnd == 2 && OP3check == false && OP2 != true && OP1 != true)
 			{
 				OP3 = true;
-				
+				if (Application::IsKeyPressed('E'))
+				{
+					questions = false;
+				}
 			}
 		}		
 	}
@@ -712,30 +722,24 @@ void Splevel1::Render()
 				RenderTextOnScreen(meshList[GEO_TEXT], "Reach prestiege for lift access", Color(0, 1, 0), 4, 10, 30);
 			}
 		}
+
 		if (questions == true)
 		{
 			RenderMeshOnScreen(meshList[GEO_Screen], 40, 30, 16, 54, true);
-			if (OP1 == true &&OP1check == false)
+			if (OP1 == true)
 			{
 				RenderMeshOnScreen(meshList[GEO_op1], 40, 30, 16, 54, true);
 				std::cout << "OP1";
-				OP1check = true;
 			}
-			else if (OP2 == true && OP2check == false)
+			if (OP2 == true)
 			{
 				RenderMeshOnScreen(meshList[GEO_op2], 40, 30, 16, 54, true);
 				std::cout << "OP2";
-				OP2check = true;
 			}
-			else if (OP3 == true && OP3check == false)
+			if (OP3 == true)
 			{
 				RenderMeshOnScreen(meshList[GEO_op3], 40, 30, 16, 54, true);
 				std::cout << "OP3";
-				OP3check = true;
-			}
-			else
-			{
-
 			}
 		}
 	}
