@@ -283,7 +283,7 @@ string timerstring, beetsinstringform;
 int totalbeets = 0, countdownbonus = 1500;
 
 int mg1_start;
-bool OP1, OP2, OP3,OP1check, OP2check,OP3check,deleterest;
+bool OP1, OP2, OP3,OP1check, OP2check,OP3check,deleterest,LS_start,LS_Win,LS_Lose;
 
 void Splevel1::Update(double dt)
 {
@@ -550,12 +550,30 @@ void Splevel1::Update(double dt)
 		//Phone mini game
 		if (camera.position.x > 30 && camera.position.x < 45 && (camera.position.z > 30 && camera.position.z < 40))
 		{
-				RenderTextOnScreen(meshList[GEO_TEXT], "Press 'E' to start phone", Color(0, 1, 0), 4, 10, 30);
-				if (Application::IsKeyPressed('E'))
+			RenderTextOnScreen(meshList[GEO_TEXT], "Press 'E' to start phone", Color(0, 1, 0), 4, 10, 30);
+			if (Application::IsKeyPressed('E'))
+			{
+				LS_start = true;
+			}
+			if (questions == true)
+			{
+				if (deleterest == false)
 				{
-					questions = true;
-					if (deleterest == false)
+					int rnd = rand() % 3 + 0;
+					cout << rnd;
+					if (rnd == 0 && OP1check == false && OP2 != true && OP3 != true)
 					{
+						OP1 = true;
+						deleterest = true;
+					}
+					if (rnd == 1 && OP2check == false && OP3 != true && OP1 != true)
+					{
+						OP2 = true;
+						deleterest = true;
+					}
+					if (rnd == 2 && OP3check == false && OP2 != true && OP1 != true)
+					{
+<<<<<<< Updated upstream
 						int rnd = rand() % 2 + 1;
 						if (rnd == 0 && OP1check == false && OP2 != true && OP3 != true)
 						{
@@ -572,18 +590,120 @@ void Splevel1::Update(double dt)
 							OP3 = true;
 							deleterest = true;
 						}
+=======
+						OP3 = true;
+						deleterest = true;
+>>>>>>> Stashed changes
 					}
 				}
-				else if (deleterest == true)
+			}
+			else if (deleterest == true)
+			{
+				cout << "PressedE->deleterest true";
+				OP1 = false;
+				OP2 = false;
+				OP3 = false;
+				deleterest = false;
+			}
+		}
+		static bool bLButtonState = false;
+		if (!bLButtonState && Application::IsMousePressed(0))
+		{
+			bLButtonState = true;
+			std::cout << "LBUTTON DOWN" << std::endl;
+			//Converting Viewport space to UI space
+			double x, y;
+			Application::GetCursorPos(&x, &y);
+			unsigned w = Application::GetWindowWidth();
+			unsigned h = Application::GetWindowHeight();
+			float posX = x / w * 80; //convert (0,800) to (0,80)
+			float posY = 60 - y / h * 60; //convert (600,0) to (0,60)
+			std::cout << "posX:" << posX << " , posY:" << posY << std::endl;
+			if (LS_start == true)
+			{
+				if (posX > 35 && posX < 45 && posY > 8 && posY < 14)
+				{
+					questions = true;
+					LS_start = false;
+				}
+			}
+			
+			if (OP1 == true)
+			{
+				if (posX > 47 && posX < 62 &&(posY > 42 && posY < 55))//op1
 				{
 					questions = false;
-					cout << "PressedE->deleterest true";
-					OP1 = false;
-					OP2 = false;
-					OP3 = false;
-					deleterest = false;
+					LS_Win = true;
 				}
+				else if (posX > 47 && posX < 62 && (posY > 25 && posY < 37))//op2
+				{
+					questions = false;
+					LS_Lose = true;
+				}
+				else if (posX > 47 && posX < 62 && (posY > 8 && posY < 20))//op3
+				{
+					questions = false;
+					LS_Lose = true;
+				}
+			}
+			if (OP2 == true)
+			{
+				if (posX > 47 && posX < 62 && (posY > 25 && posY <37))//op2
+				{
+					questions = false;
+					LS_Win = true;
+				}
+				else if (posX > 47 && posX < 62 && (posY > 42 && posY < 55))//op1
+				{
+					questions = false;
+					LS_Lose = true;
+				}
+				else if (posX > 47 && posX < 62 && (posY > 8 && posY < 20))//op3
+				{
+					questions = false;
+					LS_Lose = true;
+				}
+			}
+			if (OP3 == true)
+			{
+				if (posX > 47 && posX < 62 && (posY > 8 && posY < 20))//op3
+				{
+					questions = false;
+					LS_Win = true;
+				}
+				else if (posX > 47 && posX < 62 && (posY > 25 && posY < 37))//op2
+				{
+					questions = false;
+					LS_Lose = true;
+				}
+				else if (posX > 47 && posX < 62 && (posY > 42 && posY < 55))//op1
+				{
+					questions = false;
+					LS_Lose = true;
+				}
+			}
+			if (LS_Win == true)
+			{
+				if (posX > 35 && posX < 44 && (posY > 8 && posY < 13))
+				{
+					Manager.Money = Manager.Money + 50;
+					LS_Win = false;
+				}
+			}
+			if (LS_Lose == true)
+			{
+				if (posX > 35 && posX < 44 && (posY > 8 && posY < 13))
+				{
+					Manager.Money = Manager.Money - 100;
+					LS_Lose = false;
+				}
+			}
 			
+		}
+		else if (bLButtonState && !Application::IsMousePressed(0))
+		{
+			bLButtonState = false;
+			std::cout << "LBUTTON UP" << std::endl;
 		}
 		
 	}
@@ -760,9 +880,9 @@ void Splevel1::Render()
 			modelStack.PopMatrix();
 		}
 	}
+
 	//kjcode
 	{
-		
 		modelStack.PushMatrix();
 		modelStack.Translate(50, 0, 45);
 		modelStack.Rotate(90, 0, 1, 0);
@@ -828,24 +948,73 @@ void Splevel1::Render()
 			}
 		}
 		//Lovescam mini game
+		if (LS_start == true)
+		{
+			RenderMeshOnScreen(meshList[GEO_EMPTYBOX], 40, 25, 40, 40);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Minigame: Lovers Scam!", Color(1, 1, 1), 2, 30, 40);
+			RenderTextOnScreen(meshList[GEO_TEXT], "You have a data base of random numbers", Color(1, 1, 1), 2, 21, 35);
+			RenderTextOnScreen(meshList[GEO_TEXT], "you must use your scam skills to pick", Color(1, 1, 1), 2, 21, 32);
+			RenderTextOnScreen(meshList[GEO_TEXT], "the most convincing answer without", Color(1, 1, 1), 2, 21, 29);
+			RenderTextOnScreen(meshList[GEO_TEXT], "raising suspicion.", Color(1, 1, 1), 2, 21, 26);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Reward: $50", Color(1, 1, 1), 2, 21, 21);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Penalty: -$100", Color(1, 1, 1), 2, 21, 18);
+			RenderMeshOnScreen(meshList[GEO_EMPTYBOX], 40, 10, 10, 6);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Start!", Color(1, 1, 1), 2, 37, 9);
+		}
+		if (LS_Win == true)
+		{
+			RenderMeshOnScreen(meshList[GEO_EMPTYBOX], 40, 25, 40, 40);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Congratulations!", Color(1, 1, 1), 2, 32, 40);
+			RenderTextOnScreen(meshList[GEO_TEXT], "You managed to earn your", Color(1, 1, 1), 2, 21, 35);
+			RenderTextOnScreen(meshList[GEO_TEXT], "targets trust and scam their money.", Color(1, 1, 1), 2, 21, 32);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Reward: $50", Color(1, 1, 1), 2, 21, 21);
+			RenderMeshOnScreen(meshList[GEO_EMPTYBOX], 40, 10, 10, 6);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Hooray!", Color(1, 1, 1), 2, 37, 9);
+		}
+		if (LS_Lose == true)
+		{
+			RenderMeshOnScreen(meshList[GEO_EMPTYBOX], 40, 25, 40, 40);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Oh No!", Color(1, 1, 1), 2, 37, 40);
+			RenderTextOnScreen(meshList[GEO_TEXT], "You didn't manage to convince", Color(1, 1, 1), 2, 21, 35);
+			RenderTextOnScreen(meshList[GEO_TEXT], "the target they've reported you and", Color(1, 1, 1), 2, 21, 32);
+			RenderTextOnScreen(meshList[GEO_TEXT], "have to pay a fine.", Color(1, 1, 1), 2, 21, 29);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Penalty: -$100", Color(1, 1, 1), 2, 21, 18);
+			RenderMeshOnScreen(meshList[GEO_EMPTYBOX], 40, 10, 10, 6);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Pay up", Color(1, 1, 1), 2, 37, 9);
+		}
 		if (questions == true)
 		{
 			if (OP1 == true && OP1check == false)
 			{
 				RenderMeshOnScreen(meshList[GEO_Screen], 40, 30, 16, 54, true);
+<<<<<<< Updated upstream
 				RenderMeshOnScreen(meshList[GEO_op1], 40, 30, 16, 54, true);
+=======
+				RenderMeshOnScreen(meshList[GEO_op1], 55, 30, 16, 54, true);
+				std::cout << "OP1";
+>>>>>>> Stashed changes
 				
 			}
 			else if (OP2 == true && OP2check == false)
 			{
 				RenderMeshOnScreen(meshList[GEO_Screen], 40, 30, 16, 54, true);
+<<<<<<< Updated upstream
 				RenderMeshOnScreen(meshList[GEO_op2], 40, 30, 16, 54, true);
+=======
+				RenderMeshOnScreen(meshList[GEO_op2], 55, 30, 16, 54, true);
+				std::cout << "OP2";
+>>>>>>> Stashed changes
 				
 			}
 			else if (OP3 == true && OP3check == false)
 			{
 				RenderMeshOnScreen(meshList[GEO_Screen], 40, 30, 16, 54, true);
+<<<<<<< Updated upstream
 				RenderMeshOnScreen(meshList[GEO_op3], 40, 30, 16, 54, true);
+=======
+				RenderMeshOnScreen(meshList[GEO_op3], 55, 30, 16, 54, true);
+				std::cout << "OP3";
+>>>>>>> Stashed changes
 				
 			}
 			else
