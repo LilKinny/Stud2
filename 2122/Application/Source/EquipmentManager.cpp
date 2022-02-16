@@ -69,20 +69,23 @@ void EquipmentManager::CalculateTotalIncome(void)
 {
 	int TotalIncome = 0;
 	int TempIncome;
-	for (int i = 0; i < PrestigeLvl * 6; ++i)
+	for (int i = 0; i < (PrestigeLvl + 1) * 6; ++i)
 	{
-		TempIncome = 0;
-		EquipArray[i]->CalculateIncomePerSecond();
-		TempIncome += EquipArray[i]->IncomePerSecond;
-		if (MoneyPlantUpgrade == 1)
+		if (EquipArray[i] != nullptr)
 		{
-			TempIncome += 2;
+			TempIncome = 0;
+			EquipArray[i]->CalculateIncomePerSecond();
+			TempIncome += EquipArray[i]->IncomePerSecond;
+			if (MoneyPlantUpgrade == 1)
+			{
+				TempIncome += 2;
+			}
+			if (LuckyCatUpgrade == 1)
+			{
+				TempIncome *= 2;
+			}
+			TotalIncome += TempIncome;
 		}
-		if (LuckyCatUpgrade == 1)
-		{
-			TempIncome *= 2;
-		}
-		TotalIncome+=TempIncome;
 	}
 	if (MinigameBuffs > 0)
 	{
@@ -147,16 +150,15 @@ std::string EquipmentManager::ConvertMoneyToSuitableAmounts(void) //Return Edite
 int EquipmentManager::UnlockPhone(bool unlock)
 {
 	//Checks if got space for Phone
-	for(int i = 0; i < PrestigeLvl*6;++i)
+	for(int i = 0; i < (PrestigeLvl+1)*6;++i)
 	{
 		//Check if Equip Array got empty "Work station"
 		if (EquipArray[i] == nullptr && unlock == true)
 		{
 			EquipArray[i] = new Equipment;
-			i = PrestigeLvl * 6;
 		}
 		//if Phonelvl is 0 which means not unlocked
-		if(EquipArray[i]->PhoneLvl == 0)
+		if(EquipArray[i] == nullptr || EquipArray[i]->PhoneLvl == 0)
 		{
 			//If got money show can unlock
 			if (Money >= 50)
@@ -170,7 +172,7 @@ int EquipmentManager::UnlockPhone(bool unlock)
 				CalculateTotalIncome();
 				return 1;
 			}
-			i = PrestigeLvl * 6;
+			i = (PrestigeLvl+1) * 6;
 		}
 	}
 	return 0;
@@ -179,16 +181,15 @@ int EquipmentManager::UnlockPhone(bool unlock)
 int EquipmentManager::UnlockComputer(bool unlock)
 {
 	//Checks if got space for Computer
-	for (int i = 0; i < PrestigeLvl * 6; ++i)
+	for (int i = 0; i < (PrestigeLvl + 1) * 6; ++i)
 	{
 		//Check if Equip Array got empty "Work station"
 		if (EquipArray[i] == nullptr && unlock == true)
 		{
 			EquipArray[i] = new Equipment;
-			i = PrestigeLvl * 6;
 		}
 		//if Computerlvl is 0 which means not unlocked
-		if (EquipArray[i]->ComputerLvl == 0)
+		if (EquipArray[i] == nullptr || EquipArray[i]->ComputerLvl == 0)
 		{
 			//If got money show can unlock
 			if (Money >= 50)
@@ -202,7 +203,7 @@ int EquipmentManager::UnlockComputer(bool unlock)
 				CalculateTotalIncome();
 				return 1;
 			}
-			i = PrestigeLvl * 6;
+			i = (PrestigeLvl + 1) * 6;
 		}
 	} 
 	return 0;
