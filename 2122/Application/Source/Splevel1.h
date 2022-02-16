@@ -63,6 +63,7 @@ class Splevel1 : public Scene
 		GEO_UPGRADETEXT,
 		GEO_Table,
 		GEO_Laptop,
+		GEO_Phone1,
 		GEO_Lift,
 		GEO_Tree,
 		GEO_Puzzlebg,

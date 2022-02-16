@@ -246,6 +246,8 @@ void Splevel1::Init()
 	meshList[GEO_op4]->textureID = LoadTGA("Image//TextOP4.tga");*/
 
 	meshList[GEO_Tree] = MeshBuilder::GenerateOBJMTL("Tree", "OBJ//TreeTall.obj", "OBJ//TreeTall.mtl");
+	meshList[GEO_Laptop] = MeshBuilder::GenerateOBJMTL("Laptop", "OBJ//Laptop.obj", "OBJ//Laptop.mtl");
+	meshList[GEO_Phone1] = MeshBuilder::GenerateOBJMTL("Phone1", "OBJ//Phone1.obj", "OBJ//Phone1.mtl");
 
 	meshList[GEO_Lift] = MeshBuilder::GenerateOBJ("modelBUIDLING", "OBJ//Elevator.obj");
 	meshList[GEO_Lift]->textureID = LoadTGA("Image//Elevator.tga");
@@ -721,6 +723,24 @@ void Splevel1::Render()
 			modelStack.Translate(-1.5, 2.05, 0);
 			modelStack.Rotate(90, 0, 0, 1);
 			modelStack.Scale(0.5, 0.25, 0.5);
+			{
+				modelStack.PushMatrix();
+				modelStack.Translate(0, -6, -1);
+				modelStack.Rotate(90, 0, 1, 0);
+				modelStack.Rotate(90, 1, 0, 0);
+				modelStack.Scale(0.6, 0.5, 1.5);
+				{
+					modelStack.PushMatrix();
+					modelStack.Translate(-1, 0, 3.5);
+					/*modelStack.Rotate(90, 0, 1, 0);
+					modelStack.Rotate(90, 1, 0, 0);*/
+					modelStack.Scale(1, 3, 1);
+					RenderMesh(meshList[GEO_Phone1], true);
+					modelStack.PopMatrix();
+				}
+				RenderMesh(meshList[GEO_Laptop], true);
+				modelStack.PopMatrix();
+			}
 			RenderMesh(meshList[GEO_PAPER], true);
 			modelStack.PopMatrix();
 		}
