@@ -144,7 +144,7 @@ std::string EquipmentManager::ConvertMoneyToSuitableAmounts(void) //Return Edite
 	}
 	if (Money >= 1000000)
 	{
-		Temporary += 'mil';
+		Temporary += 'm';
 	}
 	else if (Money >= 1000)
 	{
