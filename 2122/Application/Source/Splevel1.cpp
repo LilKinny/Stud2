@@ -997,99 +997,100 @@ void Splevel1::Render()
 			RenderTextOnScreen(meshList[GEO_TEXT], "Store Page: " + std::to_string(PageNum), Color(1, 1, 0), 2, 30, 43);
 			modelStack.PopMatrix();
 
-
-			//Equipment
-			//Gray Button
+			//Equipment Store
 			{
-				if (Manager.UnlockComputer(false) == 0)
+				//Gray Button
 				{
-					//GrayButton Left Top
+					if (Manager.UnlockComputer(false) == 0)
+					{
+						//GrayButton Left Top
+						modelStack.PushMatrix();
+						RenderMeshOnScreen(meshList[GEO_GRAYBUTTON], 24, 29, 24, 3, true);
+						modelStack.PopMatrix();
+					}
+					if (Manager.UnlockPhone(false) == 0)
+					{
+						//GrayButton Mid Top
+						modelStack.PushMatrix();
+						RenderMeshOnScreen(meshList[GEO_GRAYBUTTON], 40, 29, 24, 3, true);
+						modelStack.PopMatrix();
+					}
+					if (Manager.UnlockLuckyCat(false) == 0)
+					{
+						//GrayButton Right Top
+						modelStack.PushMatrix();
+						RenderMeshOnScreen(meshList[GEO_GRAYBUTTON], 56, 29, 24, 3, true);
+						modelStack.PopMatrix();
+					}
+					if (Manager.UnlockMoneyPlant(false) == 0)
+					{
+						//GrayButton Left Bot
+						modelStack.PushMatrix();
+						RenderMeshOnScreen(meshList[GEO_GRAYBUTTON], 24, 16, 24, 3, true);
+						modelStack.PopMatrix();
+					}
+				}
+				//Green Button
+				{
+					if (Manager.UnlockComputer(false) == 1)
+					{
+						//GreenButton Left Top
+						modelStack.PushMatrix();
+						RenderMeshOnScreen(meshList[GEO_GREENBUTTON], 24, 29, 24, 3, true);
+						modelStack.PopMatrix();
+					}
+					if (Manager.UnlockPhone(false) == 1)
+					{
+						//GreenButton Mid Top
+						modelStack.PushMatrix();
+						RenderMeshOnScreen(meshList[GEO_GREENBUTTON], 40, 29, 24, 3, true);
+						modelStack.PopMatrix();
+					}
+					if (Manager.UnlockLuckyCat(false) == 1)
+					{
+						//GreenButton Right Top
+						modelStack.PushMatrix();
+						RenderMeshOnScreen(meshList[GEO_GREENBUTTON], 56, 29, 24, 3, true);
+						modelStack.PopMatrix();
+					}
+					if (Manager.UnlockMoneyPlant(false) == 1)
+					{
+						//GreenButton Left Bot
+						modelStack.PushMatrix();
+						RenderMeshOnScreen(meshList[GEO_GREENBUTTON], 24, 16, 24, 3, true);
+						modelStack.PopMatrix();
+					}
+				}
+				//Unlock
+				{
+					//Text
 					modelStack.PushMatrix();
-					RenderMeshOnScreen(meshList[GEO_GRAYBUTTON], 24, 29, 24, 3, true);
+					RenderTextOnScreen(meshList[GEO_TEXT], "Unlock", Color(1, 0, 0), 2, 21, 28);
+					RenderTextOnScreen(meshList[GEO_TEXT], "Unlock", Color(1, 0, 0), 2, 37, 28);
+					RenderTextOnScreen(meshList[GEO_TEXT], "Unlock", Color(1, 0, 0), 2, 53, 28);
+					RenderTextOnScreen(meshList[GEO_TEXT], "Unlock", Color(1, 0, 0), 2, 21, 15);
 					modelStack.PopMatrix();
 				}
-				if (Manager.UnlockPhone(false) == 0)
+				//Description
 				{
-					//GrayButton Mid Top
 					modelStack.PushMatrix();
-					RenderMeshOnScreen(meshList[GEO_GRAYBUTTON], 40, 29, 24, 3, true);
-					modelStack.PopMatrix();
-				}
-				if (Manager.UnlockLuckyCat(false) == 0)
-				{
-					//GrayButton Right Top
-					modelStack.PushMatrix();
-					RenderMeshOnScreen(meshList[GEO_GRAYBUTTON], 56, 29, 24, 3, true);
-					modelStack.PopMatrix();
-				}
-				if (Manager.UnlockMoneyPlant(false) == 0)
-				{
-					//GrayButton Left Bot
-					modelStack.PushMatrix();
-					RenderMeshOnScreen(meshList[GEO_GRAYBUTTON], 24, 16, 24, 3, true);
-					modelStack.PopMatrix();
-				}
-			}
-			//Green Button
-			{
-				if (Manager.UnlockComputer(false) == 1)
-				{
-					//GreenButton Left Top
-					modelStack.PushMatrix();
-					RenderMeshOnScreen(meshList[GEO_GREENBUTTON], 24, 29, 24, 3, true);
-					modelStack.PopMatrix();
-				}
-				if (Manager.UnlockPhone(false) == 1)
-				{
-					//GreenButton Mid Top
-					modelStack.PushMatrix();
-					RenderMeshOnScreen(meshList[GEO_GREENBUTTON], 40, 29, 24, 3, true);
-					modelStack.PopMatrix();
-				}
-				if (Manager.UnlockLuckyCat(false) == 1)
-				{
-					//GreenButton Right Top
-					modelStack.PushMatrix();
-					RenderMeshOnScreen(meshList[GEO_GREENBUTTON], 56, 29, 24, 3, true);
-					modelStack.PopMatrix();
-				}
-				if (Manager.UnlockMoneyPlant(false) == 1)
-				{
-					//GreenButton Left Bot
-					modelStack.PushMatrix();
-					RenderMeshOnScreen(meshList[GEO_GREENBUTTON], 24, 16, 24, 3, true);
-					modelStack.PopMatrix();
-				}
-			}
-			//Unlock
-			{
-				//Text
-				modelStack.PushMatrix();
-				RenderTextOnScreen(meshList[GEO_TEXT], "Unlock", Color(1, 0, 0), 2, 21, 28);
-				RenderTextOnScreen(meshList[GEO_TEXT], "Unlock", Color(1, 0, 0), 2, 37, 28);
-				RenderTextOnScreen(meshList[GEO_TEXT], "Unlock", Color(1, 0, 0), 2, 53, 28);
-				RenderTextOnScreen(meshList[GEO_TEXT], "Unlock", Color(1, 0, 0), 2, 21, 15);
-				modelStack.PopMatrix();
-			}
-			//Description
-			{
-				modelStack.PushMatrix();
-				RenderTextOnScreen(meshList[GEO_TEXT], "Computer", Color(0.5, 0, 0.5), 1, 18, 36);
-				RenderTextOnScreen(meshList[GEO_TEXT], "Income: $1/s", Color(0.5, 0, 0.5), 1, 18, 34);
-				RenderTextOnScreen(meshList[GEO_TEXT], "Price: $50", Color(0.5, 0, 0.5), 1, 18, 32);
+					RenderTextOnScreen(meshList[GEO_TEXT], "Computer", Color(0.5, 0, 0.5), 1, 18, 36);
+					RenderTextOnScreen(meshList[GEO_TEXT], "Income: $1/s", Color(0.5, 0, 0.5), 1, 18, 34);
+					RenderTextOnScreen(meshList[GEO_TEXT], "Price: $50", Color(0.5, 0, 0.5), 1, 18, 32);
 
-				RenderTextOnScreen(meshList[GEO_TEXT], "Phone", Color(0.5, 0, 0.5), 1, 34, 36);
-				RenderTextOnScreen(meshList[GEO_TEXT], "Income: $1/s", Color(0.5, 0, 0.5), 1, 34, 34);
-				RenderTextOnScreen(meshList[GEO_TEXT], "Price: $50", Color(0.5, 0, 0.5), 1, 34, 32);
+					RenderTextOnScreen(meshList[GEO_TEXT], "Phone", Color(0.5, 0, 0.5), 1, 34, 36);
+					RenderTextOnScreen(meshList[GEO_TEXT], "Income: $1/s", Color(0.5, 0, 0.5), 1, 34, 34);
+					RenderTextOnScreen(meshList[GEO_TEXT], "Price: $50", Color(0.5, 0, 0.5), 1, 34, 32);
 
-				RenderTextOnScreen(meshList[GEO_TEXT], "Lucky Cat", Color(0.5, 0, 0.5), 1, 50, 36);
-				RenderTextOnScreen(meshList[GEO_TEXT], "Each Equipment Income x 2 ", Color(0.5, 0, 0.5), 1, 50, 34);
-				RenderTextOnScreen(meshList[GEO_TEXT], "Price: $10000, Prestige: 2", Color(0.5, 0, 0.5), 1, 50, 32);
+					RenderTextOnScreen(meshList[GEO_TEXT], "Lucky Cat", Color(0.5, 0, 0.5), 1, 50, 36);
+					RenderTextOnScreen(meshList[GEO_TEXT], "Each Equipment Income x 2 ", Color(0.5, 0, 0.5), 1, 50, 34);
+					RenderTextOnScreen(meshList[GEO_TEXT], "Price: $10000, Prestige: 2", Color(0.5, 0, 0.5), 1, 50, 32);
 
-				RenderTextOnScreen(meshList[GEO_TEXT], "Money Plant", Color(0.5, 0, 0.5), 1, 18, 23);
-				RenderTextOnScreen(meshList[GEO_TEXT], "+$2/s for each equipment", Color(0.5, 0, 0.5), 1, 18, 21);
-				RenderTextOnScreen(meshList[GEO_TEXT], "Price: $5000, Prestige: 1", Color(0.5, 0, 0.5), 1, 18, 19);
-				modelStack.PopMatrix();
+					RenderTextOnScreen(meshList[GEO_TEXT], "Money Plant", Color(0.5, 0, 0.5), 1, 18, 23);
+					RenderTextOnScreen(meshList[GEO_TEXT], "+$2/s for each equipment", Color(0.5, 0, 0.5), 1, 18, 21);
+					RenderTextOnScreen(meshList[GEO_TEXT], "Price: $5000, Prestige: 1", Color(0.5, 0, 0.5), 1, 18, 19);
+					modelStack.PopMatrix();
+				}
 			}
 		}
 		else if (RenderUI == 2)
@@ -1103,7 +1104,89 @@ void Splevel1::Render()
 			RenderTextOnScreen(meshList[GEO_TEXT], "Owned Page: " + std::to_string(PageNum), Color(1, 1, 0), 2, 30, 43);
 			modelStack.PopMatrix();
 
-			//Equipment
+			//Equipment Owned
+			{
+				//Gray Button
+				{
+					//GrayButton Left Top
+					modelStack.PushMatrix();
+					RenderMeshOnScreen(meshList[GEO_GRAYBUTTON], 24, 29, 24, 3, true);
+					modelStack.PopMatrix();
+					//GrayButton Mid Top
+					modelStack.PushMatrix();
+					RenderMeshOnScreen(meshList[GEO_GRAYBUTTON], 40, 29, 24, 3, true);
+					modelStack.PopMatrix();
+					//GrayButton Right Top
+					modelStack.PushMatrix();
+					RenderMeshOnScreen(meshList[GEO_GRAYBUTTON], 56, 29, 24, 3, true);
+					modelStack.PopMatrix();
+					//GrayButton Left Bot
+					modelStack.PushMatrix();
+					RenderMeshOnScreen(meshList[GEO_GRAYBUTTON], 24, 16, 24, 3, true);
+					modelStack.PopMatrix();
+					//GrayButton Mid Top
+					modelStack.PushMatrix();
+					RenderMeshOnScreen(meshList[GEO_GRAYBUTTON], 40, 16, 24, 3, true);
+					modelStack.PopMatrix();
+					//GrayButton Right Top
+					modelStack.PushMatrix();
+					RenderMeshOnScreen(meshList[GEO_GRAYBUTTON], 56, 16, 24, 3, true);
+					modelStack.PopMatrix();
+				}
+
+				//Green Button
+				{
+					//GreenButton Left Top
+					modelStack.PushMatrix();
+					RenderMeshOnScreen(meshList[GEO_GREENBUTTON], 24, 29, 24, 3, true);
+					modelStack.PopMatrix();
+					//GreenButton Mid Top
+					modelStack.PushMatrix();
+					RenderMeshOnScreen(meshList[GEO_GREENBUTTON], 40, 29, 24, 3, true);
+					modelStack.PopMatrix();
+					//GreenButton Right Top
+					modelStack.PushMatrix();
+					RenderMeshOnScreen(meshList[GEO_GREENBUTTON], 56, 29, 24, 3, true);
+					modelStack.PopMatrix();
+					//GreenButton Left Bot
+					modelStack.PushMatrix();
+					RenderMeshOnScreen(meshList[GEO_GREENBUTTON], 24, 16, 24, 3, true);
+					modelStack.PopMatrix();
+					//GreenButton Mid Top
+					modelStack.PushMatrix();
+					RenderMeshOnScreen(meshList[GEO_GREENBUTTON], 40, 16, 24, 3, true);
+					modelStack.PopMatrix();
+					//GreenButton Right Top
+					modelStack.PushMatrix();
+					RenderMeshOnScreen(meshList[GEO_GREENBUTTON], 56, 16, 24, 3, true);
+					modelStack.PopMatrix();
+				}
+			}
+			//Switch for Phone and Computer
+			{
+				//GrayButton Top
+				modelStack.PushMatrix();
+				RenderMeshOnScreen(meshList[GEO_GRAYBUTTON], 22, 44, 24, 3, true);
+				modelStack.PopMatrix();
+				//GreenButton Bot
+				modelStack.PushMatrix();
+				RenderMeshOnScreen(meshList[GEO_GREENBUTTON], 22, 41, 24, 3, true);
+				modelStack.PopMatrix();
+			}
+		}
+		else if (RenderUI == 3)
+		{
+		//BotUI
+		modelStack.PushMatrix();
+		RenderMeshOnScreen(meshList[GEO_BotUI], 40, 30, 16, 54, true);
+		modelStack.PopMatrix();
+		//Text
+		modelStack.PushMatrix();
+		RenderTextOnScreen(meshList[GEO_TEXT], "Owned Page: " + std::to_string(PageNum), Color(1, 1, 0), 2, 30, 43);
+		modelStack.PopMatrix();
+
+		//Equipment Owned
+		{
 			//Gray Button
 			{
 				//GrayButton Left Top
@@ -1159,6 +1242,29 @@ void Splevel1::Render()
 				RenderMeshOnScreen(meshList[GEO_GREENBUTTON], 56, 16, 24, 3, true);
 				modelStack.PopMatrix();
 			}
+		}
+			//Switch for Phone and Computer
+			{
+				//GrayButton Bot
+				modelStack.PushMatrix();
+				RenderMeshOnScreen(meshList[GEO_GRAYBUTTON], 22, 41, 24, 3, true);
+				modelStack.PopMatrix();
+				//GreenButton Top
+				modelStack.PushMatrix();
+				RenderMeshOnScreen(meshList[GEO_GREENBUTTON], 22, 44, 24, 3, true);
+				modelStack.PopMatrix();
+			}
+		}
+		if (RenderUI == 2 || RenderUI == 3)
+		{
+			//Computer Text
+			modelStack.PushMatrix();
+			RenderTextOnScreen(meshList[GEO_TEXT], "Computer", Color(1, 0, 0), 1.5, 19, 40);
+			modelStack.PopMatrix();
+			//Phone Text
+			modelStack.PushMatrix();
+			RenderTextOnScreen(meshList[GEO_TEXT], "Phone", Color(1, 0, 0), 1.5, 19, 43);
+			modelStack.PopMatrix();
 		}
 	}
 
@@ -1389,10 +1495,17 @@ void Splevel1::UpdateMainControls()
 		}
 		if ((posY <= 59 && posY >= 53.5) && (posX >= 15.5 && posX <= 26.5)) //Click Owned
 		{
-			PageNum = 1;
 			RenderUI = 2;
 		}
-		if (RenderUI == 2)
+		if ((posY >= 46 && posY <= 49) && (posX >= 18.5 && posX <= 25.5)) //Top Computer clicked
+		{
+			RenderUI = 2;
+		}
+		if ((posY >= 43 && posY <= 46) && (posX >= 18.5 && posX <= 25.5)) //Bot Phone Clicked
+		{
+			RenderUI = 3;
+		}
+		if (RenderUI == 2 || RenderUI == 3)
 		{
 			if ((posY >= 46 && posY <= 48.5) && (posX >= 27.5 && posX <= 29)) //Left Button
 			{
