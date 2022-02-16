@@ -69,7 +69,6 @@ class Splevel1 : public Scene
 		GEO_Puzzlebg,
 		GEO_PuzzlePlayer,
 		GEO_PuzzlePaper,
-		
 		GEO_Screen,
 		GEO_op1,
 		GEO_op2,
@@ -127,6 +126,7 @@ private:
 	float rotateAngleF;
 	float rotateAngleSF;
 	bool bEnableLight;
+	bool questions;
 
 	void PuzzleRender();
 	void UpdatePuzzleControls();

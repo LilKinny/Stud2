@@ -252,17 +252,6 @@ void Scene13::Update(double dt)
 		float posX = (x / w) * 80; //convert (0,800) to (0,80)
 		float posY = 60 - (y / h) *60; //convert (600,0) to (0,60)
 		std::cout << "posX:" << posX << " , posY:" << posY << std::endl;
-		if (posX > 30 && posX < 50 && posY > 24 && posY < 40)
-		{
-			std::cout << "Hit! transition start" << std::endl;
-			transition = true;
-			
-			//trigger user action or function
-		}
-		else
-		{
-			std::cout << "Miss!" << std::endl;
-		}
 	
 	}
 	else if (bLButtonState && !Application::IsMousePressed(0))

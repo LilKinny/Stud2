@@ -283,10 +283,11 @@ string timerstring, beetsinstringform;
 int totalbeets = 0;
 
 int mg1_start;
-bool questions, OP1, OP2, OP3,OP1check, OP2check,OP3check,deleterest;
+bool OP1, OP2, OP3,OP1check, OP2check,OP3check,deleterest;
 
 void Splevel1::Update(double dt)
 {
+	Manager.UpdateMoney(dt);
 	float cposx = camera.position.x;
 	float cposz = camera.position.z;
 	//cout << cposx;
@@ -494,7 +495,7 @@ void Splevel1::Update(double dt)
 				RenderTextOnScreen(meshList[GEO_TEXT], "Press 'E' to start phone", Color(0, 1, 0), 4, 10, 30);
 				if (Application::IsKeyPressed('E'))
 				{
-					
+					questions = true;
 					if (deleterest == false)
 					{
 						int rnd = rand() % 2 + 1;
@@ -518,6 +519,7 @@ void Splevel1::Update(double dt)
 				}
 				else if (deleterest == true)
 				{
+					questions = false;
 					cout << "PressedE->deleterest true";
 					OP1 = false;
 					OP2 = false;
@@ -768,29 +770,35 @@ void Splevel1::Render()
 				RenderTextOnScreen(meshList[GEO_TEXT], "Reach prestiege for lift access", Color(0, 1, 0), 4, 10, 30);
 			}
 		}
-
-			if (OP1 == true &&OP1check == false)
+		//Lovescam mini game
+		if (questions == true)
+		{
+			if (OP1 == true && OP1check == false)
 			{
 				RenderMeshOnScreen(meshList[GEO_Screen], 40, 30, 16, 54, true);
 				RenderMeshOnScreen(meshList[GEO_op1], 40, 30, 16, 54, true);
 				std::cout << "OP1";
+				
 			}
 			else if (OP2 == true && OP2check == false)
 			{
 				RenderMeshOnScreen(meshList[GEO_Screen], 40, 30, 16, 54, true);
 				RenderMeshOnScreen(meshList[GEO_op2], 40, 30, 16, 54, true);
 				std::cout << "OP2";
+				
 			}
 			else if (OP3 == true && OP3check == false)
 			{
 				RenderMeshOnScreen(meshList[GEO_Screen], 40, 30, 16, 54, true);
 				RenderMeshOnScreen(meshList[GEO_op3], 40, 30, 16, 54, true);
 				std::cout << "OP3";
+				
 			}
 			else
 			{
 
 			}
+		}
 		
 	}
 
@@ -926,6 +934,112 @@ void Splevel1::Render()
 			RenderTextOnScreen(meshList[GEO_TEXT], "Store Page: " + std::to_string(PageNum), Color(1, 1, 0), 2, 30, 43);
 			modelStack.PopMatrix();
 
+
+			//Equipment
+			//Gray Button
+			{
+				if (Manager.UnlockComputer(false) == 0)
+				{
+					//GrayButton Left Top
+					modelStack.PushMatrix();
+					RenderMeshOnScreen(meshList[GEO_GRAYBUTTON], 24, 29, 24, 3, true);
+					modelStack.PopMatrix();
+				}
+				if (Manager.UnlockPhone(false) == 0)
+				{
+					//GrayButton Mid Top
+					modelStack.PushMatrix();
+					RenderMeshOnScreen(meshList[GEO_GRAYBUTTON], 40, 29, 24, 3, true);
+					modelStack.PopMatrix();
+				}
+				if (Manager.UnlockLuckyCat(false) == 0)
+				{
+					//GrayButton Right Top
+					modelStack.PushMatrix();
+					RenderMeshOnScreen(meshList[GEO_GRAYBUTTON], 56, 29, 24, 3, true);
+					modelStack.PopMatrix();
+				}
+				if (Manager.UnlockMoneyPlant(false) == 0)
+				{
+					//GrayButton Left Bot
+					modelStack.PushMatrix();
+					RenderMeshOnScreen(meshList[GEO_GRAYBUTTON], 24, 16, 24, 3, true);
+					modelStack.PopMatrix();
+				}
+			}
+			//Green Button
+			{
+				if (Manager.UnlockComputer(false) == 1)
+				{
+					//GreenButton Left Top
+					modelStack.PushMatrix();
+					RenderMeshOnScreen(meshList[GEO_GREENBUTTON], 24, 29, 24, 3, true);
+					modelStack.PopMatrix();
+				}
+				if (Manager.UnlockPhone(false) == 1)
+				{
+					//GreenButton Mid Top
+					modelStack.PushMatrix();
+					RenderMeshOnScreen(meshList[GEO_GREENBUTTON], 40, 29, 24, 3, true);
+					modelStack.PopMatrix();
+				}
+				if (Manager.UnlockLuckyCat(false) == 1)
+				{
+					//GreenButton Right Top
+					modelStack.PushMatrix();
+					RenderMeshOnScreen(meshList[GEO_GREENBUTTON], 56, 29, 24, 3, true);
+					modelStack.PopMatrix();
+				}
+				if (Manager.UnlockMoneyPlant(false) == 1)
+				{
+					//GreenButton Left Bot
+					modelStack.PushMatrix();
+					RenderMeshOnScreen(meshList[GEO_GREENBUTTON], 24, 16, 24, 3, true);
+					modelStack.PopMatrix();
+				}
+			}
+			//Unlock
+			{
+				//Text
+				modelStack.PushMatrix();
+				RenderTextOnScreen(meshList[GEO_TEXT], "Unlock", Color(1, 0, 0), 2, 21, 28);
+				RenderTextOnScreen(meshList[GEO_TEXT], "Unlock", Color(1, 0, 0), 2, 37, 28);
+				RenderTextOnScreen(meshList[GEO_TEXT], "Unlock", Color(1, 0, 0), 2, 53, 28);
+				RenderTextOnScreen(meshList[GEO_TEXT], "Unlock", Color(1, 0, 0), 2, 21, 15);
+				modelStack.PopMatrix();
+			}
+			//Description
+			{
+				modelStack.PushMatrix();
+				RenderTextOnScreen(meshList[GEO_TEXT], "Computer", Color(0.5, 0, 0.5), 1, 18, 36);
+				RenderTextOnScreen(meshList[GEO_TEXT], "Income: $1/s", Color(0.5, 0, 0.5), 1, 18, 34);
+				RenderTextOnScreen(meshList[GEO_TEXT], "Price: $50", Color(0.5, 0, 0.5), 1, 18, 32);
+
+				RenderTextOnScreen(meshList[GEO_TEXT], "Phone", Color(0.5, 0, 0.5), 1, 34, 36);
+				RenderTextOnScreen(meshList[GEO_TEXT], "Income: $1/s", Color(0.5, 0, 0.5), 1, 34, 34);
+				RenderTextOnScreen(meshList[GEO_TEXT], "Price: $50", Color(0.5, 0, 0.5), 1, 34, 32);
+
+				RenderTextOnScreen(meshList[GEO_TEXT], "Lucky Cat", Color(0.5, 0, 0.5), 1, 50, 36);
+				RenderTextOnScreen(meshList[GEO_TEXT], "Each Equipment Income x 2 ", Color(0.5, 0, 0.5), 1, 50, 34);
+				RenderTextOnScreen(meshList[GEO_TEXT], "Price: $10000, Prestige: 2", Color(0.5, 0, 0.5), 1, 50, 32);
+
+				RenderTextOnScreen(meshList[GEO_TEXT], "Money Plant", Color(0.5, 0, 0.5), 1, 18, 23);
+				RenderTextOnScreen(meshList[GEO_TEXT], "+$2/s for each equipment", Color(0.5, 0, 0.5), 1, 18, 21);
+				RenderTextOnScreen(meshList[GEO_TEXT], "Price: $5000, Prestige: 1", Color(0.5, 0, 0.5), 1, 18, 19);
+				modelStack.PopMatrix();
+			}
+		}
+		else if (RenderUI == 2)
+		{
+			//BotUI
+			modelStack.PushMatrix();
+			RenderMeshOnScreen(meshList[GEO_BotUI], 40, 30, 16, 54, true);
+			modelStack.PopMatrix();
+			//Text
+			modelStack.PushMatrix();
+			RenderTextOnScreen(meshList[GEO_TEXT], "Owned Page: " + std::to_string(PageNum), Color(1, 1, 0), 2, 30, 43);
+			modelStack.PopMatrix();
+
 			//Equipment
 			//Gray Button
 			{
@@ -957,44 +1071,31 @@ void Splevel1::Render()
 
 			//Green Button
 			{
-				//GrayButton Left Top
+				//GreenButton Left Top
 				modelStack.PushMatrix();
 				RenderMeshOnScreen(meshList[GEO_GREENBUTTON], 24, 29, 24, 3, true);
 				modelStack.PopMatrix();
-				//GrayButton Mid Top
+				//GreenButton Mid Top
 				modelStack.PushMatrix();
 				RenderMeshOnScreen(meshList[GEO_GREENBUTTON], 40, 29, 24, 3, true);
 				modelStack.PopMatrix();
-				//GrayButton Right Top
+				//GreenButton Right Top
 				modelStack.PushMatrix();
 				RenderMeshOnScreen(meshList[GEO_GREENBUTTON], 56, 29, 24, 3, true);
 				modelStack.PopMatrix();
-				//GrayButton Left Bot
+				//GreenButton Left Bot
 				modelStack.PushMatrix();
 				RenderMeshOnScreen(meshList[GEO_GREENBUTTON], 24, 16, 24, 3, true);
 				modelStack.PopMatrix();
-				//GrayButton Mid Top
+				//GreenButton Mid Top
 				modelStack.PushMatrix();
 				RenderMeshOnScreen(meshList[GEO_GREENBUTTON], 40, 16, 24, 3, true);
 				modelStack.PopMatrix();
-				//GrayButton Right Top
+				//GreenButton Right Top
 				modelStack.PushMatrix();
 				RenderMeshOnScreen(meshList[GEO_GREENBUTTON], 56, 16, 24, 3, true);
 				modelStack.PopMatrix();
 			}
-		}
-		else if (RenderUI == 2)
-		{
-			//BotUI
-			modelStack.PushMatrix();
-			RenderMeshOnScreen(meshList[GEO_BotUI], 40, 30, 16, 54, true);
-			modelStack.PopMatrix();
-
-
-			//Text
-			modelStack.PushMatrix();
-			RenderTextOnScreen(meshList[GEO_TEXT], "Owned Page: " + std::to_string(PageNum), Color(1, 1, 0), 2, 30, 43);
-			modelStack.PopMatrix();
 		}
 	}
 
@@ -1257,14 +1358,50 @@ void Splevel1::UpdateMainControls()
 		{
 			RenderPrestige = 0;
 		}
-		if (RenderPrestige == 1)
+		if (RenderPrestige == 1)  //Upgrade Prestige
 		{
 			if ((posY >= 30 && posY <= 33) && (posX >= 70 && posX <= 78))
 			{
 				Manager.UpgradePrestige(true);
 			}
 		}
-		//
+		if ((posY >= 31.5 && posY <= 34) && (posX >= 20.5 && posX <= 27.5)) //Top Left Button
+		{
+			if (RenderUI == 1)
+			{
+				Manager.UnlockComputer(true);
+			}
+		}
+		if ((posY >= 31.5 && posY <= 34) && (posX >= 36.5 && posX <= 43.5)) //Top Mid Button
+		{
+			if (RenderUI == 1)
+			{
+				Manager.UnlockPhone(true);
+			}
+		}
+		if ((posY >= 31.5 && posY <= 34) && (posX >= 52.5 && posX <= 59.5)) //Top Right Button
+		{
+			if (RenderUI == 1)
+			{
+				Manager.UnlockLuckyCat(true);
+			}
+		}
+		if ((posY >= 18.5 && posY <= 21.5) && (posX >= 20.5 && posX <= 27.5)) //Bot Left Button
+		{
+			if (RenderUI == 1)
+			{
+				Manager.UnlockMoneyPlant(true);
+			}
+		}
+		if ((posY >= 18.5 && posY <= 21.5) && (posX >= 36.5 && posX <= 43.5)) //Bot Mid Button
+		{
+
+		}
+		if ((posY >= 18.5 && posY <= 21.5) && (posX >= 52.5 && posX <= 59.5)) //Bot Right Button
+		{
+
+		}
+
 		if (posX > 35 && posX < 45 && posY > 8 && posY < 14)
 		{
 			if (setuppolice == true)
