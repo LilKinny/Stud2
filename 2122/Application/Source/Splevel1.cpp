@@ -229,16 +229,16 @@ void Splevel1::Init()
 	meshList[GEO_Screen]->textureID = LoadTGA("Image//Phone.tga");
 
 	meshList[GEO_op1] = MeshBuilder::GenerateRec("Rec", Color(1, 1, 1), 1.f, 1.f);
-	meshList[GEO_op1]->textureID = LoadTGA("Image//TextOP1.tga");
+	meshList[GEO_op1]->textureID = LoadTGA("Image//OP1.tga");
 
 	meshList[GEO_op2] = MeshBuilder::GenerateRec("Rec", Color(1, 1, 1), 1.f, 1.f);
-	meshList[GEO_op2]->textureID = LoadTGA("Image//TextOP2.tga");
+	meshList[GEO_op2]->textureID = LoadTGA("Image//OP2.tga");
 
 	meshList[GEO_op3] = MeshBuilder::GenerateRec("Rec", Color(1, 1, 1), 1.f, 1.f);
-	meshList[GEO_op3]->textureID = LoadTGA("Image//TextOP3.tga");
+	meshList[GEO_op3]->textureID = LoadTGA("Image//OP3.tga");
 
-	meshList[GEO_op4] = MeshBuilder::GenerateRec("Rec", Color(1, 1, 1), 1.f, 1.f);
-	meshList[GEO_op4]->textureID = LoadTGA("Image//TextOP4.tga");
+	/*meshList[GEO_op4] = MeshBuilder::GenerateRec("Rec", Color(1, 1, 1), 1.f, 1.f);
+	meshList[GEO_op4]->textureID = LoadTGA("Image//TextOP4.tga");*/
 
 	meshList[GEO_Tree] = MeshBuilder::GenerateOBJMTL("Tree", "OBJ//TreeTall.obj", "OBJ//TreeTall.mtl");
 
@@ -275,7 +275,7 @@ float pposx, pposz, pposx2, pposz2, pposx3, pposz3, rotateangle, pposy, pposy2, 
 string timerstring;
 
 int mg1_start;
-bool questions,Reaply1,Reply2,Reply3;
+bool questions, OP1, OP2, OP3,OP1check, OP2check,OP3check;
 
 void Splevel1::Update(double dt)
 {
@@ -461,11 +461,35 @@ void Splevel1::Update(double dt)
 				if (Application::IsKeyPressed('E'))
 				{
 					questions = true;
-					
 				}
 			}
 		}
 		
+	}
+
+
+	//lovescam
+	{
+		int rnd;
+		if (questions == true)
+		{
+			rnd = Random(2);
+			if (rnd == 0 && OP1check == false)
+			{
+				OP1 = true;
+				
+			}
+			if (rnd == 1 && OP2check==false)
+			{
+				OP2 = true;
+				
+			}
+			if (rnd == 2 && OP3check == false)
+			{
+				OP3 = true;
+				
+			}
+		}		
 	}
 }
 
@@ -679,7 +703,7 @@ void Splevel1::Render()
 		//lift
 		if (camera.position.x > 25 && camera.position.x < 60 &&(camera.position.z < -50 && camera.position.z > -60))
 		{
-			if (Manager.PrestigeLvl >= 1)
+			if (Manager.PrestigeLvl > 0)
 			{
 				RenderTextOnScreen(meshList[GEO_TEXT], "Press 'E' to L2", Color(0, 1, 0), 4, 10, 30);
 			}
@@ -688,8 +712,32 @@ void Splevel1::Render()
 				RenderTextOnScreen(meshList[GEO_TEXT], "Reach prestiege for lift access", Color(0, 1, 0), 4, 10, 30);
 			}
 		}
-		
+		if (questions == true)
+		{
+			RenderMeshOnScreen(meshList[GEO_Screen], 40, 30, 16, 54, true);
+			if (OP1 == true &&OP1check == false)
+			{
+				RenderMeshOnScreen(meshList[GEO_op1], 40, 30, 16, 54, true);
+				std::cout << "OP1";
+				OP1check = true;
+			}
+			else if (OP2 == true && OP2check == false)
+			{
+				RenderMeshOnScreen(meshList[GEO_op2], 40, 30, 16, 54, true);
+				std::cout << "OP2";
+				OP2check = true;
+			}
+			else if (OP3 == true && OP3check == false)
+			{
+				RenderMeshOnScreen(meshList[GEO_op3], 40, 30, 16, 54, true);
+				std::cout << "OP3";
+				OP3check = true;
+			}
+			else
+			{
 
+			}
+		}
 	}
 
 	//Koh Win Code
@@ -886,55 +934,7 @@ void Splevel1::Render()
 		}
 	}
 
-	//lovescam
-	{
-		int rnd;
-
-		if (questions == true)
-		{
-
-			RenderMeshOnScreen(meshList[GEO_Screen], 40, 30, 20, 10, true);
-
-			if (Manager.PrestigeLvl == 2|| Manager.PrestigeLvl == 3)
-			{
-				rnd = Random(4);
-				int pos[4] = { 48,38,28,18 };
-				for (int i = 0; i < 3; i++)
-				{
-					if (pos[i] == rnd - 1)
-					{
-						RenderMeshOnScreen(meshList[GEO_op1], 55, pos[i], 20, 10, true);//correct answer
-					}
-					else
-					{
-						RenderMeshOnScreen(meshList[GEO_op2], 55, pos[i], 20, 10, true);
-					}
-				}
-			}
-			else
-			{
-				rnd = Random(3);
-				int pos[3] = { 48,38,28 };
-				for (int i = 0; i < 3; i++)
-				{
-					if (pos[i] == rnd - 1)
-					{
-						RenderMeshOnScreen(meshList[GEO_op1], 55, pos[i], 20, 10, true);//correct answer
-					}
-					else
-					{
-						RenderMeshOnScreen(meshList[GEO_op4], 55, pos[i], 20, 10, true);
-					}
-				}
-			}
-
-			if (Manager.PrestigeLvl == 2)
-			{
-				RenderMeshOnScreen(meshList[GEO_op3], 55, 18, 20, 10, true);
-			}
-			
-		}
-	}
+	
 
 
 	if (PuzzleActive == true)
