@@ -122,7 +122,7 @@ void Splevel1::Init()
 
 	puzzle.Init();
 
-	PuzzleActive = false;
+	PuzzleActive = true;
 
 	PuzzlePlayerPickup = false;
 
@@ -1250,21 +1250,29 @@ void Splevel1::PuzzleRender()
 		RenderMeshOnScreen(meshList[GEO_PuzzlePaper], 18 + (paperposx * 4), 3 + (paperposy * 4), 3, 3);
 	}
 
-	if (PuzzlePlayerPickup == true)
-	{
-		RenderMeshOnScreen(meshList[GEO_PuzzlePlayer],puzzle.playeractualpox, puzzle.playeractualpoy, 3, 3);
-	}
-	else
-	{
-		RenderMeshOnScreen(meshList[GEO_PuzzlePlayer], 18 + (puzzle.Player->position.x * 4), 3 + (puzzle.Player->position.y * 4), 3, 3);
-		puzzle.playeractualpox = 18 + (puzzle.Player->position.x * 4);
-		puzzle.playeractualpoy = 3 + (puzzle.Player->position.y * 4);
-	}
+
+	//player render
+	//if (PuzzlePlayerPickup == true)
+	//{
+	//	RenderMeshOnScreen(meshList[GEO_PuzzlePlayer],puzzle.playeractualpox, puzzle.playeractualpoy, 3, 3);
+	//}
+	//else if (PuzzlePlayerPickup == false)
+	//{
+	//	//y offset by 4
+	//	RenderMeshOnScreen(meshList[GEO_PuzzlePlayer], 18 + (puzzle.Player->position.x * 4), 3 + (puzzle.Player->position.y * 4), 3, 3);
+	//	//RenderMeshOnScreen(meshList[GEO_PuzzlePlayer], 18 , 12 , 3, 3);
+
+	//}
+
+	RenderMeshOnScreen(meshList[GEO_PuzzlePlayer], puzzle.playeractualpox, puzzle.playeractualpoy - 5, 3, 3);
+	
 	
 }
 
 void Splevel1::UpdatePuzzleControls()
 {
+	
+
 	//static bool bLButtonState = false;
 	if (Application::IsMousePressed(0))
 	{
@@ -1282,6 +1290,13 @@ void Splevel1::UpdatePuzzleControls()
 		if ((posY <= puzzle.playeractualpoy + 1.5 && posY >= puzzle.playeractualpoy - 1.5) && (posX >= puzzle.playeractualpox -2 && posX <= puzzle.playeractualpox + 2)) //Clck Store
 		{
 			PuzzlePlayerPickup = true;
+			/*puzzle.playeractualpox = posX;
+			puzzle.playeractualpoy = posY;*/
+		}
+
+		if (PuzzlePlayerPickup == true)
+		{
+
 			puzzle.playeractualpox = posX;
 			puzzle.playeractualpoy = posY;
 		}
@@ -1289,8 +1304,12 @@ void Splevel1::UpdatePuzzleControls()
 	}
 	else if (!Application::IsMousePressed(0))
 	{
+		
 		puzzle.pickupstatus = false;
 		PuzzlePlayerPickup = false;
+		
+		puzzle.playeractualpox = (18 + (puzzle.Player->position.x * 4));
+		puzzle.playeractualpoy = (8 + (puzzle.Player->position.y * 4));
 		//bLButtonState = false;
 	}
 	static bool bRButtonState = false;
@@ -1302,6 +1321,9 @@ void Splevel1::UpdatePuzzleControls()
 	{
 		bRButtonState = false;
 	}
+
+
+	
 }
 
 void Splevel1::UpdateMainControls()
