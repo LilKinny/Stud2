@@ -10,12 +10,14 @@ public:
 	int LuckyCatUpgrade;
 	int MoneyPlantUpgrade;
 	int PrestigeLvl;
+	float TotalIncomePerSecond;
 	float Money;
 	Equipment* EquipArray[18];
 	EquipmentManager();
 	~EquipmentManager();
 	int UpgradePrestige(bool Upgrade);
-	int CalculateTotalIncome(void);
+	void CalculateTotalIncome(void);
+	void UpdateMoney(float dt);
 	std::string ConvertMoneyToSuitableAmounts(void);
 	int UnlockPhone(bool unlock);
 	int UnlockComputer(bool unlock);

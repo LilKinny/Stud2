@@ -65,15 +65,47 @@ int EquipmentManager::UpgradePrestige(bool Upgrade)
 	return 0;
 }
 
-int EquipmentManager::CalculateTotalIncome(void)
+void EquipmentManager::CalculateTotalIncome(void)
 {
 	int TotalIncome = 0;
+	int TempIncome;
 	for (int i = 0; i < PrestigeLvl * 6; ++i)
 	{
-		EquipArray[i]->CalculateIncomePerSecondCalculateIncomePerSecond();
-		TotalIncome += EquipArray[i]->IncomePerSecond;
+		TempIncome = 0;
+		EquipArray[i]->CalculateIncomePerSecond();
+		TempIncome += EquipArray[i]->IncomePerSecond;
+		if (MoneyPlantUpgrade == 1)
+		{
+			TempIncome += 2;
+		}
+		if (LuckyCatUpgrade == 1)
+		{
+			TempIncome *= 2;
+		}
+		TotalIncome+=TempIncome;
 	}
-	return TotalIncome
+	if (MinigameBuffs > 0)
+	{
+		TotalIncome += TotalIncome * (MinigameBuffs * 0.01);
+	}
+	if (PrestigeLvl == 1)
+	{
+		TotalIncome *= 1.5;
+	}
+	else if (PrestigeLvl == 2)
+	{
+		TotalIncome *= 1.75;
+	}
+	else if (PrestigeLvl == 3)
+	{
+		TotalIncome *= 2;
+	}
+	TotalIncomePerSecond = TotalIncome;
+}
+
+void EquipmentManager::UpdateMoney(float dt)
+{
+	Money += TotalIncomePerSecond*dt;
 }
 
 std::string EquipmentManager::ConvertMoneyToSuitableAmounts(void) //Return Edited String
@@ -118,7 +150,7 @@ int EquipmentManager::UnlockPhone(bool unlock)
 	for(int i = 0; i < PrestigeLvl*6;++i)
 	{
 		//Check if Equip Array got empty "Work station"
-		if (EquipArray[i] == nullptr)
+		if (EquipArray[i] == nullptr && unlock == true)
 		{
 			EquipArray[i] = new Equipment;
 			i = PrestigeLvl * 6;
@@ -135,6 +167,7 @@ int EquipmentManager::UnlockPhone(bool unlock)
 					Money -= 50;
 					EquipArray[i]->PhoneLvl = 1;
 				}
+				CalculateTotalIncome();
 				return 1;
 			}
 			i = PrestigeLvl * 6;
@@ -149,7 +182,7 @@ int EquipmentManager::UnlockComputer(bool unlock)
 	for (int i = 0; i < PrestigeLvl * 6; ++i)
 	{
 		//Check if Equip Array got empty "Work station"
-		if (EquipArray[i] == nullptr)
+		if (EquipArray[i] == nullptr && unlock == true)
 		{
 			EquipArray[i] = new Equipment;
 			i = PrestigeLvl * 6;
@@ -166,11 +199,12 @@ int EquipmentManager::UnlockComputer(bool unlock)
 					Money -= 50;
 					EquipArray[i]->ComputerLvl = 1;
 				}
+				CalculateTotalIncome();
 				return 1;
 			}
 			i = PrestigeLvl * 6;
 		}
-	}
+	} 
 	return 0;
 }
 
@@ -186,9 +220,10 @@ int EquipmentManager::UnlockLuckyCat(bool unlock)
 				Money -= 10000;
 				LuckyCatUpgrade = 1;
 			}
+			CalculateTotalIncome();
 			return 1;
 		}
-	}
+	} 
 	return 0;
 }
 
@@ -204,9 +239,10 @@ int EquipmentManager::UnlockMoneyPlant(bool unlock)
 				Money -= 5000;
 				MoneyPlantUpgrade = 1;
 			}
+			CalculateTotalIncome();
 			return 1;
 		}
-	}
+	} 
 	return 0;
 }
 
@@ -221,6 +257,7 @@ int EquipmentManager::UpgradePhone(bool upgrade, int WorkStation)
 				Money -= 250;
 				EquipArray[WorkStation]->PhoneLvl = 2;
 			}
+			CalculateTotalIncome();
 			return 1;
 		}
 	}
@@ -233,6 +270,7 @@ int EquipmentManager::UpgradePhone(bool upgrade, int WorkStation)
 				Money -= 1250;
 				EquipArray[WorkStation]->PhoneLvl = 3;
 			}
+			CalculateTotalIncome();
 			return 1;
 		}
 	}
@@ -254,6 +292,7 @@ int EquipmentManager::UpgradeComputer(bool upgrade, int WorkStation)
 				Money -= 500;
 				EquipArray[WorkStation]->ComputerLvl = 2;
 			}
+			CalculateTotalIncome();
 			return 1;
 		}
 	}
@@ -266,6 +305,7 @@ int EquipmentManager::UpgradeComputer(bool upgrade, int WorkStation)
 				Money -= 5000;
 				EquipArray[WorkStation]->ComputerLvl = 3;
 			}
+			CalculateTotalIncome();
 			return 1;
 		}
 	}
