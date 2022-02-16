@@ -276,11 +276,11 @@ void Splevel1::Init()
 	projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 1000.f);
 	projectionStack.LoadMatrix(projection);
 }
-bool setuppolice = false, clearpolice, paper1, paper2, paper3, timerstart, win, lose, startlaptop = false;
+bool setuppolice = false, clearpolice, paper1, paper2, paper3, paper4, timerstart, win, lose, startlaptop = false, evidence_won_bonus;
 double scaleevidence = 0.1, countdown, timer;
-float pposx, pposz, pposx2, pposz2, pposx3, pposz3, rotateangle, pposy, pposy2, pposy3, pushaway;
+float pposx, pposz, pposx2, pposz2, pposx4, pposx3, pposz3, pposz4, rotateangle, pposy, pposy2, pposy3, pposy4, pushaway;
 string timerstring, beetsinstringform;
-int totalbeets = 0;
+int totalbeets = 0, countdownbonus = 1500;
 
 int mg1_start;
 bool OP1, OP2, OP3,OP1check, OP2check,OP3check,deleterest;
@@ -305,19 +305,41 @@ void Splevel1::Update(double dt)
 	if (mg1_start == 300 && clearpolice == false) setuppolice = true;
 	if (setuppolice == true && clearpolice == false)
 	{
-		pposz = 19;
-		pposx = (rand() % 100 + 0) - 50;
-		pposz = (rand() % 100 + 0) - 50;
-		pposx2 = (rand() % 100 + 0) - 50;
-		pposz2 = (rand() % 100 + 0) - 50;
-		pposx3 = (rand() % 100 + 0) - 50;
-		pposz3 = (rand() % 100 + 0) - 50;
-		pposy = 18;
-		pposy2 = 18;
-		pposy3 = 18;
-		scaleevidence = 2;
-		countdown = 600;
-		clearpolice = true;
+		if (Manager.PrestigeLvl <= 2)
+		{
+			pposz = 19;
+			pposx = (rand() % 100 + 0) - 50;
+			pposz = (rand() % 100 + 0) - 50;
+			pposx2 = (rand() % 100 + 0) - 50;
+			pposz2 = (rand() % 100 + 0) - 50;
+			pposx3 = (rand() % 100 + 0) - 50;
+			pposz3 = (rand() % 100 + 0) - 50;
+			pposy = 18;
+			pposy2 = 18;
+			pposy3 = 18;
+			scaleevidence = 2;
+			countdown = 600;
+			clearpolice = true;
+		}
+		else
+		{
+			pposz = 19;
+			pposx = (rand() % 100 + 0) - 50;
+			pposz = (rand() % 100 + 0) - 50;
+			pposx2 = (rand() % 100 + 0) - 50;
+			pposz2 = (rand() % 100 + 0) - 50;
+			pposx3 = (rand() % 100 + 0) - 50;
+			pposz3 = (rand() % 100 + 0) - 50;
+			pposx4 = (rand() % 100 + 0) - 50;
+			pposz4 = (rand() % 100 + 0) - 50;
+			pposy = 18;
+			pposy2 = 18;
+			pposy3 = 18;
+			pposy4 = 18;
+			scaleevidence = 2;
+			countdown = 550;
+			clearpolice = true;
+		}
 	}
 	if (clearpolice == true)
 	{
@@ -336,15 +358,37 @@ void Splevel1::Update(double dt)
 			paper3 = true;
 			pposy3 = 0;
 		}
-		if (paper1 == true && paper2 == true && paper3 == true)
+		else if (cposx > pposx4 - 10 && cposx < pposx4 + 10 && cposz > pposz4 - 10 && cposz < pposz4 + 10 && paper4 == false)
 		{
-			win = true;
-			clearpolice = false;
+			paper4 = true;
+			pposy4 = 0;
+		}
 
-			paper1 = false;
-			paper2 = false;
-			paper3 = false;
-			timerstart = false;
+		if (Manager.PrestigeLvl <= 2)
+		{
+			if (paper1 == true && paper2 == true && paper3 == true)
+			{
+				win = true;
+				clearpolice = false;
+
+				paper1 = false;
+				paper2 = false;
+				paper3 = false;
+				timerstart = false;
+			}
+		}
+		else
+		{
+			if (paper1 == true && paper2 == true && paper3 == true && paper4 == true)
+			{
+				win = true;
+				clearpolice = false;
+
+				paper1 = false;
+				paper2 = false;
+				paper3 = false;
+				timerstart = false;
+			}
 		}
 	}
 
@@ -357,8 +401,7 @@ void Splevel1::Update(double dt)
 			{
 				bLButtonState = true;
 				totalbeets++;
-				Manager.Money++;
-				cout << "Clicked beet";
+				Manager.Money = Manager.Money + 10;
 				beetsinstringform = to_string(totalbeets);
 			}
 			else if (bLButtonState && !Application::IsMousePressed(0))
@@ -470,6 +513,21 @@ void Splevel1::Update(double dt)
 		break;
 	}
 
+	if (evidence_won_bonus == true)
+	{
+		int timerbonus = 0;
+		Sleep(10);
+		countdownbonus--;
+		timerbonus = countdownbonus / 10;
+		timerstring = to_string(timerbonus);
+
+		if (timerbonus < 0)
+		{
+			Manager.TotalIncomePerSecond -= Manager.TotalIncomePerSecond / 100 * 15;
+			evidence_won_bonus = false;
+		}
+
+	}
 
 	//player table
 	{
@@ -499,7 +557,6 @@ void Splevel1::Update(double dt)
 					if (deleterest == false)
 					{
 						int rnd = rand() % 2 + 1;
-						cout << rnd;
 						if (rnd == 0 && OP1check == false && OP2 != true && OP3 != true)
 						{
 							OP1 = true;
@@ -777,21 +834,18 @@ void Splevel1::Render()
 			{
 				RenderMeshOnScreen(meshList[GEO_Screen], 40, 30, 16, 54, true);
 				RenderMeshOnScreen(meshList[GEO_op1], 40, 30, 16, 54, true);
-				std::cout << "OP1";
 				
 			}
 			else if (OP2 == true && OP2check == false)
 			{
 				RenderMeshOnScreen(meshList[GEO_Screen], 40, 30, 16, 54, true);
 				RenderMeshOnScreen(meshList[GEO_op2], 40, 30, 16, 54, true);
-				std::cout << "OP2";
 				
 			}
 			else if (OP3 == true && OP3check == false)
 			{
 				RenderMeshOnScreen(meshList[GEO_Screen], 40, 30, 16, 54, true);
 				RenderMeshOnScreen(meshList[GEO_op3], 40, 30, 16, 54, true);
-				std::cout << "OP3";
 				
 			}
 			else
@@ -828,6 +882,14 @@ void Splevel1::Render()
 		RenderMesh(meshList[GEO_PAPER], true);
 		modelStack.PopMatrix();
 
+		modelStack.PushMatrix();
+		modelStack.Translate(pposx4, pposy4, pposz4);
+		modelStack.Rotate(90, 1, 0, 0);
+		modelStack.Rotate(rotateangle * 10, 0, 0, 1);
+		modelStack.Scale(scaleevidence, scaleevidence, scaleevidence);
+		RenderMesh(meshList[GEO_PAPER], true);
+		modelStack.PopMatrix();
+
 		if(timerstart == true) RenderTextOnScreen(meshList[GEO_TEXT], "Time left: " + timerstring , Color(1, 1, 1), 2, 37, 5);
 
 		else if (setuppolice == true)
@@ -854,6 +916,7 @@ void Splevel1::Render()
 			RenderTextOnScreen(meshList[GEO_TEXT], "Reward: +15% income boost for 30s", Color(1, 1, 1), 2, 22, 21);
 			RenderMeshOnScreen(meshList[GEO_EMPTYBOX], 40, 10, 10, 6);
 			RenderTextOnScreen(meshList[GEO_TEXT], "Hooray!", Color(1, 1, 1), 2, 37, 9);
+			Manager.TotalIncomePerSecond += Manager.TotalIncomePerSecond / 100 * 15;
 		}
 		else if (lose == true)
 		{
@@ -1415,6 +1478,7 @@ void Splevel1::UpdateMainControls()
 				win = false;
 				timerstart = false;
 				clearpolice = false;
+				evidence_won_bonus = true;
 			}
 			else if (lose == true)
 			{
