@@ -248,6 +248,12 @@ void Splevel1::Init()
 	meshList[GEO_Tree] = MeshBuilder::GenerateOBJMTL("Tree", "OBJ//TreeTall.obj", "OBJ//TreeTall.mtl");
 	meshList[GEO_Laptop] = MeshBuilder::GenerateOBJMTL("Laptop", "OBJ//Laptop.obj", "OBJ//Laptop.mtl");
 	meshList[GEO_Phone1] = MeshBuilder::GenerateOBJMTL("Phone1", "OBJ//Phone1.obj", "OBJ//Phone1.mtl");
+	meshList[GEO_Body] = MeshBuilder::GenerateOBJMTL("Body", "OBJ//Body.obj", "OBJ//Body.mtl");
+	meshList[GEO_Head] = MeshBuilder::GenerateOBJMTL("Head", "OBJ//Head.obj", "OBJ//Head.mtl");
+	meshList[GEO_Arms] = MeshBuilder::GenerateOBJMTL("Arms", "OBJ//Arms.obj", "OBJ//Arms.mtl");
+
+
+
 
 	meshList[GEO_Lift] = MeshBuilder::GenerateOBJ("modelBUIDLING", "OBJ//Elevator.obj");
 	meshList[GEO_Lift]->textureID = LoadTGA("Image//Elevator.tga");
@@ -915,6 +921,28 @@ void Splevel1::Render()
 		RenderMesh(meshList[GEO_Table], true);
 		modelStack.PopMatrix();
 		
+
+		modelStack.PushMatrix();
+		modelStack.Translate(15, 5, 15);
+		modelStack.Scale(5, 5, 5);
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(0, 0, 0);
+			modelStack.Scale(1, 1, 1);
+			{
+				modelStack.PushMatrix();
+				modelStack.Translate(0, 0, 0);
+				modelStack.Scale(1, 1, 1);
+				RenderMesh(meshList[GEO_Arms], false);
+				modelStack.PopMatrix();
+			}
+			RenderMesh(meshList[GEO_Head], false);
+			modelStack.PopMatrix();
+		}
+		RenderMesh(meshList[GEO_Body], false);
+		modelStack.PopMatrix();
+
+
 		//Evidence mini game
 		if (camera.position.x > 30 && camera.position.x < 45 && (camera.position.z > 55 && camera.position.z < 65))
 		{
@@ -1047,7 +1075,7 @@ void Splevel1::Render()
 		RenderMesh(meshList[GEO_PAPER], true);
 		modelStack.PopMatrix();
 
-		if(timerstart == true) RenderTextOnScreen(meshList[GEO_TEXT], "Time left: " + timerstring , Color(1, 1, 1), 2, 37, 5);
+		if (timerstart == true) RenderTextOnScreen(meshList[GEO_TEXT], "Time left: " + timerstring, Color(1, 1, 1), 2, 37, 5);
 
 		else if (setuppolice == true)
 		{

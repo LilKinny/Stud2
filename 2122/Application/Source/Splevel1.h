@@ -74,6 +74,9 @@ class Splevel1 : public Scene
 		GEO_op2,
 		GEO_op3,
 		GEO_op4,
+		GEO_Body,
+		GEO_Head,
+		GEO_Arms,
 
 		NUM_GEOMETRY,
 	};
