@@ -1599,10 +1599,10 @@ void Splevel1::UpdatePuzzleControls()
 {
 	
 
-	//static bool bLButtonState = false;
+	static bool bLButtonState = false;
 	if (Application::IsMousePressed(0))
 	{
-		//bLButtonState = true;
+		bLButtonState = true;
 
 		//Converting Viewport space to UI space
 		double x, y;
@@ -1611,6 +1611,7 @@ void Splevel1::UpdatePuzzleControls()
 		unsigned h = Application::GetWindowHeight();
 		float posX = (x / w) * 80; //convert (0,800) to (0,80)
 		float posY = 60 - (y / h) * 60; //convert (600,0) to (0,60)
+		
 		
 		//player
 		if ((posY <= puzzle.playeractualpoy + 1.5 && posY >= puzzle.playeractualpoy - 1.5) && (posX >= puzzle.playeractualpox -2 && posX <= puzzle.playeractualpox + 2)) //Clck Store
@@ -1628,25 +1629,40 @@ void Splevel1::UpdatePuzzleControls()
 		}
 		
 	}
-	else if (!Application::IsMousePressed(0))
+	else if (bLButtonState == true && !Application::IsMousePressed(0))
 	{
-		
+		bLButtonState = false;
+		if (PuzzlePlayerPickup == true)
+		{
+
+		}
+		double x, y;
+		Application::GetCursorPos(&x, &y);
+		unsigned w = Application::GetWindowWidth();
+		unsigned h = Application::GetWindowHeight();
+		float posX = (x / w) * 80; //convert (0,800) to (0,80)
+		float posY = 60 - (y / h) * 60; //convert (600,0) to (0,60)
 		puzzle.pickupstatus = false;
-		PuzzlePlayerPickup = false;
+		PuzzlePlayerPickup = false;	
+
+		posX -= 2;
 		
-		puzzle.playeractualpox = (18 + (puzzle.Player->position.x * 4));
-		puzzle.playeractualpoy = (8 + (puzzle.Player->position.y * 4));
+		int resultx = posX + 4 / 2;
+		resultx -= resultx % 4;
+
+		puzzle.playeractualpox = resultx;
+		puzzle.playeractualpox += 2;
+
+		int resulty = posY + 4 / 2;
+		resulty -= resulty % 4;
+
+		puzzle.playeractualpoy = resulty;
+		
+		/*puzzle.playeractualpox = (18 + (puzzle.Player->position.x * 4));
+		puzzle.playeractualpoy = (8 + (puzzle.Player->position.y * 4));*/
 		//bLButtonState = false;
 	}
-	static bool bRButtonState = false;
-	if (!bRButtonState && Application::IsMousePressed(1))
-	{
-		bRButtonState = true;
-	}
-	else if (bRButtonState && !Application::IsMousePressed(1))
-	{
-		bRButtonState = false;
-	}
+	
 
 
 	
