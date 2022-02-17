@@ -7,8 +7,7 @@ EquipmentManager::EquipmentManager()
 	LuckyCatUpgrade = 0;
 	MoneyPlantUpgrade = 0;
 	PrestigeLvl = 0;
-	Money = 5000;
-	BasePrice = 50;
+	Money = 50000;
 	InitEquipArray();
 }
 
@@ -30,7 +29,7 @@ int EquipmentManager::UpgradePrestige(bool Upgrade)
 				DeleteEquipArray();
 				InitEquipArray();
 				CalculateTotalIncome();
-				Money = 0;
+				//Money = 0;
 			}
 			return 1;
 		}
@@ -46,7 +45,7 @@ int EquipmentManager::UpgradePrestige(bool Upgrade)
 				DeleteEquipArray();
 				InitEquipArray();
 				CalculateTotalIncome();
-				Money = 0;
+				//Money = 0;
 			}
 			return 1;
 		}
@@ -62,7 +61,7 @@ int EquipmentManager::UpgradePrestige(bool Upgrade)
 				DeleteEquipArray();
 				InitEquipArray(); 
 				CalculateTotalIncome();
-				Money = 0;
+				//Money = 0;
 			}
 			return 1;
 		}
@@ -193,6 +192,7 @@ std::string EquipmentManager::ConvertMoneyToSuitableAmounts(float Amount) //Retu
 
 int EquipmentManager::UnlockPhone(bool unlock)
 {
+	float IncrementPrice = 50;
 	//Checks if got space for Phone
 	for(int i = 0; i < (PrestigeLvl+1)*6;++i)
 	{
@@ -204,13 +204,15 @@ int EquipmentManager::UnlockPhone(bool unlock)
 		//if Phonelvl is 0 which means not unlocked
 		if(EquipArray[i] == nullptr || EquipArray[i]->PhoneLvl == 0)
 		{
+			//Calculate Increment 
+			IncrementPrice = IncrementPrice + IncrementPrice * NumOfPhones() * 0.2;
 			//If got money show can unlock
-			if (Money >= 50)
+			if (Money >= IncrementPrice)
 			{
 				//if unlock is true , unlock the phone
 				if (unlock == true)
 				{
-					Money -= 50;
+					Money -= IncrementPrice;
 					EquipArray[i]->PhoneLvl = 1;
 				}
 				CalculateTotalIncome();
@@ -224,6 +226,7 @@ int EquipmentManager::UnlockPhone(bool unlock)
 
 int EquipmentManager::UnlockComputer(bool unlock)
 {
+	float IncrementPrice = 50;
 	//Checks if got space for Computer
 	for (int i = 0; i < (PrestigeLvl + 1) * 6; ++i)
 	{
@@ -235,8 +238,10 @@ int EquipmentManager::UnlockComputer(bool unlock)
 		//if Computerlvl is 0 which means not unlocked
 		if (EquipArray[i] == nullptr || EquipArray[i]->ComputerLvl == 0)
 		{
+			//Calculate Increment 
+			IncrementPrice = IncrementPrice + IncrementPrice * NumOfComputers() * 0.2;
 			//If got money show can unlock
-			if (Money >= 50)
+			if (Money >= IncrementPrice)
 			{
 				//if unlock is true , unlock the Computer
 				if (unlock == true)
@@ -293,13 +298,16 @@ int EquipmentManager::UnlockMoneyPlant(bool unlock)
 
 int EquipmentManager::UpgradePhone(bool upgrade, int WorkStation)
 {
+	float IncrementPrice;
 	if (EquipArray[WorkStation]->PhoneLvl == 1) //Can Upgrade to 1
 	{
-		if (Money >= 250)
+		IncrementPrice = 250;
+		IncrementPrice = IncrementPrice + IncrementPrice * NumOfPhones() * 0.2;
+		if (Money >= IncrementPrice)
 		{
 			if (upgrade == true)
 			{
-				Money -= 250;
+				Money -= IncrementPrice;
 				EquipArray[WorkStation]->PhoneLvl = 2;
 			}
 			CalculateTotalIncome();
@@ -309,11 +317,13 @@ int EquipmentManager::UpgradePhone(bool upgrade, int WorkStation)
 	}
 	if (EquipArray[WorkStation]->PhoneLvl == 2) //Can Upgrade to 2
 	{
-		if (Money >= 1250)
+		IncrementPrice = 1250;
+		IncrementPrice = IncrementPrice + IncrementPrice * NumOfPhones() * 0.2;
+		if (Money >= IncrementPrice)
 		{
 			if (upgrade == true)
 			{
-				Money -= 1250;
+				Money -= IncrementPrice;
 				EquipArray[WorkStation]->PhoneLvl = 3;
 			}
 			CalculateTotalIncome();
@@ -333,13 +343,16 @@ int EquipmentManager::UpgradePhone(bool upgrade, int WorkStation)
 
 int EquipmentManager::UpgradeComputer(bool upgrade, int WorkStation)
 {
+	float IncrementPrice;
 	if (EquipArray[WorkStation]->ComputerLvl == 1) //Can Upgrade to 1
 	{
-		if (Money >= 500)
+		IncrementPrice = 500;
+		IncrementPrice = IncrementPrice + IncrementPrice * NumOfComputers() * 0.2;
+		if (Money >= IncrementPrice)
 		{
 			if (upgrade == true)
 			{
-				Money -= 500;
+				Money -= IncrementPrice;
 				EquipArray[WorkStation]->ComputerLvl = 2;
 			}
 			CalculateTotalIncome();
@@ -349,11 +362,13 @@ int EquipmentManager::UpgradeComputer(bool upgrade, int WorkStation)
 	}
 	if (EquipArray[WorkStation]->ComputerLvl == 2) //Can Upgrade to 2
 	{
-		if (Money >= 5000)
+		IncrementPrice = 5000;
+		IncrementPrice = IncrementPrice + IncrementPrice * NumOfComputers() * 0.2;
+		if (Money >= IncrementPrice)
 		{
 			if (upgrade == true)
 			{
-				Money -= 5000;
+				Money -= IncrementPrice;
 				EquipArray[WorkStation]->ComputerLvl = 3;
 			}
 			CalculateTotalIncome();
@@ -386,5 +401,31 @@ void EquipmentManager::InitEquipArray(void)
 	{
 		EquipArray[i] = nullptr;
 	}
+}
+
+float EquipmentManager::NumOfPhones(void)
+{
+	int NumOfPhones = 0;
+	for (int i = 0; i < (PrestigeLvl + 1) * 6; ++i)
+	{
+		if (EquipArray[i] != nullptr && EquipArray[i]->PhoneLvl >= 1)
+		{
+			++NumOfPhones;
+		}
+	}
+	return NumOfPhones;
+}
+
+float EquipmentManager::NumOfComputers(void)
+{
+	int NumOfComputers = 0;
+	for (int i = 0; i < (PrestigeLvl + 1) * 6; ++i)
+	{
+		if (EquipArray[i] != nullptr && EquipArray[i]->ComputerLvl >= 1)
+		{
+			++NumOfComputers;
+		}
+	}
+	return NumOfComputers;
 }
 

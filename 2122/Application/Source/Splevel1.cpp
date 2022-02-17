@@ -1605,11 +1605,11 @@ void Splevel1::Render()
 					modelStack.PushMatrix();
 					RenderTextOnScreen(meshList[GEO_TEXT], "Computer", Color(0.5, 0, 0.5), 1, 18, 36);
 					RenderTextOnScreen(meshList[GEO_TEXT], "Income: $1/s", Color(0.5, 0, 0.5), 1, 18, 34);
-					RenderTextOnScreen(meshList[GEO_TEXT], "Price: $50", Color(0.5, 0, 0.5), 1, 18, 32);
+					RenderTextOnScreen(meshList[GEO_TEXT], "Price: $"+Manager.ConvertMoneyToSuitableAmounts(50 + 50 * Manager.NumOfComputers() * 0.2), Color(0.5, 0, 0.5), 1, 18, 32);
 
 					RenderTextOnScreen(meshList[GEO_TEXT], "Phone", Color(0.5, 0, 0.5), 1, 34, 36);
 					RenderTextOnScreen(meshList[GEO_TEXT], "Income: $1/s", Color(0.5, 0, 0.5), 1, 34, 34);
-					RenderTextOnScreen(meshList[GEO_TEXT], "Price: $50", Color(0.5, 0, 0.5), 1, 34, 32);
+					RenderTextOnScreen(meshList[GEO_TEXT], "Price: $" + Manager.ConvertMoneyToSuitableAmounts(50 + 50 * Manager.NumOfPhones() * 0.2), Color(0.5, 0, 0.5), 1, 34, 32);
 
 					RenderTextOnScreen(meshList[GEO_TEXT], "Lucky Cat", Color(0.5, 0, 0.5), 1, 50, 36);
 					RenderTextOnScreen(meshList[GEO_TEXT], "Each Equipment Income x 2 ", Color(0.5, 0, 0.5), 1, 50, 34);
@@ -1776,10 +1776,12 @@ void Splevel1::Render()
 			//Description
 			{
 				modelStack.PushMatrix();
-				std::string ObjName, Income, Price;
+				std::string ObjName, Income;
+				float Price;
 				for (int i = 0; i < 6; ++i)
 				{
-					ObjName = Income = Price = "";
+					ObjName = Income = "";
+					Price = 0;
 					if (Manager.EquipArray[(PageNum - 1) * 6 + i] == nullptr || Manager.EquipArray[(PageNum - 1) * 6 + i]->ComputerLvl == 0)
 					{
 					}
@@ -1789,23 +1791,23 @@ void Splevel1::Render()
 						Income = "Income: $" + Manager.ConvertMoneyToSuitableAmounts(Manager.CalculateIncome((PageNum - 1) * 6 + i,1)) + "/s";
 						if (Manager.EquipArray[(PageNum - 1) * 6 + i]->ComputerLvl == 1)
 						{
-							Price = "500";
+							Price = 500 * Manager.NumOfComputers() * 0.2;
 						}
 						else if (Manager.EquipArray[(PageNum - 1) * 6 + i]->ComputerLvl == 2)
 						{
-							Price = "5000";
+							Price = 5000 * Manager.NumOfComputers() * 0.2;
 						}
 						else
 						{
-							Price = "0";
+							Price = 0;
 						}
 						if (i == 0)
 						{
 							RenderTextOnScreen(meshList[GEO_TEXT], ObjName, Color(0.5, 0, 0.5), 1, 18, 36);
 							RenderTextOnScreen(meshList[GEO_TEXT], Income, Color(0.5, 0, 0.5), 1, 18, 34);
-							if (Price != "0")
+							if (Price != 0)
 							{
-								RenderTextOnScreen(meshList[GEO_TEXT], "Price: $" + Manager.ConvertMoneyToSuitableAmounts(std::stof(Price)), Color(0.5, 0, 0.5), 1, 18, 32);
+								RenderTextOnScreen(meshList[GEO_TEXT], "Price: $" + Manager.ConvertMoneyToSuitableAmounts(Price), Color(0.5, 0, 0.5), 1, 18, 32);
 							}
 							else
 							{
@@ -1816,9 +1818,9 @@ void Splevel1::Render()
 						{
 							RenderTextOnScreen(meshList[GEO_TEXT], ObjName, Color(0.5, 0, 0.5), 1, 34, 36);
 							RenderTextOnScreen(meshList[GEO_TEXT], Income, Color(0.5, 0, 0.5), 1, 34, 34);
-							if (Price != "0")
+							if (Price != 0)
 							{
-								RenderTextOnScreen(meshList[GEO_TEXT], "Price: $" + Manager.ConvertMoneyToSuitableAmounts(std::stof(Price)), Color(0.5, 0, 0.5), 1, 34, 32);
+								RenderTextOnScreen(meshList[GEO_TEXT], "Price: $" + Manager.ConvertMoneyToSuitableAmounts(Price), Color(0.5, 0, 0.5), 1, 34, 32);
 							}
 							else
 							{
@@ -1829,9 +1831,9 @@ void Splevel1::Render()
 						{
 							RenderTextOnScreen(meshList[GEO_TEXT], ObjName, Color(0.5, 0, 0.5), 1, 50, 36);
 							RenderTextOnScreen(meshList[GEO_TEXT], Income, Color(0.5, 0, 0.5), 1, 50, 34);
-							if (Price != "0")
+							if (Price != 0)
 							{
-								RenderTextOnScreen(meshList[GEO_TEXT], "Price: $" + Manager.ConvertMoneyToSuitableAmounts(std::stof(Price)), Color(0.5, 0, 0.5), 1, 50, 32);
+								RenderTextOnScreen(meshList[GEO_TEXT], "Price: $" + Manager.ConvertMoneyToSuitableAmounts(Price), Color(0.5, 0, 0.5), 1, 50, 32);
 							}
 							else
 							{
@@ -1842,9 +1844,9 @@ void Splevel1::Render()
 						{
 							RenderTextOnScreen(meshList[GEO_TEXT], ObjName, Color(0.5, 0, 0.5), 1, 18, 23);
 							RenderTextOnScreen(meshList[GEO_TEXT], Income, Color(0.5, 0, 0.5), 1, 18, 21);
-							if (Price != "0")
+							if (Price != 0)
 							{
-								RenderTextOnScreen(meshList[GEO_TEXT], "Price: $" + Manager.ConvertMoneyToSuitableAmounts(std::stof(Price)), Color(0.5, 0, 0.5), 1, 18, 19);
+								RenderTextOnScreen(meshList[GEO_TEXT], "Price: $" + Manager.ConvertMoneyToSuitableAmounts(Price), Color(0.5, 0, 0.5), 1, 18, 19);
 							}
 							else
 							{
@@ -1855,9 +1857,9 @@ void Splevel1::Render()
 						{
 							RenderTextOnScreen(meshList[GEO_TEXT], ObjName, Color(0.5, 0, 0.5), 1, 34, 23);
 							RenderTextOnScreen(meshList[GEO_TEXT], Income, Color(0.5, 0, 0.5), 1, 34, 21);
-							if (Price != "0")
+							if (Price != 0)
 							{
-								RenderTextOnScreen(meshList[GEO_TEXT], "Price: $" + Manager.ConvertMoneyToSuitableAmounts(std::stof(Price)), Color(0.5, 0, 0.5), 1, 34, 19);
+								RenderTextOnScreen(meshList[GEO_TEXT], "Price: $" + Manager.ConvertMoneyToSuitableAmounts(Price), Color(0.5, 0, 0.5), 1, 34, 19);
 							}
 							else
 							{
@@ -1868,9 +1870,9 @@ void Splevel1::Render()
 						{
 							RenderTextOnScreen(meshList[GEO_TEXT], ObjName, Color(0.5, 0, 0.5), 1, 50, 23);
 							RenderTextOnScreen(meshList[GEO_TEXT], Income, Color(0.5, 0, 0.5), 1, 50, 21);
-							if (Price != "0")
+							if (Price != 0)
 							{
-								RenderTextOnScreen(meshList[GEO_TEXT], "Price: $" + Manager.ConvertMoneyToSuitableAmounts(std::stof(Price)), Color(0.5, 0, 0.5), 1, 50, 19);
+								RenderTextOnScreen(meshList[GEO_TEXT], "Price: $" + Manager.ConvertMoneyToSuitableAmounts(Price), Color(0.5, 0, 0.5), 1, 50, 19);
 							}
 							else
 							{
@@ -2049,10 +2051,12 @@ void Splevel1::Render()
 			//Description
 			{
 				modelStack.PushMatrix();
-				std::string ObjName, Income, Price;
+				std::string ObjName, Income;
+				float Price;
 				for (int i = 0; i < 6; ++i)
 				{
-					ObjName = Income = Price = "";
+					ObjName = Income = "";
+					Price = 0;
 					if (Manager.EquipArray[(PageNum - 1) * 6 + i] == nullptr || Manager.EquipArray[(PageNum - 1) * 6 + i]->PhoneLvl == 0)
 					{
 					}
@@ -2062,23 +2066,23 @@ void Splevel1::Render()
 						Income = "Income: $" + Manager.ConvertMoneyToSuitableAmounts(Manager.CalculateIncome((PageNum - 1) * 6 + i,2)) + "/s";
 						if (Manager.EquipArray[(PageNum - 1) * 6 + i]->PhoneLvl == 1)
 						{
-							Price = "250";
+							Price = 250 * Manager.NumOfPhones() * 0.2;
 						}
 						else if (Manager.EquipArray[(PageNum - 1) * 6 + i]->PhoneLvl == 2)
 						{
-							Price = "1250";
+							Price = 1250 * Manager.NumOfPhones() * 0.2;
 						}
 						else
 						{
-							Price = "0";
+							Price = 0;
 						}
 						if (i == 0)
 						{
 							RenderTextOnScreen(meshList[GEO_TEXT], ObjName, Color(0.5, 0, 0.5), 1, 18, 36);
 							RenderTextOnScreen(meshList[GEO_TEXT], Income, Color(0.5, 0, 0.5), 1, 18, 34);
-							if (Price != "0")
+							if (Price != 0)
 							{
-								RenderTextOnScreen(meshList[GEO_TEXT], "Price: $" + Manager.ConvertMoneyToSuitableAmounts(std::stof(Price)), Color(0.5, 0, 0.5), 1, 18, 32);
+								RenderTextOnScreen(meshList[GEO_TEXT], "Price: $" + Manager.ConvertMoneyToSuitableAmounts(Price), Color(0.5, 0, 0.5), 1, 18, 32);
 							}
 							else
 							{
@@ -2089,9 +2093,9 @@ void Splevel1::Render()
 						{
 							RenderTextOnScreen(meshList[GEO_TEXT], ObjName, Color(0.5, 0, 0.5), 1, 34, 36);
 							RenderTextOnScreen(meshList[GEO_TEXT], Income, Color(0.5, 0, 0.5), 1, 34, 34);
-							if (Price != "0")
+							if (Price != 0)
 							{
-								RenderTextOnScreen(meshList[GEO_TEXT], "Price: $" + Manager.ConvertMoneyToSuitableAmounts(std::stof(Price)), Color(0.5, 0, 0.5), 1, 34, 32);
+								RenderTextOnScreen(meshList[GEO_TEXT], "Price: $" + Manager.ConvertMoneyToSuitableAmounts(Price), Color(0.5, 0, 0.5), 1, 34, 32);
 							}
 							else
 							{
@@ -2102,9 +2106,9 @@ void Splevel1::Render()
 						{
 							RenderTextOnScreen(meshList[GEO_TEXT], ObjName, Color(0.5, 0, 0.5), 1, 50, 36);
 							RenderTextOnScreen(meshList[GEO_TEXT], Income, Color(0.5, 0, 0.5), 1, 50, 34);
-							if (Price != "0")
+							if (Price != 0)
 							{
-								RenderTextOnScreen(meshList[GEO_TEXT], "Price: $" + Manager.ConvertMoneyToSuitableAmounts(std::stof(Price)), Color(0.5, 0, 0.5), 1, 50, 32);
+								RenderTextOnScreen(meshList[GEO_TEXT], "Price: $" + Manager.ConvertMoneyToSuitableAmounts(Price), Color(0.5, 0, 0.5), 1, 50, 32);
 							}
 							else
 							{
@@ -2115,9 +2119,9 @@ void Splevel1::Render()
 						{
 							RenderTextOnScreen(meshList[GEO_TEXT], ObjName, Color(0.5, 0, 0.5), 1, 18, 23);
 							RenderTextOnScreen(meshList[GEO_TEXT], Income, Color(0.5, 0, 0.5), 1, 18, 21);
-							if (Price != "0")
+							if (Price != 0)
 							{
-								RenderTextOnScreen(meshList[GEO_TEXT], "Price: $" + Manager.ConvertMoneyToSuitableAmounts(std::stof(Price)), Color(0.5, 0, 0.5), 1, 18, 19);
+								RenderTextOnScreen(meshList[GEO_TEXT], "Price: $" + Manager.ConvertMoneyToSuitableAmounts(Price), Color(0.5, 0, 0.5), 1, 18, 19);
 							}
 							else
 							{
@@ -2128,9 +2132,9 @@ void Splevel1::Render()
 						{
 							RenderTextOnScreen(meshList[GEO_TEXT], ObjName, Color(0.5, 0, 0.5), 1, 34, 23);
 							RenderTextOnScreen(meshList[GEO_TEXT], Income, Color(0.5, 0, 0.5), 1, 34, 21);
-							if (Price != "0")
+							if (Price != 0)
 							{
-								RenderTextOnScreen(meshList[GEO_TEXT], "Price: $" + Manager.ConvertMoneyToSuitableAmounts(std::stof(Price)), Color(0.5, 0, 0.5), 1, 34, 19);
+								RenderTextOnScreen(meshList[GEO_TEXT], "Price: $" + Manager.ConvertMoneyToSuitableAmounts(Price), Color(0.5, 0, 0.5), 1, 34, 19);
 							}
 							else
 							{
@@ -2141,9 +2145,9 @@ void Splevel1::Render()
 						{
 							RenderTextOnScreen(meshList[GEO_TEXT], ObjName, Color(0.5, 0, 0.5), 1, 50, 23);
 							RenderTextOnScreen(meshList[GEO_TEXT], Income, Color(0.5, 0, 0.5), 1, 50, 21);
-							if (Price != "0")
+							if (Price != 0)
 							{
-								RenderTextOnScreen(meshList[GEO_TEXT], "Price: $" + Manager.ConvertMoneyToSuitableAmounts(std::stof(Price)), Color(0.5, 0, 0.5), 1, 50, 19);
+								RenderTextOnScreen(meshList[GEO_TEXT], "Price: $" + Manager.ConvertMoneyToSuitableAmounts(Price), Color(0.5, 0, 0.5), 1, 50, 19);
 							}
 							else
 							{

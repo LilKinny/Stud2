@@ -12,7 +12,6 @@ public:
 	int PrestigeLvl;
 	float TotalIncomePerSecond;
 	float Money;
-	float BasePrice;
 	Equipment* EquipArray[18];
 	EquipmentManager();
 	~EquipmentManager();
@@ -29,6 +28,8 @@ public:
 	int UpgradeComputer(bool upgrade, int WorkStation);
 	void DeleteEquipArray(void);
 	void InitEquipArray(void);
+	float NumOfPhones(void);
+	float NumOfComputers(void);
 };
 
 
