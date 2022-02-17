@@ -242,8 +242,14 @@ void Splevel1::Init()
 	meshList[GEO_op3] = MeshBuilder::GenerateRec("Rec", Color(1, 1, 1), 1.f, 1.f);
 	meshList[GEO_op3]->textureID = LoadTGA("Image//OP3.tga");
 
-	/*meshList[GEO_op4] = MeshBuilder::GenerateRec("Rec", Color(1, 1, 1), 1.f, 1.f);
-	meshList[GEO_op4]->textureID = LoadTGA("Image//TextOP4.tga");*/
+	meshList[GEO_PREop1] = MeshBuilder::GenerateRec("Rec", Color(1, 1, 1), 1.f, 1.f);
+	meshList[GEO_PREop1]->textureID = LoadTGA("Image//Pre_OP1.tga");
+
+	meshList[GEO_PREop2] = MeshBuilder::GenerateRec("Rec", Color(1, 1, 1), 1.f, 1.f);
+	meshList[GEO_PREop2]->textureID = LoadTGA("Image//Pre_OP2.tga");
+
+	meshList[GEO_PREop3] = MeshBuilder::GenerateRec("Rec", Color(1, 1, 1), 1.f, 1.f);
+	meshList[GEO_PREop3]->textureID = LoadTGA("Image//Pre_OP3.tga");
 
 	meshList[GEO_Tree] = MeshBuilder::GenerateOBJMTL("Tree", "OBJ//TreeTall.obj", "OBJ//TreeTall.mtl");
 	meshList[GEO_Laptop] = MeshBuilder::GenerateOBJMTL("Laptop", "OBJ//Laptop.obj", "OBJ//Laptop.mtl");
@@ -289,7 +295,7 @@ string timerstring, beetsinstringform;
 int totalbeets = 0, countdownbonus = 1500;
 
 int mg1_start;
-bool OP1, OP2, OP3,OP1check, OP2check,OP3check,deleterest,LS_start,LS_Win,LS_Lose;
+bool OP1, OP2, OP3,OP1check, OP2check,OP3check,deleterest,LS_start,LS_Win,LS_Lose,POP1,POP2,POP3;
 float cposx, cposz;
 void Splevel1::Update(double dt)
 {
@@ -561,25 +567,48 @@ void Splevel1::Update(double dt)
 			{
 				LS_start = true;
 			}
-			if (questions == true)
+			if (Manager.PrestigeLvl >= 1)
 			{
-				if (deleterest == false)
+				if (questions == true)
 				{
-					int rnd = rand() % 3 + 0;
-					cout << rnd;
-					if (rnd == 0 && OP1check == false && OP2 != true && OP3 != true)
+					if (deleterest == false)
 					{
-						OP1 = true;
-						deleterest = true;
+						int rnd = rand() % 3 + 0;
+						cout << rnd;
+						if (rnd == 0 && OP1check == false && OP2 != true && OP3 != true)
+						{
+							POP1 = true;
+							deleterest = true;
+						}
+						if (rnd == 1 && OP2check == false && OP3 != true && OP1 != true)
+						{
+							POP2 = true;
+							deleterest = true;
+						}
+						if (rnd == 2 && OP3check == false && OP2 != true && OP1 != true)
+						{
+							POP3 = true;
+							deleterest = true;
+						}
 					}
-					if (rnd == 1 && OP2check == false && OP3 != true && OP1 != true)
+				}
+				else if (deleterest == true)
+				{
+					cout << "PressedE->deleterest true";
+					OP1 = false;
+					OP2 = false;
+					OP3 = false;
+					deleterest = false;
+				}
+			}
+			else
+			{
+				if (questions == true)
+				{
+					if (deleterest == false)
 					{
-						OP2 = true;
-						deleterest = true;
-					}
-					if (rnd == 2 && OP3check == false && OP2 != true && OP1 != true)
-					{
-						int rnd = rand() % 2 + 1;
+						int rnd = rand() % 3 + 0;
+						cout << rnd;
 						if (rnd == 0 && OP1check == false && OP2 != true && OP3 != true)
 						{
 							OP1 = true;
@@ -595,20 +624,16 @@ void Splevel1::Update(double dt)
 							OP3 = true;
 							deleterest = true;
 						}
-
-						OP3 = true;
-						deleterest = true;
-
 					}
 				}
-			}
-			else if (deleterest == true)
-			{
-				cout << "PressedE->deleterest true";
-				OP1 = false;
-				OP2 = false;
-				OP3 = false;
-				deleterest = false;
+				else if (deleterest == true)
+				{
+					cout << "PressedE->deleterest true";
+					OP1 = false;
+					OP2 = false;
+					OP3 = false;
+					deleterest = false;
+				}
 			}
 		}
 		static bool bLButtonState = false;
@@ -682,6 +707,77 @@ void Splevel1::Update(double dt)
 					LS_Lose = true;
 				}
 				else if (posX > 47 && posX < 62 && (posY > 42 && posY < 55))//op1
+				{
+					questions = false;
+					LS_Lose = true;
+				}
+			}
+			//Prestiege ans
+			if (POP1 == true)
+			{
+				if (posX > 47 && posX < 62 && (posY > 36 && posY < 45))//win
+				{
+					questions = false;
+					LS_Win = true;
+				}
+				else if (posX > 47 && posX < 62 && (posY > 49 && posY < 53))
+				{
+					questions = false;
+					LS_Lose = true;
+				}
+				else if (posX > 47 && posX < 62 && (posY > 22 && posY < 32))
+				{
+					questions = false;
+					LS_Lose = true;
+				}
+				else if (posX > 47 && posX < 62 && (posY > 9 && posY < 19))
+				{
+					questions = false;
+					LS_Lose = true;
+				}
+			}
+			if (POP2 == true)
+			{
+				if (posX > 47 && posX < 62 && (posY > 36 && posY < 45))
+				{
+					questions = false;
+					LS_Lose = true;
+				}
+				else if (posX > 47 && posX < 62 && (posY > 49 && posY < 53))
+				{
+					questions = false;
+					LS_Lose = true;
+				}
+				else if (posX > 47 && posX < 62 && (posY > 22 && posY < 32))
+				{
+					questions = false;
+					LS_Lose = true;
+				}
+				else if (posX > 47 && posX < 62 && (posY > 9 && posY < 19))//win
+				{
+					questions = false;
+					LS_Win = true;
+
+				}
+			}
+			if (POP3 == true)
+			{
+				if (posX > 47 && posX < 62 && (posY > 49 && posY < 53))
+				{
+					questions = false;
+					LS_Lose = true;
+				}
+				else if (posX > 47 && posX < 62 && (posY > 36 && posY < 45))
+				{
+					questions = false;
+					LS_Lose = true;
+				}
+				else if (posX > 47 && posX < 62 && (posY > 22 && posY < 32))
+				{
+					questions = false;
+					LS_Win = true;
+				}
+				else if (posX > 47 && posX < 62 && (posY > 9 && posY < 19))//win
 				{
 					questions = false;
 					LS_Lose = true;
@@ -1040,22 +1136,36 @@ void Splevel1::Render()
 				RenderMeshOnScreen(meshList[GEO_Screen], 40, 30, 16, 54, true);
 				RenderMeshOnScreen(meshList[GEO_op1], 55, 30, 16, 54, true);
 				std::cout << "OP1";
-
-				
 			}
 			else if (OP2 == true && OP2check == false)
 			{
 				RenderMeshOnScreen(meshList[GEO_Screen], 40, 30, 16, 54, true);
 				RenderMeshOnScreen(meshList[GEO_op2], 55, 30, 16, 54, true);
 				std::cout << "OP2";
-				
 			}
 			else if (OP3 == true && OP3check == false)
 			{
 				RenderMeshOnScreen(meshList[GEO_Screen], 40, 30, 16, 54, true);
 				RenderMeshOnScreen(meshList[GEO_op3], 55, 30, 16, 54, true);
 				std::cout << "OP3";
-				
+			}
+			else if(POP1 == true && OP1check == false)
+			{
+				RenderMeshOnScreen(meshList[GEO_Screen], 40, 30, 16, 54, true);
+				RenderMeshOnScreen(meshList[GEO_PREop1], 55, 30, 16, 54, true);
+				std::cout << "POP1";
+			}
+			else if (POP2 == true && OP1check == false)
+			{
+				RenderMeshOnScreen(meshList[GEO_Screen], 40, 30, 16, 54, true);
+				RenderMeshOnScreen(meshList[GEO_PREop2], 55, 30, 16, 54, true);
+				std::cout << "POP2";
+			}
+			else if (POP3 == true && OP1check == false)
+			{
+				RenderMeshOnScreen(meshList[GEO_Screen], 40, 30, 16, 54, true);
+				RenderMeshOnScreen(meshList[GEO_PREop3], 55, 30, 16, 54, true);
+				std::cout << "POP3";
 			}
 			else
 			{
