@@ -304,6 +304,7 @@ int EquipmentManager::UpgradePhone(bool upgrade, int WorkStation)
 			CalculateTotalIncome();
 			return 1;
 		}
+		return 3;
 	}
 	if (EquipArray[WorkStation]->PhoneLvl == 2) //Can Upgrade to 2
 	{
@@ -317,12 +318,16 @@ int EquipmentManager::UpgradePhone(bool upgrade, int WorkStation)
 			CalculateTotalIncome();
 			return 1;
 		}
+		return 3;
 	}
 	if (EquipArray[WorkStation]->PhoneLvl == 3) //Maxed Cannot upgrade
 	{
 		return 2;
 	}
-	return 0;
+	if (EquipArray[WorkStation]->PhoneLvl == 0)
+	{
+		return 0;
+	}
 }
 
 int EquipmentManager::UpgradeComputer(bool upgrade, int WorkStation)
@@ -339,6 +344,7 @@ int EquipmentManager::UpgradeComputer(bool upgrade, int WorkStation)
 			CalculateTotalIncome();
 			return 1;
 		}
+		return 3;
 	}
 	if (EquipArray[WorkStation]->ComputerLvl == 2) //Can Upgrade to 2
 	{
@@ -352,12 +358,16 @@ int EquipmentManager::UpgradeComputer(bool upgrade, int WorkStation)
 			CalculateTotalIncome();
 			return 1;
 		}
+		return 3;
 	}
 	if (EquipArray[WorkStation]->ComputerLvl == 3) //Maxed Cannot upgrade
 	{
 		return 2;
 	}
-	return 0;
+	if (EquipArray[WorkStation]->ComputerLvl == 0)
+	{
+		return 0;
+	}
 }
 
 void EquipmentManager::DeleteEquipArray(void)
