@@ -239,10 +239,6 @@ void Scene13::Update(double dt)
 
 	//Mouse Inputs
 	static bool bLButtonState = false;
-	if (!bLButtonState && Application::IsMousePressed(0))
-	{
-		bLButtonState = true;
-		std::cout << "LBUTTON DOWN" << std::endl;
 
 		//Converting Viewport space to UI space
 		double x, y;
@@ -251,24 +247,22 @@ void Scene13::Update(double dt)
 		unsigned h = Application::GetWindowHeight();
 		float posX = (x / w) * 80; //convert (0,800) to (0,80)
 		float posY = 60 - (y / h) *60; //convert (600,0) to (0,60)
-		std::cout << "posX:" << posX << " , posY:" << posY << std::endl;
-	
-	}
+		if (!bLButtonState && Application::IsMousePressed(0))
+		{
+			if (posX > 30 && posX < 50 && posY > 24 && posY < 40)
+			{
+				std::cout << "Hit! transition start 2 black" << std::endl;
+				transition = true;
+			}
+			else
+			{
+				std::cout << "Miss!" << std::endl;
+			}
+		}
+
 	else if (bLButtonState && !Application::IsMousePressed(0))
 	{
 		bLButtonState = false;
-		std::cout << "LBUTTON UP" << std::endl;
-	}
-	static bool bRButtonState = false;
-	if (!bRButtonState && Application::IsMousePressed(1))
-	{
-		bRButtonState = true;
-		std::cout << "RBUTTON DOWN" << std::endl;
-	}
-	else if (bRButtonState && !Application::IsMousePressed(1))
-	{
-		bRButtonState = false;
-		std::cout << "RBUTTON UP" << std::endl;
 	}
 	if (scalex < 20 && transition == true)
 	{
