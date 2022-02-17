@@ -1661,29 +1661,31 @@ void Splevel1::UpdatePuzzleControls()
 		bLButtonState = false;
 		if (PuzzlePlayerPickup == true)
 		{
+			puzzle.pickupstatus = false;
+			PuzzlePlayerPickup = false;
 
+			double x, y;
+			Application::GetCursorPos(&x, &y);
+			unsigned w = Application::GetWindowWidth();
+			unsigned h = Application::GetWindowHeight();
+			float posX = (x / w) * 80; //convert (0,800) to (0,80)
+			float posY = 60 - (y / h) * 60; //convert (600,0) to (0,60)
+
+
+			posX -= 2;
+
+			int resultx = posX + 4 / 2;
+			resultx -= resultx % 4;
+
+			puzzle.playeractualpox = resultx;
+			puzzle.playeractualpox += 2;
+
+			int resulty = posY + 4 / 2;
+			resulty -= resulty % 4;
+
+			puzzle.playeractualpoy = resulty;
 		}
-		double x, y;
-		Application::GetCursorPos(&x, &y);
-		unsigned w = Application::GetWindowWidth();
-		unsigned h = Application::GetWindowHeight();
-		float posX = (x / w) * 80; //convert (0,800) to (0,80)
-		float posY = 60 - (y / h) * 60; //convert (600,0) to (0,60)
-		puzzle.pickupstatus = false;
-		PuzzlePlayerPickup = false;	
-
-		posX -= 2;
 		
-		int resultx = posX + 4 / 2;
-		resultx -= resultx % 4;
-
-		puzzle.playeractualpox = resultx;
-		puzzle.playeractualpox += 2;
-
-		int resulty = posY + 4 / 2;
-		resulty -= resulty % 4;
-
-		puzzle.playeractualpoy = resulty;
 		
 		/*puzzle.playeractualpox = (18 + (puzzle.Player->position.x * 4));
 		puzzle.playeractualpoy = (8 + (puzzle.Player->position.y * 4));*/
