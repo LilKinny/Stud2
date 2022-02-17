@@ -123,7 +123,7 @@ void Splevel1::Init()
 	puzzle.Init();
 
 	PuzzleActive = false;
-
+	PuzzleUIActive = false;
 	PuzzlePlayerPickup = false;
 
 	gamestate = Splevel1::Gamestate::MainGame;
@@ -539,12 +539,15 @@ void Splevel1::Update(double dt)
 			PuzzleActive = false;
 			puzzle.Resetgame();
 			puzzletimer = 30;
+			PuzzleWinUI = true;
+			Manager.MinigameBuffs += 5;
 		}
 		else if (puzzletimer < 0)
 		{
 			PuzzleActive = false;
 			puzzle.Resetgame();
 			puzzletimer = 30;
+			PuzzleLoseUI = true;
 		}
 	}
 	//end
@@ -586,7 +589,7 @@ void Splevel1::Update(double dt)
 			{
 				if (PuzzleActive == false)
 				{
-					PuzzleActive = true;
+					PuzzleUIActive = true;
 				}
 			}
 		}
@@ -830,7 +833,25 @@ LS_Win = true;
 					LS_Lose = false;
 				}
 			}
+			if (PuzzleUIActive == true)
+			{
+				if (posX > 35 && posX < 45 && posY > 8 && posY < 14)
+				{
+					cout << "Bruu moment";
+					PuzzleActive = true;
+					PuzzleUIActive = false;
+				}
+			}
+			if (PuzzleWinUI == true)
+			{
+				if (posX > 35 && posX < 45 && posY > 8 && posY < 14) PuzzleWinUI = false;
+			}
 
+			if (PuzzleLoseUI == true)
+			{
+				if (posX > 35 && posX < 45 && posY > 8 && posY < 14) PuzzleLoseUI = false;
+				Manager.Money -= Manager.Money / 5;
+			}
 		}
 		else if (bLButtonState && !Application::IsMousePressed(0))
 		{
@@ -1124,7 +1145,12 @@ void Splevel1::Render()
 		if (camera.position.x > 30 && camera.position.x < 45 && (camera.position.z > 40 && camera.position.z < 55))
 		{
 			RenderTextOnScreen(meshList[GEO_TEXT], "Press 'E' to start Laptop", Color(0, 1, 0), 4, 10, 30);
-			
+			RenderTextOnScreen(meshList[GEO_TEXT], "Press 'F' to start stack minigame", Color(0, 1, 0), 4, 6, 25);
+
+			if (Application::IsKeyPressed('F'))
+			{
+				PuzzleUIActive = true;
+			}
 		}
 		//Phone mini game
 		if (camera.position.x > 30 && camera.position.x < 45 && (camera.position.z > 30 && camera.position.z < 40))
@@ -1181,6 +1207,47 @@ void Splevel1::Render()
 			RenderMeshOnScreen(meshList[GEO_EMPTYBOX], 40, 10, 10, 6);
 			RenderTextOnScreen(meshList[GEO_TEXT], "Pay up", Color(1, 1, 1), 2, 37, 9);
 		}
+
+		if (PuzzleUIActive == true)
+		{
+			RenderMeshOnScreen(meshList[GEO_EMPTYBOX], 40, 25, 40, 40);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Minigame: Stack Overflow!", Color(1, 1, 1), 2, 27, 40);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Someone has hacked into your computer", Color(1, 1, 1), 2, 23, 35);
+			RenderTextOnScreen(meshList[GEO_TEXT], "and you have to block the hack!", Color(1, 1, 1), 2, 22, 32);
+			RenderTextOnScreen(meshList[GEO_TEXT], "You have to drag rico to the blocks", Color(1, 1, 1), 2, 22, 29);
+			RenderTextOnScreen(meshList[GEO_TEXT], "of code. If he is near a block, you can ", Color(1, 1, 1), 2, 20.5, 26);
+			RenderTextOnScreen(meshList[GEO_TEXT], "pick it up and move it. Your goal is to", Color(1, 1, 1), 2, 20.5, 23);
+			RenderTextOnScreen(meshList[GEO_TEXT], "stack all blocks together in one spot", Color(1, 1, 1), 2, 22, 21);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Reward: 5% permanent income boost", Color(1, 1, 1), 2, 24, 18);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Penalty: -20% of total income", Color(1, 1, 1), 2, 24, 15);
+			RenderMeshOnScreen(meshList[GEO_EMPTYBOX], 40, 10, 10, 6);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Start!", Color(1, 1, 1), 2, 37, 9);
+		}
+
+		if (PuzzleWinUI == true)
+		{
+			RenderMeshOnScreen(meshList[GEO_EMPTYBOX], 40, 25, 40, 40);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Congratulations!", Color(1, 1, 1), 2, 27, 40);
+			RenderTextOnScreen(meshList[GEO_TEXT], "You managed to block the hack!", Color(1, 1, 1), 2, 23, 35);
+			RenderTextOnScreen(meshList[GEO_TEXT], "You decided to upgrade your ", Color(1, 1, 1), 2, 24, 32);
+			RenderTextOnScreen(meshList[GEO_TEXT], "computers antivirus.", Color(1, 1, 1), 2, 22, 29);
+			RenderTextOnScreen(meshList[GEO_TEXT], "They will now work harder ", Color(1, 1, 1), 2, 24, 26);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Reward: 5% income boost permanently", Color(1, 1, 1), 2, 22, 21);
+			RenderMeshOnScreen(meshList[GEO_EMPTYBOX], 40, 10, 10, 6);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Hooray!", Color(1, 1, 1), 2, 37, 9);
+		}
+		if (PuzzleLoseUI == true)
+		{
+			RenderMeshOnScreen(meshList[GEO_EMPTYBOX], 40, 25, 40, 40);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Ouch!", Color(1, 1, 1), 2, 29, 40);
+			RenderTextOnScreen(meshList[GEO_TEXT], "You didnt block the hack in time!", Color(1, 1, 1), 2, 21, 35);
+			RenderTextOnScreen(meshList[GEO_TEXT], "The hacker demands your income as ransom", Color(1, 1, 1), 2, 21, 32);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Penalty: -20% of all cash", Color(1, 1, 1), 2, 24, 18);
+			RenderMeshOnScreen(meshList[GEO_EMPTYBOX], 40, 10, 10, 6);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Pay up", Color(1, 1, 1), 2, 37, 9);
+		}
+
+
 		if (questions == true)
 		{
 			if (OP1 == true && OP1check == false)

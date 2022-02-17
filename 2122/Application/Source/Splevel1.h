@@ -144,6 +144,9 @@ private:
 
 	Puzzle puzzle;
 	bool PuzzleActive;
+	bool PuzzleUIActive;
+	bool PuzzleWinUI;
+	bool PuzzleLoseUI;
 
 	bool PuzzlePlayerPickup;
 
