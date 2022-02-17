@@ -9,12 +9,18 @@ public:
 	void Render();
 	void Update();
 	void Init();
+	bool Wincheck();
+	void Resetgame();
 
-	bool pickupstatus;
+	bool ispickupsomthing;
 
 	PuzzleEntity* Paper[10]{};
 
 	PuzzleEntity* Player;
+
+	PuzzleEntity* Border;
+
+
 
 	float playeractualpox;
 	float playeractualpoy;

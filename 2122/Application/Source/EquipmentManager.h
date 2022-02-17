@@ -12,6 +12,7 @@ public:
 	int PrestigeLvl;
 	float TotalIncomePerSecond;
 	float Money;
+	float BasePrice;
 	Equipment* EquipArray[18];
 	EquipmentManager();
 	~EquipmentManager();

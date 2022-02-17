@@ -1,4 +1,5 @@
 #include "EquipmentManager.h"
+#include <iostream>
 
 EquipmentManager::EquipmentManager()
 {
@@ -7,6 +8,7 @@ EquipmentManager::EquipmentManager()
 	MoneyPlantUpgrade = 0;
 	PrestigeLvl = 0;
 	Money = 5000;
+	BasePrice = 50;
 	InitEquipArray();
 }
 
@@ -115,8 +117,7 @@ float EquipmentManager::CalculateIncome(int WorkStation, int CompOrPhone)
 	if (EquipArray[WorkStation] != nullptr)
 	{
 		TempIncome = 0;
-		EquipArray[WorkStation]->CalculateIncomePerSecond();
-		TempIncome += EquipArray[WorkStation]->IncomePerSecond;
+		TempIncome += EquipArray[WorkStation]->CalculateIncomePerSecond(CompOrPhone);
 		if (MoneyPlantUpgrade == 1)
 		{
 			TempIncome += 2;
