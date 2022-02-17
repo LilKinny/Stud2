@@ -76,6 +76,53 @@ void Camera3::Update(double dt)
 		{
 			position -= view * ZOOM_SPEED * static_cast<float>(dt);
 		}
+
+		// right wall
+		if (position.x < 75 && position.x > 62)
+		{
+			if (position.z < 75 && position.z > -85)
+			{
+				position -= view * ZOOM_SPEED * static_cast<float>(dt);
+			}
+		}
+
+		// right entrance wall
+		if (position.x < 75 && position.x > 18)
+		{
+			if (position.z < 75 && position.z > 60)
+			{
+				position -= view * ZOOM_SPEED * static_cast<float>(dt);
+			}
+		}
+
+
+		// left wall
+		if (position.x < -57 && position.x > -70)
+		{
+			if (position.z < 78 && position.z > -70)
+			{
+				position -= view * ZOOM_SPEED * static_cast<float>(dt);
+			}
+		}
+
+		// left entrance wall
+		if (position.x < -17 && position.x > -58)
+		{
+			if (position.z < 70 && position.z > 60)
+			{
+				position -= view * ZOOM_SPEED * static_cast<float>(dt);
+			}
+		}
+
+		// back wall
+		if (position.x < 60 && position.x > -76)
+		{
+			if (position.z < -60 && position.z > -70)
+			{
+				position -= view * ZOOM_SPEED * static_cast<float>(dt);
+			}
+		}
+
 	}
 	if (Application::IsKeyPressed('S'))
 	{
@@ -83,6 +130,52 @@ void Camera3::Update(double dt)
 		if (position.x > 445 || position.x < -445 || position.z > 445 || position.z < -445)
 		{
 			position += view * ZOOM_SPEED * static_cast<float>(dt);
+		}
+
+		// right wall
+		if (position.x < 75 && position.x > 62)
+		{
+			if (position.z < 75 && position.z > -85)
+			{
+				position += view * ZOOM_SPEED * static_cast<float>(dt);
+			}
+		}
+
+		// right entrance wall
+		if (position.x < 75 && position.x > 18)
+		{
+			if (position.z < 75 && position.z > 60)
+			{
+				position += view * ZOOM_SPEED * static_cast<float>(dt);
+			}
+		}
+
+
+		// left wall
+		if (position.x < -57 && position.x > -70)
+		{
+			if (position.z < 78 && position.z > -70)
+			{
+				position += view * ZOOM_SPEED * static_cast<float>(dt);
+			}
+		}
+
+		// left entrance wall
+		if (position.x < -17 && position.x > -58)
+		{
+			if (position.z < 70 && position.z > 60)
+			{
+				position += view * ZOOM_SPEED * static_cast<float>(dt);
+			}
+		}
+
+		// back wall
+		if (position.x < 60 && position.x > -76)
+		{
+			if (position.z < -60 && position.z > -70)
+			{
+				position += view * ZOOM_SPEED * static_cast<float>(dt);
+			}
 		}
 	}
 	if (Application::IsKeyPressed('A'))
@@ -92,6 +185,52 @@ void Camera3::Update(double dt)
 		{
 			position += right * ZOOM_SPEED * static_cast<float>(dt);
 		}
+
+		// right wall
+		if (position.x < 75 && position.x > 62)
+		{
+			if (position.z < 75 && position.z > -85)
+			{
+				position += right * ZOOM_SPEED * static_cast<float>(dt);
+			}
+		}
+
+		// right entrance wall
+		if (position.x < 75 && position.x > 18)
+		{
+			if (position.z < 75 && position.z > 60)
+			{
+				position += right * ZOOM_SPEED * static_cast<float>(dt);
+			}
+		}
+
+
+		// left wall
+		if (position.x < -57 && position.x > -70)
+		{
+			if (position.z < 78 && position.z > -70)
+			{
+				position += right * ZOOM_SPEED * static_cast<float>(dt);
+			}
+		}
+
+		// left entrance wall
+		if (position.x < -17 && position.x > -58)
+		{
+			if (position.z < 70 && position.z > 60)
+			{
+				position += right * ZOOM_SPEED * static_cast<float>(dt);
+			}
+		}
+
+		// back wall
+		if (position.x < 60 && position.x > -76)
+		{
+			if (position.z < -60 && position.z > -70)
+			{
+				position += right * ZOOM_SPEED * static_cast<float>(dt);
+			}
+		}
 	}
 	if (Application::IsKeyPressed('D'))
 	{
@@ -100,7 +239,54 @@ void Camera3::Update(double dt)
 		{
 			position -= right * ZOOM_SPEED * static_cast<float>(dt);
 		}
+
+		// right wall
+		if (position.x < 75 && position.x > 62)
+		{
+			if (position.z < 75 && position.z > -85)
+			{
+				position -= right * ZOOM_SPEED * static_cast<float>(dt);
+			}
+		}
+
+		// right entrance wall
+		if (position.x < -17 && position.x > -58)
+		{
+			if (position.z < 70 && position.z > 60)
+			{
+				position -= right * ZOOM_SPEED * static_cast<float>(dt);
+			}
+		}
+
+
+		// left wall
+		if (position.x < -57 && position.x > -70)
+		{
+			if (position.z < 78 && position.z > -70)
+			{
+				position -= right * ZOOM_SPEED * static_cast<float>(dt);
+			}
+		}
+
+		// left entrance wall
+		if (position.x < -58 && position.x > -70)
+		{
+			if (position.z < 78 && position.z > -70)
+			{
+				position -= right * ZOOM_SPEED * static_cast<float>(dt);
+			}
+		}
+
+		// back wall
+		if (position.x < 60 && position.x > -76)
+		{
+			if (position.z < -60 && position.z > -70)
+			{
+				position -= right * ZOOM_SPEED * static_cast<float>(dt);
+			}
+		}
 	}
+
 	position.y = defaultPosition.y;
 	target = position + view;
 

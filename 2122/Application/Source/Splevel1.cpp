@@ -225,6 +225,9 @@ void Splevel1::Init()
 
 
 	meshList[GEO_BUILDING] = MeshBuilder::GenerateOBJMTL("modelBUIDLING","OBJ//LVL1_withfloor.obj", "OBJ//LVL1_withfloor.mtl");
+
+	meshList[GEO_LVL2] = MeshBuilder::GenerateOBJMTL("modelLVL2", "OBJ//LVL2.obj", "OBJ//LVL2.mtl");
+
 	meshList[GEO_Table] = MeshBuilder::GenerateOBJMTL("modelBUIDLING", "OBJ//simple_table.obj", "OBJ//simple_table.mtl");
 
 	meshList[GEO_Screen] = MeshBuilder::GenerateRec("Rec", Color(1, 1, 1), 3.f, 5.f);
@@ -244,8 +247,14 @@ void Splevel1::Init()
 	meshList[GEO_op3] = MeshBuilder::GenerateRec("Rec", Color(1, 1, 1), 1.f, 1.f);
 	meshList[GEO_op3]->textureID = LoadTGA("Image//OP3.tga");
 
-	/*meshList[GEO_op4] = MeshBuilder::GenerateRec("Rec", Color(1, 1, 1), 1.f, 1.f);
-	meshList[GEO_op4]->textureID = LoadTGA("Image//TextOP4.tga");*/
+	meshList[GEO_PREop1] = MeshBuilder::GenerateRec("Rec", Color(1, 1, 1), 1.f, 1.f);
+	meshList[GEO_PREop1]->textureID = LoadTGA("Image//Pre_OP1.tga");
+
+	meshList[GEO_PREop2] = MeshBuilder::GenerateRec("Rec", Color(1, 1, 1), 1.f, 1.f);
+	meshList[GEO_PREop2]->textureID = LoadTGA("Image//Pre_OP2.tga");
+
+	meshList[GEO_PREop3] = MeshBuilder::GenerateRec("Rec", Color(1, 1, 1), 1.f, 1.f);
+	meshList[GEO_PREop3]->textureID = LoadTGA("Image//Pre_OP3.tga");
 
 	meshList[GEO_Tree] = MeshBuilder::GenerateOBJMTL("Tree", "OBJ//TreeTall.obj", "OBJ//TreeTall.mtl");
 	meshList[GEO_Laptop] = MeshBuilder::GenerateOBJMTL("Laptop", "OBJ//Laptop.obj", "OBJ//Laptop.mtl");
@@ -253,8 +262,6 @@ void Splevel1::Init()
 	meshList[GEO_Body] = MeshBuilder::GenerateOBJMTL("Body", "OBJ//Body.obj", "OBJ//Body.mtl");
 	meshList[GEO_Head] = MeshBuilder::GenerateOBJMTL("Head", "OBJ//Head.obj", "OBJ//Head.mtl");
 	meshList[GEO_Arms] = MeshBuilder::GenerateOBJMTL("Arms", "OBJ//Arms.obj", "OBJ//Arms.mtl");
-
-
 
 
 	meshList[GEO_Lift] = MeshBuilder::GenerateOBJ("modelBUIDLING", "OBJ//Elevator.obj");
@@ -288,15 +295,15 @@ bool setuppolice = false, clearpolice, paper1, paper2, paper3, paper4, timerstar
 double scaleevidence = 0.1, countdown, timer;
 float pposx, pposz, pposx2, pposz2, pposx4, pposx3, pposz3, pposz4, rotateangle, pposy, pposy2, pposy3, pposy4, pushaway;
 string timerstring, beetsinstringform;
-int totalbeets = 0, countdownbonus = 1500;
+int totalbeets = 0, countdownbonus = 1500, spinD = 0;
 
 int mg1_start;
-bool OP1, OP2, OP3,OP1check, OP2check,OP3check,deleterest,LS_start,LS_Win,LS_Lose;
+bool OP1, OP2, OP3,OP1check, OP2check,OP3check,deleterest,LS_start,LS_Win,LS_Lose,POP1,POP2,POP3, rotateback = true;
 float cposx, cposz;
 void Splevel1::Update(double dt)
 {
 	Manager.UpdateMoney(dt);
-	 cposx = camera.position.x;
+	cposx = camera.position.x;
 	cposz = camera.position.z;
 	//cout << cposx;
 	rotateangle = rotateangle + 0.1;
@@ -433,7 +440,7 @@ void Splevel1::Update(double dt)
 		timer = countdown / 10;
 		timerstring = to_string(timer);
 
-		
+
 	}
 	if (timer < 0)
 	{
@@ -479,7 +486,7 @@ void Splevel1::Update(double dt)
 	{
 		camera.Update(dt);
 	}
-	
+
 
 
 
@@ -588,25 +595,48 @@ void Splevel1::Update(double dt)
 			{
 				LS_start = true;
 			}
-			if (questions == true)
+			if (Manager.PrestigeLvl >= 1)
 			{
-				if (deleterest == false)
+				if (questions == true)
 				{
-					int rnd = rand() % 3 + 0;
-					cout << rnd;
-					if (rnd == 0 && OP1check == false && OP2 != true && OP3 != true)
+					if (deleterest == false)
 					{
-						OP1 = true;
-						deleterest = true;
+						int rnd = rand() % 3 + 0;
+						cout << rnd;
+						if (rnd == 0 && OP1check == false && OP2 != true && OP3 != true)
+						{
+							POP1 = true;
+							deleterest = true;
+						}
+						if (rnd == 1 && OP2check == false && OP3 != true && OP1 != true)
+						{
+							POP2 = true;
+							deleterest = true;
+						}
+						if (rnd == 2 && OP3check == false && OP2 != true && OP1 != true)
+						{
+							POP3 = true;
+							deleterest = true;
+						}
 					}
-					if (rnd == 1 && OP2check == false && OP3 != true && OP1 != true)
+				}
+				else if (deleterest == true)
+				{
+					cout << "PressedE->deleterest true";
+					OP1 = false;
+					OP2 = false;
+					OP3 = false;
+					deleterest = false;
+				}
+			}
+			else
+			{
+				if (questions == true)
+				{
+					if (deleterest == false)
 					{
-						OP2 = true;
-						deleterest = true;
-					}
-					if (rnd == 2 && OP3check == false && OP2 != true && OP1 != true)
-					{
-						int rnd = rand() % 2 + 1;
+						int rnd = rand() % 3 + 0;
+						cout << rnd;
 						if (rnd == 0 && OP1check == false && OP2 != true && OP3 != true)
 						{
 							OP1 = true;
@@ -622,20 +652,16 @@ void Splevel1::Update(double dt)
 							OP3 = true;
 							deleterest = true;
 						}
-
-						OP3 = true;
-						deleterest = true;
-
 					}
 				}
-			}
-			else if (deleterest == true)
-			{
-				cout << "PressedE->deleterest true";
-				OP1 = false;
-				OP2 = false;
-				OP3 = false;
-				deleterest = false;
+				else if (deleterest == true)
+				{
+					cout << "PressedE->deleterest true";
+					OP1 = false;
+					OP2 = false;
+					OP3 = false;
+					deleterest = false;
+				}
 			}
 		}
 		static bool bLButtonState = false;
@@ -659,10 +685,10 @@ void Splevel1::Update(double dt)
 					LS_start = false;
 				}
 			}
-			
+
 			if (OP1 == true)
 			{
-				if (posX > 47 && posX < 62 &&(posY > 42 && posY < 55))//op1
+				if (posX > 47 && posX < 62 && (posY > 42 && posY < 55))//op1
 				{
 					questions = false;
 					LS_Win = true;
@@ -680,15 +706,15 @@ void Splevel1::Update(double dt)
 			}
 			if (OP2 == true)
 			{
-				if (posX > 47 && posX < 62 && (posY > 25 && posY <37))//op2
+				if (posX > 47 && posX < 62 && (posY > 25 && posY < 37))//op2
 				{
 					questions = false;
-					LS_Win = true;
+					LS_Lose = true;
 				}
 				else if (posX > 47 && posX < 62 && (posY > 42 && posY < 55))//op1
 				{
 					questions = false;
-					LS_Lose = true;
+					LS_Win = true;
 				}
 				else if (posX > 47 && posX < 62 && (posY > 8 && posY < 20))//op3
 				{
@@ -701,7 +727,7 @@ void Splevel1::Update(double dt)
 				if (posX > 47 && posX < 62 && (posY > 8 && posY < 20))//op3
 				{
 					questions = false;
-					LS_Win = true;
+					LS_Lose = true;
 				}
 				else if (posX > 47 && posX < 62 && (posY > 25 && posY < 37))//op2
 				{
@@ -709,6 +735,77 @@ void Splevel1::Update(double dt)
 					LS_Lose = true;
 				}
 				else if (posX > 47 && posX < 62 && (posY > 42 && posY < 55))//op1
+				{
+					questions = false;
+LS_Win = true;
+				}
+			}
+			//Prestiege ans
+			if (POP1 == true)
+			{
+				if (posX > 47 && posX < 62 && (posY > 36 && posY < 45))//win
+				{
+					questions = false;
+					LS_Win = true;
+				}
+				else if (posX > 47 && posX < 62 && (posY > 49 && posY < 53))
+				{
+					questions = false;
+					LS_Lose = true;
+				}
+				else if (posX > 47 && posX < 62 && (posY > 22 && posY < 32))
+				{
+					questions = false;
+					LS_Lose = true;
+				}
+				else if (posX > 47 && posX < 62 && (posY > 9 && posY < 19))
+				{
+					questions = false;
+					LS_Lose = true;
+				}
+			}
+			if (POP2 == true)
+			{
+				if (posX > 47 && posX < 62 && (posY > 36 && posY < 45))
+				{
+					questions = false;
+					LS_Lose = true;
+				}
+				else if (posX > 47 && posX < 62 && (posY > 49 && posY < 53))
+				{
+					questions = false;
+					LS_Lose = true;
+				}
+				else if (posX > 47 && posX < 62 && (posY > 22 && posY < 32))
+				{
+					questions = false;
+					LS_Lose = true;
+				}
+				else if (posX > 47 && posX < 62 && (posY > 9 && posY < 19))//win
+				{
+					questions = false;
+					LS_Win = true;
+
+				}
+			}
+			if (POP3 == true)
+			{
+				if (posX > 47 && posX < 62 && (posY > 49 && posY < 53))
+				{
+					questions = false;
+					LS_Lose = true;
+				}
+				else if (posX > 47 && posX < 62 && (posY > 36 && posY < 45))
+				{
+					questions = false;
+					LS_Lose = true;
+				}
+				else if (posX > 47 && posX < 62 && (posY > 22 && posY < 32))
+				{
+					questions = false;
+					LS_Win = true;
+				}
+				else if (posX > 47 && posX < 62 && (posY > 9 && posY < 19))//win
 				{
 					questions = false;
 					LS_Lose = true;
@@ -730,15 +827,26 @@ void Splevel1::Update(double dt)
 					LS_Lose = false;
 				}
 			}
-			
+
 		}
 		else if (bLButtonState && !Application::IsMousePressed(0))
 		{
-			bLButtonState = false;
-			std::cout << "LBUTTON UP" << std::endl;
+		bLButtonState = false;
+		std::cout << "LBUTTON UP" << std::endl;
 		}
-		
 	}
+
+	//Character Animation
+	if (rotateback == false)
+	{
+		spinD += 300;
+	}
+	if (rotateback == true)
+	{
+		spinD -= -300;
+	}
+	if (rotateAngle >= 45) rotateback = true;
+	else if (rotateAngle < 0) rotateback = false;
 }
 
 
@@ -815,10 +923,7 @@ void Splevel1::Render()
 
 
 	viewStack.LoadIdentity();
-	viewStack.LookAt(
-		camera.position.x, camera.position.y, camera.position.z,
-		camera.target.x, camera.target.y, camera.target.z,
-		camera.up.x, camera.up.y, camera.up.z);
+	viewStack.LookAt(camera.position.x, camera.position.y, camera.position.z,camera.target.x, camera.target.y, camera.target.z,camera.up.x, camera.up.y, camera.up.z);
 	modelStack.LoadIdentity();
 
 
@@ -850,20 +955,31 @@ void Splevel1::Render()
 	RenderMesh(meshList[GEO_AXES], false);
 	RenderSkybox();
 
-	modelStack.PushMatrix();
-	modelStack.Translate(0, 0, 0);
-	modelStack.Scale(10, 10, 10);
+	//Building
 	{
 		modelStack.PushMatrix();
-		modelStack.Translate(6.52, 3, -7);
-		modelStack.Rotate(90, 0, 0, 1);
-		modelStack.Scale(1.5, 0.9, 1);
-		RenderMesh(meshList[GEO_Lift], true);
+		modelStack.Translate(0, 0, 0);
+		modelStack.Scale(10, 10, 10);
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(6.52, 3, -7);
+			modelStack.Rotate(90, 0, 0, 1);
+			modelStack.Scale(1.5, 0.9, 1);
+			RenderMesh(meshList[GEO_Lift], true);
+			modelStack.PopMatrix();
+		}
+		RenderMesh(meshList[GEO_BUILDING], true);
 		modelStack.PopMatrix();
-	}
-	RenderMesh(meshList[GEO_BUILDING], true);
-	modelStack.PopMatrix();
 
+		if (Manager.PrestigeLvl > 0)
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(0, 50, 0);
+			modelStack.Scale(10, 10, 10);
+			RenderMesh(meshList[GEO_LVL2], true);
+			modelStack.PopMatrix();
+		}
+	}
 
 
 	//Render trees
@@ -949,6 +1065,7 @@ void Splevel1::Render()
 		modelStack.PopMatrix();
 		
 
+		// a human, person, worker, slave
 		modelStack.PushMatrix();
 		modelStack.Translate(15, 5, 15);
 		modelStack.Scale(5, 5, 5);
@@ -958,7 +1075,9 @@ void Splevel1::Render()
 			modelStack.Scale(1, 1, 1);
 			{
 				modelStack.PushMatrix();
-				modelStack.Translate(0, 0, 0);
+				modelStack.Translate(0, 3, 0);
+				modelStack.Rotate(-90, 0, 0, 1);
+				modelStack.Rotate(spinD, 0, 1, 0);
 				modelStack.Scale(1, 1, 1);
 				RenderMesh(meshList[GEO_Arms], false);
 				modelStack.PopMatrix();
@@ -967,7 +1086,30 @@ void Splevel1::Render()
 			modelStack.PopMatrix();
 		}
 		RenderMesh(meshList[GEO_Body], false);
+
+		modelStack.PushMatrix();
+		modelStack.Rotate(90, 0, 1, 0);
+		modelStack.Scale(1, 1.5, 1.2);
+		modelStack.Translate(0, -0.5, 2.2);
+		RenderMesh(meshList[GEO_Table], false);
+
+		modelStack.PushMatrix();
+		modelStack.Translate(0, 2.05, 0);
+		modelStack.Rotate(90, 0, 1, 0);
+		modelStack.Scale(0.4, 0.3, 0.7);
+		RenderMesh(meshList[GEO_Laptop], true);
 		modelStack.PopMatrix();
+
+		modelStack.PushMatrix();
+		modelStack.Translate(1, 2.2, 0);
+		modelStack.Rotate(90, 0, 1, 0);
+		modelStack.Rotate(90, 1, 0, 0);
+		modelStack.Scale(0.4, 0.3, 0.6);
+		RenderMesh(meshList[GEO_Phone1], true);
+		modelStack.PopMatrix();
+		modelStack.PopMatrix();
+		modelStack.PopMatrix();
+		//
 
 
 		//Evidence mini game
@@ -989,7 +1131,7 @@ void Splevel1::Render()
 				RenderTextOnScreen(meshList[GEO_TEXT], "Press 'E' to start phone", Color(0, 1, 0), 4, 10, 30);
 			}
 		}
-		//lift
+		//L1 lift
 		if (camera.position.x > 25 && camera.position.x < 60 &&(camera.position.z < -50 && camera.position.z > -60))
 		{
 			if (Manager.PrestigeLvl > 0)
@@ -998,7 +1140,7 @@ void Splevel1::Render()
 			}
 			else
 			{
-				RenderTextOnScreen(meshList[GEO_TEXT], "Reach prestiege for lift access", Color(0, 1, 0), 4, 10, 30);
+				RenderTextOnScreen(meshList[GEO_TEXT], "Reach prestige 1 for lift access", Color(0, 1, 0), 4, 10, 30);
 			}
 		}
 		//Lovescam mini game
@@ -1043,22 +1185,36 @@ void Splevel1::Render()
 				RenderMeshOnScreen(meshList[GEO_Screen], 40, 30, 16, 54, true);
 				RenderMeshOnScreen(meshList[GEO_op1], 55, 30, 16, 54, true);
 				std::cout << "OP1";
-
-				
 			}
 			else if (OP2 == true && OP2check == false)
 			{
 				RenderMeshOnScreen(meshList[GEO_Screen], 40, 30, 16, 54, true);
 				RenderMeshOnScreen(meshList[GEO_op2], 55, 30, 16, 54, true);
 				std::cout << "OP2";
-				
 			}
 			else if (OP3 == true && OP3check == false)
 			{
 				RenderMeshOnScreen(meshList[GEO_Screen], 40, 30, 16, 54, true);
 				RenderMeshOnScreen(meshList[GEO_op3], 55, 30, 16, 54, true);
 				std::cout << "OP3";
-				
+			}
+			else if(POP1 == true && OP1check == false)
+			{
+				RenderMeshOnScreen(meshList[GEO_Screen], 40, 30, 16, 54, true);
+				RenderMeshOnScreen(meshList[GEO_PREop1], 55, 30, 16, 54, true);
+				std::cout << "POP1";
+			}
+			else if (POP2 == true && OP1check == false)
+			{
+				RenderMeshOnScreen(meshList[GEO_Screen], 40, 30, 16, 54, true);
+				RenderMeshOnScreen(meshList[GEO_PREop2], 55, 30, 16, 54, true);
+				std::cout << "POP2";
+			}
+			else if (POP3 == true && OP1check == false)
+			{
+				RenderMeshOnScreen(meshList[GEO_Screen], 40, 30, 16, 54, true);
+				RenderMeshOnScreen(meshList[GEO_PREop3], 55, 30, 16, 54, true);
+				std::cout << "POP3";
 			}
 			else
 			{
@@ -1158,7 +1314,7 @@ void Splevel1::Render()
 		modelStack.PushMatrix();
 		RenderMeshOnScreen(meshList[GEO_TopUI], 40, 30, 16, 54, true);
 		modelStack.PopMatrix();
-		RenderTextOnScreen(meshList[GEO_TEXT], Manager.ConvertMoneyToSuitableAmounts(), Color(1, 1, 0), 3, 61.5, 51);
+		RenderTextOnScreen(meshList[GEO_TEXT], Manager.ConvertMoneyToSuitableAmounts(Manager.Money), Color(1, 1, 0), 3, 61.5, 51);
 
 		if (RenderPrestige == 0)
 		{
@@ -1316,64 +1472,255 @@ void Splevel1::Render()
 			RenderTextOnScreen(meshList[GEO_TEXT], "Owned Page: " + std::to_string(PageNum), Color(1, 1, 0), 2, 30, 43);
 			modelStack.PopMatrix();
 
-			//Equipment Owned
+			//Gray Button
 			{
-				//Gray Button
+				if (Manager.EquipArray[(PageNum - 1) * 6 + 0] == nullptr || Manager.UpgradeComputer(false, (PageNum - 1) * 6 + 0) != 1)
 				{
 					//GrayButton Left Top
 					modelStack.PushMatrix();
 					RenderMeshOnScreen(meshList[GEO_GRAYBUTTON], 24, 29, 24, 3, true);
 					modelStack.PopMatrix();
+				}
+				if (Manager.EquipArray[(PageNum - 1) * 6 + 1] == nullptr || Manager.UpgradeComputer(false, (PageNum - 1) * 6 + 1) != 1)
+				{
 					//GrayButton Mid Top
 					modelStack.PushMatrix();
 					RenderMeshOnScreen(meshList[GEO_GRAYBUTTON], 40, 29, 24, 3, true);
 					modelStack.PopMatrix();
+				}
+				if (Manager.EquipArray[(PageNum - 1) * 6 + 2] == nullptr || Manager.UpgradeComputer(false, (PageNum - 1) * 6 + 2) != 1)
+				{
 					//GrayButton Right Top
 					modelStack.PushMatrix();
 					RenderMeshOnScreen(meshList[GEO_GRAYBUTTON], 56, 29, 24, 3, true);
 					modelStack.PopMatrix();
+				}
+				if (Manager.EquipArray[(PageNum - 1) * 6 + 3] == nullptr || Manager.UpgradeComputer(false, (PageNum - 1) * 6 + 3) != 1)
+				{
 					//GrayButton Left Bot
 					modelStack.PushMatrix();
 					RenderMeshOnScreen(meshList[GEO_GRAYBUTTON], 24, 16, 24, 3, true);
 					modelStack.PopMatrix();
-					//GrayButton Mid Top
+				}
+				if (Manager.EquipArray[(PageNum - 1) * 6 + 4] == nullptr || Manager.UpgradeComputer(false, (PageNum - 1) * 6 + 4) != 1)
+				{
+					//GrayButton Mid Bot
 					modelStack.PushMatrix();
 					RenderMeshOnScreen(meshList[GEO_GRAYBUTTON], 40, 16, 24, 3, true);
 					modelStack.PopMatrix();
-					//GrayButton Right Top
+				}
+				if (Manager.EquipArray[(PageNum - 1) * 6 + 5] == nullptr || Manager.UpgradeComputer(false, (PageNum - 1) * 6 + 5) != 1)
+				{
+					//GrayButton Right Bot
 					modelStack.PushMatrix();
 					RenderMeshOnScreen(meshList[GEO_GRAYBUTTON], 56, 16, 24, 3, true);
 					modelStack.PopMatrix();
 				}
+			}
 
-				//Green Button
+			//Green Button
+			{
+				if (Manager.EquipArray[(PageNum - 1) * 6 + 0] != nullptr && Manager.UpgradeComputer(false, (PageNum - 1) * 6 + 0) == 1)
 				{
 					//GreenButton Left Top
 					modelStack.PushMatrix();
 					RenderMeshOnScreen(meshList[GEO_GREENBUTTON], 24, 29, 24, 3, true);
 					modelStack.PopMatrix();
+				}
+				if (Manager.EquipArray[(PageNum - 1) * 6 + 1] != nullptr && Manager.UpgradeComputer(false, (PageNum - 1) * 6 + 1) == 1)
+				{
 					//GreenButton Mid Top
 					modelStack.PushMatrix();
 					RenderMeshOnScreen(meshList[GEO_GREENBUTTON], 40, 29, 24, 3, true);
 					modelStack.PopMatrix();
+				}
+				if (Manager.EquipArray[(PageNum - 1) * 6 + 2] != nullptr && Manager.UpgradeComputer(false, (PageNum - 1) * 6 + 2) == 1)
+				{
 					//GreenButton Right Top
 					modelStack.PushMatrix();
 					RenderMeshOnScreen(meshList[GEO_GREENBUTTON], 56, 29, 24, 3, true);
 					modelStack.PopMatrix();
+				}
+				if (Manager.EquipArray[(PageNum - 1) * 6 + 3] != nullptr && Manager.UpgradeComputer(false, (PageNum - 1) * 6 + 3) == 1)
+				{
 					//GreenButton Left Bot
 					modelStack.PushMatrix();
 					RenderMeshOnScreen(meshList[GEO_GREENBUTTON], 24, 16, 24, 3, true);
 					modelStack.PopMatrix();
+				}
+				if (Manager.EquipArray[(PageNum - 1) * 6 + 4] != nullptr && Manager.UpgradeComputer(false, (PageNum - 1) * 6 + 4) == 1)
+				{
 					//GreenButton Mid Top
 					modelStack.PushMatrix();
 					RenderMeshOnScreen(meshList[GEO_GREENBUTTON], 40, 16, 24, 3, true);
 					modelStack.PopMatrix();
+				}
+				if (Manager.EquipArray[(PageNum - 1) * 6 + 5] != nullptr && Manager.UpgradeComputer(false, (PageNum - 1) * 6 + 5) == 1)
+				{
 					//GreenButton Right Top
 					modelStack.PushMatrix();
 					RenderMeshOnScreen(meshList[GEO_GREENBUTTON], 56, 16, 24, 3, true);
 					modelStack.PopMatrix();
 				}
 			}
+				
+			//Text
+			{
+				//Text
+				modelStack.PushMatrix();
+				std::string TempText;
+				for (int i = 0; i < 6; ++i)
+				{
+					TempText = "";
+					if (Manager.EquipArray[(PageNum - 1) * 6 + i] == nullptr || Manager.EquipArray[(PageNum - 1) * 6 + i]->ComputerLvl == 0)
+					{
+						TempText = "Locked";
+					}
+					else if (Manager.UpgradeComputer(false, (PageNum - 1) * 6 + i) != 2)
+					{
+						TempText = "Upgrade";
+					}
+					else if (Manager.UpgradeComputer(false, (PageNum - 1) * 6 + i) == 2)
+					{
+						TempText = "Maxed";
+					}
+					if (i == 0)
+					{
+						RenderTextOnScreen(meshList[GEO_TEXT], TempText, Color(1, 0, 0), 2, 21, 28);
+					}
+					if (i == 1)
+					{
+						RenderTextOnScreen(meshList[GEO_TEXT], TempText, Color(1, 0, 0), 2, 37, 28);
+					}
+					if (i == 2)
+					{
+						RenderTextOnScreen(meshList[GEO_TEXT], TempText , Color(1, 0, 0), 2, 53, 28);
+					}
+					if (i == 3)
+					{
+						RenderTextOnScreen(meshList[GEO_TEXT], TempText, Color(1, 0, 0), 2, 21, 15);
+					}
+					if (i == 4)
+					{
+						RenderTextOnScreen(meshList[GEO_TEXT], TempText, Color(1, 0, 0), 2, 37, 15);
+					}
+					if (i == 5)
+					{
+						RenderTextOnScreen(meshList[GEO_TEXT], TempText, Color(1, 0, 0), 2, 53, 15);
+					}
+				}
+				modelStack.PopMatrix();
+			}
+
+			//Description
+			{
+				modelStack.PushMatrix();
+				std::string ObjName, Income, Price;
+				for (int i = 0; i < 6; ++i)
+				{
+					ObjName = Income = Price = "";
+					if (Manager.EquipArray[(PageNum - 1) * 6 + i] == nullptr || Manager.EquipArray[(PageNum - 1) * 6 + i]->ComputerLvl == 0)
+					{
+					}
+					else
+					{
+						ObjName = "Computer Level " + std::to_string(Manager.EquipArray[(PageNum - 1) * 6 + i]->ComputerLvl);
+						Income = "Income: $" + Manager.ConvertMoneyToSuitableAmounts(Manager.CalculateIncome((PageNum - 1) * 6 + i,1)) + "/s";
+						if (Manager.EquipArray[(PageNum - 1) * 6 + i]->ComputerLvl == 1)
+						{
+							Price = "500";
+						}
+						else if (Manager.EquipArray[(PageNum - 1) * 6 + i]->ComputerLvl == 2)
+						{
+							Price = "5000";
+						}
+						else
+						{
+							Price = "0";
+						}
+						if (i == 0)
+						{
+							RenderTextOnScreen(meshList[GEO_TEXT], ObjName, Color(0.5, 0, 0.5), 1, 18, 36);
+							RenderTextOnScreen(meshList[GEO_TEXT], Income, Color(0.5, 0, 0.5), 1, 18, 34);
+							if (Price != "0")
+							{
+								RenderTextOnScreen(meshList[GEO_TEXT], "Price: $" + Manager.ConvertMoneyToSuitableAmounts(std::stof(Price)), Color(0.5, 0, 0.5), 1, 18, 32);
+							}
+							else
+							{
+								RenderTextOnScreen(meshList[GEO_TEXT], "Price: N/A", Color(0.5, 0, 0.5), 1, 18, 32);
+							}
+						}
+						if (i == 1)
+						{
+							RenderTextOnScreen(meshList[GEO_TEXT], ObjName, Color(0.5, 0, 0.5), 1, 34, 36);
+							RenderTextOnScreen(meshList[GEO_TEXT], Income, Color(0.5, 0, 0.5), 1, 34, 34);
+							if (Price != "0")
+							{
+								RenderTextOnScreen(meshList[GEO_TEXT], "Price: $" + Manager.ConvertMoneyToSuitableAmounts(std::stof(Price)), Color(0.5, 0, 0.5), 1, 34, 32);
+							}
+							else
+							{
+								RenderTextOnScreen(meshList[GEO_TEXT], "Price: N/A", Color(0.5, 0, 0.5), 1, 34, 32);
+							}
+						}
+						if (i == 2)
+						{
+							RenderTextOnScreen(meshList[GEO_TEXT], ObjName, Color(0.5, 0, 0.5), 1, 50, 36);
+							RenderTextOnScreen(meshList[GEO_TEXT], Income, Color(0.5, 0, 0.5), 1, 50, 34);
+							if (Price != "0")
+							{
+								RenderTextOnScreen(meshList[GEO_TEXT], "Price: $" + Manager.ConvertMoneyToSuitableAmounts(std::stof(Price)), Color(0.5, 0, 0.5), 1, 50, 32);
+							}
+							else
+							{
+								RenderTextOnScreen(meshList[GEO_TEXT], "Price: N/A", Color(0.5, 0, 0.5), 1, 50, 32);
+							}
+						}
+						if (i == 3)
+						{
+							RenderTextOnScreen(meshList[GEO_TEXT], ObjName, Color(0.5, 0, 0.5), 1, 18, 23);
+							RenderTextOnScreen(meshList[GEO_TEXT], Income, Color(0.5, 0, 0.5), 1, 18, 21);
+							if (Price != "0")
+							{
+								RenderTextOnScreen(meshList[GEO_TEXT], "Price: $" + Manager.ConvertMoneyToSuitableAmounts(std::stof(Price)), Color(0.5, 0, 0.5), 1, 18, 19);
+							}
+							else
+							{
+								RenderTextOnScreen(meshList[GEO_TEXT], "Price: N/A", Color(0.5, 0, 0.5), 1, 18, 19);
+							}
+						}
+						if (i == 4)
+						{
+							RenderTextOnScreen(meshList[GEO_TEXT], ObjName, Color(0.5, 0, 0.5), 1, 34, 23);
+							RenderTextOnScreen(meshList[GEO_TEXT], Income, Color(0.5, 0, 0.5), 1, 34, 21);
+							if (Price != "0")
+							{
+								RenderTextOnScreen(meshList[GEO_TEXT], "Price: $" + Manager.ConvertMoneyToSuitableAmounts(std::stof(Price)), Color(0.5, 0, 0.5), 1, 34, 19);
+							}
+							else
+							{
+								RenderTextOnScreen(meshList[GEO_TEXT], "Price: N/A", Color(0.5, 0, 0.5), 1, 34, 19);
+							}
+						}
+						if (i == 5)
+						{
+							RenderTextOnScreen(meshList[GEO_TEXT], ObjName, Color(0.5, 0, 0.5), 1, 50, 23);
+							RenderTextOnScreen(meshList[GEO_TEXT], Income, Color(0.5, 0, 0.5), 1, 50, 21);
+							if (Price != "0")
+							{
+								RenderTextOnScreen(meshList[GEO_TEXT], "Price: $" + Manager.ConvertMoneyToSuitableAmounts(std::stof(Price)), Color(0.5, 0, 0.5), 1, 50, 19);
+							}
+							else
+							{
+								RenderTextOnScreen(meshList[GEO_TEXT], "Price: N/A", Color(0.5, 0, 0.5), 1, 50, 19);
+							}
+						}
+					}
+				}
+				modelStack.PopMatrix();
+			}
+		
 			//Switch for Phone and Computer
 			{
 				//GrayButton Top
@@ -1388,73 +1735,265 @@ void Splevel1::Render()
 		}
 		else if (RenderUI == 3)
 		{
-		//BotUI
-		modelStack.PushMatrix();
-		RenderMeshOnScreen(meshList[GEO_BotUI], 40, 30, 16, 54, true);
-		modelStack.PopMatrix();
-		//Text
-		modelStack.PushMatrix();
-		RenderTextOnScreen(meshList[GEO_TEXT], "Owned Page: " + std::to_string(PageNum), Color(1, 1, 0), 2, 30, 43);
-		modelStack.PopMatrix();
+			//BotUI
+			modelStack.PushMatrix();
+			RenderMeshOnScreen(meshList[GEO_BotUI], 40, 30, 16, 54, true);
+			modelStack.PopMatrix();
+			//Text
+			modelStack.PushMatrix();
+			RenderTextOnScreen(meshList[GEO_TEXT], "Owned Page: " + std::to_string(PageNum), Color(1, 1, 0), 2, 30, 43);
+			modelStack.PopMatrix();
 
-		//Equipment Owned
-		{
 			//Gray Button
 			{
-				//GrayButton Left Top
-				modelStack.PushMatrix();
-				RenderMeshOnScreen(meshList[GEO_GRAYBUTTON], 24, 29, 24, 3, true);
-				modelStack.PopMatrix();
-				//GrayButton Mid Top
-				modelStack.PushMatrix();
-				RenderMeshOnScreen(meshList[GEO_GRAYBUTTON], 40, 29, 24, 3, true);
-				modelStack.PopMatrix();
-				//GrayButton Right Top
-				modelStack.PushMatrix();
-				RenderMeshOnScreen(meshList[GEO_GRAYBUTTON], 56, 29, 24, 3, true);
-				modelStack.PopMatrix();
-				//GrayButton Left Bot
-				modelStack.PushMatrix();
-				RenderMeshOnScreen(meshList[GEO_GRAYBUTTON], 24, 16, 24, 3, true);
-				modelStack.PopMatrix();
-				//GrayButton Mid Top
-				modelStack.PushMatrix();
-				RenderMeshOnScreen(meshList[GEO_GRAYBUTTON], 40, 16, 24, 3, true);
-				modelStack.PopMatrix();
-				//GrayButton Right Top
-				modelStack.PushMatrix();
-				RenderMeshOnScreen(meshList[GEO_GRAYBUTTON], 56, 16, 24, 3, true);
-				modelStack.PopMatrix();
+				if (Manager.EquipArray[(PageNum - 1) * 6 + 0] == nullptr || Manager.UpgradePhone(false, (PageNum - 1) * 6 + 0) != 1)
+				{
+					//GrayButton Left Top
+					modelStack.PushMatrix();
+					RenderMeshOnScreen(meshList[GEO_GRAYBUTTON], 24, 29, 24, 3, true);
+					modelStack.PopMatrix();
+				}
+				if (Manager.EquipArray[(PageNum - 1) * 6 + 1] == nullptr || Manager.UpgradePhone(false, (PageNum - 1) * 6 + 1) != 1)
+				{
+					//GrayButton Mid Top
+					modelStack.PushMatrix();
+					RenderMeshOnScreen(meshList[GEO_GRAYBUTTON], 40, 29, 24, 3, true);
+					modelStack.PopMatrix();
+				}
+				if (Manager.EquipArray[(PageNum - 1) * 6 + 2] == nullptr || Manager.UpgradePhone(false, (PageNum - 1) * 6 + 2) != 1)
+				{
+					//GrayButton Right Top
+					modelStack.PushMatrix();
+					RenderMeshOnScreen(meshList[GEO_GRAYBUTTON], 56, 29, 24, 3, true);
+					modelStack.PopMatrix();
+				}
+				if (Manager.EquipArray[(PageNum - 1) * 6 + 3] == nullptr || Manager.UpgradePhone(false, (PageNum - 1) * 6 + 3) != 1)
+				{
+					//GrayButton Left Bot
+					modelStack.PushMatrix();
+					RenderMeshOnScreen(meshList[GEO_GRAYBUTTON], 24, 16, 24, 3, true);
+					modelStack.PopMatrix();
+				}
+				if (Manager.EquipArray[(PageNum - 1) * 6 + 4] == nullptr || Manager.UpgradePhone(false, (PageNum - 1) * 6 + 4) != 1)
+				{
+					//GrayButton Mid Bot
+					modelStack.PushMatrix();
+					RenderMeshOnScreen(meshList[GEO_GRAYBUTTON], 40, 16, 24, 3, true);
+					modelStack.PopMatrix();
+				}
+				if (Manager.EquipArray[(PageNum - 1) * 6 + 5] == nullptr || Manager.UpgradePhone(false, (PageNum - 1) * 6 + 5) != 1)
+				{
+					//GrayButton Right Bot
+					modelStack.PushMatrix();
+					RenderMeshOnScreen(meshList[GEO_GRAYBUTTON], 56, 16, 24, 3, true);
+					modelStack.PopMatrix();
+				}
 			}
 
 			//Green Button
 			{
-				//GreenButton Left Top
+				if (Manager.EquipArray[(PageNum - 1) * 6 + 0] != nullptr && Manager.UpgradePhone(false, (PageNum - 1) * 6 + 0) == 1)
+				{
+					//GreenButton Left Top
+					modelStack.PushMatrix();
+					RenderMeshOnScreen(meshList[GEO_GREENBUTTON], 24, 29, 24, 3, true);
+					modelStack.PopMatrix();
+				}
+				if (Manager.EquipArray[(PageNum - 1) * 6 + 1] != nullptr && Manager.UpgradePhone(false, (PageNum - 1) * 6 + 1) == 1)
+				{
+					//GreenButton Mid Top
+					modelStack.PushMatrix();
+					RenderMeshOnScreen(meshList[GEO_GREENBUTTON], 40, 29, 24, 3, true);
+					modelStack.PopMatrix();
+				}
+				if (Manager.EquipArray[(PageNum - 1) * 6 + 2] != nullptr && Manager.UpgradePhone(false, (PageNum - 1) * 6 + 2) == 1)
+				{
+					//GreenButton Right Top
+					modelStack.PushMatrix();
+					RenderMeshOnScreen(meshList[GEO_GREENBUTTON], 56, 29, 24, 3, true);
+					modelStack.PopMatrix();
+				}
+				if (Manager.EquipArray[(PageNum - 1) * 6 + 3] != nullptr && Manager.UpgradePhone(false, (PageNum - 1) * 6 + 3) == 1)
+				{
+					//GreenButton Left Bot
+					modelStack.PushMatrix();
+					RenderMeshOnScreen(meshList[GEO_GREENBUTTON], 24, 16, 24, 3, true);
+					modelStack.PopMatrix();
+				}
+				if (Manager.EquipArray[(PageNum - 1) * 6 + 4] != nullptr && Manager.UpgradePhone(false, (PageNum - 1) * 6 + 4) == 1)
+				{
+					//GreenButton Mid Top
+					modelStack.PushMatrix();
+					RenderMeshOnScreen(meshList[GEO_GREENBUTTON], 40, 16, 24, 3, true);
+					modelStack.PopMatrix();
+				}
+				if (Manager.EquipArray[(PageNum - 1) * 6 + 5] != nullptr && Manager.UpgradePhone(false, (PageNum - 1) * 6 + 5) == 1)
+				{
+					//GreenButton Right Top
+					modelStack.PushMatrix();
+					RenderMeshOnScreen(meshList[GEO_GREENBUTTON], 56, 16, 24, 3, true);
+					modelStack.PopMatrix();
+				}
+			}
+
+			//Text
+			{
+				//Text
 				modelStack.PushMatrix();
-				RenderMeshOnScreen(meshList[GEO_GREENBUTTON], 24, 29, 24, 3, true);
-				modelStack.PopMatrix();
-				//GreenButton Mid Top
-				modelStack.PushMatrix();
-				RenderMeshOnScreen(meshList[GEO_GREENBUTTON], 40, 29, 24, 3, true);
-				modelStack.PopMatrix();
-				//GreenButton Right Top
-				modelStack.PushMatrix();
-				RenderMeshOnScreen(meshList[GEO_GREENBUTTON], 56, 29, 24, 3, true);
-				modelStack.PopMatrix();
-				//GreenButton Left Bot
-				modelStack.PushMatrix();
-				RenderMeshOnScreen(meshList[GEO_GREENBUTTON], 24, 16, 24, 3, true);
-				modelStack.PopMatrix();
-				//GreenButton Mid Top
-				modelStack.PushMatrix();
-				RenderMeshOnScreen(meshList[GEO_GREENBUTTON], 40, 16, 24, 3, true);
-				modelStack.PopMatrix();
-				//GreenButton Right Top
-				modelStack.PushMatrix();
-				RenderMeshOnScreen(meshList[GEO_GREENBUTTON], 56, 16, 24, 3, true);
+				std::string TempText;
+				for (int i = 0; i < 6; ++i)
+				{
+					TempText = "";
+					if (Manager.EquipArray[(PageNum - 1) * 6 + i] == nullptr || Manager.EquipArray[(PageNum - 1) * 6 + i]->PhoneLvl == 0)
+					{
+						TempText = "Locked";
+					}
+					else if (Manager.UpgradePhone(false, (PageNum - 1) * 6 + i) != 2)
+					{
+						TempText = "Upgrade";
+					}
+					else if (Manager.UpgradePhone(false, (PageNum - 1) * 6 + i) == 2)
+					{
+						TempText = "Maxed";
+					}
+					if (i == 0)
+					{
+						RenderTextOnScreen(meshList[GEO_TEXT], TempText, Color(1, 0, 0), 2, 21, 28);
+					}
+					if (i == 1)
+					{
+						RenderTextOnScreen(meshList[GEO_TEXT], TempText, Color(1, 0, 0), 2, 37, 28);
+					}
+					if (i == 2)
+					{
+						RenderTextOnScreen(meshList[GEO_TEXT], TempText, Color(1, 0, 0), 2, 53, 28);
+					}
+					if (i == 3)
+					{
+						RenderTextOnScreen(meshList[GEO_TEXT], TempText, Color(1, 0, 0), 2, 21, 15);
+					}
+					if (i == 4)
+					{
+						RenderTextOnScreen(meshList[GEO_TEXT], TempText, Color(1, 0, 0), 2, 37, 15);
+					}
+					if (i == 5)
+					{
+						RenderTextOnScreen(meshList[GEO_TEXT], TempText, Color(1, 0, 0), 2, 53, 15);
+					}
+				}
 				modelStack.PopMatrix();
 			}
-		}
+
+
+			//Description
+			{
+				modelStack.PushMatrix();
+				std::string ObjName, Income, Price;
+				for (int i = 0; i < 6; ++i)
+				{
+					ObjName = Income = Price = "";
+					if (Manager.EquipArray[(PageNum - 1) * 6 + i] == nullptr || Manager.EquipArray[(PageNum - 1) * 6 + i]->PhoneLvl == 0)
+					{
+					}
+					else
+					{
+						ObjName = "Phone Level " + std::to_string(Manager.EquipArray[(PageNum - 1) * 6 + i]->PhoneLvl);
+						Income = "Income: $" + Manager.ConvertMoneyToSuitableAmounts(Manager.CalculateIncome((PageNum - 1) * 6 + i,2)) + "/s";
+						if (Manager.EquipArray[(PageNum - 1) * 6 + i]->PhoneLvl == 1)
+						{
+							Price = "250";
+						}
+						else if (Manager.EquipArray[(PageNum - 1) * 6 + i]->PhoneLvl == 2)
+						{
+							Price = "1250";
+						}
+						else
+						{
+							Price = "0";
+						}
+						if (i == 0)
+						{
+							RenderTextOnScreen(meshList[GEO_TEXT], ObjName, Color(0.5, 0, 0.5), 1, 18, 36);
+							RenderTextOnScreen(meshList[GEO_TEXT], Income, Color(0.5, 0, 0.5), 1, 18, 34);
+							if (Price != "0")
+							{
+								RenderTextOnScreen(meshList[GEO_TEXT], "Price: $" + Manager.ConvertMoneyToSuitableAmounts(std::stof(Price)), Color(0.5, 0, 0.5), 1, 18, 32);
+							}
+							else
+							{
+								RenderTextOnScreen(meshList[GEO_TEXT], "Price: N/A", Color(0.5, 0, 0.5), 1, 18, 32);
+							}
+						}
+						if (i == 1)
+						{
+							RenderTextOnScreen(meshList[GEO_TEXT], ObjName, Color(0.5, 0, 0.5), 1, 34, 36);
+							RenderTextOnScreen(meshList[GEO_TEXT], Income, Color(0.5, 0, 0.5), 1, 34, 34);
+							if (Price != "0")
+							{
+								RenderTextOnScreen(meshList[GEO_TEXT], "Price: $" + Manager.ConvertMoneyToSuitableAmounts(std::stof(Price)), Color(0.5, 0, 0.5), 1, 34, 32);
+							}
+							else
+							{
+								RenderTextOnScreen(meshList[GEO_TEXT], "Price: N/A", Color(0.5, 0, 0.5), 1, 34, 32);
+							}
+						}
+						if (i == 2)
+						{
+							RenderTextOnScreen(meshList[GEO_TEXT], ObjName, Color(0.5, 0, 0.5), 1, 50, 36);
+							RenderTextOnScreen(meshList[GEO_TEXT], Income, Color(0.5, 0, 0.5), 1, 50, 34);
+							if (Price != "0")
+							{
+								RenderTextOnScreen(meshList[GEO_TEXT], "Price: $" + Manager.ConvertMoneyToSuitableAmounts(std::stof(Price)), Color(0.5, 0, 0.5), 1, 50, 32);
+							}
+							else
+							{
+								RenderTextOnScreen(meshList[GEO_TEXT], "Price: N/A", Color(0.5, 0, 0.5), 1, 50, 32);
+							}
+						}
+						if (i == 3)
+						{
+							RenderTextOnScreen(meshList[GEO_TEXT], ObjName, Color(0.5, 0, 0.5), 1, 18, 23);
+							RenderTextOnScreen(meshList[GEO_TEXT], Income, Color(0.5, 0, 0.5), 1, 18, 21);
+							if (Price != "0")
+							{
+								RenderTextOnScreen(meshList[GEO_TEXT], "Price: $" + Manager.ConvertMoneyToSuitableAmounts(std::stof(Price)), Color(0.5, 0, 0.5), 1, 18, 19);
+							}
+							else
+							{
+								RenderTextOnScreen(meshList[GEO_TEXT], "Price: N/A", Color(0.5, 0, 0.5), 1, 18, 19);
+							}
+						}
+						if (i == 4)
+						{
+							RenderTextOnScreen(meshList[GEO_TEXT], ObjName, Color(0.5, 0, 0.5), 1, 34, 23);
+							RenderTextOnScreen(meshList[GEO_TEXT], Income, Color(0.5, 0, 0.5), 1, 34, 21);
+							if (Price != "0")
+							{
+								RenderTextOnScreen(meshList[GEO_TEXT], "Price: $" + Manager.ConvertMoneyToSuitableAmounts(std::stof(Price)), Color(0.5, 0, 0.5), 1, 34, 19);
+							}
+							else
+							{
+								RenderTextOnScreen(meshList[GEO_TEXT], "Price: N/A", Color(0.5, 0, 0.5), 1, 34, 19);
+							}
+						}
+						if (i == 5)
+						{
+							RenderTextOnScreen(meshList[GEO_TEXT], ObjName, Color(0.5, 0, 0.5), 1, 50, 23);
+							RenderTextOnScreen(meshList[GEO_TEXT], Income, Color(0.5, 0, 0.5), 1, 50, 21);
+							if (Price != "0")
+							{
+								RenderTextOnScreen(meshList[GEO_TEXT], "Price: $" + Manager.ConvertMoneyToSuitableAmounts(std::stof(Price)), Color(0.5, 0, 0.5), 1, 50, 19);
+							}
+							else
+							{
+								RenderTextOnScreen(meshList[GEO_TEXT], "Price: N/A", Color(0.5, 0, 0.5), 1, 50, 19);
+							}	
+						}
+					}
+				}
+				modelStack.PopMatrix();
+			}
+
 			//Switch for Phone and Computer
 			{
 				//GrayButton Bot
@@ -1471,11 +2010,11 @@ void Splevel1::Render()
 		{
 			//Computer Text
 			modelStack.PushMatrix();
-			RenderTextOnScreen(meshList[GEO_TEXT], "Computer", Color(1, 0, 0), 1.5, 19, 40);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Phone", Color(1, 0, 0), 1.5, 19, 40);
 			modelStack.PopMatrix();
 			//Phone Text
 			modelStack.PushMatrix();
-			RenderTextOnScreen(meshList[GEO_TEXT], "Phone", Color(1, 0, 0), 1.5, 19, 43);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Computer", Color(1, 0, 0), 1.5, 19, 43);
 			modelStack.PopMatrix();
 		}
 	}
@@ -1957,12 +2496,28 @@ void Splevel1::UpdateMainControls()
 			{
 				Manager.UnlockComputer(true);
 			}
+			else if (RenderUI == 2)
+			{
+				Manager.UpgradeComputer(true, (PageNum - 1) * 6 + 0);
+			}
+			else if (RenderUI == 3)
+			{
+				Manager.UpgradePhone(true, (PageNum - 1) * 6 + 0);
+			}
 		}
 		if ((posY >= 31.5 && posY <= 34) && (posX >= 36.5 && posX <= 43.5)) //Top Mid Button
 		{
 			if (RenderUI == 1)
 			{
 				Manager.UnlockPhone(true);
+			}
+			else if (RenderUI == 2)
+			{
+				Manager.UpgradeComputer(true, (PageNum - 1) * 6 + 1);
+			}
+			else if (RenderUI == 3)
+			{
+				Manager.UpgradePhone(true, (PageNum - 1) * 6 + 1);
 			}
 		}
 		if ((posY >= 31.5 && posY <= 34) && (posX >= 52.5 && posX <= 59.5)) //Top Right Button
@@ -1971,21 +2526,51 @@ void Splevel1::UpdateMainControls()
 			{
 				Manager.UnlockLuckyCat(true);
 			}
+			else if (RenderUI == 2)
+			{
+				Manager.UpgradeComputer(true, (PageNum - 1) * 6 + 2);
+			}
+			else if (RenderUI == 3)
+			{
+				Manager.UpgradePhone(true, (PageNum - 1) * 6 + 2);
+			}
 		}
 		if ((posY >= 18.5 && posY <= 21.5) && (posX >= 20.5 && posX <= 27.5)) //Bot Left Button
 		{
 			if (RenderUI == 1)
 			{
-				Manager.UnlockMoneyPlant(true);
+				Manager.UnlockMoneyPlant(true); 
+			}
+			else if (RenderUI == 2)
+			{
+				Manager.UpgradeComputer(true, (PageNum - 1) * 6 + 3);
+			}
+			else if (RenderUI == 3)
+			{
+				Manager.UpgradePhone(true, (PageNum - 1) * 6 + 3);
 			}
 		}
 		if ((posY >= 18.5 && posY <= 21.5) && (posX >= 36.5 && posX <= 43.5)) //Bot Mid Button
 		{
-
+			if (RenderUI == 2)
+			{
+				Manager.UpgradeComputer(true, (PageNum - 1) * 6 + 4);
+			}
+			else if (RenderUI == 3)
+			{
+				Manager.UpgradePhone(true, (PageNum - 1) * 6 + 4);
+			}
 		}
 		if ((posY >= 18.5 && posY <= 21.5) && (posX >= 52.5 && posX <= 59.5)) //Bot Right Button
 		{
-
+			if (RenderUI == 2)
+			{
+				Manager.UpgradeComputer(true, (PageNum - 1) * 6 + 5);
+			}
+			else if (RenderUI == 3)
+			{
+				Manager.UpgradePhone(true, (PageNum - 1) * 6 + 5);
+			}
 		}
 
 		if (posX > 35 && posX < 45 && posY > 8 && posY < 14)

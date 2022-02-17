@@ -70,8 +70,8 @@ int EquipmentManager::UpgradePrestige(bool Upgrade)
 
 void EquipmentManager::CalculateTotalIncome(void)
 {
-	int TotalIncome = 0;
-	int TempIncome;
+	float TotalIncome = 0;
+	float TempIncome;
 	for (int i = 0; i < (PrestigeLvl + 1) * 6; ++i)
 	{
 		if (EquipArray[i] != nullptr)
@@ -109,6 +109,43 @@ void EquipmentManager::CalculateTotalIncome(void)
 	TotalIncomePerSecond = TotalIncome;
 }
 
+float EquipmentManager::CalculateIncome(int WorkStation, int CompOrPhone)
+{
+	float TempIncome = 0;;
+	if (EquipArray[WorkStation] != nullptr)
+	{
+		TempIncome = 0;
+		EquipArray[WorkStation]->CalculateIncomePerSecond();
+		TempIncome += EquipArray[WorkStation]->IncomePerSecond;
+		if (MoneyPlantUpgrade == 1)
+		{
+			TempIncome += 2;
+		}
+		if (LuckyCatUpgrade == 1)
+		{
+			TempIncome *= 2;
+		}
+		if (MinigameBuffs > 0)
+		{
+			TempIncome += TempIncome * (MinigameBuffs * 0.01);
+		}
+		if (PrestigeLvl == 1)
+		{
+			TempIncome *= 1.5;
+		}
+		else if (PrestigeLvl == 2)
+		{
+			TempIncome *= 1.75;
+		}
+		else if (PrestigeLvl == 3)
+		{
+			TempIncome *= 2;
+		}
+	}
+	
+	return TempIncome;
+}
+
 void EquipmentManager::UpdateMoney(float dt)
 {
 	if (TotalIncomePerSecond != 0)
@@ -117,19 +154,19 @@ void EquipmentManager::UpdateMoney(float dt)
 	}
 }
 
-std::string EquipmentManager::ConvertMoneyToSuitableAmounts(void) //Return Edited String
+std::string EquipmentManager::ConvertMoneyToSuitableAmounts(float Amount) //Return Edited String
 {
-	float Temp = Money;
-	if (Money >= 1000000)
+	float Temp = Amount;
+	if (Amount >= 1000000)
 	{
 		Temp = Temp * 0.000001;
 	}
-	else if (Money >= 1000)
+	else if (Amount >= 1000)  
 	{
 		Temp = Temp * 0.001;
 	}
 	std::string Temporary = std::to_string(Temp);
-	int Stoppos = -1;
+	int Stoppos = 0;
 	for (unsigned int i = 0; i < Temporary.length(); ++i)
 	{
 		if (Temporary[i] == '.')
@@ -142,11 +179,11 @@ std::string EquipmentManager::ConvertMoneyToSuitableAmounts(void) //Return Edite
 	{
 		Temporary = Temporary.substr(0, Stoppos + 3);
 	}
-	if (Money >= 1000000)
+	if (Amount >= 1000000)
 	{
 		Temporary += 'm';
 	}
-	else if (Money >= 1000)
+	else if (Amount >= 1000)
 	{
 		Temporary += 'k';
 	}
@@ -267,6 +304,7 @@ int EquipmentManager::UpgradePhone(bool upgrade, int WorkStation)
 			CalculateTotalIncome();
 			return 1;
 		}
+		return 3;
 	}
 	if (EquipArray[WorkStation]->PhoneLvl == 2) //Can Upgrade to 2
 	{
@@ -280,12 +318,16 @@ int EquipmentManager::UpgradePhone(bool upgrade, int WorkStation)
 			CalculateTotalIncome();
 			return 1;
 		}
+		return 3;
 	}
 	if (EquipArray[WorkStation]->PhoneLvl == 3) //Maxed Cannot upgrade
 	{
 		return 2;
 	}
-	return 0;
+	if (EquipArray[WorkStation]->PhoneLvl == 0)
+	{
+		return 0;
+	}
 }
 
 int EquipmentManager::UpgradeComputer(bool upgrade, int WorkStation)
@@ -302,6 +344,7 @@ int EquipmentManager::UpgradeComputer(bool upgrade, int WorkStation)
 			CalculateTotalIncome();
 			return 1;
 		}
+		return 3;
 	}
 	if (EquipArray[WorkStation]->ComputerLvl == 2) //Can Upgrade to 2
 	{
@@ -315,12 +358,16 @@ int EquipmentManager::UpgradeComputer(bool upgrade, int WorkStation)
 			CalculateTotalIncome();
 			return 1;
 		}
+		return 3;
 	}
 	if (EquipArray[WorkStation]->ComputerLvl == 3) //Maxed Cannot upgrade
 	{
 		return 2;
 	}
-	return 0;
+	if (EquipArray[WorkStation]->ComputerLvl == 0)
+	{
+		return 0;
+	}
 }
 
 void EquipmentManager::DeleteEquipArray(void)

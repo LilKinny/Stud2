@@ -48,6 +48,7 @@ class Splevel1 : public Scene
 		GEO_COTTAGE,
 		GEO_TEXT,
 		GEO_BUILDING,
+		GEO_LVL2,
 		GEO_LAPTOP,
 		GEO_LAPTOP_UI,
 		GEO_TopUI,
@@ -73,7 +74,9 @@ class Splevel1 : public Scene
 		GEO_op1,
 		GEO_op2,
 		GEO_op3,
-		GEO_op4,
+		GEO_PREop1,
+		GEO_PREop2,
+		GEO_PREop3,
 		GEO_Body,
 		GEO_Head,
 		GEO_Arms,
@@ -128,6 +131,7 @@ private:
 	float rotateAngle;
 	float rotateAngleF;
 	float rotateAngleSF;
+	float rotateAnglesC;
 	bool bEnableLight;
 	bool questions,Pqeustions;
 
