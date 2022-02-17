@@ -303,7 +303,6 @@ string timerstring, beetsinstringform;
 int totalbeets = 0, countdownbonus = 1500, spinD = 0;
 
 int mg1_start;
-bool OP1, OP2, OP3,OP1check, OP2check,OP3check,deleterest,LS_start,LS_Win,LS_Lose,POP1,POP2,POP3;
 bool lvl2, lvl3,lvl1=true;
 bool OP1, OP2, OP3,OP1check, OP2check,OP3check,deleterest,LS_start,LS_Win,LS_Lose,POP1,POP2,POP3, rotateback = true;
 float cposx, cposz;
@@ -870,7 +869,8 @@ LS_Win = true;
 		spinD += 300;
 	}
 
-
+	static bool BButtonState = false;
+	static bool CButtonState = false;
 
 	if (lvl1 == true)
 	{
@@ -887,9 +887,41 @@ LS_Win = true;
 		camera.target.y = 130 - camera.position.y + camera.target.y;
 		camera.position.y = 130;
 	}
+
+	//Level Checker
+	if (camera.position.x > 25 && camera.position.x < 60 && (camera.position.z < -50 && camera.position.z > -60) && (camera.position.y == 30))//L1
+	{
+		if (!BButtonState && Application::IsKeyPressed('E'))
+		{
+			BButtonState = true;
+
+			if (Manager.PrestigeLvl > 0)
+			{
+				lvl2 = true;
+				lvl1 = false;
+			}
+		}
+		else if (BButtonState && !Application::IsKeyPressed('E'))
+		{
+			BButtonState = false;
+		}
+	}
+	if (camera.position.x > 25 && camera.position.x < 60 && (camera.position.z < -50 && camera.position.z > -60))//L2
+	{
+		if (!CButtonState && Application::IsKeyPressed('F'))
+		{
+			CButtonState = true;
+			lvl2 = false;
+			lvl1 = true;
+			std::cout << "Ass\n";
+		}
+		else if (CButtonState && !Application::IsKeyPressed('F'))
+		{
+			CButtonState = false;
+		}
+	}
 	
-	static bool BButtonState = false;
-	static bool CButtonState = false;
+	
 	if (rotateback == true)
 	{
 		spinD -= -300;
@@ -897,78 +929,6 @@ LS_Win = true;
 	if (rotateAngle >= 45) rotateback = true;
 	else if (rotateAngle < 0) rotateback = false;
 }
-
-
-	//Level Checker
-	if (camera.position.x > 25 && camera.position.x < 60 && (camera.position.z < -50 && camera.position.z > -60) && (camera.position.y == 30))//L1
-	{
-		if (!BButtonState && Application::IsKeyPressed('E'))
-		{
-			BButtonState = true;
-
-			if (Manager.PrestigeLvl > 0)
-			{
-				lvl2 = true;
-				lvl1 = false;
-			}
-		}
-		else if (BButtonState && !Application::IsKeyPressed('E'))
-		{
-			BButtonState = false;
-		}
-	}
-	if (camera.position.x > 25 && camera.position.x < 60 && (camera.position.z < -50 && camera.position.z > -60))//L2
-	{
-		if (!CButtonState && Application::IsKeyPressed('F'))
-		{
-			CButtonState = true;
-			lvl2 = false;
-			lvl1 = true;
-			std::cout << "Ass\n";
-		}
-		else if (CButtonState && !Application::IsKeyPressed('F'))
-		{
-			CButtonState = false;
-		}
-	}
-}
-
-
-	//Level Checker
-	if (camera.position.x > 25 && camera.position.x < 60 && (camera.position.z < -50 && camera.position.z > -60) && (camera.position.y == 30))//L1
-	{
-		if (!BButtonState && Application::IsKeyPressed('E'))
-		{
-			BButtonState = true;
-
-			if (Manager.PrestigeLvl > 0)
-			{
-				lvl2 = true;
-				lvl1 = false;
-			}
-		}
-		else if (BButtonState && !Application::IsKeyPressed('E'))
-		{
-			BButtonState = false;
-		}
-	}
-	if (camera.position.x > 25 && camera.position.x < 60 && (camera.position.z < -50 && camera.position.z > -60))//L2
-	{
-		if (!CButtonState && Application::IsKeyPressed('F'))
-		{
-			CButtonState = true;
-			lvl2 = false;
-			lvl1 = true;
-			std::cout << "Ass\n";
-		}
-		else if (CButtonState && !Application::IsKeyPressed('F'))
-		{
-			CButtonState = false;
-		}
-	}
-	
-}
-
 
 
 void Splevel1::Render()
@@ -1137,11 +1097,12 @@ void Splevel1::Render()
 			if (Manager.PrestigeLvl > 1)
 			{
 				RenderTextOnScreen(meshList[GEO_TEXT], "Press 'E' to L3", Color(0, 1, 0), 4, 10, 30);
-				RenderTextOnScreen(meshList[GEO_TEXT], "Press 'F' to L1", Color(0, 1, 0), 4, 10, 27);
 			}
 			else
 			{
 				RenderTextOnScreen(meshList[GEO_TEXT], "Reach prestige 2 for lift access", Color(0, 1, 0), 4, 10, 30);
+				RenderTextOnScreen(meshList[GEO_TEXT], "Press 'F' to L1", Color(0, 1, 0), 4, 10, 27);
+
 			}
 		}
 	}
