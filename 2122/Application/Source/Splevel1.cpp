@@ -223,7 +223,8 @@ void Splevel1::Init()
 
 
 	meshList[GEO_BUILDING] = MeshBuilder::GenerateOBJMTL("modelBUIDLING","OBJ//LVL1_withfloor.obj", "OBJ//LVL1_withfloor.mtl");
-	meshList[GEO_LVL2] = MeshBuilder::GenerateOBJMTL("modelLVL2", "OBJ//LVL2.obj", "OBJ//LVL2.mtl");
+
+	meshList[GEO_LVL2] = MeshBuilder::GenerateOBJMTL("modelLVL2", "OBJ//LVL2.obj", "LVL2.mtl");
 
 	meshList[GEO_Table] = MeshBuilder::GenerateOBJMTL("modelBUIDLING", "OBJ//simple_table.obj", "OBJ//simple_table.mtl");
 
@@ -259,8 +260,6 @@ void Splevel1::Init()
 	meshList[GEO_Body] = MeshBuilder::GenerateOBJMTL("Body", "OBJ//Body.obj", "OBJ//Body.mtl");
 	meshList[GEO_Head] = MeshBuilder::GenerateOBJMTL("Head", "OBJ//Head.obj", "OBJ//Head.mtl");
 	meshList[GEO_Arms] = MeshBuilder::GenerateOBJMTL("Arms", "OBJ//Arms.obj", "OBJ//Arms.mtl");
-
-
 
 
 	meshList[GEO_Lift] = MeshBuilder::GenerateOBJ("modelBUIDLING", "OBJ//Elevator.obj");
@@ -302,7 +301,7 @@ float cposx, cposz;
 void Splevel1::Update(double dt)
 {
 	Manager.UpdateMoney(dt);
-	 cposx = camera.position.x;
+	cposx = camera.position.x;
 	cposz = camera.position.z;
 	//cout << cposx;
 	rotateangle = rotateangle + 0.1;
@@ -439,7 +438,7 @@ void Splevel1::Update(double dt)
 		timer = countdown / 10;
 		timerstring = to_string(timer);
 
-		
+
 	}
 	if (timer < 0)
 	{
@@ -485,7 +484,7 @@ void Splevel1::Update(double dt)
 	{
 		camera.Update(dt);
 	}
-	
+
 
 
 
@@ -659,10 +658,10 @@ void Splevel1::Update(double dt)
 					LS_start = false;
 				}
 			}
-			
+
 			if (OP1 == true)
 			{
-				if (posX > 47 && posX < 62 &&(posY > 42 && posY < 55))//op1
+				if (posX > 47 && posX < 62 && (posY > 42 && posY < 55))//op1
 				{
 					questions = false;
 					LS_Win = true;
@@ -680,7 +679,7 @@ void Splevel1::Update(double dt)
 			}
 			if (OP2 == true)
 			{
-				if (posX > 47 && posX < 62 && (posY > 25 && posY <37))//op2
+				if (posX > 47 && posX < 62 && (posY > 25 && posY < 37))//op2
 				{
 					questions = false;
 					LS_Lose = true;
@@ -711,7 +710,7 @@ void Splevel1::Update(double dt)
 				else if (posX > 47 && posX < 62 && (posY > 42 && posY < 55))//op1
 				{
 					questions = false;
-					LS_Win = true;
+LS_Win = true;
 				}
 			}
 			//Prestiege ans
@@ -808,17 +807,14 @@ void Splevel1::Update(double dt)
 		bLButtonState = false;
 		std::cout << "LBUTTON UP" << std::endl;
 		}
-
 	}
 
-	//Character animations?
+	//Character Animation
+	int spinD=30;
+	rotateAnglesC += (float)(spinD * dt);
+	if (rotateAnglesC >= 45)
 	{
-		rotateAnglesC+= (float)(30 * dt);
-		if (rotateAnglesC > 45)
-		{
-
-		}
-
+		spinD = -30;
 	}
 }
 
@@ -896,10 +892,7 @@ void Splevel1::Render()
 
 
 	viewStack.LoadIdentity();
-	viewStack.LookAt(
-		camera.position.x, camera.position.y, camera.position.z,
-		camera.target.x, camera.target.y, camera.target.z,
-		camera.up.x, camera.up.y, camera.up.z);
+	viewStack.LookAt(camera.position.x, camera.position.y, camera.position.z,camera.target.x, camera.target.y, camera.target.z,camera.up.x, camera.up.y, camera.up.z);
 	modelStack.LoadIdentity();
 
 
@@ -1051,7 +1044,9 @@ void Splevel1::Render()
 			modelStack.Scale(1, 1, 1);
 			{
 				modelStack.PushMatrix();
-				modelStack.Translate(0, 0, 0);
+				modelStack.Translate(0, 3, 0);
+				modelStack.Rotate(-90, 0, 0, 1);
+				modelStack.Rotate(rotateAnglesC, 0, 1, 0);
 				modelStack.Scale(1, 1, 1);
 				RenderMesh(meshList[GEO_Arms], false);
 				modelStack.PopMatrix();
