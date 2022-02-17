@@ -226,6 +226,8 @@ void Splevel1::Init()
 
 	meshList[GEO_LVL2] = MeshBuilder::GenerateOBJMTL("modelLVL2", "OBJ//LVL2.obj", "OBJ//LVL2.mtl");
 
+	meshList[GEO_LVL3] = MeshBuilder::GenerateOBJMTL("modelLVL3", "OBJ//LVL3.obj", "OBJ//LVL3.mtl");
+
 	meshList[GEO_Table] = MeshBuilder::GenerateOBJMTL("modelBUIDLING", "OBJ//simple_table.obj", "OBJ//simple_table.mtl");
 
 	meshList[GEO_Screen] = MeshBuilder::GenerateRec("Rec", Color(1, 1, 1), 3.f, 5.f);
@@ -297,6 +299,7 @@ int totalbeets = 0, countdownbonus = 1500;
 
 int mg1_start;
 bool OP1, OP2, OP3,OP1check, OP2check,OP3check,deleterest,LS_start,LS_Win,LS_Lose,POP1,POP2,POP3;
+bool lvl2, lvl3,lvl1=true;
 float cposx, cposz;
 void Splevel1::Update(double dt)
 {
@@ -816,6 +819,61 @@ LS_Win = true;
 	{
 		spinD = -30;
 	}
+
+
+
+	if (lvl1 == true)
+	{
+		camera.target.y = 30 - camera.position.y + camera.target.y;
+		camera.position.y = 30;
+	}
+	if (lvl2 == true)
+	{
+		camera.target.y = 80 - camera.position.y + camera.target.y;
+		camera.position.y = 80;
+	}
+	if (lvl3 == true)
+	{
+		camera.target.y = 130 - camera.position.y + camera.target.y;
+		camera.position.y = 130;
+	}
+	
+	static bool BButtonState = false;
+	static bool CButtonState = false;
+
+	//Level Checker
+	if (camera.position.x > 25 && camera.position.x < 60 && (camera.position.z < -50 && camera.position.z > -60) && (camera.position.y == 30))//L1
+	{
+		if (!BButtonState && Application::IsKeyPressed('E'))
+		{
+			BButtonState = true;
+
+			if (Manager.PrestigeLvl > 0)
+			{
+				lvl2 = true;
+				lvl1 = false;
+			}
+		}
+		else if (BButtonState && !Application::IsKeyPressed('E'))
+		{
+			BButtonState = false;
+		}
+	}
+	if (camera.position.x > 25 && camera.position.x < 60 && (camera.position.z < -50 && camera.position.z > -60))//L2
+	{
+		if (!CButtonState && Application::IsKeyPressed('F'))
+		{
+			CButtonState = true;
+			lvl2 = false;
+			lvl1 = true;
+			std::cout << "Ass\n";
+		}
+		else if (CButtonState && !Application::IsKeyPressed('F'))
+		{
+			CButtonState = false;
+		}
+	}
+	
 }
 
 
@@ -851,13 +909,9 @@ void Splevel1::Render()
 	//modelStack.LoadIdentity();
 	//Mtx44 mvp = projectionStack.Top() * viewStack.Top() * modelStack.Top();
 
-
-
 	//Position lightPosition_cameraspace = viewStack.Top() * light[0].position;
 	//glUniform3fv(m_parameters[U_LIGHT0_POSITION], 1, &lightPosition_cameraspace.x);
 	//
-
-
 	//if (light[0].type == Light::LIGHT_DIRECTIONAL)
 	//{
 	//	Vector3 lightDir(light[0].position.x, light[0].position.y, light[0].position.z);
@@ -945,8 +999,57 @@ void Splevel1::Render()
 			modelStack.PushMatrix();
 			modelStack.Translate(0, 50, 0);
 			modelStack.Scale(10, 10, 10);
+			{
+				modelStack.PushMatrix();
+				modelStack.Translate(6.52, 3, -7);
+				modelStack.Rotate(90, 0, 0, 1);
+				modelStack.Scale(1.5, 0.9, 1);
+				RenderMesh(meshList[GEO_Lift], true);
+				modelStack.PopMatrix();
+			}
 			RenderMesh(meshList[GEO_LVL2], true);
 			modelStack.PopMatrix();
+		}
+		if (Manager.PrestigeLvl > 1)
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(0, 100, 0);
+			modelStack.Scale(10, 10, 10);
+			{
+				modelStack.PushMatrix();
+				modelStack.Translate(6.52, 3, -7);
+				modelStack.Rotate(90, 0, 0, 1);
+				modelStack.Scale(1.5, 0.9, 1);
+				RenderMesh(meshList[GEO_Lift], true);
+				modelStack.PopMatrix();
+			}
+			RenderMesh(meshList[GEO_LVL3], true);
+			modelStack.PopMatrix();
+		}
+		//L1 lift
+		if (camera.position.x > 25 && camera.position.x < 60 && (camera.position.z < -50 && camera.position.z > -60) && (camera.position.y == 30))
+		{
+			if (Manager.PrestigeLvl > 0)
+			{
+				RenderTextOnScreen(meshList[GEO_TEXT], "Press 'E' to L2", Color(0, 1, 0), 4, 10, 30);
+			}
+			else
+			{
+				RenderTextOnScreen(meshList[GEO_TEXT], "Reach prestige 1 for lift access", Color(0, 1, 0), 4, 10, 30);
+			}
+		}
+		//L2 lift
+		if (camera.position.x > 25 && camera.position.x < 60 && (camera.position.z < -50 && camera.position.z > -60) && (camera.position.y == 80))
+		{
+			if (Manager.PrestigeLvl > 1)
+			{
+				RenderTextOnScreen(meshList[GEO_TEXT], "Press 'E' to L3", Color(0, 1, 0), 4, 10, 30);
+				RenderTextOnScreen(meshList[GEO_TEXT], "Press 'F' to L1", Color(0, 1, 0), 4, 10, 27);
+			}
+			else
+			{
+				RenderTextOnScreen(meshList[GEO_TEXT], "Reach prestige 2 for lift access", Color(0, 1, 0), 4, 10, 30);
+			}
 		}
 	}
 
@@ -1099,18 +1202,7 @@ void Splevel1::Render()
 				RenderTextOnScreen(meshList[GEO_TEXT], "Press 'E' to start phone", Color(0, 1, 0), 4, 10, 30);
 			}
 		}
-		//L1 lift
-		if (camera.position.x > 25 && camera.position.x < 60 &&(camera.position.z < -50 && camera.position.z > -60))
-		{
-			if (Manager.PrestigeLvl > 0)
-			{
-				RenderTextOnScreen(meshList[GEO_TEXT], "Press 'E' to L2", Color(0, 1, 0), 4, 10, 30);
-			}
-			else
-			{
-				RenderTextOnScreen(meshList[GEO_TEXT], "Reach prestige 1 for lift access", Color(0, 1, 0), 4, 10, 30);
-			}
-		}
+		
 		//Lovescam mini game
 		if (LS_start == true)
 		{
@@ -1999,8 +2091,12 @@ void Splevel1::Render()
 	// -------------------------------------------------POSITION DEBUG----------------------------------------------
 	float pox = camera.position.x;
 	float poz = camera.position.z;
+	float poy = camera.position.y;
+
 	RenderTextOnScreen(meshList[GEO_TEXT], "Pos X:" + std::to_string(pox), Color(1, 1, 0), 2, 0, 43);
 	RenderTextOnScreen(meshList[GEO_TEXT], "Pos Z: " + std::to_string(poz), Color(1, 1, 0), 2, 0, 45);
+	RenderTextOnScreen(meshList[GEO_TEXT], "Pos Y: " + std::to_string(poy), Color(1, 1, 0), 2, 0, 41);
+
 
 	RenderTextOnScreen(meshList[GEO_TEXT], "Pos X:" + std::to_string(debugmouseposx), Color(1, 1, 0), 2, 0, 30);
 	RenderTextOnScreen(meshList[GEO_TEXT], "Pos y: " + std::to_string(debugmouseposy), Color(1, 1, 0), 2, 0, 33);
