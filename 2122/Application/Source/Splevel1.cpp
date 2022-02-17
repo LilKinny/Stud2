@@ -293,10 +293,10 @@ bool setuppolice = false, clearpolice, paper1, paper2, paper3, paper4, timerstar
 double scaleevidence = 0.1, countdown, timer;
 float pposx, pposz, pposx2, pposz2, pposx4, pposx3, pposz3, pposz4, rotateangle, pposy, pposy2, pposy3, pposy4, pushaway;
 string timerstring, beetsinstringform;
-int totalbeets = 0, countdownbonus = 1500;
+int totalbeets = 0, countdownbonus = 1500, spinD = 0;
 
 int mg1_start;
-bool OP1, OP2, OP3,OP1check, OP2check,OP3check,deleterest,LS_start,LS_Win,LS_Lose,POP1,POP2,POP3;
+bool OP1, OP2, OP3,OP1check, OP2check,OP3check,deleterest,LS_start,LS_Win,LS_Lose,POP1,POP2,POP3, rotateback = true;
 float cposx, cposz;
 void Splevel1::Update(double dt)
 {
@@ -810,12 +810,16 @@ LS_Win = true;
 	}
 
 	//Character Animation
-	int spinD=30;
-	rotateAnglesC += (float)(spinD * dt);
-	if (rotateAnglesC >= 45)
+	if (rotateback == false)
 	{
-		spinD = -30;
+		spinD += 300;
 	}
+	if (rotateback == true)
+	{
+		spinD -= -300;
+	}
+	if (rotateAngle >= 45) rotateback = true;
+	else if (rotateAngle < 0) rotateback = false;
 }
 
 
@@ -1046,7 +1050,7 @@ void Splevel1::Render()
 				modelStack.PushMatrix();
 				modelStack.Translate(0, 3, 0);
 				modelStack.Rotate(-90, 0, 0, 1);
-				modelStack.Rotate(rotateAnglesC, 0, 1, 0);
+				modelStack.Rotate(spinD, 0, 1, 0);
 				modelStack.Scale(1, 1, 1);
 				RenderMesh(meshList[GEO_Arms], false);
 				modelStack.PopMatrix();
