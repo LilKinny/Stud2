@@ -18,6 +18,8 @@ public:
 
 	PuzzleEntity* Player;
 
+	PuzzleEntity* Border;
+
 
 
 	float playeractualpox;

@@ -26,6 +26,9 @@ void Puzzle::Init()
 
 	Player = new PuzzleEntity();
 
+	Border = new PuzzleEntity();
+
+
 	for (int i = 0; i < 10; i++)
 	{
 		/*Paper[i] = new Puzzle();*/
@@ -78,6 +81,9 @@ void Puzzle::Init()
 
 	Player->prevposition.x = playeractualpox;
 	Player->prevposition.y = playeractualpoy;
+
+	Border->position.x = playeractualpox;
+	Border->position.y = playeractualpoy;
 
 	ispickupsomthing = false;
 
@@ -165,6 +171,9 @@ void Puzzle::Resetgame()
 
 	Player->prevposition.x = playeractualpox;
 	Player->prevposition.y = playeractualpoy;
+
+	Border->position.x = playeractualpox;
+	Border->position.y = playeractualpoy;
 
 	ispickupsomthing = false;
 

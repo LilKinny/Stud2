@@ -285,6 +285,9 @@ void Splevel1::Init()
 	meshList[GEO_PuzzlePaper] = MeshBuilder::GenerateQuad("puzzlebg", Color(1, 1, 1), 1.f);
 	meshList[GEO_PuzzlePaper]->textureID = LoadTGA("Image//PuzzlePaper.tga");
 
+	meshList[GEO_PuzzleBorder] = MeshBuilder::GenerateQuad("puzzlebord", Color(1, 1, 1), 1.f);
+	meshList[GEO_PuzzleBorder]->textureID = LoadTGA("Image//PlayerBorder.tga");
+
 	
 
 	Mtx44 projection;
@@ -2164,6 +2167,8 @@ void Splevel1::PuzzleRender()
 {
 	RenderMeshOnScreen(meshList[GEO_Puzzlebg], 40, 25, 40, 40);
 
+	RenderMeshOnScreen(meshList[GEO_PuzzleBorder], puzzle.Border->position.x, puzzle.Border->position.y, 11, 11);
+
 	for (int i = 0; i < 10; i++)
 	{
 		/*int paperposx = puzzle.Paper[i]->position.x;
@@ -2339,6 +2344,9 @@ void Splevel1::UpdatePuzzleControls()
 			{
 				puzzle.Player->prevposition.x = puzzle.playeractualpox;
 				puzzle.Player->prevposition.y = puzzle.playeractualpoy;
+
+				puzzle.Border->position.x = puzzle.playeractualpox;
+				puzzle.Border->position.y = puzzle.playeractualpoy;
 			}
 
 		}
