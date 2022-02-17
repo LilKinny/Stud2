@@ -131,6 +131,7 @@ private:
 	float rotateAngle;
 	float rotateAngleF;
 	float rotateAngleSF;
+	float rotateAnglesC;
 	bool bEnableLight;
 	bool questions,Pqeustions;
 

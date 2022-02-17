@@ -683,12 +683,12 @@ void Splevel1::Update(double dt)
 				if (posX > 47 && posX < 62 && (posY > 25 && posY <37))//op2
 				{
 					questions = false;
-					LS_Win = true;
+					LS_Lose = true;
 				}
 				else if (posX > 47 && posX < 62 && (posY > 42 && posY < 55))//op1
 				{
 					questions = false;
-					LS_Lose = true;
+					LS_Win = true;
 				}
 				else if (posX > 47 && posX < 62 && (posY > 8 && posY < 20))//op3
 				{
@@ -701,7 +701,7 @@ void Splevel1::Update(double dt)
 				if (posX > 47 && posX < 62 && (posY > 8 && posY < 20))//op3
 				{
 					questions = false;
-					LS_Win = true;
+					LS_Lose = true;
 				}
 				else if (posX > 47 && posX < 62 && (posY > 25 && posY < 37))//op2
 				{
@@ -711,7 +711,7 @@ void Splevel1::Update(double dt)
 				else if (posX > 47 && posX < 62 && (posY > 42 && posY < 55))//op1
 				{
 					questions = false;
-					LS_Lose = true;
+					LS_Win = true;
 				}
 			}
 			//Prestiege ans
@@ -801,14 +801,24 @@ void Splevel1::Update(double dt)
 					LS_Lose = false;
 				}
 			}
-			
+
 		}
 		else if (bLButtonState && !Application::IsMousePressed(0))
 		{
-			bLButtonState = false;
-			std::cout << "LBUTTON UP" << std::endl;
+		bLButtonState = false;
+		std::cout << "LBUTTON UP" << std::endl;
 		}
-		
+
+	}
+
+	//Character animations?
+	{
+		rotateAnglesC+= (float)(30 * dt);
+		if (rotateAnglesC > 45)
+		{
+
+		}
+
 	}
 }
 
