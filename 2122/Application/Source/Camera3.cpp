@@ -104,6 +104,13 @@ void Camera3::Update(double dt)
 	position.y = defaultPosition.y;
 	target = position + view;
 
+	if (position.x < 75 && position.x > 62)
+	{
+		if (position.z < 75 && position.z > -85)
+		{
+			std::cout << "In blocking range";
+		}
+	}
 
 	if (Application::IsKeyPressed('Q'))
 	{
