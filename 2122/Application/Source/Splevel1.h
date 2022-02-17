@@ -48,6 +48,7 @@ class Splevel1 : public Scene
 		GEO_COTTAGE,
 		GEO_TEXT,
 		GEO_BUILDING,
+		GEO_LVL2,
 		GEO_LAPTOP,
 		GEO_LAPTOP_UI,
 		GEO_TopUI,

@@ -223,6 +223,8 @@ void Splevel1::Init()
 
 
 	meshList[GEO_BUILDING] = MeshBuilder::GenerateOBJMTL("modelBUIDLING","OBJ//LVL1_withfloor.obj", "OBJ//LVL1_withfloor.mtl");
+	meshList[GEO_LVL2] = MeshBuilder::GenerateOBJMTL("modelLVL2", "OBJ//LVL2.obj", "OBJ//LVL2.mtl");
+
 	meshList[GEO_Table] = MeshBuilder::GenerateOBJMTL("modelBUIDLING", "OBJ//simple_table.obj", "OBJ//simple_table.mtl");
 
 	meshList[GEO_Screen] = MeshBuilder::GenerateRec("Rec", Color(1, 1, 1), 3.f, 5.f);
@@ -919,21 +921,31 @@ void Splevel1::Render()
 	RenderMesh(meshList[GEO_AXES], false);
 	RenderSkybox();
 
-	//Elevator
-	modelStack.PushMatrix();
-	modelStack.Translate(0, 0, 0);
-	modelStack.Scale(10, 10, 10);
+	//Building
 	{
 		modelStack.PushMatrix();
-		modelStack.Translate(6.52, 3, -7);
-		modelStack.Rotate(90, 0, 0, 1);
-		modelStack.Scale(1.5, 0.9, 1);
-		RenderMesh(meshList[GEO_Lift], true);
+		modelStack.Translate(0, 0, 0);
+		modelStack.Scale(10, 10, 10);
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(6.52, 3, -7);
+			modelStack.Rotate(90, 0, 0, 1);
+			modelStack.Scale(1.5, 0.9, 1);
+			RenderMesh(meshList[GEO_Lift], true);
+			modelStack.PopMatrix();
+		}
+		RenderMesh(meshList[GEO_BUILDING], true);
 		modelStack.PopMatrix();
-	}
-	RenderMesh(meshList[GEO_BUILDING], true);
-	modelStack.PopMatrix();
 
+		if (Manager.PrestigeLvl > 0)
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(0, 1, 0);
+			modelStack.Scale(10, 10, 10);
+			RenderMesh(meshList[GEO_LVL2], true);
+			modelStack.PopMatrix();
+		}
+	}
 
 
 	//Render trees
@@ -1082,7 +1094,7 @@ void Splevel1::Render()
 				RenderTextOnScreen(meshList[GEO_TEXT], "Press 'E' to start phone", Color(0, 1, 0), 4, 10, 30);
 			}
 		}
-		//lift
+		//L1 lift
 		if (camera.position.x > 25 && camera.position.x < 60 &&(camera.position.z < -50 && camera.position.z > -60))
 		{
 			if (Manager.PrestigeLvl > 0)
@@ -1091,7 +1103,7 @@ void Splevel1::Render()
 			}
 			else
 			{
-				RenderTextOnScreen(meshList[GEO_TEXT], "Reach prestiege for lift access", Color(0, 1, 0), 4, 10, 30);
+				RenderTextOnScreen(meshList[GEO_TEXT], "Reach prestige 1 for lift access", Color(0, 1, 0), 4, 10, 30);
 			}
 		}
 		//Lovescam mini game
