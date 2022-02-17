@@ -142,6 +142,8 @@ private:
 
 	bool PuzzlePlayerPickup;
 
+	float puzzletimer;
+
 	enum class Gamestate {MainGame,PuzzleGame}gamestate;
 
 	int RenderUI;

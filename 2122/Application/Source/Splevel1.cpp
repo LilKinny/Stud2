@@ -128,6 +128,8 @@ void Splevel1::Init()
 
 	gamestate = Splevel1::Gamestate::MainGame;
 
+	puzzletimer = 30;
+
 	//Initialize camera settings
 	camera.Init(Vector3(80, 30, 50), Vector3(0, 0, 0), Vector3(0, 1, 0));
 
@@ -271,7 +273,7 @@ void Splevel1::Init()
 	meshList[GEO_Puzzlebg]->textureID = LoadTGA("Image//Puzzlebg.tga");
 
 	meshList[GEO_PuzzlePlayer] = MeshBuilder::GenerateQuad("puzzlebg", Color(1, 1, 1), 1.f);
-	meshList[GEO_PuzzlePlayer]->textureID = LoadTGA("Image//PuzzlePlayer.tga");
+	meshList[GEO_PuzzlePlayer]->textureID = LoadTGA("Image//Ricardo.tga");
 
 	meshList[GEO_PuzzlePaper] = MeshBuilder::GenerateQuad("puzzlebg", Color(1, 1, 1), 1.f);
 	meshList[GEO_PuzzlePaper]->textureID = LoadTGA("Image//PuzzlePaper.tga");
@@ -506,7 +508,7 @@ void Splevel1::Update(double dt)
 	debugmouseposx = posX;
 	debugmouseposy = posY;
 
-
+	//luke
 	switch (gamestate)
 	{
 	case Splevel1::Gamestate::MainGame:
@@ -518,6 +520,24 @@ void Splevel1::Update(double dt)
 	default:
 		break;
 	}
+
+	if (PuzzleActive == true)
+	{
+		puzzletimer -= dt;
+		if (puzzle.Wincheck() == true)
+		{
+			PuzzleActive = false;
+			puzzle.Resetgame();
+			puzzletimer = 30;
+		}
+		else if (puzzletimer < 0)
+		{
+			PuzzleActive = false;
+			puzzle.Resetgame();
+			puzzletimer = 30;
+		}
+	}
+	//end
 
 	if (evidence_won_bonus == true)
 	{
@@ -551,6 +571,13 @@ void Splevel1::Update(double dt)
 			if (Application::IsKeyPressed('E'))
 			{
 				startlaptop = true;
+			}
+			else if(Application::IsKeyPressed('F'))
+			{
+				if (PuzzleActive == false)
+				{
+					PuzzleActive = true;
+				}
 			}
 		}
 		//Phone mini game
@@ -1471,6 +1498,9 @@ void Splevel1::Render()
 	RenderTextOnScreen(meshList[GEO_TEXT], "Pos X:" + std::to_string(debugmouseposx), Color(1, 1, 0), 2, 0, 30);
 	RenderTextOnScreen(meshList[GEO_TEXT], "Pos y: " + std::to_string(debugmouseposy), Color(1, 1, 0), 2, 0, 33);
 
+	RenderTextOnScreen(meshList[GEO_TEXT], "Pos Y puzzle:" + std::to_string(puzzle.playeractualpoy), Color(1, 1, 0), 2, 0, 20);
+	RenderTextOnScreen(meshList[GEO_TEXT], "Pos X puzzle: " + std::to_string(puzzle.playeractualpox), Color(1, 1, 0), 2, 0, 23);
+
 }
 
 void Splevel1::RenderSkybox()
@@ -1597,10 +1627,10 @@ void Splevel1::PuzzleRender()
 
 	for (int i = 0; i < 10; i++)
 	{
-		int paperposx = puzzle.Paper[i]->position.x;
-		int paperposy = puzzle.Paper[i]->position.y;
+		/*int paperposx = puzzle.Paper[i]->position.x;
+		int paperposy = puzzle.Paper[i]->position.y;*/
 
-		RenderMeshOnScreen(meshList[GEO_PuzzlePaper], 18 + (paperposx * 4), 3 + (paperposy * 4), 3, 3);
+		RenderMeshOnScreen(meshList[GEO_PuzzlePaper], puzzle.Paper[i]->actlposition.x, puzzle.Paper[i]->actlposition.y, 3, 3);
 	}
 
 
@@ -1617,7 +1647,10 @@ void Splevel1::PuzzleRender()
 
 	//}
 
-	RenderMeshOnScreen(meshList[GEO_PuzzlePlayer], puzzle.playeractualpox, puzzle.playeractualpoy - 5, 3, 3);
+	RenderMeshOnScreen(meshList[GEO_PuzzlePlayer], puzzle.playeractualpox, (puzzle.playeractualpoy), 3, 3);
+
+
+	RenderTextOnScreen(meshList[GEO_TEXT], "Time left: "+ std::to_string(puzzletimer), Color(1, 1, 1), 2, 37, 3);
 	
 	
 }
@@ -1639,14 +1672,42 @@ void Splevel1::UpdatePuzzleControls()
 		float posX = (x / w) * 80; //convert (0,800) to (0,80)
 		float posY = 60 - (y / h) * 60; //convert (600,0) to (0,60)
 		
-		
+		posY -= 3;
+
 		//player
-		if ((posY <= puzzle.playeractualpoy + 1.5 && posY >= puzzle.playeractualpoy - 1.5) && (posX >= puzzle.playeractualpox -2 && posX <= puzzle.playeractualpox + 2)) //Clck Store
+		
+		if (puzzle.ispickupsomthing == false)
 		{
-			PuzzlePlayerPickup = true;
-			/*puzzle.playeractualpox = posX;
-			puzzle.playeractualpoy = posY;*/
+			if ((posY <= (puzzle.playeractualpoy + 1.5) && posY >= (puzzle.playeractualpoy - 1.5)) && (posX >= (puzzle.playeractualpox - 2) && posX <= (puzzle.playeractualpox + 2))) //Clck Store
+			{
+				puzzle.ispickupsomthing = true;
+				PuzzlePlayerPickup = true;
+				/*puzzle.playeractualpox = posX;
+				puzzle.playeractualpoy = posY;*/
+			}
+			else
+			{
+				for (int i = 0; i < 10; i++)
+				{
+					if ((posY <= (puzzle.Paper[i]->actlposition.y + 1.5) && posY >= (puzzle.Paper[i]->actlposition.y - 1.5)) && (posX >= (puzzle.Paper[i]->actlposition.x - 2) && posX <= (puzzle.Paper[i]->actlposition.x + 2)))
+					{
+						if (puzzle.Paper[i]->actlposition.x > (puzzle.playeractualpox - 6) && (puzzle.Paper[i]->actlposition.x < (puzzle.playeractualpox + 6))
+							&& (puzzle.Paper[i]->actlposition.y > (puzzle.playeractualpoy - 6) && (puzzle.Paper[i]->actlposition.y < (puzzle.playeractualpoy + 6))))
+						{
+							puzzle.ispickupsomthing = true;
+							puzzle.Paper[i]->pickupstatus = true;
+							break;
+						}
+					}
+				}
+			}
 		}
+
+		
+
+
+
+		//checking
 
 		if (PuzzlePlayerPickup == true)
 		{
@@ -1654,36 +1715,161 @@ void Splevel1::UpdatePuzzleControls()
 			puzzle.playeractualpox = posX;
 			puzzle.playeractualpoy = posY;
 		}
-		
+		else
+		{
+			for (int i = 0; i < 10; i++)
+			{
+
+				if (puzzle.Paper[i]->pickupstatus == true)
+				{
+					puzzle.Paper[i]->actlposition.x = posX;
+					puzzle.Paper[i]->actlposition.y = posY;
+					break;
+				}
+			}
+		}
 	}
 	else if (bLButtonState == true && !Application::IsMousePressed(0))
 	{
 		bLButtonState = false;
+
+		double x, y;
+		Application::GetCursorPos(&x, &y);
+		unsigned w = Application::GetWindowWidth();
+		unsigned h = Application::GetWindowHeight();
+		float posX = (x / w) * 80; //convert (0,800) to (0,80)
+		float posY = 60 - (y / h) * 60; //convert (600,0) to (0,60)
+
+
 		if (PuzzlePlayerPickup == true)
 		{
-			puzzle.pickupstatus = false;
+			puzzle.ispickupsomthing = false;
 			PuzzlePlayerPickup = false;
 
-			double x, y;
-			Application::GetCursorPos(&x, &y);
-			unsigned w = Application::GetWindowWidth();
-			unsigned h = Application::GetWindowHeight();
-			float posX = (x / w) * 80; //convert (0,800) to (0,80)
-			float posY = 60 - (y / h) * 60; //convert (600,0) to (0,60)
+			bool spottaken = false;
 
+			posY -= 3;
 
 			posX -= 2;
 
 			int resultx = posX + 4 / 2;
 			resultx -= resultx % 4;
 
-			puzzle.playeractualpox = resultx;
-			puzzle.playeractualpox += 2;
+			puzzle.playeractualpox = (resultx + 2);
+
+			//boundary
+			if (puzzle.playeractualpox < 22)
+			{
+				puzzle.playeractualpox = 22;
+			}
+			else if (puzzle.playeractualpox > 58)
+			{
+				puzzle.playeractualpox = 58;
+			}
+			
 
 			int resulty = posY + 4 / 2;
 			resulty -= resulty % 4;
 
-			puzzle.playeractualpoy = resulty;
+			puzzle.playeractualpoy = (resulty - 1);
+
+			//boundary
+			if (puzzle.playeractualpoy < 7)
+			{
+				puzzle.playeractualpoy = 7;
+			}
+			else if (puzzle.playeractualpoy > 43)
+			{
+				puzzle.playeractualpoy = 43;
+			}
+
+			//colison
+			for (int i = 0; i < 10; i++)
+			{
+				if (puzzle.playeractualpox == puzzle.Paper[i]->actlposition.x && puzzle.playeractualpoy == puzzle.Paper[i]->actlposition.y)
+				{
+					spottaken = true;
+					
+					puzzle.playeractualpox = puzzle.Player->prevposition.x;
+					puzzle.playeractualpoy = puzzle.Player->prevposition.y;
+
+				}
+			}
+
+			if (spottaken == false)
+			{
+				puzzle.Player->prevposition.x = puzzle.playeractualpox;
+				puzzle.Player->prevposition.y = puzzle.playeractualpoy;
+			}
+
+		}
+		else
+		{
+			for (int i = 0; i < 10; i++)
+			{
+				if (puzzle.Paper[i]->pickupstatus == true)
+				{
+					puzzle.ispickupsomthing = false;
+					puzzle.Paper[i]->pickupstatus = false;
+
+					bool spottaken = false;
+					
+
+					posY -= 3;
+
+					posX -= 2;
+
+					int resultx = posX + 4 / 2;
+					resultx -= resultx % 4;
+
+					puzzle.Paper[i]->actlposition.x = (resultx + 2);
+
+					//boundary
+					if (puzzle.Paper[i]->actlposition.x < (puzzle.playeractualpox - 6))
+					{
+						puzzle.Paper[i]->actlposition.x = (puzzle.playeractualpox - 4);
+					}
+					else if (puzzle.Paper[i]->actlposition.x > (puzzle.playeractualpox + 6))
+					{
+						puzzle.Paper[i]->actlposition.x = (puzzle.playeractualpox + 4);
+					}
+
+
+					int resulty = posY + 4 / 2;
+					resulty -= resulty % 4;
+
+					puzzle.Paper[i]->actlposition.y = (resulty - 1);
+
+					//boundary
+					if (puzzle.Paper[i]->actlposition.y < (puzzle.playeractualpoy - 6))
+					{
+						puzzle.Paper[i]->actlposition.y = (puzzle.playeractualpoy - 4);
+					}
+					else if (puzzle.Paper[i]->actlposition.y > (puzzle.playeractualpoy + 6))
+					{
+						puzzle.Paper[i]->actlposition.y = (puzzle.playeractualpoy + 4);
+					}
+
+
+					if (puzzle.playeractualpox == puzzle.Paper[i]->actlposition.x && puzzle.playeractualpoy == puzzle.Paper[i]->actlposition.y)
+					{
+						spottaken = true;
+
+						puzzle.Paper[i]->actlposition.x = puzzle.Paper[i]->prevposition.x;
+						puzzle.Paper[i]->actlposition.y = puzzle.Paper[i]->prevposition.y;
+						
+
+					}
+
+					if (spottaken == false)
+					{
+						puzzle.Paper[i]->prevposition.x = puzzle.Paper[i]->actlposition.x;
+						puzzle.Paper[i]->prevposition.y = puzzle.Paper[i]->actlposition.y;
+						
+					}
+					break;
+				}
+			}
 		}
 		
 		
