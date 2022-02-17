@@ -1609,7 +1609,7 @@ void Splevel1::Render()
 						}
 						else
 						{
-							Price = "Nil";
+							Price = "0";
 						}
 						if (i == 0)
 						{
