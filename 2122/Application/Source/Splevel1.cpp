@@ -940,7 +940,7 @@ void Splevel1::Render()
 		if (Manager.PrestigeLvl > 0)
 		{
 			modelStack.PushMatrix();
-			modelStack.Translate(0, 1, 0);
+			modelStack.Translate(0, 50, 0);
 			modelStack.Scale(10, 10, 10);
 			RenderMesh(meshList[GEO_LVL2], true);
 			modelStack.PopMatrix();
