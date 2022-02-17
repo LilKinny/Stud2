@@ -931,6 +931,41 @@ LS_Win = true;
 			CButtonState = false;
 		}
 	}
+}
+
+
+	//Level Checker
+	if (camera.position.x > 25 && camera.position.x < 60 && (camera.position.z < -50 && camera.position.z > -60) && (camera.position.y == 30))//L1
+	{
+		if (!BButtonState && Application::IsKeyPressed('E'))
+		{
+			BButtonState = true;
+
+			if (Manager.PrestigeLvl > 0)
+			{
+				lvl2 = true;
+				lvl1 = false;
+			}
+		}
+		else if (BButtonState && !Application::IsKeyPressed('E'))
+		{
+			BButtonState = false;
+		}
+	}
+	if (camera.position.x > 25 && camera.position.x < 60 && (camera.position.z < -50 && camera.position.z > -60))//L2
+	{
+		if (!CButtonState && Application::IsKeyPressed('F'))
+		{
+			CButtonState = true;
+			lvl2 = false;
+			lvl1 = true;
+			std::cout << "Ass\n";
+		}
+		else if (CButtonState && !Application::IsKeyPressed('F'))
+		{
+			CButtonState = false;
+		}
+	}
 	
 }
 
