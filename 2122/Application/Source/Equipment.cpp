@@ -40,3 +40,37 @@ void Equipment::CalculateIncomePerSecond(void)
 	}
 }
 
+int Equipment::CalculateIncomePerSecond(int CompOrPhone)
+{
+	if (CompOrPhone == 1)
+	{
+		if (ComputerLvl == 1)
+		{
+			return 1;
+		}
+		else if (ComputerLvl == 2)
+		{
+			return 5;
+		}
+		else if (ComputerLvl == 3)
+		{
+			return 10;
+		}
+	}
+	else
+	{
+		if (PhoneLvl == 1)
+		{
+			return 1;
+		}
+		else if (PhoneLvl == 2)
+		{
+			return 3;
+		}
+		else if (PhoneLvl == 3)
+		{
+			return 8;
+		}
+	}
+}
+

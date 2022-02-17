@@ -11,6 +11,7 @@ public:
 	Equipment();
 	~Equipment();
 	void CalculateIncomePerSecond(void);
+	int CalculateIncomePerSecond(int CompOrPhone);
 };
 
 #endif

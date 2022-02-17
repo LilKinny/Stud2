@@ -17,7 +17,7 @@ public:
 	~EquipmentManager();
 	int UpgradePrestige(bool Upgrade);
 	void CalculateTotalIncome(void);
-	float CalculateIncome(int);
+	float CalculateIncome(int WorkStation, int CompOrPhone);
 	void UpdateMoney(float dt);
 	std::string ConvertMoneyToSuitableAmounts(float Amount);
 	int UnlockPhone(bool unlock);

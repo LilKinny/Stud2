@@ -109,7 +109,7 @@ void EquipmentManager::CalculateTotalIncome(void)
 	TotalIncomePerSecond = TotalIncome;
 }
 
-float EquipmentManager::CalculateIncome(int WorkStation)
+float EquipmentManager::CalculateIncome(int WorkStation, int CompOrPhone)
 {
 	float TempIncome = 0;;
 	if (EquipArray[WorkStation] != nullptr)
