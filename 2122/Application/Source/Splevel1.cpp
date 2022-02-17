@@ -923,6 +923,7 @@ void Splevel1::Render()
 		modelStack.PopMatrix();
 		
 
+		// a human, person, worker, slave
 		modelStack.PushMatrix();
 		modelStack.Translate(15, 5, 15);
 		modelStack.Scale(5, 5, 5);
@@ -941,7 +942,29 @@ void Splevel1::Render()
 			modelStack.PopMatrix();
 		}
 		RenderMesh(meshList[GEO_Body], false);
+
+		modelStack.PushMatrix();
+		modelStack.Rotate(90, 0, 1, 0);
+		modelStack.Scale(1, 1.5, 1.2);
+		modelStack.Translate(0, -0.5, 2.2);
+		RenderMesh(meshList[GEO_Table], false);
+
+		modelStack.PushMatrix();
+		modelStack.Translate(0, 2.05, 0);
+		modelStack.Rotate(90, 0, 1, 0);
+		modelStack.Scale(0.4, 0.3, 0.7);
+		RenderMesh(meshList[GEO_Laptop], true);
 		modelStack.PopMatrix();
+
+		modelStack.PushMatrix();
+		modelStack.Translate(1, 2.2, 0);
+		modelStack.Rotate(90, 0, 1, 0);
+		modelStack.Rotate(90, 1, 0, 0);
+		modelStack.Scale(0.4, 0.3, 0.6);
+		RenderMesh(meshList[GEO_Phone1], true);
+		modelStack.PopMatrix();
+		modelStack.PopMatrix();
+		//
 
 
 		//Evidence mini game
