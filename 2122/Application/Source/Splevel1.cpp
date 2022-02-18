@@ -1794,11 +1794,11 @@ void Splevel1::Render()
 						Income = "Income: $" + Manager.ConvertMoneyToSuitableAmounts(Manager.CalculateIncome((PageNum - 1) * 6 + i,1)) + "/s";
 						if (Manager.EquipArray[(PageNum - 1) * 6 + i]->ComputerLvl == 1)
 						{
-							Price = 500 * Manager.NumOfComputers() * 0.2;
+							Price = 500 + 500 *((PageNum-1 )* 6 + i) * 0.2;
 						}
 						else if (Manager.EquipArray[(PageNum - 1) * 6 + i]->ComputerLvl == 2)
 						{
-							Price = 5000 * Manager.NumOfComputers() * 0.2;
+							Price = 5000 + 5000 * ((PageNum - 1) * 6 + i) * 0.2;
 						}
 						else
 						{
@@ -2069,11 +2069,11 @@ void Splevel1::Render()
 						Income = "Income: $" + Manager.ConvertMoneyToSuitableAmounts(Manager.CalculateIncome((PageNum - 1) * 6 + i,2)) + "/s";
 						if (Manager.EquipArray[(PageNum - 1) * 6 + i]->PhoneLvl == 1)
 						{
-							Price = 250 * Manager.NumOfPhones() * 0.2;
+							Price = 250 + 250 * ((PageNum - 1) * 6 + i) * 0.2;
 						}
 						else if (Manager.EquipArray[(PageNum - 1) * 6 + i]->PhoneLvl == 2)
 						{
-							Price = 1250 * Manager.NumOfPhones() * 0.2;
+							Price = 1250 + 1250 * ((PageNum - 1) * 6 + i) * 0.2;
 						}
 						else
 						{
@@ -2229,44 +2229,44 @@ void Splevel1::RenderSkybox()
 
 
 	modelStack.PushMatrix();
-	modelStack.Translate(cposx, 0, -499 + cposz);
-	modelStack.Scale(1000, 1000, 1000);
+	modelStack.Translate(cposx, 0, -666 + cposz);
+	modelStack.Scale(2000, 2000, 2000);
 	RenderMesh(meshList[GEO_FRONT], false);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(cposx, 0, 499 + cposz);
+	modelStack.Translate(cposx, 0, 666 + cposz);
 	modelStack.Rotate(180, 0, 1, 0);
-	modelStack.Scale(1000, 1000, 1000);
+	modelStack.Scale(2000, 2000, 2000);
 	RenderMesh(meshList[GEO_BACK], false);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(-499 + cposx, 0, cposz);
+	modelStack.Translate(-666 + cposx, 0, cposz);
 	modelStack.Rotate(90, 0, 1, 0);
-	modelStack.Scale(1000, 1000, 1000);
+	modelStack.Scale(2000, 2000, 2000);
 	RenderMesh(meshList[GEO_LEFT], false);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(499 + cposx, 0, cposz);
+	modelStack.Translate(666 + cposx, 0, cposz);
 	modelStack.Rotate(-90, 0, 1, 0);
-	modelStack.Scale(1000, 1000, 1000);
+	modelStack.Scale(2000, 2000, 2000);
 	RenderMesh(meshList[GEO_RIGHT], false);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(cposx, 499, cposz);
+	modelStack.Translate(cposx, 666, cposz);
 	modelStack.Rotate(90, 1, 0, 0);
-	modelStack.Scale(1000, 1000, 1000);
+	modelStack.Scale(2000, 2000, 2000);
 	RenderMesh(meshList[GEO_TOP], false);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(cposx, -499, cposz);
+	modelStack.Translate(cposx, -666, cposz);
 	modelStack.Rotate(-90, 0, 1, 0);
 	modelStack.Rotate(-90, 1, 0, 0);
-	modelStack.Scale(1000, 1000, 1000);
+	modelStack.Scale(2000, 2000, 2000);
 	RenderMesh(meshList[GEO_BOTTOM], false);
 	modelStack.PopMatrix();
 
