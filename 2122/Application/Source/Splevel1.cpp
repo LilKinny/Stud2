@@ -1470,6 +1470,150 @@ void Splevel1::Render()
 		}
 	}
 
+	//Surrounding buildings
+	{
+		modelStack.PushMatrix();
+		modelStack.Rotate(90, 0, 1, 0);
+		modelStack.Translate(0, 0, 320);
+		modelStack.Scale(180, 180, 180);
+		RenderMesh(meshList[GEO_LBUILDING1], true);
+		modelStack.PopMatrix();
+
+		modelStack.PushMatrix();
+		modelStack.Rotate(-90, 0, 1, 0);
+		modelStack.Translate(0, 0, 320);
+		modelStack.Scale(300, 180, 180);
+		RenderMesh(meshList[GEO_LBUILDING2], true);
+		modelStack.PopMatrix();
+
+		modelStack.PushMatrix();
+		modelStack.Rotate(180, 0, 1, 0);
+		modelStack.Translate(0, 0, 300);
+		modelStack.Scale(300, 180, 180);
+		RenderMesh(meshList[GEO_LBUILDING3], true);
+		modelStack.PopMatrix();
+
+		modelStack.PushMatrix();
+		modelStack.Rotate(180, 0, 1, 0);
+		modelStack.Translate(300, 0, 300);
+		modelStack.Scale(120, 120, 120);
+		RenderMesh(meshList[GEO_SKYSCRAPER1], true);
+		modelStack.PopMatrix();
+
+		modelStack.PushMatrix();
+		modelStack.Translate(330, 0, -300);
+		modelStack.Rotate(90, 0, 1, 0);
+		modelStack.Scale(200, 200, 200);
+		RenderMesh(meshList[GEO_SBUILDING1], true);
+		modelStack.PopMatrix();
+	}
+
+	//Road and cars
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(0, 0.3, 250);
+		modelStack.Scale(100, 10, 80);
+		RenderMesh(meshList[GEO_ROAD], true);
+		modelStack.PopMatrix();
+
+		modelStack.PushMatrix();
+		modelStack.Translate(0, 0.3, -130);
+		modelStack.Scale(225, 10, 100);
+		RenderMesh(meshList[GEO_ROAD], true);
+		modelStack.PopMatrix();
+
+		modelStack.PushMatrix();
+		modelStack.Translate(150, 0.3, 250);
+		modelStack.Rotate(180, 0, 1, 0);
+		modelStack.Scale(246, 10, 80);
+		RenderMesh(meshList[GEO_ROADTSECT], true);
+		modelStack.PopMatrix();
+
+		modelStack.PushMatrix();
+		modelStack.Translate(-150, 0.3, 250);
+		modelStack.Rotate(180, 0, 1, 0);
+		modelStack.Scale(246, 10, 80);
+		RenderMesh(meshList[GEO_ROADTSECT], true);
+		modelStack.PopMatrix();
+
+
+		modelStack.PushMatrix();
+		modelStack.Translate(150, 0.3, 60);
+		modelStack.Rotate(90, 0, 1, 0);
+		modelStack.Scale(300, 10, 80);
+		RenderMesh(meshList[GEO_ROAD], true);
+		modelStack.PopMatrix();
+
+		modelStack.PushMatrix();
+		modelStack.Translate(-150, 0.3, 60);
+		modelStack.Rotate(90, 0, 1, 0);
+		modelStack.Scale(300, 10, 80);
+		RenderMesh(meshList[GEO_ROAD], true);
+		modelStack.PopMatrix();
+
+		modelStack.PushMatrix();
+		modelStack.Translate(150, 0.3, -130);
+		modelStack.Scale(80, 10, 100);
+		RenderMesh(meshList[GEO_ROADTURN], true);
+		modelStack.PopMatrix();
+
+		modelStack.PushMatrix();
+		modelStack.Translate(-150, 0.3, -130);
+		modelStack.Rotate(90, 0, 1, 0);
+		modelStack.Scale(100, 10, 80);
+		RenderMesh(meshList[GEO_ROADTURN], true);
+		modelStack.PopMatrix();
+
+		modelStack.PushMatrix();
+		modelStack.Translate(700, 0.3, 250);
+		modelStack.Scale(1000, 10, 80);
+		RenderMesh(meshList[GEO_ROAD], true);
+		modelStack.PopMatrix();
+
+		modelStack.PushMatrix();
+		modelStack.Translate(-700, 0.3, 250);
+		modelStack.Scale(1000, 10, 80);
+		RenderMesh(meshList[GEO_ROAD], true);
+		modelStack.PopMatrix();
+
+		if (spawntaxi == true)
+		{
+			modelStack.PushMatrix();
+			modelStack.Rotate(90, 0, 1, 0);
+			modelStack.Translate(-250, 0, movecar);
+			modelStack.Scale(30, 30, 30);
+			RenderMesh(meshList[GEO_TAXI], true);
+			modelStack.PopMatrix();
+		}
+
+		if (spawnpolice == true)
+		{
+			modelStack.PushMatrix();
+			modelStack.Rotate(90, 0, 1, 0);
+			modelStack.Translate(-250, 0, movecar);
+			modelStack.Scale(30, 30, 30);
+			RenderMesh(meshList[GEO_POLICE], true);
+			modelStack.PopMatrix();
+		}
+
+		if (spawntruck == true)
+		{
+			modelStack.PushMatrix();
+			modelStack.Rotate(90, 0, 1, 0);
+			modelStack.Translate(-250, 0, movecar);
+			modelStack.Scale(30, 30, 30);
+			RenderMesh(meshList[GEO_TRUCK], true);
+			modelStack.PopMatrix();
+		}
+
+		//modelStack.PushMatrix();
+		//modelStack.Rotate (90, 0, 1, 0);
+		//modelStack.Translate(-250, 0, movecar);
+		//modelStack.Scale(40, 40, 40);
+		//RenderMesh(meshList[GEO_TRUCK], true);
+		//modelStack.PopMatrix();
+	}
+
 	//Building
 	{
 		modelStack.PushMatrix();
@@ -1821,149 +1965,9 @@ void Splevel1::Render()
 		modelStack.PopMatrix();
 
 
-		//Road and cars
-		{
-			modelStack.PushMatrix();
-			modelStack.Translate(0, 0.3, 250);
-			modelStack.Scale(100, 10, 80);
-			RenderMesh(meshList[GEO_ROAD], true);
-			modelStack.PopMatrix();
+		
 
-			modelStack.PushMatrix();
-			modelStack.Translate(0, 0.3, -130);
-			modelStack.Scale(225, 10, 100);
-			RenderMesh(meshList[GEO_ROAD], true);
-			modelStack.PopMatrix();
-
-			modelStack.PushMatrix();
-			modelStack.Translate(150, 0.3, 250);
-			modelStack.Rotate(180, 0, 1, 0);
-			modelStack.Scale(246, 10, 80);
-			RenderMesh(meshList[GEO_ROADTSECT], true);
-			modelStack.PopMatrix();
-
-			modelStack.PushMatrix();
-			modelStack.Translate(-150, 0.3, 250);
-			modelStack.Rotate(180, 0, 1, 0);
-			modelStack.Scale(246, 10, 80);
-			RenderMesh(meshList[GEO_ROADTSECT], true);
-			modelStack.PopMatrix();
-
-
-			modelStack.PushMatrix();
-			modelStack.Translate(150, 0.3, 60);
-			modelStack.Rotate(90, 0, 1, 0);
-			modelStack.Scale(300, 10, 80);
-			RenderMesh(meshList[GEO_ROAD], true);
-			modelStack.PopMatrix();
-
-			modelStack.PushMatrix();
-			modelStack.Translate(-150, 0.3, 60);
-			modelStack.Rotate(90, 0, 1, 0);
-			modelStack.Scale(300, 10, 80);
-			RenderMesh(meshList[GEO_ROAD], true);
-			modelStack.PopMatrix();
-
-			modelStack.PushMatrix();
-			modelStack.Translate(150, 0.3, -130);
-			modelStack.Scale(80, 10, 100);
-			RenderMesh(meshList[GEO_ROADTURN], true);
-			modelStack.PopMatrix();
-
-			modelStack.PushMatrix();
-			modelStack.Translate(-150, 0.3, -130);
-			modelStack.Rotate(90, 0, 1, 0);
-			modelStack.Scale(100, 10, 80);
-			RenderMesh(meshList[GEO_ROADTURN], true);
-			modelStack.PopMatrix();
-
-			modelStack.PushMatrix();
-			modelStack.Translate(700, 0.3, 250);
-			modelStack.Scale(1000, 10, 80);
-			RenderMesh(meshList[GEO_ROAD], true);
-			modelStack.PopMatrix();
-
-			modelStack.PushMatrix();
-			modelStack.Translate(-700, 0.3, 250);
-			modelStack.Scale(1000, 10, 80);
-			RenderMesh(meshList[GEO_ROAD], true);
-			modelStack.PopMatrix();
-
-			if (spawntaxi == true)
-			{
-				modelStack.PushMatrix();
-				modelStack.Rotate(90, 0, 1, 0);
-				modelStack.Translate(-250, 0, movecar);
-				modelStack.Scale(30, 30, 30);
-				RenderMesh(meshList[GEO_TAXI], true);
-				modelStack.PopMatrix();
-			}
-
-			if (spawnpolice == true)
-			{
-				modelStack.PushMatrix();
-				modelStack.Rotate(90, 0, 1, 0);
-				modelStack.Translate(-250, 0, movecar);
-				modelStack.Scale(30, 30, 30);
-				RenderMesh(meshList[GEO_POLICE], true);
-				modelStack.PopMatrix();
-			}
-
-			if (spawntruck == true)
-			{
-				modelStack.PushMatrix();
-				modelStack.Rotate(90, 0, 1, 0);
-				modelStack.Translate(-250, 0, movecar);
-				modelStack.Scale(30, 30, 30);
-				RenderMesh(meshList[GEO_TRUCK], true);
-				modelStack.PopMatrix();
-			}
-
-			//modelStack.PushMatrix();
-			//modelStack.Rotate (90, 0, 1, 0);
-			//modelStack.Translate(-250, 0, movecar);
-			//modelStack.Scale(40, 40, 40);
-			//RenderMesh(meshList[GEO_TRUCK], true);
-			//modelStack.PopMatrix();
-		}
-
-		//Surrounding buildings
-		{
-			modelStack.PushMatrix();
-			modelStack.Rotate(90, 0, 1, 0);
-			modelStack.Translate(0, 0, 320);
-			modelStack.Scale(180, 180, 180);
-			RenderMesh(meshList[GEO_LBUILDING1], true);
-			modelStack.PopMatrix();
-
-			modelStack.PushMatrix();
-			modelStack.Rotate(-90, 0, 1, 0);
-			modelStack.Translate(0, 0, 320);
-			modelStack.Scale(300, 180, 180);
-			RenderMesh(meshList[GEO_LBUILDING2], true);
-			modelStack.PopMatrix();
-
-			modelStack.PushMatrix();
-			modelStack.Rotate(180, 0, 1, 0);
-			modelStack.Translate(0,0, 300);
-			modelStack.Scale(300, 180, 180);
-			RenderMesh(meshList[GEO_LBUILDING3], true);
-			modelStack.PopMatrix();
-
-			modelStack.PushMatrix();
-			modelStack.Rotate(180, 0, 1, 0);
-			modelStack.Translate(300, 0, 300);
-			modelStack.Scale(120, 120, 120);
-			RenderMesh(meshList[GEO_SKYSCRAPER1], true);
-			modelStack.PopMatrix();
-
-			modelStack.PushMatrix();
-			modelStack.Translate(330, 0, -300);
-			modelStack.Rotate(90, 0, 1, 0);
-			modelStack.Scale(200, 200, 200);
-			RenderMesh(meshList[GEO_SBUILDING1], true);
-			modelStack.PopMatrix();
-		}
+		
 
 		if (timerstart == true) RenderTextOnScreen(meshList[GEO_TEXT], "Time left: " + timerstring, Color(1, 1, 1), 2, 37, 5);
 
