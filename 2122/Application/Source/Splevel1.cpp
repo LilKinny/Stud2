@@ -1214,6 +1214,63 @@ void Splevel1::Render()
 		}
 	}
 
+	//WorkStation Rendering
+	{
+		int WorkStationPositionX, WorkStationPositionY, WorkStationPositionZ;
+		WorkStationPositionX = WorkStationPositionY = WorkStationPositionZ = 0;
+		for (int i = 0; i < (Manager.PrestigeLvl + 1) * 6; ++i)
+		{
+			std::cout << i % 6 << std::endl;
+			if (i < 6)
+			{
+				WorkStationPositionY = 0;
+			}
+			else if (i < 12)
+			{
+				WorkStationPositionY = 50;
+			}
+			else if (i < 18)
+			{
+				WorkStationPositionY = 100;
+			}
+			if (i % 6 == 0)
+			{
+				WorkStationPositionX = -75;
+				WorkStationPositionZ = 40;
+			}
+			else if (i % 6 == 1)
+			{
+				WorkStationPositionX = -75;
+				WorkStationPositionZ = 20;
+			}
+			else if (i % 6 == 2)
+			{
+				WorkStationPositionX = -75;
+				WorkStationPositionZ = 0;
+			}
+			else if (i % 6 == 3)
+			{
+				WorkStationPositionX = -75;
+				WorkStationPositionZ = -30;
+			}
+			else if (i % 6 == 4)
+			{
+				WorkStationPositionX = -75;
+				WorkStationPositionZ = -50;
+			}
+			else if (i % 6 == 5)
+			{
+				WorkStationPositionX = -75;
+				WorkStationPositionZ = -70;
+			}
+			modelStack.PushMatrix();
+			modelStack.Scale(1, 1, 1);
+			modelStack.Translate(WorkStationPositionX, WorkStationPositionY, WorkStationPositionZ);
+			RenderWorkStation(i);
+			modelStack.PopMatrix();
+		}
+	}
+
 	//Building
 	{
 		modelStack.PushMatrix();
@@ -1296,13 +1353,9 @@ void Splevel1::Render()
 		}
 	}
 
-	//WorkStation Rendering
-	{
-
-	}
-
 	//kjcode
 	{
+		//Default Equipment
 		modelStack.PushMatrix();
 		modelStack.Translate(50, 0, 45);
 		modelStack.Rotate(90, 0, 1, 0);
@@ -1335,54 +1388,6 @@ void Splevel1::Render()
 		}
 		RenderMesh(meshList[GEO_Table], true);
 		modelStack.PopMatrix();
-		
-
-		// a human, person, worker, slave
-		modelStack.PushMatrix();
-		modelStack.Translate(15, 5, 15);
-		modelStack.Scale(3, 3, 3);
-		{
-			modelStack.PushMatrix();
-			modelStack.Translate(0, 0, 0);
-			modelStack.Scale(1, 1, 1);
-			{
-				modelStack.PushMatrix();
-				modelStack.Translate(0, 3, 0);
-				modelStack.Rotate(-90, 0, 0, 1);
-				modelStack.Rotate(spinD, 0, 1, 0);
-				modelStack.Scale(1, 1, 1);
-				RenderMesh(meshList[GEO_Arms], false);
-				modelStack.PopMatrix();
-			}
-			RenderMesh(meshList[GEO_Head], false);
-			modelStack.PopMatrix();
-		}
-		RenderMesh(meshList[GEO_Body], false);
-
-		modelStack.PushMatrix();
-		modelStack.Rotate(90, 0, 1, 0);
-		modelStack.Scale(1, 1.5, 1.2);
-		modelStack.Translate(0, -0.5, 2.2);
-		RenderMesh(meshList[GEO_Table], false);
-
-		modelStack.PushMatrix();
-		modelStack.Translate(0, 2.05, 0);
-		modelStack.Rotate(90, 0, 1, 0);
-		modelStack.Scale(0.4, 0.3, 0.7);
-		RenderMesh(meshList[GEO_Laptop], true);
-		modelStack.PopMatrix();
-
-		modelStack.PushMatrix();
-		modelStack.Translate(1, 2.2, 0);
-		modelStack.Rotate(90, 0, 1, 0);
-		modelStack.Rotate(90, 1, 0, 0);
-		modelStack.Scale(0.4, 0.3, 0.6);
-		RenderMesh(meshList[GEO_Phone1], true);
-		modelStack.PopMatrix();
-		modelStack.PopMatrix();
-		modelStack.PopMatrix();
-		//
-
 
 		//Evidence mini game
 		if (camera.position.x > 30 && camera.position.x < 45 && (camera.position.z > 55 && camera.position.z < 65) && (lvl1 == true))
@@ -2554,6 +2559,98 @@ void Splevel1::RenderSkybox()
 	RenderTextOnScreen(meshList[GEO_TEXT], "Scammer tycoon", Color(0, 1, 0), 2, 26, 50);*/
 
 
+}
+
+void Splevel1::RenderWorkStation(int WorkStation)
+{
+	//Render WorkStation
+	if (Manager.EquipArray[WorkStation] != nullptr)
+	{
+		//Render WorkStation
+		{
+			//Render Worker
+			modelStack.PushMatrix();
+			modelStack.Translate(15, 5, 15);
+			modelStack.Scale(5, 5, 5);
+			RenderMesh(meshList[GEO_Body], false);
+			{
+				modelStack.PushMatrix();
+				modelStack.Translate(0, 0, 0);
+				modelStack.Scale(1, 1, 1);
+				RenderMesh(meshList[GEO_Head], false);
+				{
+					modelStack.PushMatrix();
+					modelStack.Translate(0, 3, 0);
+					modelStack.Rotate(-90, 0, 0, 1);
+					modelStack.Rotate(spinD, 0, 1, 0);
+					modelStack.Scale(1, 1, 1);
+					RenderMesh(meshList[GEO_Arms], false);
+					modelStack.PopMatrix();
+				}
+				modelStack.PopMatrix();
+				//Render Desk and Equipment
+				modelStack.PushMatrix();
+				modelStack.Rotate(90, 0, 1, 0);
+				modelStack.Scale(1, 1.5, 1);
+				modelStack.Translate(0, -0.5, 2.2);
+				RenderMesh(meshList[GEO_Table], false);
+				{
+					modelStack.PushMatrix();
+					if (Manager.EquipArray[WorkStation]->ComputerLvl == 1)
+					{
+						modelStack.Translate(0, 2.05, 0);
+						modelStack.Rotate(90, 0, 1, 0);
+						modelStack.Scale(0.4, 0.3, 0.7);
+						RenderMesh(meshList[GEO_Laptop], true);//Render Laptop 
+					}
+					else if (Manager.EquipArray[WorkStation]->ComputerLvl == 2)
+					{
+						modelStack.Translate(0, 2.05, 0);
+						modelStack.Rotate(90, 0, 1, 0);
+						modelStack.Scale(0.4, 0.3, 0.7);
+						RenderMesh(meshList[GEO_Laptop], true); //Render Laptop 2
+					}
+					else if (Manager.EquipArray[WorkStation]->ComputerLvl == 3)
+					{
+						modelStack.Translate(0, 2.05, 0);
+						modelStack.Rotate(90, 0, 1, 0);
+						modelStack.Scale(0.4, 0.3, 0.7);
+						RenderMesh(meshList[GEO_Laptop], true); //Render Laptop 3
+					}
+					modelStack.PopMatrix();
+
+					modelStack.PushMatrix();
+					if (Manager.EquipArray[WorkStation]->PhoneLvl == 1)
+					{
+						modelStack.Translate(1, 2.2, 0);
+						modelStack.Rotate(90, 0, 1, 0);
+						modelStack.Rotate(90, 1, 0, 0);
+						modelStack.Scale(0.4, 0.3, 0.6);
+						RenderMesh(meshList[GEO_Phone1], true); //Render Phone 1
+					}
+					else if (Manager.EquipArray[WorkStation]->PhoneLvl == 2)
+					{
+						modelStack.Translate(1, 2.2, 0);
+						modelStack.Rotate(90, 0, 1, 0);
+						modelStack.Rotate(90, 1, 0, 0);
+						modelStack.Scale(0.4, 0.3, 0.6);
+						RenderMesh(meshList[GEO_Phone1], true); //Render Phone 2
+					}
+					else if (Manager.EquipArray[WorkStation]->PhoneLvl == 3)
+					{
+						modelStack.Translate(1, 2.2, 0);
+						modelStack.Rotate(90, 0, 1, 0);
+						modelStack.Rotate(90, 1, 0, 0);
+						modelStack.Scale(0.4, 0.3, 0.6);
+						RenderMesh(meshList[GEO_Phone1], true); //Render Phone 3
+					}
+					modelStack.PopMatrix();
+				}
+				modelStack.PopMatrix();
+			}
+			modelStack.PopMatrix();
+		}
+	}
 }
 
 void Splevel1::PuzzleRender()
