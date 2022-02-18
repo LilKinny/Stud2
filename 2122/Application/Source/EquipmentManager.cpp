@@ -302,7 +302,7 @@ int EquipmentManager::UpgradePhone(bool upgrade, int WorkStation)
 	if (EquipArray[WorkStation]->PhoneLvl == 1) //Can Upgrade to 1
 	{
 		IncrementPrice = 250;
-		IncrementPrice = IncrementPrice + IncrementPrice * NumOfPhones() * 0.2;
+		IncrementPrice = IncrementPrice + IncrementPrice * WorkStation * 0.2;
 		if (Money >= IncrementPrice)
 		{
 			if (upgrade == true)
@@ -318,7 +318,7 @@ int EquipmentManager::UpgradePhone(bool upgrade, int WorkStation)
 	if (EquipArray[WorkStation]->PhoneLvl == 2) //Can Upgrade to 2
 	{
 		IncrementPrice = 1250;
-		IncrementPrice = IncrementPrice + IncrementPrice * NumOfPhones() * 0.2;
+		IncrementPrice = IncrementPrice + IncrementPrice * WorkStation * 0.2;
 		if (Money >= IncrementPrice)
 		{
 			if (upgrade == true)
@@ -347,7 +347,7 @@ int EquipmentManager::UpgradeComputer(bool upgrade, int WorkStation)
 	if (EquipArray[WorkStation]->ComputerLvl == 1) //Can Upgrade to 1
 	{
 		IncrementPrice = 500;
-		IncrementPrice = IncrementPrice + IncrementPrice * NumOfComputers() * 0.2;
+		IncrementPrice = IncrementPrice + IncrementPrice * WorkStation * 0.2;
 		if (Money >= IncrementPrice)
 		{
 			if (upgrade == true)
@@ -363,7 +363,7 @@ int EquipmentManager::UpgradeComputer(bool upgrade, int WorkStation)
 	if (EquipArray[WorkStation]->ComputerLvl == 2) //Can Upgrade to 2
 	{
 		IncrementPrice = 5000;
-		IncrementPrice = IncrementPrice + IncrementPrice * NumOfComputers() * 0.2;
+		IncrementPrice = IncrementPrice + IncrementPrice * WorkStation * 0.2;
 		if (Money >= IncrementPrice)
 		{
 			if (upgrade == true)

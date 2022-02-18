@@ -1791,11 +1791,11 @@ void Splevel1::Render()
 						Income = "Income: $" + Manager.ConvertMoneyToSuitableAmounts(Manager.CalculateIncome((PageNum - 1) * 6 + i,1)) + "/s";
 						if (Manager.EquipArray[(PageNum - 1) * 6 + i]->ComputerLvl == 1)
 						{
-							Price = 500 * Manager.NumOfComputers() * 0.2;
+							Price = 500 + 500 *((PageNum-1 )* 6 + i) * 0.2;
 						}
 						else if (Manager.EquipArray[(PageNum - 1) * 6 + i]->ComputerLvl == 2)
 						{
-							Price = 5000 * Manager.NumOfComputers() * 0.2;
+							Price = 5000 + 5000 * ((PageNum - 1) * 6 + i) * 0.2;
 						}
 						else
 						{
@@ -2066,11 +2066,11 @@ void Splevel1::Render()
 						Income = "Income: $" + Manager.ConvertMoneyToSuitableAmounts(Manager.CalculateIncome((PageNum - 1) * 6 + i,2)) + "/s";
 						if (Manager.EquipArray[(PageNum - 1) * 6 + i]->PhoneLvl == 1)
 						{
-							Price = 250 * Manager.NumOfPhones() * 0.2;
+							Price = 250 + 250 * ((PageNum - 1) * 6 + i) * 0.2;
 						}
 						else if (Manager.EquipArray[(PageNum - 1) * 6 + i]->PhoneLvl == 2)
 						{
-							Price = 1250 * Manager.NumOfPhones() * 0.2;
+							Price = 1250 + 1250 * ((PageNum - 1) * 6 + i) * 0.2;
 						}
 						else
 						{
