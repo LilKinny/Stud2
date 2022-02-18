@@ -746,11 +746,8 @@ void Splevel1::Update(double dt)
 				else if (posX > 47 && posX < 62 && (posY > 42 && posY < 55))//op1
 				{
 					questions = false;
-<<<<<<< Updated upstream
 					LS_Lose = true;
-=======
 					LS_Win = true;
->>>>>>> Stashed changes
 				}
 			}
 			//Prestiege ans
@@ -856,8 +853,11 @@ void Splevel1::Update(double dt)
 
 			if (PuzzleLoseUI == true)
 			{
-				if (posX > 35 && posX < 45 && posY > 8 && posY < 14) PuzzleLoseUI = false;
-				Manager.Money -= Manager.Money / 5;
+				if (posX > 35 && posX < 45 && posY > 8 && posY < 14)
+				{
+					PuzzleLoseUI = false;
+					Manager.Money -= Manager.Money / 5;
+				}
 			}
 		}
 		else if (bLButtonState && !Application::IsMousePressed(0))
@@ -1207,7 +1207,7 @@ void Splevel1::Render()
 		// a human, person, worker, slave
 		modelStack.PushMatrix();
 		modelStack.Translate(15, 5, 15);
-		modelStack.Scale(5, 5, 5);
+		modelStack.Scale(3, 3, 3);
 		{
 			modelStack.PushMatrix();
 			modelStack.Translate(0, 0, 0);

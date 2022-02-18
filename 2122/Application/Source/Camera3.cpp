@@ -269,9 +269,9 @@ void Camera3::Update(double dt)
 		}
 
 		// left entrance wall
-		if (position.x < -58 && position.x > -70)
+		if (position.x < -17 && position.x > -58)
 		{
-			if (position.z < 78 && position.z > -70)
+			if (position.z < 70 && position.z > 60)
 			{
 				position -= right * ZOOM_SPEED * static_cast<float>(dt);
 			}
