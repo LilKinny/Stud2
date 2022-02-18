@@ -1695,6 +1695,8 @@ void Splevel1::Render()
 			RenderTextOnScreen(meshList[GEO_TEXT], "Ouch!", Color(1, 1, 1), 2, 29, 40);
 			RenderTextOnScreen(meshList[GEO_TEXT], "You got hit by a car!", Color(1, 1, 1), 2, 21, 35);
 			RenderTextOnScreen(meshList[GEO_TEXT], "Your hospital bill is expensive...", Color(1, 1, 1), 2, 21, 32);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Its probably a good idea not to.", Color(1, 1, 1), 2, 21, 29);
+			RenderTextOnScreen(meshList[GEO_TEXT], "stay on the road for too long...", Color(1, 1, 1), 2, 21, 26);
 			RenderTextOnScreen(meshList[GEO_TEXT], "Penalty: 50% of total income", Color(1, 1, 1), 2, 24, 18);
 			RenderMeshOnScreen(meshList[GEO_EMPTYBOX], 40, 10, 10, 6);
 			RenderTextOnScreen(meshList[GEO_TEXT], "Pay up", Color(1, 1, 1), 2, 37, 9);
