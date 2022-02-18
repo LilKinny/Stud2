@@ -1418,8 +1418,6 @@ void Splevel1::Render()
 	{
 
 	}
-
-
 	//kjcode
 	{
 		//Default Equipment

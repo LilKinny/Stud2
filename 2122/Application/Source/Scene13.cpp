@@ -5,7 +5,7 @@
 #include "LoadTGA.h"
 #include "shader.hpp"
 #include "Mtx44.h"
-
+#include "EquipmentManager.h"
 #include "Application.h"
 #include "MeshBuilder.h"
 #include "Utility.h"
@@ -14,9 +14,12 @@
 #include "Material.h"
 #include <cstdlib>
 #include <GLFW/glfw3.h>
+EquipmentManager Manager;
 using namespace std;
-float scalex;
-bool transition;
+float scalex, countdown = 0, counterPlus, counterMinue, carmove;;
+bool transition, stage2, stage3, rotatebackk = true, taxi, popo, truck;
+int spinDD = 0;
+
 string transitiontoscene;
 Scene13::Scene13()
 {
@@ -54,8 +57,7 @@ void Scene13::Init()
 	*/m_programID = LoadShaders("Shader//Texture.vertexshader", "Shader//Blending.fragmentshader");
 	//m_programID = LoadShaders("Shader//Texture.vertexshader", "Shader//Texture.fragmentshader");
 	m_programID = LoadShaders("Shader//Texture.vertexshader","Shader//Text.fragmentshader");
-
-
+	
 
 	m_parameters[U_MVP] = glGetUniformLocation(m_programID, "MVP");
 	m_parameters[U_MODELVIEW] = glGetUniformLocation(m_programID, "MV");
@@ -81,6 +83,8 @@ void Scene13::Init()
 	m_parameters[U_COLOR_TEXTURE] = glGetUniformLocation(m_programID, "colorTexture");
 	m_parameters[U_TEXT_ENABLED] =glGetUniformLocation(m_programID, "textEnabled");
 	m_parameters[U_TEXT_COLOR] = glGetUniformLocation(m_programID,"textColor");
+
+	
 
 	glUseProgram(m_programID);
 
@@ -118,7 +122,7 @@ void Scene13::Init()
 	rotateAngle = 0;
 
 	//Initialize camera settings
-	camera.Init(Vector3(80, 50, 50), Vector3(0, 0, 0), Vector3(0, 1, 0));
+	camera.Init(Vector3(175, 50, 175), Vector3(0, 100, 0), Vector3(0, 1, 0));
 
 	// Init VBO
 	for (int i = 0; i < NUM_GEOMETRY; ++i)
@@ -148,8 +152,31 @@ void Scene13::Init()
 
 	meshList[GEO_GRASS_V] = MeshBuilder::GenerateOBJMTL("model211", "OBJ//grassLarge.obj", "OBJ//grassLarge.mtl");
 
+	meshList[GEO_LVL2] = MeshBuilder::GenerateOBJMTL("modelLVL2", "OBJ//LVL2.obj", "OBJ//LVL2.mtl");
+
+	meshList[GEO_LVL3] = MeshBuilder::GenerateOBJMTL("modelLVL3", "OBJ//LVL3.obj", "OBJ//LVL3.mtl");
+	meshList[GEO_Lift] = MeshBuilder::GenerateOBJ("modelBUIDLING", "OBJ//Elevator.obj");
+	meshList[GEO_Lift]->textureID = LoadTGA("Image//Elevator.tga");
+	meshList[GEO_Table] = MeshBuilder::GenerateOBJMTL("modelBUIDLING", "OBJ//simple_table.obj", "OBJ//simple_table.mtl");
+	meshList[GEO_Laptop] = MeshBuilder::GenerateOBJMTL("Laptop", "OBJ//Laptop.obj", "OBJ//Laptop.mtl");
+	meshList[GEO_Phone1] = MeshBuilder::GenerateOBJMTL("Phone1", "OBJ//Phone1.obj", "OBJ//Phone1.mtl");
+	meshList[GEO_Body] = MeshBuilder::GenerateOBJMTL("Body", "OBJ//Body.obj", "OBJ//Body.mtl");
+	meshList[GEO_Head] = MeshBuilder::GenerateOBJMTL("Head", "OBJ//Head.obj", "OBJ//Head.mtl");
+	meshList[GEO_Arms] = MeshBuilder::GenerateOBJMTL("Arms", "OBJ//Arms.obj", "OBJ//Arms.mtl");
+
+	meshList[GEO_TAXI] = MeshBuilder::GenerateOBJMTL("Tree", "OBJ//taxi.obj", "OBJ//taxi.mtl");
+	meshList[GEO_POLICE] = MeshBuilder::GenerateOBJMTL("Tree", "OBJ//police.obj", "OBJ//police.mtl");
+	meshList[GEO_TRUCK] = MeshBuilder::GenerateOBJMTL("Tree", "OBJ//delivery.obj", "OBJ//delivery.mtl");
+	meshList[GEO_ROAD] = MeshBuilder::GenerateOBJMTL("Tree", "OBJ//road_straight.obj", "OBJ//road_straight.mtl");
+
 
 	meshList[GEO_BUILDING] = MeshBuilder::GenerateOBJMTL("modelBUIDLING", "OBJ//LVL1_withfloor.obj", "OBJ//LVL1_withfloor.mtl");
+
+	meshList[GEO_LBUILDING1] = MeshBuilder::GenerateOBJMTL("modelBUIDLING", "OBJ//large_buildingA.obj", "OBJ//large_buildingA.mtl");
+	meshList[GEO_LBUILDING2] = MeshBuilder::GenerateOBJMTL("modelBUIDLING", "OBJ//large_buildingB.obj", "OBJ//large_buildingB.mtl");
+	meshList[GEO_LBUILDING3] = MeshBuilder::GenerateOBJMTL("modelBUIDLING", "OBJ//large_buildingD.obj", "OBJ//large_buildingD.mtl");
+	meshList[GEO_SKYSCRAPER1] = MeshBuilder::GenerateOBJMTL("modelSkyScraper", "OBJ//skyscraperF.obj", "OBJ//skyscraperF.mtl");
+
 	/*
 	meshList[GEO_NYP] = MeshBuilder::GenerateQuad("nyplogo", Color(1, 1, 1), 1.f);
 	meshList[GEO_NYP]->textureID = LoadTGA("Image//NYP.tga");
@@ -275,6 +302,29 @@ void Scene13::Update(double dt)
 		cout << "Change scene";
 		
 	}
+
+
+	if (countdown >= 150) counterMinue = true;
+	if (counterMinue == true) countdown = countdown - 1;
+	if (countdown <= 0) counterMinue = false;
+	if (counterMinue == false) countdown = countdown + 1;
+	if (countdown >= 50) stage2 = true;
+	else stage2 = false;
+	if (countdown >= 100) stage3 = true;
+	else stage3 = false;
+
+	//std::cout << countdown;
+
+	if (rotatebackk == false)
+	{
+		spinDD += 300;
+	}
+	if (rotatebackk == true)
+	{
+		spinDD -= -300;
+	}
+	if (rotateAngle >= 45) rotatebackk = true;
+	else if (rotateAngle < 0) rotatebackk = false;
 }
 
 void Scene13::Render()
@@ -336,8 +386,51 @@ void Scene13::Render()
 		glUniform3fv(m_parameters[U_LIGHT0_POSITION], 1, &lightPosition_cameraspace.x);
 	}
 
-	modelStack.PushMatrix();
-	//scale, translate, rotate
+
+	int randomno = rand() % 15 + 0;
+	/*cout << randomno << " ";*/
+	if (randomno == 1 && popo == false && truck == false && taxi == false)
+	{
+		taxi = true;
+		/*cout << "SPAWNED TAXI ";*/
+	}
+	if (randomno == 2 && popo == false && truck == false && taxi == false)
+	{
+		popo = true;
+		/*cout << "SPAWNED POLICE ";*/
+	}
+	if (randomno == 3 && popo == false && truck == false && taxi == false)
+	{
+		truck = true;
+		/*cout << "SPAWNED TRUCK";*/
+	}
+	if (popo == true)
+	{
+		carmove += 15;
+		if (carmove >= 1500)
+		{
+			carmove = -1500;
+			popo = false;
+		}
+	}
+	if (taxi == true)
+	{
+		carmove += 10;
+		if (carmove >= 1500)
+		{
+			carmove = -1500;
+			taxi = false;
+		}
+	}
+	if (truck == true)
+	{
+		carmove += 8;
+		if (carmove >= 1500)
+		{
+			carmove = -1500;
+			truck = false;
+		}
+	}
 }
 
 void Scene13::RenderSkybox()
@@ -404,13 +497,105 @@ void Scene13::RenderSkybox()
 	RenderMesh(meshList[GEO_GRASS], true);
 	modelStack.PopMatrix();
 
-	modelStack.PushMatrix();
-	//modelStack.Rotate(-90, 1, 0, 0);
-	modelStack.Translate(0, 0, 0);
-	modelStack.Scale(4, 4, 4);
+	//Building
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(0, 0, 0);
+		modelStack.Scale(10, 10, 10);
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(6.52, 3, -7);
+			modelStack.Rotate(90, 0, 0, 1);
+			modelStack.Scale(1.5, 0.9, 1);
+			RenderMesh(meshList[GEO_Lift], true);
+			modelStack.PopMatrix();
+		}
+		RenderMesh(meshList[GEO_BUILDING], true);
+		modelStack.PopMatrix();
 
-	RenderMesh(meshList[GEO_BUILDING], true);
-	modelStack.PopMatrix();
+		if (stage2 == true)
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(0, 50, 0);
+			modelStack.Scale(10, 10, 10);
+			{
+				modelStack.PushMatrix();
+				modelStack.Translate(6.52, 3, -7);
+				modelStack.Rotate(90, 0, 0, 1);
+				modelStack.Scale(1.5, 0.9, 1);
+				RenderMesh(meshList[GEO_Lift], true);
+				modelStack.PopMatrix();
+			}
+			RenderMesh(meshList[GEO_LVL2], true);
+			modelStack.PopMatrix();
+		}
+		
+		if (stage3 == true)
+		{
+
+
+			modelStack.PushMatrix();
+			modelStack.Translate(0, 100, 0);
+			modelStack.Scale(10, 10, 10);
+			{
+				modelStack.PushMatrix();
+				modelStack.Translate(6.52, 3, -7);
+				modelStack.Rotate(90, 0, 0, 1);
+				modelStack.Scale(1.5, 0.9, 1);
+				RenderMesh(meshList[GEO_Lift], true);
+				modelStack.PopMatrix();
+			}
+			RenderMesh(meshList[GEO_LVL3], true);
+			modelStack.PopMatrix();
+		}
+		
+	}
+
+	//Road and cars
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(0, 0.3, 250);
+		modelStack.Scale(2500, 10, 80);
+		RenderMesh(meshList[GEO_ROAD], true);
+		modelStack.PopMatrix();
+
+		if (taxi == true)
+		{
+			modelStack.PushMatrix();
+			modelStack.Rotate(90, 0, 1, 0);
+			modelStack.Translate(-250, 0, carmove);
+			modelStack.Scale(30, 30, 30);
+			RenderMesh(meshList[GEO_TAXI], true);
+			modelStack.PopMatrix();
+		}
+
+		if (popo == true)
+		{
+			modelStack.PushMatrix();
+			modelStack.Rotate(90, 0, 1, 0);
+			modelStack.Translate(-250, 0, carmove);
+			modelStack.Scale(30, 30, 30);
+			RenderMesh(meshList[GEO_POLICE], true);
+			modelStack.PopMatrix();
+		}
+
+		if (truck == true)
+		{
+			modelStack.PushMatrix();
+			modelStack.Rotate(90, 0, 1, 0);
+			modelStack.Translate(-250, 0, carmove);
+			modelStack.Scale(30, 30, 30);
+			RenderMesh(meshList[GEO_TRUCK], true);
+			modelStack.PopMatrix();
+		}
+
+		//modelStack.PushMatrix();
+		//modelStack.Rotate (90, 0, 1, 0);
+		//modelStack.Translate(-250, 0, carmove);
+		//modelStack.Scale(40, 40, 40);
+		//RenderMesh(meshList[GEO_TRUCK], true);
+		//modelStack.PopMatrix();
+	}
 
 
 	/*modelStack.PushMatrix();
@@ -457,7 +642,90 @@ void Scene13::RenderSkybox()
 	RenderText(meshList[GEO_TEXT], "Hello world", Color(0, 1, 0));
 	modelStack.PopMatrix();*/
 
-	
+	//Render WorkStation
+	{
+		//Render Worker
+		modelStack.PushMatrix();
+		modelStack.Translate(15, 5, 15);
+		modelStack.Scale(5, 5, 5);
+		RenderMesh(meshList[GEO_Body], false);
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(0, 0, 0);
+			modelStack.Scale(1, 1, 1);
+			RenderMesh(meshList[GEO_Head], false);
+			{
+				modelStack.PushMatrix();
+				modelStack.Translate(0, 3, 0);
+				modelStack.Rotate(-90, 0, 0, 1);
+				modelStack.Rotate(spinDD, 0, 1, 0);
+				modelStack.Scale(1, 1, 1);
+				RenderMesh(meshList[GEO_Arms], false);
+				modelStack.PopMatrix();
+			}
+			modelStack.PopMatrix();
+			//Render Desk and Equipment
+			modelStack.PushMatrix();
+			modelStack.Rotate(90, 0, 1, 0);
+			modelStack.Scale(1, 1.5, 1);
+			modelStack.Translate(0, -0.5, 2.2);
+			RenderMesh(meshList[GEO_Table], false);
+			{
+				modelStack.PushMatrix();
+
+					modelStack.Translate(0, 2.05, 0);
+					modelStack.Rotate(90, 0, 1, 0);
+					modelStack.Scale(0.4, 0.3, 0.7);
+					RenderMesh(meshList[GEO_Laptop], true);//Render Laptop 
+
+				modelStack.PopMatrix();
+
+				modelStack.PushMatrix();
+
+					modelStack.Translate(1, 2.2, 0);
+					modelStack.Rotate(90, 0, 1, 0);
+					modelStack.Rotate(90, 1, 0, 0);
+					modelStack.Scale(0.4, 0.3, 0.6);
+					RenderMesh(meshList[GEO_Phone1], true); //Render Phone 1
+				
+				modelStack.PopMatrix();
+			}
+			modelStack.PopMatrix();
+		}
+		modelStack.PopMatrix();
+	}
+
+
+	//Surrounding buildings
+	{
+		modelStack.PushMatrix();
+		modelStack.Rotate(90, 0, 1, 0);
+		modelStack.Translate(0, 0, 320);
+		modelStack.Scale(180, 180, 180);
+		RenderMesh(meshList[GEO_LBUILDING1], true);
+		modelStack.PopMatrix();
+
+		modelStack.PushMatrix();
+		modelStack.Rotate(-90, 0, 1, 0);
+		modelStack.Translate(0, 0, 320);
+		modelStack.Scale(300, 180, 180);
+		RenderMesh(meshList[GEO_LBUILDING2], true);
+		modelStack.PopMatrix();
+
+		modelStack.PushMatrix();
+		modelStack.Rotate(180, 0, 1, 0);
+		modelStack.Translate(0, 0, 300);
+		modelStack.Scale(300, 180, 180);
+		RenderMesh(meshList[GEO_LBUILDING3], true);
+		modelStack.PopMatrix();
+
+		modelStack.PushMatrix();
+		modelStack.Rotate(180, 0, 1, 0);
+		modelStack.Translate(300, 0, 300);
+		modelStack.Scale(120, 120, 120);
+		RenderMesh(meshList[GEO_SKYSCRAPER1], true);
+		modelStack.PopMatrix();
+	}
 
 	RenderMeshOnScreen(meshList[GEO_TITLEBUTTONS], 4, 3, 2, 1);
 	RenderTextOnScreen(meshList[GEO_TEXT], "PLAY", Color(0, 1, 0), 4, 36, 30);
