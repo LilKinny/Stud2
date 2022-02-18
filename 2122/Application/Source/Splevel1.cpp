@@ -202,7 +202,7 @@ void Splevel1::Init()
 	meshList[GEO_TITLE] = MeshBuilder::GenerateQuad("quad", Color(1, 1, 1), 1.f);
 	meshList[GEO_TITLE]->textureID = LoadTGA("Image//TitleFrame.tga");
 
-	meshList[GEO_LIGHTBALL] = MeshBuilder::GenerateSphere("lightball", Color(1, 1, 0), 1.f);
+	meshList[GEO_LIGHTBALL] = MeshBuilder::GenerateSphere("lightball", Color(1, 1, 0.8), 1.f);
 
 	/*
 	meshList[GEO_CHAIR] = MeshBuilder::GenerateOBJ("model1","OBJ//chair.obj");
@@ -265,6 +265,10 @@ void Splevel1::Init()
 	meshList[GEO_Head] = MeshBuilder::GenerateOBJMTL("Head", "OBJ//Head.obj", "OBJ//Head.mtl");
 	meshList[GEO_Arms] = MeshBuilder::GenerateOBJMTL("Arms", "OBJ//Arms.obj", "OBJ//Arms.mtl");
 
+	meshList[GEO_TAXI] = MeshBuilder::GenerateOBJMTL("Tree", "OBJ//taxi.obj", "OBJ//taxi.mtl");
+	meshList[GEO_POLICE] = MeshBuilder::GenerateOBJMTL("Tree", "OBJ//police.obj", "OBJ//police.mtl");
+	meshList[GEO_TRUCK] = MeshBuilder::GenerateOBJMTL("Tree", "OBJ//delivery.obj", "OBJ//delivery.mtl");
+	meshList[GEO_ROAD] = MeshBuilder::GenerateOBJMTL("Tree", "OBJ//road_straight.obj", "OBJ//road_straight.mtl");
 
 	meshList[GEO_Lift] = MeshBuilder::GenerateOBJ("modelBUIDLING", "OBJ//Elevator.obj");
 	meshList[GEO_Lift]->textureID = LoadTGA("Image//Elevator.tga");
@@ -304,8 +308,8 @@ int totalbeets = 0, countdownbonus = 1500, spinD = 0;
 
 int mg1_start;
 bool lvl2, lvl3,lvl1=true;
-bool OP1, OP2, OP3,OP1check, OP2check,OP3check,deleterest,LS_start,LS_Win,LS_Lose,POP1,POP2,POP3, rotateback = true;
-float cposx, cposz;
+bool OP1, OP2, OP3,OP1check, OP2check,OP3check,deleterest,LS_start,LS_Win,LS_Lose,POP1,POP2,POP3, rotateback = true, spawntaxi, spawnpolice, spawntruck;
+float cposx, cposz, movecar;
 void Splevel1::Update(double dt)
 {
 	Manager.UpdateMoney(dt);
@@ -460,6 +464,51 @@ void Splevel1::Update(double dt)
 		paper2 = false;
 		paper3 = false;
 	}
+
+
+	int randomno = rand() % 15 + 0;
+	cout << randomno << " ";
+	if (randomno == 1 && spawnpolice == false && spawntruck == false && spawntaxi == false)
+	{
+		spawntaxi = true;
+		cout << "SPAWNED TAXI ";
+	}
+	if (randomno == 2 && spawnpolice == false && spawntruck == false && spawntaxi == false)
+	{spawnpolice = true;
+	cout << "SPAWNED POLICE ";
+	}
+	if (randomno == 3 && spawnpolice == false && spawntruck == false && spawntaxi == false)
+	{spawntruck = true;
+	cout << "SPAWNED TRUCK";
+	}
+	if (spawnpolice == true)
+	{
+		movecar += 15;
+		if (movecar >= 1500)
+		{
+			movecar = -1500;
+			spawnpolice = false;
+		}
+	}
+	if (spawntaxi == true)
+	{
+		movecar += 10;
+		if (movecar >= 1500)
+		{
+			movecar = -1500;
+			spawntaxi = false;
+		}
+	}
+	if (spawntruck == true)
+	{
+		movecar += 8;
+		if (movecar >= 1500)
+		{
+			movecar = -1500;
+			spawntruck = false;
+		}
+	}
+
 	//static const float 
 	if (Application::IsKeyPressed('1')) //enable back face culling
 		glEnable(GL_CULL_FACE);
@@ -1010,7 +1059,7 @@ void Splevel1::Render()
 	modelStack.LoadIdentity();
 
 
-	Vector3 lightDir(light[1].position.x, light[1].position.y, light[1].position.z);
+	Vector3 lightDir(light[0].position.x, light[0].position.y, light[0].position.z);
 	Vector3 lightDirection_cameraspace = viewStack.Top() * lightDir;
 	glUniform3fv(m_parameters[U_LIGHT0_POSITION], 1, &lightDirection_cameraspace.x);
 
@@ -1044,13 +1093,15 @@ void Splevel1::Render()
 	{
 		for (int i = 0; i < 30; i++)
 		{
-			modelStack.PushMatrix();
-			//modelStack.Rotate(-90, 1, 0, 0);
-			modelStack.Translate(-450 + (i * 30), 0, -450);
-			modelStack.Scale(70, 70, 70);
+			
+				modelStack.PushMatrix();
+				//modelStack.Rotate(-90, 1, 0, 0);
+				modelStack.Translate(-450 + (i * 30), 0, -450);
+				modelStack.Scale(70, 70, 70);
 
-			RenderMesh(meshList[GEO_Tree], true);
-			modelStack.PopMatrix();
+				RenderMesh(meshList[GEO_Tree], true);
+				modelStack.PopMatrix();
+			
 		}
 
 		for (int i = 0; i < 30; i++)
@@ -1066,24 +1117,34 @@ void Splevel1::Render()
 
 		for (int i = 0; i < 30; i++)
 		{
-			modelStack.PushMatrix();
-			//modelStack.Rotate(-90, 1, 0, 0);
-			modelStack.Translate(-450, 0, -450 + (i * 30));
-			modelStack.Scale(70, 70, 70);
+			int x = -450 + (i * 30);
+			if (x > 200 && x < 300);
+			else
+			{
+				modelStack.PushMatrix();
+				//modelStack.Rotate(-90, 1, 0, 0);
+				modelStack.Translate(-450, 0, -450 + (i * 30));
+				modelStack.Scale(70, 70, 70);
 
-			RenderMesh(meshList[GEO_Tree], true);
-			modelStack.PopMatrix();
+				RenderMesh(meshList[GEO_Tree], true);
+				modelStack.PopMatrix();
+			}
 		}
 
 		for (int i = 0; i < 30; i++)
 		{
-			modelStack.PushMatrix();
-			//modelStack.Rotate(-90, 1, 0, 0);
-			modelStack.Translate(450, 0, -450 + (i * 30));
-			modelStack.Scale(70, 70, 70);
+			int x = -450 + (i * 30);
+			if (x > 200 && x < 300);
+			else
+			{
+				modelStack.PushMatrix();
+				//modelStack.Rotate(-90, 1, 0, 0);
+				modelStack.Translate(450, 0, -450 + (i * 30));
+				modelStack.Scale(70, 70, 70);
 
-			RenderMesh(meshList[GEO_Tree], true);
-			modelStack.PopMatrix();
+				RenderMesh(meshList[GEO_Tree], true);
+				modelStack.PopMatrix();
+			}
 		}
 	}
 
@@ -1431,6 +1492,53 @@ void Splevel1::Render()
 		modelStack.Scale(scaleevidence, scaleevidence, scaleevidence);
 		RenderMesh(meshList[GEO_PAPER], true);
 		modelStack.PopMatrix();
+
+
+		//Road and cars
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(0, 0, 250);
+			modelStack.Scale(2500, 10, 80);
+			RenderMesh(meshList[GEO_ROAD], true);
+			modelStack.PopMatrix();
+
+			if (spawntaxi == true)
+			{
+				modelStack.PushMatrix();
+				modelStack.Rotate(90, 0, 1, 0);
+				modelStack.Translate(-250, 0, movecar);
+				modelStack.Scale(30, 30, 30);
+				RenderMesh(meshList[GEO_TAXI], true);
+				modelStack.PopMatrix();
+			}
+
+			if (spawnpolice == true)
+			{
+				modelStack.PushMatrix();
+				modelStack.Rotate(90, 0, 1, 0);
+				modelStack.Translate(-250, 0, movecar);
+				modelStack.Scale(30, 30, 30);
+				RenderMesh(meshList[GEO_POLICE], true);
+				modelStack.PopMatrix();
+			}
+
+			if (spawntruck == true)
+			{
+				modelStack.PushMatrix();
+				modelStack.Rotate(90, 0, 1, 0);
+				modelStack.Translate(-250, 0, movecar);
+				modelStack.Scale(30, 30, 30);
+				RenderMesh(meshList[GEO_TRUCK], true);
+				modelStack.PopMatrix();
+			}
+
+			//modelStack.PushMatrix();
+			//modelStack.Rotate (90, 0, 1, 0);
+			//modelStack.Translate(-250, 0, movecar);
+			//modelStack.Scale(40, 40, 40);
+			//RenderMesh(meshList[GEO_TRUCK], true);
+			//modelStack.PopMatrix();
+		}
 
 		if (timerstart == true) RenderTextOnScreen(meshList[GEO_TEXT], "Time left: " + timerstring, Color(1, 1, 1), 2, 37, 5);
 
@@ -2239,41 +2347,41 @@ void Splevel1::RenderSkybox()
 
 
 	modelStack.PushMatrix();
-	modelStack.Translate(cposx, 0, -666 + cposz);
+	modelStack.Translate(cposx, 0, -998 + cposz);
 	modelStack.Scale(2000, 2000, 2000);
 	RenderMesh(meshList[GEO_FRONT], false);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(cposx, 0, 666 + cposz);
+	modelStack.Translate(cposx, 0, 998 + cposz);
 	modelStack.Rotate(180, 0, 1, 0);
 	modelStack.Scale(2000, 2000, 2000);
 	RenderMesh(meshList[GEO_BACK], false);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(-666 + cposx, 0, cposz);
+	modelStack.Translate(-998 + cposx, 0, cposz);
 	modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Scale(2000, 2000, 2000);
 	RenderMesh(meshList[GEO_LEFT], false);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(666 + cposx, 0, cposz);
+	modelStack.Translate(998 + cposx, 0, cposz);
 	modelStack.Rotate(-90, 0, 1, 0);
 	modelStack.Scale(2000, 2000, 2000);
 	RenderMesh(meshList[GEO_RIGHT], false);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(cposx, 666, cposz);
+	modelStack.Translate(cposx, 998, cposz);
 	modelStack.Rotate(90, 1, 0, 0);
 	modelStack.Scale(2000, 2000, 2000);
 	RenderMesh(meshList[GEO_TOP], false);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(cposx, -666, cposz);
+	modelStack.Translate(cposx, -998, cposz);
 	modelStack.Rotate(-90, 0, 1, 0);
 	modelStack.Rotate(-90, 1, 0, 0);
 	modelStack.Scale(2000, 2000, 2000);
@@ -2321,7 +2429,7 @@ void Splevel1::RenderSkybox()
 	modelStack.Translate(light[0].position.x, light[0].position.y, light[0].position.z);
 	modelStack.Rotate(180, 0, 180, 180);
 	modelStack.Scale(5, 5, 5);
-	RenderMesh(meshList[GEO_LIGHTBALL], true);
+	RenderMesh(meshList[GEO_LIGHTBALL], false);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();

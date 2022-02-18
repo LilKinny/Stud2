@@ -83,6 +83,11 @@ class Splevel1 : public Scene
 		GEO_Head,
 		GEO_Arms,
 
+		GEO_TAXI,
+		GEO_TRUCK,
+		GEO_POLICE,
+		GEO_ROAD,
+
 		NUM_GEOMETRY,
 	};
 	enum UNIFORM_TYPE
