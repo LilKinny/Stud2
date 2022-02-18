@@ -115,7 +115,7 @@ void Camera3::Update(double dt)
 		}
 
 		// back wall
-		if (position.x < 60 && position.x > -76)
+		if (position.x < 70 && position.x > -76)
 		{
 			if (position.z < -60 && position.z > -70)
 			{
@@ -170,7 +170,7 @@ void Camera3::Update(double dt)
 		}
 
 		// back wall
-		if (position.x < 60 && position.x > -76)
+		if (position.x < 70 && position.x > -76)
 		{
 			if (position.z < -60 && position.z > -70)
 			{
@@ -224,7 +224,7 @@ void Camera3::Update(double dt)
 		}
 
 		// back wall
-		if (position.x < 60 && position.x > -76)
+		if (position.x < 70 && position.x > -76)
 		{
 			if (position.z < -60 && position.z > -70)
 			{
@@ -278,7 +278,7 @@ void Camera3::Update(double dt)
 		}
 
 		// back wall
-		if (position.x < 60 && position.x > -76)
+		if (position.x < 70 && position.x > -76)
 		{
 			if (position.z < -60 && position.z > -70)
 			{
