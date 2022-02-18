@@ -128,7 +128,7 @@ void Splevel1::Init()
 
 	gamestate = Splevel1::Gamestate::MainGame;
 
-	puzzletimer = 30;
+	puzzletimer = 60;
 
 	//Initialize camera settings
 	camera.Init(Vector3(80, 30, 50), Vector3(0, 0, 0), Vector3(0, 1, 0));
@@ -590,15 +590,54 @@ void Splevel1::Update(double dt)
 		{
 			PuzzleActive = false;
 			puzzle.Resetgame();
-			puzzletimer = 30;
+			if (Manager.PrestigeLvl == 0)
+			{
+				puzzletimer = 60;
+				Manager.MinigameBuffs += 1;
+			}
+			else if (Manager.PrestigeLvl == 1)
+			{
+				puzzletimer = 50;
+				Manager.MinigameBuffs += 2;
+			}
+			else if (Manager.PrestigeLvl == 2)
+			{
+				puzzletimer = 40;
+				Manager.MinigameBuffs += 3;
+			}
+			else if (Manager.PrestigeLvl == 3)
+			{
+				puzzletimer = 30;
+				Manager.MinigameBuffs += 5;
+			}
 			PuzzleWinUI = true;
-			Manager.MinigameBuffs += 5;
+			
 		}
 		else if (puzzletimer < 0)
 		{
 			PuzzleActive = false;
 			puzzle.Resetgame();
-			puzzletimer = 30;
+			if (Manager.PrestigeLvl == 0)
+			{
+				puzzletimer = 60;
+				
+			}
+			else if (Manager.PrestigeLvl == 1)
+			{
+				puzzletimer = 50;
+				
+			}
+			else if (Manager.PrestigeLvl == 2)
+			{
+				puzzletimer = 40;
+				
+			}
+			else if (Manager.PrestigeLvl == 3)
+			{
+				puzzletimer = 30;
+				
+			}
+			
 			PuzzleLoseUI = true;
 		}
 	}
@@ -2655,6 +2694,7 @@ void Splevel1::RenderWorkStation(int WorkStation)
 
 void Splevel1::PuzzleRender()
 {
+	RenderMeshOnScreen(meshList[GEO_Puzzlebg], 40, 25, 80, 80);
 	RenderMeshOnScreen(meshList[GEO_Puzzlebg], 40, 25, 40, 40);
 
 	RenderMeshOnScreen(meshList[GEO_PuzzleBorder], puzzle.Border->position.x, puzzle.Border->position.y, 11, 11);
@@ -2684,7 +2724,7 @@ void Splevel1::PuzzleRender()
 	RenderMeshOnScreen(meshList[GEO_PuzzlePlayer], puzzle.playeractualpox, (puzzle.playeractualpoy), 3, 3);
 
 
-	RenderTextOnScreen(meshList[GEO_TEXT], "Time left: "+ std::to_string(puzzletimer), Color(1, 1, 1), 2, 37, 3);
+	RenderTextOnScreen(meshList[GEO_TEXT], "Time left: "+ std::to_string(puzzletimer), Color(1, 1, 1), 2, 39, 3);
 	
 	
 }
