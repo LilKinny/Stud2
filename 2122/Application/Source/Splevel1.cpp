@@ -431,6 +431,9 @@ void Splevel1::Init()
 	meshList[GEO_Puzzlebg] = MeshBuilder::GenerateQuad("puzzlebg", Color(1, 1, 1), 1.f);
 	meshList[GEO_Puzzlebg]->textureID = LoadTGA("Image//Puzzlebg.tga");
 
+	meshList[GEO_Puzzlebgbg] = MeshBuilder::GenerateQuad("puzzlebgbg", Color(1, 1, 1), 1.f);
+	meshList[GEO_Puzzlebgbg]->textureID = LoadTGA("Image//Ricardo.tga");
+
 	meshList[GEO_PuzzlePlayer] = MeshBuilder::GenerateQuad("puzzlebg", Color(1, 1, 1), 1.f);
 	meshList[GEO_PuzzlePlayer]->textureID = LoadTGA("Image//Ricardo.tga");
 
@@ -2770,8 +2773,8 @@ void Splevel1::Render()
 	RenderTextOnScreen(meshList[GEO_TEXT], "Pos X:" + std::to_string(debugmouseposx), Color(1, 1, 0), 2, 0, 30);
 	RenderTextOnScreen(meshList[GEO_TEXT], "Pos y: " + std::to_string(debugmouseposy), Color(1, 1, 0), 2, 0, 33);
 
-	RenderTextOnScreen(meshList[GEO_TEXT], "Pos Y puzzle:" + std::to_string(puzzle.playeractualpoy), Color(1, 1, 0), 2, 0, 20);
-	RenderTextOnScreen(meshList[GEO_TEXT], "Pos X puzzle: " + std::to_string(puzzle.playeractualpox), Color(1, 1, 0), 2, 0, 23);
+	/*RenderTextOnScreen(meshList[GEO_TEXT], "Pos Y puzzle:" + std::to_string(puzzle.playeractualpoy), Color(1, 1, 0), 2, 0, 20);
+	RenderTextOnScreen(meshList[GEO_TEXT], "Pos X puzzle: " + std::to_string(puzzle.playeractualpox), Color(1, 1, 0), 2, 0, 23);*/
 
 }
 
@@ -2987,7 +2990,7 @@ void Splevel1::RenderWorkStation(int WorkStation)
 
 void Splevel1::PuzzleRender()
 {
-	RenderMeshOnScreen(meshList[GEO_Puzzlebg], 40, 25, 80, 80);
+	RenderMeshOnScreen(meshList[GEO_Puzzlebgbg], 40, 25, 80, 80);
 	RenderMeshOnScreen(meshList[GEO_Puzzlebg], 40, 25, 40, 40);
 
 	RenderMeshOnScreen(meshList[GEO_PuzzleBorder], puzzle.Border->position.x, puzzle.Border->position.y, 11, 11);
@@ -3017,7 +3020,7 @@ void Splevel1::PuzzleRender()
 	RenderMeshOnScreen(meshList[GEO_PuzzlePlayer], puzzle.playeractualpox, (puzzle.playeractualpoy), 3, 3);
 
 
-	RenderTextOnScreen(meshList[GEO_TEXT], "Time left: "+ std::to_string(puzzletimer), Color(1, 1, 1), 2, 39, 3);
+	RenderTextOnScreen(meshList[GEO_TEXT], "Time left: "+ std::to_string(puzzletimer), Color(1, 1, 1), 2, 3, 50);
 	
 	
 }
