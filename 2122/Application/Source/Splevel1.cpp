@@ -285,6 +285,8 @@ void Splevel1::Init()
 	meshList[GEO_TRUCK] = MeshBuilder::GenerateOBJMTL("Tree", "OBJ//delivery.obj", "OBJ//delivery.mtl");
 	meshList[GEO_ROAD] = MeshBuilder::GenerateOBJMTL("Tree", "OBJ//road_straight.obj", "OBJ//road_straight.mtl");
 
+	meshList[GEO_STREETLIGHT] = MeshBuilder::GenerateOBJMTL("streetlight", "OBJ//streetlight.obj", "OBJ//streetlight.mtl");
+
 	meshList[GEO_Lift] = MeshBuilder::GenerateOBJ("modelBUIDLING", "OBJ//Elevator.obj");
 	meshList[GEO_Lift]->textureID = LoadTGA("Image//Elevator.tga");
 
@@ -1410,6 +1412,28 @@ void Splevel1::Render()
 			RenderTextOnScreen(meshList[GEO_TEXT], "Press 'E' to L2", Color(0, 1, 0), 4, 10, 30);
 			RenderTextOnScreen(meshList[GEO_TEXT], "Press 'F' to L1", Color(0, 1, 0), 4, 10, 27);
 		}
+	}
+
+	//streetlight
+	for (int i = 0; i < 5; i++)
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(-400 + (i * 300), 0, 290);
+		/*modelStack.Rotate(90, 0, 1, 0);
+		modelStack.Rotate(90, 1, 0, 0);*/
+		modelStack.Scale(150, 250, 150);
+		RenderMesh(meshList[GEO_STREETLIGHT], true);
+		modelStack.PopMatrix();
+	}
+	for (int i = 0; i < 5; i++)
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(-550 + (i * 300), 0, 210);
+		modelStack.Rotate(180, 0, 1, 0);
+		
+		modelStack.Scale(150, 250, 150);
+		RenderMesh(meshList[GEO_STREETLIGHT], true);
+		modelStack.PopMatrix();
 	}
 
 

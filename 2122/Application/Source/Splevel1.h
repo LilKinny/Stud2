@@ -84,6 +84,7 @@ class Splevel1 : public Scene
 		GEO_TRUCK,
 		GEO_POLICE,
 		GEO_ROAD,
+		GEO_STREETLIGHT,
 
 		NUM_GEOMETRY,
 	};
