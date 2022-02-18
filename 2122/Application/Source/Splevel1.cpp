@@ -276,7 +276,7 @@ void Splevel1::Init()
 	puzzle.Init();
 
 	//Initialize camera settings
-	camera.Init(Vector3(80, 30, 50), Vector3(0, 0, 0), Vector3(0, 1, 0));
+	camera.Init(Vector3(0, 30, 345), Vector3(0, 0, 0), Vector3(0, 1, 0));
 
 	PuzzleActive = false;
 	PuzzleUIActive = false;
@@ -613,7 +613,7 @@ void Splevel1::Update(double dt)
 	}
 
 
-	int randomno = rand() % 15 + 0;
+	int randomno = rand() % 5 + 0;
 	/*cout << randomno << " ";*/
 	if (randomno == 1 && spawnpolice == false && spawntruck == false && spawntaxi == false)
 	{
@@ -630,28 +630,28 @@ void Splevel1::Update(double dt)
 	}
 	if (spawnpolice == true)
 	{
-		movecar += 15;
-		if (movecar >= 1500)
+		movecar += 20;
+		if (movecar >= 1200)
 		{
-			movecar = -1500;
+			movecar = -1200;
 			spawnpolice = false;
 		}
 	}
 	if (spawntaxi == true)
 	{
-		movecar += 10;
-		if (movecar >= 1500)
+		movecar += 15;
+		if (movecar >= 1200)
 		{
-			movecar = -1500;
+			movecar = -1200;
 			spawntaxi = false;
 		}
 	}
 	if (spawntruck == true)
 	{
-		movecar += 8;
-		if (movecar >= 1500)
+		movecar += 11;
+		if (movecar >= 1200)
 		{
-			movecar = -1500;
+			movecar = -1200;
 			spawntruck = false;
 		}
 	}

@@ -358,7 +358,7 @@ void Scene13::Init()
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16,16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Image//Agency_FB.tga");
 	Mtx44 projection;
-	projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 1000.f);
+	projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 10000.f);
 	projectionStack.LoadMatrix(projection);
 }
 
@@ -605,39 +605,39 @@ void Scene13::RenderSkybox()
 	modelStack.PopMatrix();*/
 
 
-	CONST FLOAT OFFSET = 499;
+	CONST FLOAT OFFSET = 900;
 
 	modelStack.PushMatrix();
 	modelStack.Translate(0, 0, -OFFSET);
-	modelStack.Scale(1000, 1000, 1000);
+	modelStack.Scale(2000, 2000, 2000);
 	RenderMesh(meshList[GEO_FRONT], false);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
 	modelStack.Translate(0, 0, OFFSET);
 	modelStack.Rotate(180, 0, 1, 0);
-	modelStack.Scale(1000, 1000, 1000);
+	modelStack.Scale(2000, 2000, 2000);
 	RenderMesh(meshList[GEO_BACK], false);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
 	modelStack.Translate(-OFFSET, 0, 0);
 	modelStack.Rotate(90, 0, 1, 0);
-	modelStack.Scale(1000, 1000, 1000);
+	modelStack.Scale(2000, 2000, 2000);
 	RenderMesh(meshList[GEO_LEFT], false);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
 	modelStack.Translate(OFFSET, 0, 0);
 	modelStack.Rotate(-90, 0, 1, 0);
-	modelStack.Scale(1000, 1000, 1000);
+	modelStack.Scale(2000, 2000, 2000);
 	RenderMesh(meshList[GEO_RIGHT], false);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
 	modelStack.Translate(0, OFFSET, 0);
 	modelStack.Rotate(90, 1, 0, 0);
-	modelStack.Scale(1000, 1000, 1000);
+	modelStack.Scale(2000, 2000, 2000);
 	RenderMesh(meshList[GEO_TOP], false);
 	modelStack.PopMatrix();
 
@@ -645,13 +645,13 @@ void Scene13::RenderSkybox()
 	modelStack.Translate(0, -OFFSET, 0);
 	modelStack.Rotate(-90, 0, 1, 0);
 	modelStack.Rotate(-90, 1, 0, 0);
-	modelStack.Scale(1000, 1000, 1000);
+	modelStack.Scale(2000, 2000, 2000);
 	RenderMesh(meshList[GEO_BOTTOM], false);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
 	modelStack.Translate(0, 0, 0);
-	modelStack.Scale(900, 10, 900);
+	modelStack.Scale(9000, 10, 9000);
 	modelStack.Rotate(90, 0, 1, 0);
 	RenderMesh(meshList[GEO_GRASS], true);
 	modelStack.PopMatrix();
