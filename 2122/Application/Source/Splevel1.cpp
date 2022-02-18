@@ -293,7 +293,7 @@ void Splevel1::Init()
 	
 
 	Mtx44 projection;
-	projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 1000.f);
+	projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 10000.f);
 	projectionStack.LoadMatrix(projection);
 }
 bool setuppolice = false, clearpolice, paper1, paper2, paper3, paper4, timerstart, win, lose, startlaptop = false, evidence_won_bonus;
@@ -746,7 +746,11 @@ void Splevel1::Update(double dt)
 				else if (posX > 47 && posX < 62 && (posY > 42 && posY < 55))//op1
 				{
 					questions = false;
+<<<<<<< Updated upstream
 					LS_Lose = true;
+=======
+					LS_Win = true;
+>>>>>>> Stashed changes
 				}
 			}
 			//Prestiege ans
@@ -1034,6 +1038,55 @@ void Splevel1::Render()
 	RenderMesh(meshList[GEO_AXES], false);
 	RenderSkybox();
 
+	
+
+	//Render trees
+	{
+		for (int i = 0; i < 30; i++)
+		{
+			modelStack.PushMatrix();
+			//modelStack.Rotate(-90, 1, 0, 0);
+			modelStack.Translate(-450 + (i * 30), 0, -450);
+			modelStack.Scale(70, 70, 70);
+
+			RenderMesh(meshList[GEO_Tree], true);
+			modelStack.PopMatrix();
+		}
+
+		for (int i = 0; i < 30; i++)
+		{
+			modelStack.PushMatrix();
+			//modelStack.Rotate(-90, 1, 0, 0);
+			modelStack.Translate(-450 + (i * 30), 0, 450);
+			modelStack.Scale(70, 70, 70);
+
+			RenderMesh(meshList[GEO_Tree], true);
+			modelStack.PopMatrix();
+		}
+
+		for (int i = 0; i < 30; i++)
+		{
+			modelStack.PushMatrix();
+			//modelStack.Rotate(-90, 1, 0, 0);
+			modelStack.Translate(-450, 0, -450 + (i * 30));
+			modelStack.Scale(70, 70, 70);
+
+			RenderMesh(meshList[GEO_Tree], true);
+			modelStack.PopMatrix();
+		}
+
+		for (int i = 0; i < 30; i++)
+		{
+			modelStack.PushMatrix();
+			//modelStack.Rotate(-90, 1, 0, 0);
+			modelStack.Translate(450, 0, -450 + (i * 30));
+			modelStack.Scale(70, 70, 70);
+
+			RenderMesh(meshList[GEO_Tree], true);
+			modelStack.PopMatrix();
+		}
+	}
+
 	//Building
 	{
 		modelStack.PushMatrix();
@@ -1110,52 +1163,9 @@ void Splevel1::Render()
 		}
 	}
 
-
-	//Render trees
+	//WorkStation Rendering
 	{
-		for (int i = 0; i < 30; i++)
-		{
-			modelStack.PushMatrix();
-			//modelStack.Rotate(-90, 1, 0, 0);
-			modelStack.Translate(-450 + (i * 30), 0, -450);
-			modelStack.Scale(70, 70, 70);
 
-			RenderMesh(meshList[GEO_Tree], true);
-			modelStack.PopMatrix();
-		}
-
-		for (int i = 0; i < 30; i++)
-		{
-			modelStack.PushMatrix();
-			//modelStack.Rotate(-90, 1, 0, 0);
-			modelStack.Translate(-450 + (i * 30), 0, 450);
-			modelStack.Scale(70, 70, 70);
-
-			RenderMesh(meshList[GEO_Tree], true);
-			modelStack.PopMatrix();
-		}
-
-		for (int i = 0; i < 30; i++)
-		{
-			modelStack.PushMatrix();
-			//modelStack.Rotate(-90, 1, 0, 0);
-			modelStack.Translate(-450, 0, -450 + (i * 30));
-			modelStack.Scale(70, 70, 70);
-
-			RenderMesh(meshList[GEO_Tree], true);
-			modelStack.PopMatrix();
-		}
-
-		for (int i = 0; i < 30; i++)
-		{
-			modelStack.PushMatrix();
-			//modelStack.Rotate(-90, 1, 0, 0);
-			modelStack.Translate(450, 0, -450 + (i * 30));
-			modelStack.Scale(70, 70, 70);
-
-			RenderMesh(meshList[GEO_Tree], true);
-			modelStack.PopMatrix();
-		}
 	}
 
 	//kjcode
