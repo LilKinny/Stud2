@@ -574,7 +574,7 @@ void Splevel1::Update(double dt)
 	//player table
 	{
 		//Evidence mini game
-		if (camera.position.x > 30 && camera.position.x < 45 && (camera.position.z > 55 && camera.position.z < 65))
+		if (camera.position.x > 30 && camera.position.x < 45 && (camera.position.z > 55 && camera.position.z < 65) && (camera.position.y == 30))
 		{
 			if (Application::IsKeyPressed('E'))
 			{
@@ -582,7 +582,7 @@ void Splevel1::Update(double dt)
 			}
 		}
 		//Laptop mini game
-		if (camera.position.x > 30 && camera.position.x < 45 && (camera.position.z > 40 && camera.position.z < 55))
+		if (camera.position.x > 30 && camera.position.x < 45 && (camera.position.z > 40 && camera.position.z < 55) &&(camera.position.y == 30))
 		{
 			if (Application::IsKeyPressed('E'))
 			{
@@ -597,7 +597,7 @@ void Splevel1::Update(double dt)
 			}
 		}
 		//Phone mini game
-		if (camera.position.x > 30 && camera.position.x < 45 && (camera.position.z > 30 && camera.position.z < 40))
+		if (camera.position.x > 30 && camera.position.x < 45 && (camera.position.z > 30 && camera.position.z < 40) && (camera.position.y == 30))
 		{
 			RenderTextOnScreen(meshList[GEO_TEXT], "Press 'E' to start phone", Color(0, 1, 0), 4, 10, 30);
 			if (Application::IsKeyPressed('E'))
@@ -2226,44 +2226,44 @@ void Splevel1::RenderSkybox()
 
 
 	modelStack.PushMatrix();
-	modelStack.Translate(cposx, 0, -499 + cposz);
-	modelStack.Scale(1000, 1000, 1000);
+	modelStack.Translate(cposx, 0, -666 + cposz);
+	modelStack.Scale(2000, 2000, 2000);
 	RenderMesh(meshList[GEO_FRONT], false);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(cposx, 0, 499 + cposz);
+	modelStack.Translate(cposx, 0, 666 + cposz);
 	modelStack.Rotate(180, 0, 1, 0);
-	modelStack.Scale(1000, 1000, 1000);
+	modelStack.Scale(2000, 2000, 2000);
 	RenderMesh(meshList[GEO_BACK], false);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(-499 + cposx, 0, cposz);
+	modelStack.Translate(-666 + cposx, 0, cposz);
 	modelStack.Rotate(90, 0, 1, 0);
-	modelStack.Scale(1000, 1000, 1000);
+	modelStack.Scale(2000, 2000, 2000);
 	RenderMesh(meshList[GEO_LEFT], false);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(499 + cposx, 0, cposz);
+	modelStack.Translate(666 + cposx, 0, cposz);
 	modelStack.Rotate(-90, 0, 1, 0);
-	modelStack.Scale(1000, 1000, 1000);
+	modelStack.Scale(2000, 2000, 2000);
 	RenderMesh(meshList[GEO_RIGHT], false);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(cposx, 499, cposz);
+	modelStack.Translate(cposx, 666, cposz);
 	modelStack.Rotate(90, 1, 0, 0);
-	modelStack.Scale(1000, 1000, 1000);
+	modelStack.Scale(2000, 2000, 2000);
 	RenderMesh(meshList[GEO_TOP], false);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(cposx, -499, cposz);
+	modelStack.Translate(cposx, -666, cposz);
 	modelStack.Rotate(-90, 0, 1, 0);
 	modelStack.Rotate(-90, 1, 0, 0);
-	modelStack.Scale(1000, 1000, 1000);
+	modelStack.Scale(2000, 2000, 2000);
 	RenderMesh(meshList[GEO_BOTTOM], false);
 	modelStack.PopMatrix();
 
