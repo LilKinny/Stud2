@@ -2938,6 +2938,9 @@ void Splevel1::UpdatePuzzleControls()
 
 				puzzle.Border->position.x = puzzle.playeractualpox;
 				puzzle.Border->position.y = puzzle.playeractualpoy;
+
+				PlaySound(TEXT("WOW.wav"), NULL, SND_ASYNC);
+				
 			}
 
 		}
@@ -3003,6 +3006,8 @@ void Splevel1::UpdatePuzzleControls()
 					{
 						puzzle.Paper[i]->prevposition.x = puzzle.Paper[i]->actlposition.x;
 						puzzle.Paper[i]->prevposition.y = puzzle.Paper[i]->actlposition.y;
+
+						PlaySound(TEXT("LoseMinigame.wav"), NULL, SND_ASYNC);
 						
 					}
 					break;
