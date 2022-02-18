@@ -67,6 +67,7 @@ class Splevel1 : public Scene
 		GEO_Lift,
 		GEO_Tree,
 		GEO_Puzzlebg,
+		GEO_Puzzlebgbg,
 		GEO_PuzzlePlayer,
 		GEO_PuzzlePaper,
 		GEO_PuzzleBorder,
