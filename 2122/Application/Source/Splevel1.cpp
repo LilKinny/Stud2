@@ -3019,7 +3019,7 @@ void Splevel1::PuzzleRender()
 	RenderMeshOnScreen(meshList[GEO_PuzzlePlayer], puzzle.playeractualpox, (puzzle.playeractualpoy), 3, 3);
 
 
-	RenderTextOnScreen(meshList[GEO_TEXT], "Time left: "+ std::to_string(puzzletimer), Color(1, 1, 1), 2, 3, 70);
+	RenderTextOnScreen(meshList[GEO_TEXT], "Time left: "+ std::to_string(puzzletimer), Color(1, 1, 1), 2, 3, 50);
 	
 	
 }
