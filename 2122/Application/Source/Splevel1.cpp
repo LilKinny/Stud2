@@ -300,7 +300,7 @@ void Splevel1::Init()
 	projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 10000.f);
 	projectionStack.LoadMatrix(projection);
 }
-bool setuppolice = false, clearpolice, paper1, paper2, paper3, paper4, timerstart, win, lose, startlaptop = false, evidence_won_bonus;
+bool setuppolice = false, clearpolice, paper1, paper2, paper3, paper4, timerstart, win, lose, startlaptop = false, evidence_won_bonus, die;
 double scaleevidence = 0.1, countdown, timer;
 float pposx, pposz, pposx2, pposz2, pposx4, pposx3, pposz3, pposz4, rotateangle, pposy, pposy2, pposy3, pposy4, pushaway;
 string timerstring, beetsinstringform;
@@ -467,19 +467,19 @@ void Splevel1::Update(double dt)
 
 
 	int randomno = rand() % 15 + 0;
-	cout << randomno << " ";
+	/*cout << randomno << " ";*/
 	if (randomno == 1 && spawnpolice == false && spawntruck == false && spawntaxi == false)
 	{
 		spawntaxi = true;
-		cout << "SPAWNED TAXI ";
+		/*cout << "SPAWNED TAXI ";*/
 	}
 	if (randomno == 2 && spawnpolice == false && spawntruck == false && spawntaxi == false)
 	{spawnpolice = true;
-	cout << "SPAWNED POLICE ";
+	/*cout << "SPAWNED POLICE ";*/
 	}
 	if (randomno == 3 && spawnpolice == false && spawntruck == false && spawntaxi == false)
 	{spawntruck = true;
-	cout << "SPAWNED TRUCK";
+	/*cout << "SPAWNED TRUCK";*/
 	}
 	if (spawnpolice == true)
 	{
@@ -918,11 +918,30 @@ void Splevel1::Update(double dt)
 					Manager.Money -= Manager.Money / 5;
 				}
 			}
+			if (die == true)
+			{
+				if (posX > 35 && posX < 45 && posY > 8 && posY < 14)
+				{
+
+					Manager.Money -= Manager.Money / 2;
+					die = false;
+				}
+			}
 		}
 		else if (bLButtonState && !Application::IsMousePressed(0))
 		{
 		bLButtonState = false;
 		std::cout << "LBUTTON UP" << std::endl;
+		}
+	}
+
+	// Player get hit by car
+
+	if (camera.position.z > 230 && camera.position.z < 270)
+	{
+		if (camera.position.x > movecar - 25 && camera.position.x < movecar + 25)
+		{
+			die = true;
 		}
 	}
 
@@ -1487,6 +1506,7 @@ void Splevel1::Render()
 		}
 
 
+
 		if (questions == true)
 		{
 			if (OP1 == true && OP1check == false)
@@ -1571,7 +1591,7 @@ void Splevel1::Render()
 		//Road and cars
 		{
 			modelStack.PushMatrix();
-			modelStack.Translate(0, 0, 250);
+			modelStack.Translate(0, 0.3, 250);
 			modelStack.Scale(2500, 10, 80);
 			RenderMesh(meshList[GEO_ROAD], true);
 			modelStack.PopMatrix();
@@ -1661,6 +1681,18 @@ void Splevel1::Render()
 			RenderTextOnScreen(meshList[GEO_TEXT], "Beetcoin clicker Legacy 2.0 deluxe (Free)", Color(1, 1, 1), 1.5, 25, 38);
 			RenderTextOnScreen(meshList[GEO_TEXT], "Click the beet to earn beetcoins (worth $1)", Color(1, 1, 1), 1.5, 24.1, 34.5);
 			RenderTextOnScreen(meshList[GEO_TEXT], "Total beetcoins earned: " + beetsinstringform, Color(1, 1, 1), 1.5, 29.1, 12);
+		}
+
+		if (die == true)
+		{
+			camera.Reset();
+			RenderMeshOnScreen(meshList[GEO_EMPTYBOX], 40, 25, 40, 40);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Ouch!", Color(1, 1, 1), 2, 29, 40);
+			RenderTextOnScreen(meshList[GEO_TEXT], "You got hit by a car!", Color(1, 1, 1), 2, 21, 35);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Your hospital bill is expensive...", Color(1, 1, 1), 2, 21, 32);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Penalty: 50% of total income", Color(1, 1, 1), 2, 24, 18);
+			RenderMeshOnScreen(meshList[GEO_EMPTYBOX], 40, 10, 10, 6);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Pay up", Color(1, 1, 1), 2, 37, 9);
 		}
 	}
 
