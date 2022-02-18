@@ -574,7 +574,7 @@ void Splevel1::Update(double dt)
 	//player table
 	{
 		//Evidence mini game
-		if (camera.position.x > 30 && camera.position.x < 45 && (camera.position.z > 55 && camera.position.z < 65))
+		if (camera.position.x > 30 && camera.position.x < 45 && (camera.position.z > 55 && camera.position.z < 65) && (lvl1==true))
 		{
 			if (Application::IsKeyPressed('E'))
 			{
@@ -582,7 +582,7 @@ void Splevel1::Update(double dt)
 			}
 		}
 		//Laptop mini game
-		if (camera.position.x > 30 && camera.position.x < 45 && (camera.position.z > 40 && camera.position.z < 55))
+		if (camera.position.x > 30 && camera.position.x < 45 && (camera.position.z > 40 && camera.position.z < 55) && (lvl1 == true))
 		{
 			if (Application::IsKeyPressed('E'))
 			{
@@ -597,7 +597,7 @@ void Splevel1::Update(double dt)
 			}
 		}
 		//Phone mini game
-		if (camera.position.x > 30 && camera.position.x < 45 && (camera.position.z > 30 && camera.position.z < 40))
+		if (camera.position.x > 30 && camera.position.x < 45 && (camera.position.z > 30 && camera.position.z < 40) && (lvl1 == true))
 		{
 			RenderTextOnScreen(meshList[GEO_TEXT], "Press 'E' to start phone", Color(0, 1, 0), 4, 10, 30);
 			if (Application::IsKeyPressed('E'))
@@ -718,12 +718,12 @@ void Splevel1::Update(double dt)
 				if (posX > 47 && posX < 62 && (posY > 25 && posY < 37))//op2
 				{
 					questions = false;
-					LS_Lose = true;
+					LS_Win = true;
 				}
 				else if (posX > 47 && posX < 62 && (posY > 42 && posY < 55))//op1
 				{
 					questions = false;
-					LS_Win = true;
+					LS_Lose = true;
 				}
 				else if (posX > 47 && posX < 62 && (posY > 8 && posY < 20))//op3
 				{
@@ -736,7 +736,7 @@ void Splevel1::Update(double dt)
 				if (posX > 47 && posX < 62 && (posY > 8 && posY < 20))//op3
 				{
 					questions = false;
-					LS_Lose = true;
+					LS_Win = true;
 				}
 				else if (posX > 47 && posX < 62 && (posY > 25 && posY < 37))//op2
 				{
@@ -746,7 +746,7 @@ void Splevel1::Update(double dt)
 				else if (posX > 47 && posX < 62 && (posY > 42 && posY < 55))//op1
 				{
 					questions = false;
-LS_Win = true;
+					LS_Lose = true;
 				}
 			}
 			//Prestiege ans
@@ -868,66 +868,69 @@ LS_Win = true;
 	{
 		spinD += 300;
 	}
-
-	static bool BButtonState = false;
-	static bool CButtonState = false;
-
-	if (lvl1 == true)
-	{
-		camera.target.y = 30 - camera.position.y + camera.target.y;
-		camera.position.y = 30;
-	}
-	if (lvl2 == true)
-	{
-		camera.target.y = 80 - camera.position.y + camera.target.y;
-		camera.position.y = 80;
-	}
-	if (lvl3 == true)
-	{
-		camera.target.y = 130 - camera.position.y + camera.target.y;
-		camera.position.y = 130;
-	}
-
-	//Level Checker
-	if (camera.position.x > 25 && camera.position.x < 60 && (camera.position.z < -50 && camera.position.z > -60) && (camera.position.y == 30))//L1
-	{
-		if (!BButtonState && Application::IsKeyPressed('E'))
-		{
-			BButtonState = true;
-
-			if (Manager.PrestigeLvl > 0)
-			{
-				lvl2 = true;
-				lvl1 = false;
-			}
-		}
-		else if (BButtonState && !Application::IsKeyPressed('E'))
-		{
-			BButtonState = false;
-		}
-	}
-	if (camera.position.x > 25 && camera.position.x < 60 && (camera.position.z < -50 && camera.position.z > -60))//L2
-	{
-		if (!CButtonState && Application::IsKeyPressed('F'))
-		{
-			CButtonState = true;
-			lvl2 = false;
-			lvl1 = true;
-			std::cout << "Ass\n";
-		}
-		else if (CButtonState && !Application::IsKeyPressed('F'))
-		{
-			CButtonState = false;
-		}
-	}
-	
-	
 	if (rotateback == true)
 	{
 		spinD -= -300;
 	}
 	if (rotateAngle >= 45) rotateback = true;
 	else if (rotateAngle < 0) rotateback = false;
+	
+	//Levels
+	{
+		static bool BButtonState = false;
+		static bool CButtonState = false;
+		if (lvl1 == true)
+		{
+			camera.target.y = 30 - camera.position.y + camera.target.y;
+			camera.position.y = 30;
+		}
+		if (lvl2 == true)
+		{
+			camera.target.y = 80 - camera.position.y + camera.target.y;
+			camera.position.y = 80;
+		}
+		if (lvl3 == true)
+		{
+			camera.target.y = 130 - camera.position.y + camera.target.y;
+			camera.position.y = 130;
+		}
+
+		//Level Checker
+		if (camera.position.x > 25 && camera.position.x < 60 && (camera.position.z < -50 && camera.position.z > -60) && (camera.position.y == 30))//L1
+		{
+			if (!BButtonState && Application::IsKeyPressed('E'))
+			{
+				BButtonState = true;
+
+				if (Manager.PrestigeLvl > 0)
+				{
+					lvl2 = true;
+					lvl1 = false;
+				}
+			}
+			else if (BButtonState && !Application::IsKeyPressed('E'))
+			{
+				BButtonState = false;
+			}
+		}
+		if (camera.position.x > 25 && camera.position.x < 60 && (camera.position.z < -50 && camera.position.z > -60))//L2
+		{
+			if (!CButtonState && Application::IsKeyPressed('F'))
+			{
+				CButtonState = true;
+				lvl2 = false;
+				lvl1 = true;
+				std::cout << "Ass\n";
+			}
+			else if (CButtonState && !Application::IsKeyPressed('F'))
+			{
+				CButtonState = false;
+			}
+		}
+	}
+	
+	
+
 }
 
 
@@ -1239,12 +1242,12 @@ void Splevel1::Render()
 
 
 		//Evidence mini game
-		if (camera.position.x > 30 && camera.position.x < 45 && (camera.position.z > 55 && camera.position.z < 65))
+		if (camera.position.x > 30 && camera.position.x < 45 && (camera.position.z > 55 && camera.position.z < 65) && (lvl1 == true))
 		{
 			RenderTextOnScreen(meshList[GEO_TEXT], "Press 'E' to start Evidence", Color(0, 1, 0), 4, 10, 30);
 		}
 		//Laptop mini game
-		if (camera.position.x > 30 && camera.position.x < 45 && (camera.position.z > 40 && camera.position.z < 55))
+		if (camera.position.x > 30 && camera.position.x < 45 && (camera.position.z > 40 && camera.position.z < 55) && (lvl1 == true))
 		{
 			RenderTextOnScreen(meshList[GEO_TEXT], "Press 'E' to start Laptop", Color(0, 1, 0), 4, 10, 30);
 			RenderTextOnScreen(meshList[GEO_TEXT], "Press 'F' to start stack minigame", Color(0, 1, 0), 4, 6, 25);
@@ -1255,7 +1258,7 @@ void Splevel1::Render()
 			}
 		}
 		//Phone mini game
-		if (camera.position.x > 30 && camera.position.x < 45 && (camera.position.z > 30 && camera.position.z < 40))
+		if (camera.position.x > 30 && camera.position.x < 45 && (camera.position.z > 30 && camera.position.z < 40) && (lvl1 == true))
 		{
 			if (questions == false)
 			{
