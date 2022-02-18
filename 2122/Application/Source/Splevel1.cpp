@@ -117,6 +117,11 @@ void Splevel1::Init()
 	//variable to rotate geometry
 	rotateAngle = 0;
 
+	for (int i = 0; i < 30; i++)
+	{
+		scaleval[i] = (rand() % 60) + 60;
+	}
+
 	RenderUI = 0;
 	PageNum = 1;
 
@@ -1195,7 +1200,7 @@ void Splevel1::Render()
 	}
 
 	
-
+	srand(time(0));
 	RenderMesh(meshList[GEO_AXES], false);
 	RenderSkybox();
 
@@ -1205,11 +1210,11 @@ void Splevel1::Render()
 	{
 		for (int i = 0; i < 30; i++)
 		{
-			
+		
 				modelStack.PushMatrix();
 				//modelStack.Rotate(-90, 1, 0, 0);
 				modelStack.Translate(-450 + (i * 30), 0, -450);
-				modelStack.Scale(70, 70, 70);
+				modelStack.Scale(scaleval[i], scaleval[i], scaleval[i]);
 
 				RenderMesh(meshList[GEO_Tree], true);
 				modelStack.PopMatrix();
@@ -1218,10 +1223,11 @@ void Splevel1::Render()
 
 		for (int i = 0; i < 30; i++)
 		{
+			
 			modelStack.PushMatrix();
 			//modelStack.Rotate(-90, 1, 0, 0);
 			modelStack.Translate(-450 + (i * 30), 0, 450);
-			modelStack.Scale(70, 70, 70);
+			modelStack.Scale(scaleval[i], scaleval[i], scaleval[i]);
 
 			RenderMesh(meshList[GEO_Tree], true);
 			modelStack.PopMatrix();
@@ -1236,7 +1242,7 @@ void Splevel1::Render()
 				modelStack.PushMatrix();
 				//modelStack.Rotate(-90, 1, 0, 0);
 				modelStack.Translate(-450, 0, -450 + (i * 30));
-				modelStack.Scale(70, 70, 70);
+				modelStack.Scale(scaleval[i], scaleval[i], scaleval[i]);
 
 				RenderMesh(meshList[GEO_Tree], true);
 				modelStack.PopMatrix();
@@ -1252,7 +1258,7 @@ void Splevel1::Render()
 				modelStack.PushMatrix();
 				//modelStack.Rotate(-90, 1, 0, 0);
 				modelStack.Translate(450, 0, -450 + (i * 30));
-				modelStack.Scale(70, 70, 70);
+				modelStack.Scale(scaleval[i], scaleval[i], scaleval[i]);
 
 				RenderMesh(meshList[GEO_Tree], true);
 				modelStack.PopMatrix();
@@ -1399,15 +1405,14 @@ void Splevel1::Render()
 		}
 	}
 
-<<<<<<< Updated upstream
-=======
+
 
 	//WorkStation Rendering
 	{
 
 	}
 
->>>>>>> Stashed changes
+
 	//kjcode
 	{
 		//Default Equipment

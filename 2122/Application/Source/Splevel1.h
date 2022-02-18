@@ -161,6 +161,8 @@ private:
 	int RenderPrestige;
 	int PageNum;
 
+	int scaleval[30];
+
 	float debugmouseposx;
 	float debugmouseposy;
 	
