@@ -681,9 +681,9 @@ void Splevel1::Update(double dt)
 				else if (deleterest == true)
 				{
 					cout << "PressedE->deleterest true";
-					OP1 = false;
-					OP2 = false;
-					OP3 = false;
+					POP1 = false;
+					POP2 = false;
+					POP3 = false;
 					deleterest = false;
 				}
 			}
@@ -859,12 +859,12 @@ void Splevel1::Update(double dt)
 					questions = false;
 					LS_Lose = true;
 				}
-				else if (posX > 47 && posX < 62 && (posY > 22 && posY < 32))
+				else if (posX > 47 && posX < 62 && (posY > 22 && posY < 32))//win
 				{
 					questions = false;
 					LS_Win = true;
 				}
-				else if (posX > 47 && posX < 62 && (posY > 9 && posY < 19))//win
+				else if (posX > 47 && posX < 62 && (posY > 9 && posY < 19))
 				{
 					questions = false;
 					LS_Lose = true;
@@ -872,7 +872,12 @@ void Splevel1::Update(double dt)
 			}
 			if (LS_Win == true)
 			{
-				if (posX > 35 && posX < 44 && (posY > 8 && posY < 13))
+				if (Manager.PrestigeLvl>=1 && (posX > 35 && posX < 44 && (posY > 8 && posY < 13)))
+				{
+					Manager.Money = Manager.Money + 100;
+					LS_Win = false;
+				}
+				else if (posX > 35 && posX < 44 && (posY > 8 && posY < 13))
 				{
 					Manager.Money = Manager.Money + 50;
 					LS_Win = false;
@@ -880,9 +885,14 @@ void Splevel1::Update(double dt)
 			}
 			if (LS_Lose == true)
 			{
-				if (posX > 35 && posX < 44 && (posY > 8 && posY < 13))
+				if (Manager.PrestigeLvl >= 1 && (posX > 35 && posX < 44 && (posY > 8 && posY < 13)))
 				{
 					Manager.Money = Manager.Money - 100;
+					LS_Lose = false;
+				}
+				if (posX > 35 && posX < 44 && (posY > 8 && posY < 13))
+				{
+					Manager.Money = Manager.Money - 50;
 					LS_Lose = false;
 				}
 			}
@@ -949,7 +959,7 @@ void Splevel1::Update(double dt)
 		}
 
 		//Level Checker
-		if (camera.position.x > 25 && camera.position.x < 60 && (camera.position.z < -50 && camera.position.z > -60) && (camera.position.y == 30))//L1
+		if (camera.position.x > 25 && camera.position.x < 60 && (camera.position.z < -50 && camera.position.z > -60) && (lvl1==true))//L1
 		{
 			if (!BButtonState && Application::IsKeyPressed('E'))
 			{
@@ -966,14 +976,51 @@ void Splevel1::Update(double dt)
 				BButtonState = false;
 			}
 		}
-		if (camera.position.x > 25 && camera.position.x < 60 && (camera.position.z < -50 && camera.position.z > -60))//L2
+		if (camera.position.x > 25 && camera.position.x < 60 && (camera.position.z < -50 && camera.position.z > -60 &&(lvl2 == true)))//L2
 		{
+			if (!BButtonState && Application::IsKeyPressed('E'))
+			{
+				BButtonState = true;
+
+				if (Manager.PrestigeLvl >=2)
+				{
+					lvl3 = true;
+					lvl2 = false;
+				}
+			}
+			else if (BButtonState && !Application::IsKeyPressed('E'))
+			{
+				BButtonState = false;
+			}
 			if (!CButtonState && Application::IsKeyPressed('F'))
 			{
 				CButtonState = true;
 				lvl2 = false;
 				lvl1 = true;
-				std::cout << "Ass\n";
+			}
+			else if (CButtonState && !Application::IsKeyPressed('F'))
+			{
+				CButtonState = false;
+			}
+		}
+		if (camera.position.x > 25 && camera.position.x < 60 && (camera.position.z < -50 && camera.position.z > -60 && (lvl3 == true)))//L3
+		{
+			if (!BButtonState && Application::IsKeyPressed('E'))
+			{
+				BButtonState = true;
+				lvl3 = false;
+				lvl2 = true;
+				
+			}
+			else if (BButtonState && !Application::IsKeyPressed('E'))
+			{
+				BButtonState = false;
+			}
+			if (!CButtonState && Application::IsKeyPressed('F'))
+			{
+				CButtonState = true;
+				lvl3 = false;
+				lvl1 = true;
 			}
 			else if (CButtonState && !Application::IsKeyPressed('F'))
 			{
@@ -1197,7 +1244,7 @@ void Splevel1::Render()
 			modelStack.PopMatrix();
 		}
 		//L1 lift
-		if (camera.position.x > 25 && camera.position.x < 60 && (camera.position.z < -50 && camera.position.z > -60) && (camera.position.y == 30))
+		if (camera.position.x > 25 && camera.position.x < 60 && (camera.position.z < -50 && camera.position.z > -60) && (lvl1==true))
 		{
 			if (Manager.PrestigeLvl > 0)
 			{
@@ -1209,18 +1256,24 @@ void Splevel1::Render()
 			}
 		}
 		//L2 lift
-		if (camera.position.x > 25 && camera.position.x < 60 && (camera.position.z < -50 && camera.position.z > -60) && (camera.position.y == 80))
+		if (camera.position.x > 25 && camera.position.x < 60 && (camera.position.z < -50 && camera.position.z > -60) && (lvl2 == true))
 		{
+			RenderTextOnScreen(meshList[GEO_TEXT], "Press 'F' to L1", Color(0, 1, 0), 4, 10, 27);
+
 			if (Manager.PrestigeLvl > 1)
 			{
 				RenderTextOnScreen(meshList[GEO_TEXT], "Press 'E' to L3", Color(0, 1, 0), 4, 10, 30);
 			}
 			else
 			{
-				RenderTextOnScreen(meshList[GEO_TEXT], "Reach prestige 2 for lift access", Color(0, 1, 0), 4, 10, 30);
-				RenderTextOnScreen(meshList[GEO_TEXT], "Press 'F' to L1", Color(0, 1, 0), 4, 10, 27);
-
+				RenderTextOnScreen(meshList[GEO_TEXT], "Reach prestige 2 for L3", Color(0, 1, 0), 4, 15, 30);
 			}
+		}
+		//L3 lift
+		if (camera.position.x > 25 && camera.position.x < 60 && (camera.position.z < -50 && camera.position.z > -60) && (lvl3 == true))
+		{
+			RenderTextOnScreen(meshList[GEO_TEXT], "Press 'E' to L2", Color(0, 1, 0), 4, 10, 30);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Press 'F' to L1", Color(0, 1, 0), 4, 10, 27);
 		}
 	}
 
@@ -1346,8 +1399,8 @@ void Splevel1::Render()
 			RenderTextOnScreen(meshList[GEO_TEXT], "you must use your scam skills to pick", Color(1, 1, 1), 2, 21, 32);
 			RenderTextOnScreen(meshList[GEO_TEXT], "the most convincing answer without", Color(1, 1, 1), 2, 21, 29);
 			RenderTextOnScreen(meshList[GEO_TEXT], "raising suspicion.", Color(1, 1, 1), 2, 21, 26);
-			RenderTextOnScreen(meshList[GEO_TEXT], "Reward: $50", Color(1, 1, 1), 2, 21, 21);
-			RenderTextOnScreen(meshList[GEO_TEXT], "Penalty: -$100", Color(1, 1, 1), 2, 21, 18);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Reward: $50  Premium Reward: $100", Color(1, 1, 1), 2, 21, 21);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Penalty: -$50  Premium Penalty: -$100", Color(1, 1, 1), 2, 21, 18);
 			RenderMeshOnScreen(meshList[GEO_EMPTYBOX], 40, 10, 10, 6);
 			RenderTextOnScreen(meshList[GEO_TEXT], "Start!", Color(1, 1, 1), 2, 37, 9);
 		}
@@ -1361,7 +1414,28 @@ void Splevel1::Render()
 			RenderMeshOnScreen(meshList[GEO_EMPTYBOX], 40, 10, 10, 6);
 			RenderTextOnScreen(meshList[GEO_TEXT], "Hooray!", Color(1, 1, 1), 2, 37, 9);
 		}
+		if (LS_Win == true && Manager.PrestigeLvl > 1)
+		{
+			RenderMeshOnScreen(meshList[GEO_EMPTYBOX], 40, 25, 40, 40);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Congratulations!", Color(1, 1, 1), 2, 32, 40);
+			RenderTextOnScreen(meshList[GEO_TEXT], "You managed to earn your", Color(1, 1, 1), 2, 21, 35);
+			RenderTextOnScreen(meshList[GEO_TEXT], "targets trust and scam their money.", Color(1, 1, 1), 2, 21, 32);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Reward: $100", Color(1, 1, 1), 2, 21, 21);
+			RenderMeshOnScreen(meshList[GEO_EMPTYBOX], 40, 10, 10, 6);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Hooray!", Color(1, 1, 1), 2, 37, 9);
+		}
 		if (LS_Lose == true)
+		{
+			RenderMeshOnScreen(meshList[GEO_EMPTYBOX], 40, 25, 40, 40);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Oh No!", Color(1, 1, 1), 2, 37, 40);
+			RenderTextOnScreen(meshList[GEO_TEXT], "You didn't manage to convince", Color(1, 1, 1), 2, 21, 35);
+			RenderTextOnScreen(meshList[GEO_TEXT], "the target they've reported you and", Color(1, 1, 1), 2, 21, 32);
+			RenderTextOnScreen(meshList[GEO_TEXT], "have to pay a fine.", Color(1, 1, 1), 2, 21, 29);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Penalty: -$50", Color(1, 1, 1), 2, 21, 18);
+			RenderMeshOnScreen(meshList[GEO_EMPTYBOX], 40, 10, 10, 6);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Pay up", Color(1, 1, 1), 2, 37, 9);
+		}
+		if (LS_Lose == true && Manager.PrestigeLvl > 1)
 		{
 			RenderMeshOnScreen(meshList[GEO_EMPTYBOX], 40, 25, 40, 40);
 			RenderTextOnScreen(meshList[GEO_TEXT], "Oh No!", Color(1, 1, 1), 2, 37, 40);
