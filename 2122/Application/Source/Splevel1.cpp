@@ -1,4 +1,5 @@
 #include <iostream>
+#include <windows.h>
 #include <string>
 #include "Splevel1.h"
 #include "GL\glew.h"
@@ -15,6 +16,8 @@
 #include <GLFW/glfw3.h>
 #include <ctime>
 #include "../Puzzle.h"
+#include <mmsystem.h>
+#pragma comment(lib, "winmm.lib")
 
 
 using namespace std;
@@ -137,7 +140,7 @@ void Splevel1::Init()
 
 	//Initialize camera settings
 	camera.Init(Vector3(80, 30, 50), Vector3(0, 0, 0), Vector3(0, 1, 0));
-
+	
 	// Init VBO
 	for (int i = 0; i < NUM_GEOMETRY; ++i)
 	{
@@ -312,6 +315,7 @@ void Splevel1::Init()
 	projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 10000.f);
 	projectionStack.LoadMatrix(projection);
 }
+
 bool setuppolice = false, clearpolice, paper1, paper2, paper3, paper4, timerstart, win, lose, startlaptop = false, evidence_won_bonus, die;
 double scaleevidence = 0.1, countdown, timer;
 float pposx, pposz, pposx2, pposz2, pposx4, pposx3, pposz3, pposz4, rotateangle, pposy, pposy2, pposy3, pposy4, pushaway;
@@ -930,9 +934,12 @@ void Splevel1::Update(double dt)
 				}
 				else if (posX > 35 && posX < 44 && (posY > 8 && posY < 13))
 				{
+					
+					cout << "Playing sound here!";
 					Manager.Money = Manager.Money + 50;
 					LS_Win = false;
 				}
+				
 			}
 			if (LS_Lose == true)
 			{
@@ -1272,7 +1279,7 @@ void Splevel1::Render()
 		WorkStationPositionX = WorkStationPositionY = WorkStationPositionZ = 0;
 		for (int i = 0; i < (Manager.PrestigeLvl + 1) * 6; ++i)
 		{
-			std::cout << i % 6 << std::endl;
+			/*std::cout << i % 6 << std::endl;*/
 			if (i < 6)
 			{
 				WorkStationPositionY = 0;
@@ -3175,6 +3182,7 @@ void Splevel1::UpdateMainControls()
 			}
 			else if (win == true)
 			{
+				PlaySound(TEXT("WinMinigame.wav"), NULL, SND_ASYNC);
 				win = false;
 				timerstart = false;
 				clearpolice = false;
@@ -3182,6 +3190,7 @@ void Splevel1::UpdateMainControls()
 			}
 			else if (lose == true)
 			{
+				PlaySound(TEXT("LoseMinigame.wav"), NULL, SND_ASYNC);
 				lose = false;
 				timerstart = false;
 				clearpolice = false;

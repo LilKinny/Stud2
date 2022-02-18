@@ -8,7 +8,7 @@
 #include "Material.h"
 #include "EquipmentManager.h"
 #include "../Puzzle.h"
-
+#include <windows.h>
 class Splevel1 : public Scene
 {
 	enum GEOMETRY_TYPE
@@ -139,6 +139,11 @@ private:
 	float rotateAnglesC;
 	bool bEnableLight;
 	bool questions,Pqeustions;
+
+	//void Playsoundfile(string filename)	
+	//{
+	//	mciSendString("play mp3", NULL, 0, NULL);
+	//}
 
 	void PuzzleRender();
 	void UpdatePuzzleControls();
