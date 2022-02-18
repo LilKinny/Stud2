@@ -225,6 +225,13 @@ void Splevel1::Init()
 
 
 	meshList[GEO_BUILDING] = MeshBuilder::GenerateOBJMTL("modelBUIDLING","OBJ//LVL1_withfloor.obj", "OBJ//LVL1_withfloor.mtl");
+	meshList[GEO_LBUILDING1] = MeshBuilder::GenerateOBJMTL("modelBUIDLING", "OBJ//large_buildingA.obj", "OBJ//large_buildingA.mtl");
+	meshList[GEO_LBUILDING2] = MeshBuilder::GenerateOBJMTL("modelBUIDLING", "OBJ//large_buildingB.obj", "OBJ//large_buildingB.mtl");
+	meshList[GEO_LBUILDING3] = MeshBuilder::GenerateOBJMTL("modelBUIDLING", "OBJ//large_buildingD.obj", "OBJ//large_buildingD.mtl");
+	meshList[GEO_SKYSCRAPER1] = MeshBuilder::GenerateOBJMTL("modelSkyScraper", "OBJ//skyscraperF.obj", "OBJ//skyscraperF.mtl");
+
+
+
 
 	meshList[GEO_LVL2] = MeshBuilder::GenerateOBJMTL("modelLVL2", "OBJ//LVL2.obj", "OBJ//LVL2.mtl");
 
@@ -1353,6 +1360,15 @@ void Splevel1::Render()
 		}
 	}
 
+<<<<<<< Updated upstream
+=======
+
+	//WorkStation Rendering
+	{
+
+	}
+
+>>>>>>> Stashed changes
 	//kjcode
 	{
 		//Default Equipment
@@ -1637,6 +1653,37 @@ void Splevel1::Render()
 			//modelStack.Scale(40, 40, 40);
 			//RenderMesh(meshList[GEO_TRUCK], true);
 			//modelStack.PopMatrix();
+		}
+
+		//Surrounding buildings
+		{
+			modelStack.PushMatrix();
+			modelStack.Rotate(90, 0, 1, 0);
+			modelStack.Translate(0, 0, 320);
+			modelStack.Scale(180, 180, 180);
+			RenderMesh(meshList[GEO_LBUILDING1], true);
+			modelStack.PopMatrix();
+
+			modelStack.PushMatrix();
+			modelStack.Rotate(-90, 0, 1, 0);
+			modelStack.Translate(0, 0, 320);
+			modelStack.Scale(300, 180, 180);
+			RenderMesh(meshList[GEO_LBUILDING2], true);
+			modelStack.PopMatrix();
+
+			modelStack.PushMatrix();
+			modelStack.Rotate(180, 0, 1, 0);
+			modelStack.Translate(0,0, 300);
+			modelStack.Scale(300, 180, 180);
+			RenderMesh(meshList[GEO_LBUILDING3], true);
+			modelStack.PopMatrix();
+
+			modelStack.PushMatrix();
+			modelStack.Rotate(180, 0, 1, 0);
+			modelStack.Translate(300, 0, 300);
+			modelStack.Scale(120, 120, 120);
+			RenderMesh(meshList[GEO_SKYSCRAPER1], true);
+			modelStack.PopMatrix();
 		}
 
 		if (timerstart == true) RenderTextOnScreen(meshList[GEO_TEXT], "Time left: " + timerstring, Color(1, 1, 1), 2, 37, 5);
