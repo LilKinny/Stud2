@@ -746,11 +746,8 @@ void Splevel1::Update(double dt)
 				else if (posX > 47 && posX < 62 && (posY > 42 && posY < 55))//op1
 				{
 					questions = false;
-<<<<<<< Updated upstream
 					LS_Lose = true;
-=======
 					LS_Win = true;
->>>>>>> Stashed changes
 				}
 			}
 			//Prestiege ans
