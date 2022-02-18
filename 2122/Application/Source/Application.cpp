@@ -10,11 +10,6 @@
 //Include the standard C++ headers
 #include <stdio.h>
 #include <stdlib.h>
-#include "Scene1.h"
-#include "Scene2.h"
-#include "Scene3.h"
-#include "Scene4.h"
-#include "Scene5.h"
 #include "Scene13.h"
 #include "Splevel1.h"
 

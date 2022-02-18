@@ -39,13 +39,6 @@ class Splevel1 : public Scene
 		GEO_BOTTOM,
 		GEO_FRONT,
 		GEO_BACK,
-		GEO_BLEND,
-		GEO_NYP,
-		GEO_CHAIR,
-		GEO_SHOE,
-		GEO_DOORMAN,
-		GEO_DART,
-		GEO_COTTAGE,
 		GEO_TEXT,
 		GEO_BUILDING,
 		GEO_LVL2,
@@ -134,7 +127,8 @@ private:
 	unsigned m_parameters[U_TOTAL];
 	Light light[1];
 	void RenderMesh(Mesh* mesh, bool enableLight);
-	void RenderSkybox();
+	void RenderSkybox(void);
+	void RenderWorkStation(int WorkStation);
 	float rotateAngle;
 	float rotateAngleF;
 	float rotateAngleSF;
@@ -153,7 +147,6 @@ private:
 	bool PuzzleUIActive;
 	bool PuzzleWinUI;
 	bool PuzzleLoseUI;
-
 	bool PuzzlePlayerPickup;
 
 	float puzzletimer;
