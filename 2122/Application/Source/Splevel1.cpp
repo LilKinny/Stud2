@@ -1055,6 +1055,7 @@ void Splevel1::Update(double dt)
 			}
 			if (LS_Win == true)
 			{
+				PlaySound(TEXT("Sent.wav"), NULL, SND_ASYNC);
 				if (Manager.PrestigeLvl>=1 && (posX > 35 && posX < 44 && (posY > 8 && posY < 13)))
 				{
 					Manager.Money = Manager.Money + 100;
