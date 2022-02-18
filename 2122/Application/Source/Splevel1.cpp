@@ -236,6 +236,7 @@ void Splevel1::Init()
 	meshList[GEO_LBUILDING1] = MeshBuilder::GenerateOBJMTL("modelBUIDLING", "OBJ//large_buildingA.obj", "OBJ//large_buildingA.mtl");
 	meshList[GEO_LBUILDING2] = MeshBuilder::GenerateOBJMTL("modelBUIDLING", "OBJ//large_buildingB.obj", "OBJ//large_buildingB.mtl");
 	meshList[GEO_LBUILDING3] = MeshBuilder::GenerateOBJMTL("modelBUIDLING", "OBJ//large_buildingD.obj", "OBJ//large_buildingD.mtl");
+	meshList[GEO_SBUILDING1] = MeshBuilder::GenerateOBJMTL("modelSBUIDLING", "OBJ//small_buildingB.obj", "OBJ//small_buildingB.mtl");
 	meshList[GEO_SKYSCRAPER1] = MeshBuilder::GenerateOBJMTL("modelSkyScraper", "OBJ//skyscraperF.obj", "OBJ//skyscraperF.mtl");
 
 
@@ -284,6 +285,10 @@ void Splevel1::Init()
 	meshList[GEO_POLICE] = MeshBuilder::GenerateOBJMTL("Tree", "OBJ//police.obj", "OBJ//police.mtl");
 	meshList[GEO_TRUCK] = MeshBuilder::GenerateOBJMTL("Tree", "OBJ//delivery.obj", "OBJ//delivery.mtl");
 	meshList[GEO_ROAD] = MeshBuilder::GenerateOBJMTL("Tree", "OBJ//road_straight.obj", "OBJ//road_straight.mtl");
+	meshList[GEO_ROADTURN] = MeshBuilder::GenerateOBJMTL("Turn", "OBJ//road_bendSquare.obj", "OBJ//road_bendSquare.mtl");
+	meshList[GEO_ROADTSECT] = MeshBuilder::GenerateOBJMTL("Tsect", "OBJ//road_drivewaySingle.obj", "OBJ//road_drivewaySingle.mtl");
+
+	meshList[GEO_STREETLIGHT] = MeshBuilder::GenerateOBJMTL("streetlight", "OBJ//streetlight.obj", "OBJ//streetlight.mtl");
 
 	meshList[GEO_Lift] = MeshBuilder::GenerateOBJ("modelBUIDLING", "OBJ//Elevator.obj");
 	meshList[GEO_Lift]->textureID = LoadTGA("Image//Elevator.tga");
@@ -1412,6 +1417,28 @@ void Splevel1::Render()
 		}
 	}
 
+	//streetlight
+	for (int i = 0; i < 5; i++)
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(-400 + (i * 300), 0, 290);
+		/*modelStack.Rotate(90, 0, 1, 0);
+		modelStack.Rotate(90, 1, 0, 0);*/
+		modelStack.Scale(150, 250, 150);
+		RenderMesh(meshList[GEO_STREETLIGHT], true);
+		modelStack.PopMatrix();
+	}
+	for (int i = 0; i < 5; i++)
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(-550 + (i * 300), 0, 210);
+		modelStack.Rotate(180, 0, 1, 0);
+		
+		modelStack.Scale(150, 250, 150);
+		RenderMesh(meshList[GEO_STREETLIGHT], true);
+		modelStack.PopMatrix();
+	}
+
 
 
 	//WorkStation Rendering
@@ -1662,7 +1689,67 @@ void Splevel1::Render()
 		{
 			modelStack.PushMatrix();
 			modelStack.Translate(0, 0.3, 250);
-			modelStack.Scale(2500, 10, 80);
+			modelStack.Scale(100, 10, 80);
+			RenderMesh(meshList[GEO_ROAD], true);
+			modelStack.PopMatrix();
+
+			modelStack.PushMatrix();
+			modelStack.Translate(0, 0.3, -130);
+			modelStack.Scale(225, 10, 100);
+			RenderMesh(meshList[GEO_ROAD], true);
+			modelStack.PopMatrix();
+
+			modelStack.PushMatrix();
+			modelStack.Translate(150, 0.3, 250);
+			modelStack.Rotate(180, 0, 1, 0);
+			modelStack.Scale(246, 10, 80);
+			RenderMesh(meshList[GEO_ROADTSECT], true);
+			modelStack.PopMatrix();
+
+			modelStack.PushMatrix();
+			modelStack.Translate(-150, 0.3, 250);
+			modelStack.Rotate(180, 0, 1, 0);
+			modelStack.Scale(246, 10, 80);
+			RenderMesh(meshList[GEO_ROADTSECT], true);
+			modelStack.PopMatrix();
+
+
+			modelStack.PushMatrix();
+			modelStack.Translate(150, 0.3, 60);
+			modelStack.Rotate(90, 0, 1, 0);
+			modelStack.Scale(300, 10, 80);
+			RenderMesh(meshList[GEO_ROAD], true);
+			modelStack.PopMatrix();
+
+			modelStack.PushMatrix();
+			modelStack.Translate(-150, 0.3, 60);
+			modelStack.Rotate(90, 0, 1, 0);
+			modelStack.Scale(300, 10, 80);
+			RenderMesh(meshList[GEO_ROAD], true);
+			modelStack.PopMatrix();
+
+			modelStack.PushMatrix();
+			modelStack.Translate(150, 0.3, -130);
+			modelStack.Scale(80, 10, 100);
+			RenderMesh(meshList[GEO_ROADTURN], true);
+			modelStack.PopMatrix();
+
+			modelStack.PushMatrix();
+			modelStack.Translate(-150, 0.3, -130);
+			modelStack.Rotate(90, 0, 1, 0);
+			modelStack.Scale(100, 10, 80);
+			RenderMesh(meshList[GEO_ROADTURN], true);
+			modelStack.PopMatrix();
+
+			modelStack.PushMatrix();
+			modelStack.Translate(700, 0.3, 250);
+			modelStack.Scale(1000, 10, 80);
+			RenderMesh(meshList[GEO_ROAD], true);
+			modelStack.PopMatrix();
+
+			modelStack.PushMatrix();
+			modelStack.Translate(-700, 0.3, 250);
+			modelStack.Scale(1000, 10, 80);
 			RenderMesh(meshList[GEO_ROAD], true);
 			modelStack.PopMatrix();
 
@@ -1732,6 +1819,13 @@ void Splevel1::Render()
 			modelStack.Translate(300, 0, 300);
 			modelStack.Scale(120, 120, 120);
 			RenderMesh(meshList[GEO_SKYSCRAPER1], true);
+			modelStack.PopMatrix();
+
+			modelStack.PushMatrix();
+			modelStack.Translate(330, 0, -300);
+			modelStack.Rotate(90, 0, 1, 0);
+			modelStack.Scale(200, 200, 200);
+			RenderMesh(meshList[GEO_SBUILDING1], true);
 			modelStack.PopMatrix();
 		}
 
@@ -2936,6 +3030,9 @@ void Splevel1::UpdatePuzzleControls()
 
 				puzzle.Border->position.x = puzzle.playeractualpox;
 				puzzle.Border->position.y = puzzle.playeractualpoy;
+
+				PlaySound(TEXT("WOW.wav"), NULL, SND_ASYNC);
+				
 			}
 
 		}
@@ -3001,6 +3098,8 @@ void Splevel1::UpdatePuzzleControls()
 					{
 						puzzle.Paper[i]->prevposition.x = puzzle.Paper[i]->actlposition.x;
 						puzzle.Paper[i]->prevposition.y = puzzle.Paper[i]->actlposition.y;
+
+						PlaySound(TEXT("LoseMinigame.wav"), NULL, SND_ASYNC);
 						
 					}
 					break;

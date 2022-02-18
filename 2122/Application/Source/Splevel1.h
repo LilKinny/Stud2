@@ -44,6 +44,7 @@ class Splevel1 : public Scene
 		GEO_LBUILDING1,
 		GEO_LBUILDING2,
 		GEO_LBUILDING3,
+		GEO_SBUILDING1,
 		GEO_SKYSCRAPER1,
 		GEO_LVL2,
 		GEO_LVL3,
@@ -84,6 +85,10 @@ class Splevel1 : public Scene
 		GEO_TRUCK,
 		GEO_POLICE,
 		GEO_ROAD,
+		GEO_STREETLIGHT,
+		GEO_ROADTURN,
+		GEO_ROADTSECT,
+
 
 		NUM_GEOMETRY,
 	};
