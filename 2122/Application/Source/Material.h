@@ -27,10 +27,10 @@ struct Material
     float kShininess;
     unsigned size = 0;
     Material() {
-        kAmbient.Set(0.25f, 0.25f, 0.25f);
-        kDiffuse.Set(.5f, .5f, .5f);
-        kSpecular.Set(.5f, .5f, .5f);
-        kShininess = .5f;
+        kAmbient.Set(0.1f, 0.1f, 0.1f);
+        kDiffuse.Set(0.6f, 0.6f, 0.6f);
+        kSpecular.Set(0.3f, 0.3f, 0.3f);
+        kShininess = 1.f;
     }
     Material& operator=(const Material& rhs)
     {

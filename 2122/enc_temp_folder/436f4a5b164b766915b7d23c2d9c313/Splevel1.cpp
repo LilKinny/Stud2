@@ -1,5 +1,4 @@
 #include <iostream>
-#include <windows.h>
 #include <string>
 #include "Splevel1.h"
 #include "GL\glew.h"
@@ -16,8 +15,6 @@
 #include <GLFW/glfw3.h>
 #include <ctime>
 #include "../Puzzle.h"
-#include <mmsystem.h>
-#pragma comment(lib, "winmm.lib")
 
 
 using namespace std;
@@ -73,65 +70,12 @@ void Splevel1::Init()
 	m_parameters[U_LIGHT0_KC] = glGetUniformLocation(m_programID, "lights[0].kC");
 	m_parameters[U_LIGHT0_KL] = glGetUniformLocation(m_programID, "lights[0].kL");
 	m_parameters[U_LIGHT0_KQ] = glGetUniformLocation(m_programID, "lights[0].kQ");
+	m_parameters[U_LIGHTENABLED] = glGetUniformLocation(m_programID, "lightEnabled");
 	m_parameters[U_LIGHT0_TYPE] = glGetUniformLocation(m_programID, "lights[0].type");
 	m_parameters[U_LIGHT0_SPOTDIRECTION] = glGetUniformLocation(m_programID, "lights[0].spotDirection");
 	m_parameters[U_LIGHT0_COSCUTOFF] = glGetUniformLocation(m_programID, "lights[0].cosCutoff");
 	m_parameters[U_LIGHT0_COSINNER] = glGetUniformLocation(m_programID, "lights[0].cosInner");
 	m_parameters[U_LIGHT0_EXPONENT] = glGetUniformLocation(m_programID, "lights[0].exponent");
-	m_parameters[U_LIGHT1_POSITION] = glGetUniformLocation(m_programID, "lights[1].position_cameraspace");
-	m_parameters[U_LIGHT1_COLOR] = glGetUniformLocation(m_programID, "lights[1].color");
-	m_parameters[U_LIGHT1_POWER] = glGetUniformLocation(m_programID, "lights[1].power");
-	m_parameters[U_LIGHT1_KC] = glGetUniformLocation(m_programID, "lights[1].kC");
-	m_parameters[U_LIGHT1_KL] = glGetUniformLocation(m_programID, "lights[1].kL");
-	m_parameters[U_LIGHT1_KQ] = glGetUniformLocation(m_programID, "lights[1].kQ");
-	m_parameters[U_LIGHT1_TYPE] = glGetUniformLocation(m_programID, "lights[1].type");
-	m_parameters[U_LIGHT1_SPOTDIRECTION] = glGetUniformLocation(m_programID, "lights[1].spotDirection");
-	m_parameters[U_LIGHT1_COSCUTOFF] = glGetUniformLocation(m_programID, "lights[1].cosCutoff");
-	m_parameters[U_LIGHT1_COSINNER] = glGetUniformLocation(m_programID, "lights[1].cosInner");
-	m_parameters[U_LIGHT1_EXPONENT] = glGetUniformLocation(m_programID, "lights[1].exponent");
-
-
-	m_parameters[U_LIGHT2_POSITION] = glGetUniformLocation(m_programID, "lights[2].position_cameraspace");
-	m_parameters[U_LIGHT2_COLOR] = glGetUniformLocation(m_programID, "lights[2].color");
-	m_parameters[U_LIGHT2_POWER] = glGetUniformLocation(m_programID, "lights[2].power");
-	m_parameters[U_LIGHT2_KC] = glGetUniformLocation(m_programID, "lights[2].kC");
-	m_parameters[U_LIGHT2_KL] = glGetUniformLocation(m_programID, "lights[2].kL");
-	m_parameters[U_LIGHT2_KQ] = glGetUniformLocation(m_programID, "lights[2].kQ");
-	m_parameters[U_LIGHT2_TYPE] = glGetUniformLocation(m_programID, "lights[2].type");
-	m_parameters[U_LIGHT2_SPOTDIRECTION] = glGetUniformLocation(m_programID, "lights[2].spotDirection");
-	m_parameters[U_LIGHT2_COSCUTOFF] = glGetUniformLocation(m_programID, "lights[2].cosCutoff");
-	m_parameters[U_LIGHT2_COSINNER] = glGetUniformLocation(m_programID, "lights[2].cosInner");
-	m_parameters[U_LIGHT2_EXPONENT] = glGetUniformLocation(m_programID, "lights[2].exponent");
-
-
-	m_parameters[U_LIGHT3_POSITION] = glGetUniformLocation(m_programID, "lights[3].position_cameraspace");
-	m_parameters[U_LIGHT3_COLOR] = glGetUniformLocation(m_programID, "lights[3].color");
-	m_parameters[U_LIGHT3_POWER] = glGetUniformLocation(m_programID, "lights[3].power");
-	m_parameters[U_LIGHT3_KC] = glGetUniformLocation(m_programID, "lights[3].kC");
-	m_parameters[U_LIGHT3_KL] = glGetUniformLocation(m_programID, "lights[3].kL");
-	m_parameters[U_LIGHT3_KQ] = glGetUniformLocation(m_programID, "lights[3].kQ");
-	m_parameters[U_LIGHT3_TYPE] = glGetUniformLocation(m_programID, "lights[3].type");
-	m_parameters[U_LIGHT3_SPOTDIRECTION] = glGetUniformLocation(m_programID, "lights[3].spotDirection");
-	m_parameters[U_LIGHT3_COSCUTOFF] = glGetUniformLocation(m_programID, "lights[3].cosCutoff");
-	m_parameters[U_LIGHT3_COSINNER] = glGetUniformLocation(m_programID, "lights[3].cosInner");
-	m_parameters[U_LIGHT3_EXPONENT] = glGetUniformLocation(m_programID, "lights[3].exponent");
-
-
-
-	m_parameters[U_LIGHT4_POSITION] = glGetUniformLocation(m_programID, "lights[4].position_cameraspace");
-	m_parameters[U_LIGHT4_COLOR] = glGetUniformLocation(m_programID, "lights[4].color");
-	m_parameters[U_LIGHT4_POWER] = glGetUniformLocation(m_programID, "lights[4].power");
-	m_parameters[U_LIGHT4_KC] = glGetUniformLocation(m_programID, "lights[4].kC");
-	m_parameters[U_LIGHT4_KL] = glGetUniformLocation(m_programID, "lights[4].kL");
-	m_parameters[U_LIGHT4_KQ] = glGetUniformLocation(m_programID, "lights[4].kQ");
-	m_parameters[U_LIGHT4_TYPE] = glGetUniformLocation(m_programID, "lights[4].type");
-	m_parameters[U_LIGHT4_SPOTDIRECTION] = glGetUniformLocation(m_programID, "lights[4].spotDirection");
-	m_parameters[U_LIGHT4_COSCUTOFF] = glGetUniformLocation(m_programID, "lights[4].cosCutoff");
-	m_parameters[U_LIGHT4_COSINNER] = glGetUniformLocation(m_programID, "lights[4].cosInner");
-	m_parameters[U_LIGHT4_EXPONENT] = glGetUniformLocation(m_programID, "lights[4].exponent");
-
-
-	m_parameters[U_LIGHTENABLED] = glGetUniformLocation(m_programID, "lightEnabled");
 	m_parameters[U_NUMLIGHTS] = glGetUniformLocation(m_programID,"numLights");
 	m_parameters[U_COLOR_TEXTURE_ENABLED] = glGetUniformLocation(m_programID, "colorTextureEnabled");
 	m_parameters[U_COLOR_TEXTURE] = glGetUniformLocation(m_programID, "colorTexture");
@@ -140,7 +84,7 @@ void Splevel1::Init()
 
 	glUseProgram(m_programID);
 
-	glUniform1i(m_parameters[U_NUMLIGHTS], 5);
+	glUniform1i(m_parameters[U_NUMLIGHTS], 1);
 
 	//Replace previous code
 	light[0].type = Light::LIGHT_DIRECTIONAL;
@@ -165,98 +109,6 @@ void Splevel1::Init()
 	glUniform1f(m_parameters[U_LIGHT0_COSINNER], light[0].cosInner);
 	glUniform1f(m_parameters[U_LIGHT0_EXPONENT], light[0].exponent);
 
-
-	light[1].type = Light::LIGHT_DIRECTIONAL;
-	light[1].position.Set(0, 0, 1);
-	light[1].color.Set(1, 1, 1);
-	light[1].power = 0.5;
-	light[1].kC = 1.f;
-	light[1].kL = 0.01f;
-	light[1].kQ = 0.001f;
-	light[1].cosCutoff = cos(Math::DegreeToRadian(45));
-	light[1].cosInner = cos(Math::DegreeToRadian(30));
-	light[1].exponent = 3.f;
-	light[1].spotDirection.Set(0.f, 1.f, 0.f);
-	
-	glUniform1i(m_parameters[U_LIGHT1_TYPE], light[1].type);
-	glUniform3fv(m_parameters[U_LIGHT1_COLOR], 1, &light[1].color.r);
-	glUniform1f(m_parameters[U_LIGHT1_POWER], light[1].power);
-	glUniform1f(m_parameters[U_LIGHT1_KC], light[1].kC);
-	glUniform1f(m_parameters[U_LIGHT1_KL], light[1].kL);
-	glUniform1f(m_parameters[U_LIGHT1_KQ], light[1].kQ);
-	glUniform1f(m_parameters[U_LIGHT1_COSCUTOFF], light[1].cosCutoff);
-	glUniform1f(m_parameters[U_LIGHT1_COSINNER], light[1].cosInner);
-	glUniform1f(m_parameters[U_LIGHT1_EXPONENT], light[1].exponent);
-
-	//Replace previous code
-	light[2].type = Light::LIGHT_DIRECTIONAL;
-	light[2].position.Set(0, 0, -1);
-	light[2].color.Set(1, 1, 1);
-	light[2].power = 0.5;
-	light[2].kC = 1.f;
-	light[2].kL = 0.01f;
-	light[2].kQ = 0.001f;
-	light[2].cosCutoff = cos(Math::DegreeToRadian(45));
-	light[2].cosInner = cos(Math::DegreeToRadian(30));
-	light[2].exponent = 3.f;
-	light[2].spotDirection.Set(0.f, 1.f, 0.f);
-
-	glUniform1i(m_parameters[U_LIGHT2_TYPE], light[2].type);
-	glUniform3fv(m_parameters[U_LIGHT2_COLOR], 1, &light[2].color.r);
-	glUniform1f(m_parameters[U_LIGHT2_POWER], light[2].power);
-	glUniform1f(m_parameters[U_LIGHT2_KC], light[2].kC);
-	glUniform1f(m_parameters[U_LIGHT2_KL], light[2].kL);
-	glUniform1f(m_parameters[U_LIGHT2_KQ], light[2].kQ);
-	glUniform1f(m_parameters[U_LIGHT2_COSCUTOFF], light[2].cosCutoff);
-	glUniform1f(m_parameters[U_LIGHT2_COSINNER], light[2].cosInner);
-	glUniform1f(m_parameters[U_LIGHT2_EXPONENT], light[2].exponent);
-
-
-	light[3].type = Light::LIGHT_DIRECTIONAL;
-	light[3].position.Set(1, 0, 0);
-	light[3].color.Set(1, 1, 1);
-	light[3].power = 0.5;
-	light[3].kC = 1.f;
-	light[3].kL = 0.01f;
-	light[3].kQ = 0.001f;
-	light[3].cosCutoff = cos(Math::DegreeToRadian(45));
-	light[3].cosInner = cos(Math::DegreeToRadian(30));
-	light[3].exponent = 3.f;
-	light[3].spotDirection.Set(0.f, 1.f, 0.f);
-
-	glUniform1i(m_parameters[U_LIGHT3_TYPE], light[3].type);
-	glUniform3fv(m_parameters[U_LIGHT3_COLOR], 1, &light[3].color.r);
-	glUniform1f(m_parameters[U_LIGHT3_POWER], light[3].power);
-	glUniform1f(m_parameters[U_LIGHT3_KC], light[3].kC);
-	glUniform1f(m_parameters[U_LIGHT3_KL], light[3].kL);
-	glUniform1f(m_parameters[U_LIGHT3_KQ], light[3].kQ);
-	glUniform1f(m_parameters[U_LIGHT3_COSCUTOFF], light[3].cosCutoff);
-	glUniform1f(m_parameters[U_LIGHT3_COSINNER], light[3].cosInner);
-	glUniform1f(m_parameters[U_LIGHT3_EXPONENT], light[3].exponent);
-
-	//Replace previous code
-	light[4].type = Light::LIGHT_DIRECTIONAL;
-	light[4].position.Set(-1, 0, 0);
-	light[4].color.Set(1, 1, 1);
-	light[4].power = 0.5;
-	light[4].kC = 1.f;
-	light[4].kL = 0.01f;
-	light[4].kQ = 0.001f;
-	light[4].cosCutoff = cos(Math::DegreeToRadian(45));
-	light[4].cosInner = cos(Math::DegreeToRadian(30));
-	light[4].exponent = 3.f;
-	light[4].spotDirection.Set(0.f, 1.f, 0.f);
-
-	glUniform1i(m_parameters[U_LIGHT4_TYPE], light[4].type);
-	glUniform3fv(m_parameters[U_LIGHT4_COLOR], 1, &light[4].color.r);
-	glUniform1f(m_parameters[U_LIGHT4_POWER], light[4].power);
-	glUniform1f(m_parameters[U_LIGHT4_KC], light[4].kC);
-	glUniform1f(m_parameters[U_LIGHT4_KL], light[4].kL);
-	glUniform1f(m_parameters[U_LIGHT4_KQ], light[4].kQ);
-	glUniform1f(m_parameters[U_LIGHT4_COSCUTOFF], light[4].cosCutoff);
-	glUniform1f(m_parameters[U_LIGHT4_COSINNER], light[4].cosInner);
-	glUniform1f(m_parameters[U_LIGHT4_EXPONENT], light[4].exponent);
-
 	Mesh::SetMaterialLoc(m_parameters[U_MATERIAL_AMBIENT],
 		m_parameters[U_MATERIAL_DIFFUSE],
 		m_parameters[U_MATERIAL_SPECULAR],
@@ -265,18 +117,10 @@ void Splevel1::Init()
 	//variable to rotate geometry
 	rotateAngle = 0;
 
-	for (int i = 0; i < 30; i++)
-	{
-		scaleval[i] = (rand() % 60) + 60;
-	}
-
 	RenderUI = 0;
 	PageNum = 1;
 
 	puzzle.Init();
-
-	//Initialize camera settings
-	camera.Init(Vector3(80, 30, 50), Vector3(0, 0, 0), Vector3(0, 1, 0));
 
 	PuzzleActive = false;
 	PuzzleUIActive = false;
@@ -285,7 +129,10 @@ void Splevel1::Init()
 	gamestate = Splevel1::Gamestate::MainGame;
 
 	puzzletimer = 60;
-	
+
+	//Initialize camera settings
+	camera.Init(Vector3(80, 30, 50), Vector3(0, 0, 0), Vector3(0, 1, 0));
+
 	// Init VBO
 	for (int i = 0; i < NUM_GEOMETRY; ++i)
 	{
@@ -357,6 +204,22 @@ void Splevel1::Init()
 
 	meshList[GEO_LIGHTBALL] = MeshBuilder::GenerateSphere("lightball", Color(1, 1, 0.8), 1.f);
 
+	/*
+	meshList[GEO_CHAIR] = MeshBuilder::GenerateOBJ("model1","OBJ//chair.obj");
+	meshList[GEO_CHAIR]->textureID = LoadTGA("Image//chair.tga");
+
+	meshList[GEO_DART] = MeshBuilder::GenerateOBJ("model1", "OBJ//dart.obj");
+	meshList[GEO_DART]->textureID = LoadTGA("Image//dart.tga");
+
+	meshList[GEO_DOORMAN] = MeshBuilder::GenerateOBJ("model1", "OBJ//doorman.obj");
+	meshList[GEO_DOORMAN]->textureID = LoadTGA("Image//doorman.tga");
+
+	meshList[GEO_SHOE] = MeshBuilder::GenerateOBJ("model1", "OBJ//shoe.obj");
+	meshList[GEO_SHOE]->textureID = LoadTGA("Image//shoe.tga");
+
+	meshList[GEO_COTTAGE] = MeshBuilder::GenerateOBJMTL("model7",
+		"OBJ//cottage_obj.obj", "OBJ//cottage_obj.mtl");*/
+
 	meshList[GEO_GRASS] = MeshBuilder::GenerateOBJMTL("model211", "OBJ//ground_grass.obj", "OBJ//ground_grass.mtl");
 	meshList[GEO_GRASS_V] = MeshBuilder::GenerateOBJMTL("model211", "OBJ//grassLarge.obj", "OBJ//grassLarge.mtl");
 
@@ -365,8 +228,10 @@ void Splevel1::Init()
 	meshList[GEO_LBUILDING1] = MeshBuilder::GenerateOBJMTL("modelBUIDLING", "OBJ//large_buildingA.obj", "OBJ//large_buildingA.mtl");
 	meshList[GEO_LBUILDING2] = MeshBuilder::GenerateOBJMTL("modelBUIDLING", "OBJ//large_buildingB.obj", "OBJ//large_buildingB.mtl");
 	meshList[GEO_LBUILDING3] = MeshBuilder::GenerateOBJMTL("modelBUIDLING", "OBJ//large_buildingD.obj", "OBJ//large_buildingD.mtl");
-	meshList[GEO_SBUILDING1] = MeshBuilder::GenerateOBJMTL("modelSBUIDLING", "OBJ//small_buildingB.obj", "OBJ//small_buildingB.mtl");
 	meshList[GEO_SKYSCRAPER1] = MeshBuilder::GenerateOBJMTL("modelSkyScraper", "OBJ//skyscraperF.obj", "OBJ//skyscraperF.mtl");
+
+
+
 
 	meshList[GEO_LVL2] = MeshBuilder::GenerateOBJMTL("modelLVL2", "OBJ//LVL2.obj", "OBJ//LVL2.mtl");
 
@@ -411,10 +276,6 @@ void Splevel1::Init()
 	meshList[GEO_POLICE] = MeshBuilder::GenerateOBJMTL("Tree", "OBJ//police.obj", "OBJ//police.mtl");
 	meshList[GEO_TRUCK] = MeshBuilder::GenerateOBJMTL("Tree", "OBJ//delivery.obj", "OBJ//delivery.mtl");
 	meshList[GEO_ROAD] = MeshBuilder::GenerateOBJMTL("Tree", "OBJ//road_straight.obj", "OBJ//road_straight.mtl");
-	meshList[GEO_ROADTURN] = MeshBuilder::GenerateOBJMTL("Turn", "OBJ//road_bendSquare.obj", "OBJ//road_bendSquare.mtl");
-	meshList[GEO_ROADTSECT] = MeshBuilder::GenerateOBJMTL("Tsect", "OBJ//road_drivewaySingle.obj", "OBJ//road_drivewaySingle.mtl");
-
-	meshList[GEO_STREETLIGHT] = MeshBuilder::GenerateOBJMTL("streetlight", "OBJ//streetlight.obj", "OBJ//streetlight.mtl");
 
 	meshList[GEO_Lift] = MeshBuilder::GenerateOBJ("modelBUIDLING", "OBJ//Elevator.obj");
 	meshList[GEO_Lift]->textureID = LoadTGA("Image//Elevator.tga");
@@ -446,7 +307,6 @@ void Splevel1::Init()
 	projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 10000.f);
 	projectionStack.LoadMatrix(projection);
 }
-
 bool setuppolice = false, clearpolice, paper1, paper2, paper3, paper4, timerstart, win, lose, startlaptop = false, evidence_won_bonus, die;
 double scaleevidence = 0.1, countdown, timer;
 float pposx, pposz, pposx2, pposz2, pposx4, pposx3, pposz3, pposz4, rotateangle, pposy, pposy2, pposy3, pposy4, pushaway;
@@ -688,6 +548,9 @@ void Splevel1::Update(double dt)
 	{
 		camera.Update(dt);
 	}
+
+
+
 
 	if (Application::IsKeyPressed('I'))
 		light[0].position.z -= (float)(10 * dt);
@@ -1062,12 +925,9 @@ void Splevel1::Update(double dt)
 				}
 				else if (posX > 35 && posX < 44 && (posY > 8 && posY < 13))
 				{
-					
-					cout << "Playing sound here!";
 					Manager.Money = Manager.Money + 50;
 					LS_Win = false;
 				}
-				
 			}
 			if (LS_Lose == true)
 			{
@@ -1311,21 +1171,9 @@ void Splevel1::Render()
 	modelStack.LoadIdentity();
 
 
-	Vector3 lightDir1(light[1].position.x, light[1].position.y, light[1].position.z);
-	Vector3 lightDirection_cameraspace1 = viewStack.Top() * lightDir1;
-	glUniform3fv(m_parameters[U_LIGHT1_POSITION], 1, &lightDirection_cameraspace1.x);
-
-	Vector3 lightDir2(light[2].position.x, light[2].position.y, light[2].position.z);
-	Vector3 lightDirection_cameraspace2 = viewStack.Top() * lightDir2;
-	glUniform3fv(m_parameters[U_LIGHT2_POSITION], 1, &lightDirection_cameraspace2.x);
-
-	Vector3 lightDir3(light[3].position.x, light[3].position.y, light[3].position.z);
-	Vector3 lightDirection_cameraspace3 = viewStack.Top() * lightDir3;
-	glUniform3fv(m_parameters[U_LIGHT3_POSITION], 1, &lightDirection_cameraspace3.x);
-
-	Vector3 lightDir4(light[4].position.x, light[4].position.y, light[4].position.z);
-	Vector3 lightDirection_cameraspace4 = viewStack.Top() * lightDir4;
-	glUniform3fv(m_parameters[U_LIGHT4_POSITION], 1, &lightDirection_cameraspace4.x);
+	Vector3 lightDir(light[0].position.x, light[0].position.y, light[0].position.z);
+	Vector3 lightDirection_cameraspace = viewStack.Top() * lightDir;
+	glUniform3fv(m_parameters[U_LIGHT0_POSITION], 1, &lightDirection_cameraspace.x);
 
 	if (light[0].type == Light::LIGHT_DIRECTIONAL)
 	{
@@ -1347,7 +1195,7 @@ void Splevel1::Render()
 	}
 
 	
-	srand(time(0));
+
 	RenderMesh(meshList[GEO_AXES], false);
 	RenderSkybox();
 
@@ -1357,11 +1205,11 @@ void Splevel1::Render()
 	{
 		for (int i = 0; i < 30; i++)
 		{
-		
+			
 				modelStack.PushMatrix();
 				//modelStack.Rotate(-90, 1, 0, 0);
 				modelStack.Translate(-450 + (i * 30), 0, -450);
-				modelStack.Scale(scaleval[i], scaleval[i], scaleval[i]);
+				modelStack.Scale(70, 70, 70);
 
 				RenderMesh(meshList[GEO_Tree], true);
 				modelStack.PopMatrix();
@@ -1370,11 +1218,10 @@ void Splevel1::Render()
 
 		for (int i = 0; i < 30; i++)
 		{
-			
 			modelStack.PushMatrix();
 			//modelStack.Rotate(-90, 1, 0, 0);
 			modelStack.Translate(-450 + (i * 30), 0, 450);
-			modelStack.Scale(scaleval[i], scaleval[i], scaleval[i]);
+			modelStack.Scale(70, 70, 70);
 
 			RenderMesh(meshList[GEO_Tree], true);
 			modelStack.PopMatrix();
@@ -1389,7 +1236,7 @@ void Splevel1::Render()
 				modelStack.PushMatrix();
 				//modelStack.Rotate(-90, 1, 0, 0);
 				modelStack.Translate(-450, 0, -450 + (i * 30));
-				modelStack.Scale(scaleval[i], scaleval[i], scaleval[i]);
+				modelStack.Scale(70, 70, 70);
 
 				RenderMesh(meshList[GEO_Tree], true);
 				modelStack.PopMatrix();
@@ -1405,7 +1252,7 @@ void Splevel1::Render()
 				modelStack.PushMatrix();
 				//modelStack.Rotate(-90, 1, 0, 0);
 				modelStack.Translate(450, 0, -450 + (i * 30));
-				modelStack.Scale(scaleval[i], scaleval[i], scaleval[i]);
+				modelStack.Scale(70, 70, 70);
 
 				RenderMesh(meshList[GEO_Tree], true);
 				modelStack.PopMatrix();
@@ -1419,7 +1266,7 @@ void Splevel1::Render()
 		WorkStationPositionX = WorkStationPositionY = WorkStationPositionZ = 0;
 		for (int i = 0; i < (Manager.PrestigeLvl + 1) * 6; ++i)
 		{
-			/*std::cout << i % 6 << std::endl;*/
+			std::cout << i % 6 << std::endl;
 			if (i < 6)
 			{
 				WorkStationPositionY = 0;
@@ -1551,36 +1398,6 @@ void Splevel1::Render()
 			RenderTextOnScreen(meshList[GEO_TEXT], "Press 'F' to L1", Color(0, 1, 0), 4, 10, 27);
 		}
 	}
-
-	//streetlight
-	for (int i = 0; i < 5; i++)
-	{
-		modelStack.PushMatrix();
-		modelStack.Translate(-400 + (i * 300), 0, 290);
-		/*modelStack.Rotate(90, 0, 1, 0);
-		modelStack.Rotate(90, 1, 0, 0);*/
-		modelStack.Scale(150, 250, 150);
-		RenderMesh(meshList[GEO_STREETLIGHT], true);
-		modelStack.PopMatrix();
-	}
-	for (int i = 0; i < 5; i++)
-	{
-		modelStack.PushMatrix();
-		modelStack.Translate(-550 + (i * 300), 0, 210);
-		modelStack.Rotate(180, 0, 1, 0);
-		
-		modelStack.Scale(150, 250, 150);
-		RenderMesh(meshList[GEO_STREETLIGHT], true);
-		modelStack.PopMatrix();
-	}
-
-
-
-	//WorkStation Rendering
-	{
-
-	}
-
 	//kjcode
 	{
 		//Default Equipment
@@ -1825,67 +1642,7 @@ void Splevel1::Render()
 		{
 			modelStack.PushMatrix();
 			modelStack.Translate(0, 0.3, 250);
-			modelStack.Scale(100, 10, 80);
-			RenderMesh(meshList[GEO_ROAD], true);
-			modelStack.PopMatrix();
-
-			modelStack.PushMatrix();
-			modelStack.Translate(0, 0.3, -130);
-			modelStack.Scale(225, 10, 100);
-			RenderMesh(meshList[GEO_ROAD], true);
-			modelStack.PopMatrix();
-
-			modelStack.PushMatrix();
-			modelStack.Translate(150, 0.3, 250);
-			modelStack.Rotate(180, 0, 1, 0);
-			modelStack.Scale(246, 10, 80);
-			RenderMesh(meshList[GEO_ROADTSECT], true);
-			modelStack.PopMatrix();
-
-			modelStack.PushMatrix();
-			modelStack.Translate(-150, 0.3, 250);
-			modelStack.Rotate(180, 0, 1, 0);
-			modelStack.Scale(246, 10, 80);
-			RenderMesh(meshList[GEO_ROADTSECT], true);
-			modelStack.PopMatrix();
-
-
-			modelStack.PushMatrix();
-			modelStack.Translate(150, 0.3, 60);
-			modelStack.Rotate(90, 0, 1, 0);
-			modelStack.Scale(300, 10, 80);
-			RenderMesh(meshList[GEO_ROAD], true);
-			modelStack.PopMatrix();
-
-			modelStack.PushMatrix();
-			modelStack.Translate(-150, 0.3, 60);
-			modelStack.Rotate(90, 0, 1, 0);
-			modelStack.Scale(300, 10, 80);
-			RenderMesh(meshList[GEO_ROAD], true);
-			modelStack.PopMatrix();
-
-			modelStack.PushMatrix();
-			modelStack.Translate(150, 0.3, -130);
-			modelStack.Scale(80, 10, 100);
-			RenderMesh(meshList[GEO_ROADTURN], true);
-			modelStack.PopMatrix();
-
-			modelStack.PushMatrix();
-			modelStack.Translate(-150, 0.3, -130);
-			modelStack.Rotate(90, 0, 1, 0);
-			modelStack.Scale(100, 10, 80);
-			RenderMesh(meshList[GEO_ROADTURN], true);
-			modelStack.PopMatrix();
-
-			modelStack.PushMatrix();
-			modelStack.Translate(700, 0.3, 250);
-			modelStack.Scale(1000, 10, 80);
-			RenderMesh(meshList[GEO_ROAD], true);
-			modelStack.PopMatrix();
-
-			modelStack.PushMatrix();
-			modelStack.Translate(-700, 0.3, 250);
-			modelStack.Scale(1000, 10, 80);
+			modelStack.Scale(2500, 10, 80);
 			RenderMesh(meshList[GEO_ROAD], true);
 			modelStack.PopMatrix();
 
@@ -1956,13 +1713,6 @@ void Splevel1::Render()
 			modelStack.Scale(120, 120, 120);
 			RenderMesh(meshList[GEO_SKYSCRAPER1], true);
 			modelStack.PopMatrix();
-
-			modelStack.PushMatrix();
-			modelStack.Translate(330, 0, -300);
-			modelStack.Rotate(90, 0, 1, 0);
-			modelStack.Scale(200, 200, 200);
-			RenderMesh(meshList[GEO_SBUILDING1], true);
-			modelStack.PopMatrix();
 		}
 
 		if (timerstart == true) RenderTextOnScreen(meshList[GEO_TEXT], "Time left: " + timerstring, Color(1, 1, 1), 2, 37, 5);
@@ -2003,6 +1753,7 @@ void Splevel1::Render()
 			RenderMeshOnScreen(meshList[GEO_EMPTYBOX], 40, 10, 10, 6);
 			RenderTextOnScreen(meshList[GEO_TEXT], "Pay up", Color(1, 1, 1), 2, 37, 9);
 		}
+
 
 		if (startlaptop == true)
 		{
@@ -3165,9 +2916,6 @@ void Splevel1::UpdatePuzzleControls()
 
 				puzzle.Border->position.x = puzzle.playeractualpox;
 				puzzle.Border->position.y = puzzle.playeractualpoy;
-
-				PlaySound(TEXT("WOW.wav"), NULL, SND_ASYNC);
-				
 			}
 
 		}
@@ -3233,8 +2981,6 @@ void Splevel1::UpdatePuzzleControls()
 					{
 						puzzle.Paper[i]->prevposition.x = puzzle.Paper[i]->actlposition.x;
 						puzzle.Paper[i]->prevposition.y = puzzle.Paper[i]->actlposition.y;
-
-						PlaySound(TEXT("LoseMinigame.wav"), NULL, SND_ASYNC);
 						
 					}
 					break;
@@ -3414,7 +3160,6 @@ void Splevel1::UpdateMainControls()
 			}
 			else if (win == true)
 			{
-				PlaySound(TEXT("WinMinigame.wav"), NULL, SND_ASYNC);
 				win = false;
 				timerstart = false;
 				clearpolice = false;
@@ -3422,7 +3167,6 @@ void Splevel1::UpdateMainControls()
 			}
 			else if (lose == true)
 			{
-				PlaySound(TEXT("LoseMinigame.wav"), NULL, SND_ASYNC);
 				lose = false;
 				timerstart = false;
 				clearpolice = false;
