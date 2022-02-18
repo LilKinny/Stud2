@@ -123,6 +123,15 @@ void Camera3::Update(double dt)
 			}
 		}
 
+
+		if (position.x < 75 && position.x > -58 && position.y > 31)
+		{
+			if (position.z < 70 && position.z > 60)
+			{
+				position -= view * ZOOM_SPEED * static_cast<float>(dt);
+			}
+		}
+
 	}
 	if (Application::IsKeyPressed('S'))
 	{
@@ -173,6 +182,14 @@ void Camera3::Update(double dt)
 		if (position.x < 70 && position.x > -76)
 		{
 			if (position.z < -60 && position.z > -70)
+			{
+				position += view * ZOOM_SPEED * static_cast<float>(dt);
+			}
+		}
+
+		if (position.x < 75 && position.x > -58 && position.y > 31)
+		{
+			if (position.z < 70 && position.z > 60)
 			{
 				position += view * ZOOM_SPEED * static_cast<float>(dt);
 			}
@@ -231,6 +248,14 @@ void Camera3::Update(double dt)
 				position += right * ZOOM_SPEED * static_cast<float>(dt);
 			}
 		}
+
+		if (position.x < 75 && position.x > -58 && position.y > 31)
+		{
+			if (position.z < 70 && position.z > 60)
+			{
+				position += right * ZOOM_SPEED * static_cast<float>(dt);
+			}
+		}
 	}
 	if (Application::IsKeyPressed('D'))
 	{
@@ -281,6 +306,14 @@ void Camera3::Update(double dt)
 		if (position.x < 70 && position.x > -76)
 		{
 			if (position.z < -60 && position.z > -70)
+			{
+				position -= right * ZOOM_SPEED * static_cast<float>(dt);
+			}
+		}
+
+		if (position.x < 75 && position.x > -58 && position.y > 31)
+		{
+			if (position.z < 70 && position.z > 60)
 			{
 				position -= right * ZOOM_SPEED * static_cast<float>(dt);
 			}

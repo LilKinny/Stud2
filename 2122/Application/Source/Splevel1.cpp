@@ -225,6 +225,13 @@ void Splevel1::Init()
 
 
 	meshList[GEO_BUILDING] = MeshBuilder::GenerateOBJMTL("modelBUIDLING","OBJ//LVL1_withfloor.obj", "OBJ//LVL1_withfloor.mtl");
+	meshList[GEO_LBUILDING1] = MeshBuilder::GenerateOBJMTL("modelBUIDLING", "OBJ//large_buildingA.obj", "OBJ//large_buildingA.mtl");
+	meshList[GEO_LBUILDING2] = MeshBuilder::GenerateOBJMTL("modelBUIDLING", "OBJ//large_buildingB.obj", "OBJ//large_buildingB.mtl");
+	meshList[GEO_LBUILDING3] = MeshBuilder::GenerateOBJMTL("modelBUIDLING", "OBJ//large_buildingD.obj", "OBJ//large_buildingD.mtl");
+	meshList[GEO_SKYSCRAPER1] = MeshBuilder::GenerateOBJMTL("modelSkyScraper", "OBJ//skyscraperF.obj", "OBJ//skyscraperF.mtl");
+
+
+
 
 	meshList[GEO_LVL2] = MeshBuilder::GenerateOBJMTL("modelLVL2", "OBJ//LVL2.obj", "OBJ//LVL2.mtl");
 
@@ -1392,6 +1399,15 @@ void Splevel1::Render()
 		}
 	}
 
+<<<<<<< Updated upstream
+=======
+
+	//WorkStation Rendering
+	{
+
+	}
+
+>>>>>>> Stashed changes
 	//kjcode
 	{
 		//Default Equipment
@@ -1678,6 +1694,37 @@ void Splevel1::Render()
 			//modelStack.PopMatrix();
 		}
 
+		//Surrounding buildings
+		{
+			modelStack.PushMatrix();
+			modelStack.Rotate(90, 0, 1, 0);
+			modelStack.Translate(0, 0, 320);
+			modelStack.Scale(180, 180, 180);
+			RenderMesh(meshList[GEO_LBUILDING1], true);
+			modelStack.PopMatrix();
+
+			modelStack.PushMatrix();
+			modelStack.Rotate(-90, 0, 1, 0);
+			modelStack.Translate(0, 0, 320);
+			modelStack.Scale(300, 180, 180);
+			RenderMesh(meshList[GEO_LBUILDING2], true);
+			modelStack.PopMatrix();
+
+			modelStack.PushMatrix();
+			modelStack.Rotate(180, 0, 1, 0);
+			modelStack.Translate(0,0, 300);
+			modelStack.Scale(300, 180, 180);
+			RenderMesh(meshList[GEO_LBUILDING3], true);
+			modelStack.PopMatrix();
+
+			modelStack.PushMatrix();
+			modelStack.Rotate(180, 0, 1, 0);
+			modelStack.Translate(300, 0, 300);
+			modelStack.Scale(120, 120, 120);
+			RenderMesh(meshList[GEO_SKYSCRAPER1], true);
+			modelStack.PopMatrix();
+		}
+
 		if (timerstart == true) RenderTextOnScreen(meshList[GEO_TEXT], "Time left: " + timerstring, Color(1, 1, 1), 2, 37, 5);
 
 		else if (setuppolice == true)
@@ -1734,6 +1781,8 @@ void Splevel1::Render()
 			RenderTextOnScreen(meshList[GEO_TEXT], "Ouch!", Color(1, 1, 1), 2, 29, 40);
 			RenderTextOnScreen(meshList[GEO_TEXT], "You got hit by a car!", Color(1, 1, 1), 2, 21, 35);
 			RenderTextOnScreen(meshList[GEO_TEXT], "Your hospital bill is expensive...", Color(1, 1, 1), 2, 21, 32);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Its probably a good idea not to.", Color(1, 1, 1), 2, 21, 29);
+			RenderTextOnScreen(meshList[GEO_TEXT], "stay on the road for too long...", Color(1, 1, 1), 2, 21, 26);
 			RenderTextOnScreen(meshList[GEO_TEXT], "Penalty: 50% of total income", Color(1, 1, 1), 2, 24, 18);
 			RenderMeshOnScreen(meshList[GEO_EMPTYBOX], 40, 10, 10, 6);
 			RenderTextOnScreen(meshList[GEO_TEXT], "Pay up", Color(1, 1, 1), 2, 37, 9);
