@@ -8,7 +8,7 @@
 #include "Material.h"
 #include "EquipmentManager.h"
 #include "../Puzzle.h"
-
+#include <windows.h>
 class Splevel1 : public Scene
 {
 	enum GEOMETRY_TYPE
@@ -85,6 +85,7 @@ class Splevel1 : public Scene
 		GEO_TRUCK,
 		GEO_POLICE,
 		GEO_ROAD,
+		GEO_STREETLIGHT,
 		GEO_ROADTURN,
 		GEO_ROADTSECT,
 
@@ -144,6 +145,11 @@ private:
 	bool bEnableLight;
 	bool questions,Pqeustions;
 
+	//void Playsoundfile(string filename)	
+	//{
+	//	mciSendString("play mp3", NULL, 0, NULL);
+	//}
+
 	void PuzzleRender();
 	void UpdatePuzzleControls();
 	void UpdateMainControls();
@@ -164,6 +170,8 @@ private:
 	int RenderUI;
 	int RenderPrestige;
 	int PageNum;
+
+	int scaleval[30];
 
 	float debugmouseposx;
 	float debugmouseposy;

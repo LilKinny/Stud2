@@ -1,4 +1,5 @@
 #include <iostream>
+#include <windows.h>
 #include <string>
 #include "Splevel1.h"
 #include "GL\glew.h"
@@ -15,6 +16,8 @@
 #include <GLFW/glfw3.h>
 #include <ctime>
 #include "../Puzzle.h"
+#include <mmsystem.h>
+#pragma comment(lib, "winmm.lib")
 
 
 using namespace std;
@@ -117,6 +120,11 @@ void Splevel1::Init()
 	//variable to rotate geometry
 	rotateAngle = 0;
 
+	for (int i = 0; i < 30; i++)
+	{
+		scaleval[i] = (rand() % 60) + 60;
+	}
+
 	RenderUI = 0;
 	PageNum = 1;
 
@@ -128,11 +136,11 @@ void Splevel1::Init()
 
 	gamestate = Splevel1::Gamestate::MainGame;
 
-	puzzletimer = 30;
+	puzzletimer = 60;
 
 	//Initialize camera settings
 	camera.Init(Vector3(80, 30, 50), Vector3(0, 0, 0), Vector3(0, 1, 0));
-
+	
 	// Init VBO
 	for (int i = 0; i < NUM_GEOMETRY; ++i)
 	{
@@ -280,7 +288,7 @@ void Splevel1::Init()
 	meshList[GEO_ROADTURN] = MeshBuilder::GenerateOBJMTL("Turn", "OBJ//road_bendSquare.obj", "OBJ//road_bendSquare.mtl");
 	meshList[GEO_ROADTSECT] = MeshBuilder::GenerateOBJMTL("Tsect", "OBJ//road_drivewaySingle.obj", "OBJ//road_drivewaySingle.mtl");
 
-
+	meshList[GEO_STREETLIGHT] = MeshBuilder::GenerateOBJMTL("streetlight", "OBJ//streetlight.obj", "OBJ//streetlight.mtl");
 
 	meshList[GEO_Lift] = MeshBuilder::GenerateOBJ("modelBUIDLING", "OBJ//Elevator.obj");
 	meshList[GEO_Lift]->textureID = LoadTGA("Image//Elevator.tga");
@@ -312,6 +320,7 @@ void Splevel1::Init()
 	projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 10000.f);
 	projectionStack.LoadMatrix(projection);
 }
+
 bool setuppolice = false, clearpolice, paper1, paper2, paper3, paper4, timerstart, win, lose, startlaptop = false, evidence_won_bonus, die;
 double scaleevidence = 0.1, countdown, timer;
 float pposx, pposz, pposx2, pposz2, pposx4, pposx3, pposz3, pposz4, rotateangle, pposy, pposy2, pposy3, pposy4, pushaway;
@@ -602,15 +611,54 @@ void Splevel1::Update(double dt)
 		{
 			PuzzleActive = false;
 			puzzle.Resetgame();
-			puzzletimer = 30;
+			if (Manager.PrestigeLvl == 0)
+			{
+				puzzletimer = 60;
+				Manager.MinigameBuffs += 1;
+			}
+			else if (Manager.PrestigeLvl == 1)
+			{
+				puzzletimer = 50;
+				Manager.MinigameBuffs += 2;
+			}
+			else if (Manager.PrestigeLvl == 2)
+			{
+				puzzletimer = 40;
+				Manager.MinigameBuffs += 3;
+			}
+			else if (Manager.PrestigeLvl == 3)
+			{
+				puzzletimer = 30;
+				Manager.MinigameBuffs += 5;
+			}
 			PuzzleWinUI = true;
-			Manager.MinigameBuffs += 5;
+			
 		}
 		else if (puzzletimer < 0)
 		{
 			PuzzleActive = false;
 			puzzle.Resetgame();
-			puzzletimer = 30;
+			if (Manager.PrestigeLvl == 0)
+			{
+				puzzletimer = 60;
+				
+			}
+			else if (Manager.PrestigeLvl == 1)
+			{
+				puzzletimer = 50;
+				
+			}
+			else if (Manager.PrestigeLvl == 2)
+			{
+				puzzletimer = 40;
+				
+			}
+			else if (Manager.PrestigeLvl == 3)
+			{
+				puzzletimer = 30;
+				
+			}
+			
 			PuzzleLoseUI = true;
 		}
 	}
@@ -891,9 +939,12 @@ void Splevel1::Update(double dt)
 				}
 				else if (posX > 35 && posX < 44 && (posY > 8 && posY < 13))
 				{
+					
+					cout << "Playing sound here!";
 					Manager.Money = Manager.Money + 50;
 					LS_Win = false;
 				}
+				
 			}
 			if (LS_Lose == true)
 			{
@@ -1161,7 +1212,7 @@ void Splevel1::Render()
 	}
 
 	
-
+	srand(time(0));
 	RenderMesh(meshList[GEO_AXES], false);
 	RenderSkybox();
 
@@ -1171,11 +1222,11 @@ void Splevel1::Render()
 	{
 		for (int i = 0; i < 30; i++)
 		{
-			
+		
 				modelStack.PushMatrix();
 				//modelStack.Rotate(-90, 1, 0, 0);
 				modelStack.Translate(-450 + (i * 30), 0, -450);
-				modelStack.Scale(70, 70, 70);
+				modelStack.Scale(scaleval[i], scaleval[i], scaleval[i]);
 
 				RenderMesh(meshList[GEO_Tree], true);
 				modelStack.PopMatrix();
@@ -1184,10 +1235,11 @@ void Splevel1::Render()
 
 		for (int i = 0; i < 30; i++)
 		{
+			
 			modelStack.PushMatrix();
 			//modelStack.Rotate(-90, 1, 0, 0);
 			modelStack.Translate(-450 + (i * 30), 0, 450);
-			modelStack.Scale(70, 70, 70);
+			modelStack.Scale(scaleval[i], scaleval[i], scaleval[i]);
 
 			RenderMesh(meshList[GEO_Tree], true);
 			modelStack.PopMatrix();
@@ -1202,7 +1254,7 @@ void Splevel1::Render()
 				modelStack.PushMatrix();
 				//modelStack.Rotate(-90, 1, 0, 0);
 				modelStack.Translate(-450, 0, -450 + (i * 30));
-				modelStack.Scale(70, 70, 70);
+				modelStack.Scale(scaleval[i], scaleval[i], scaleval[i]);
 
 				RenderMesh(meshList[GEO_Tree], true);
 				modelStack.PopMatrix();
@@ -1218,7 +1270,7 @@ void Splevel1::Render()
 				modelStack.PushMatrix();
 				//modelStack.Rotate(-90, 1, 0, 0);
 				modelStack.Translate(450, 0, -450 + (i * 30));
-				modelStack.Scale(70, 70, 70);
+				modelStack.Scale(scaleval[i], scaleval[i], scaleval[i]);
 
 				RenderMesh(meshList[GEO_Tree], true);
 				modelStack.PopMatrix();
@@ -1232,7 +1284,7 @@ void Splevel1::Render()
 		WorkStationPositionX = WorkStationPositionY = WorkStationPositionZ = 0;
 		for (int i = 0; i < (Manager.PrestigeLvl + 1) * 6; ++i)
 		{
-			std::cout << i % 6 << std::endl;
+			/*std::cout << i % 6 << std::endl;*/
 			if (i < 6)
 			{
 				WorkStationPositionY = 0;
@@ -1363,6 +1415,28 @@ void Splevel1::Render()
 			RenderTextOnScreen(meshList[GEO_TEXT], "Press 'E' to L2", Color(0, 1, 0), 4, 10, 30);
 			RenderTextOnScreen(meshList[GEO_TEXT], "Press 'F' to L1", Color(0, 1, 0), 4, 10, 27);
 		}
+	}
+
+	//streetlight
+	for (int i = 0; i < 5; i++)
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(-400 + (i * 300), 0, 290);
+		/*modelStack.Rotate(90, 0, 1, 0);
+		modelStack.Rotate(90, 1, 0, 0);*/
+		modelStack.Scale(150, 250, 150);
+		RenderMesh(meshList[GEO_STREETLIGHT], true);
+		modelStack.PopMatrix();
+	}
+	for (int i = 0; i < 5; i++)
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(-550 + (i * 300), 0, 210);
+		modelStack.Rotate(180, 0, 1, 0);
+		
+		modelStack.Scale(150, 250, 150);
+		RenderMesh(meshList[GEO_STREETLIGHT], true);
+		modelStack.PopMatrix();
 	}
 
 
@@ -2775,6 +2849,7 @@ void Splevel1::RenderWorkStation(int WorkStation)
 
 void Splevel1::PuzzleRender()
 {
+	RenderMeshOnScreen(meshList[GEO_Puzzlebg], 40, 25, 80, 80);
 	RenderMeshOnScreen(meshList[GEO_Puzzlebg], 40, 25, 40, 40);
 
 	RenderMeshOnScreen(meshList[GEO_PuzzleBorder], puzzle.Border->position.x, puzzle.Border->position.y, 11, 11);
@@ -2804,7 +2879,7 @@ void Splevel1::PuzzleRender()
 	RenderMeshOnScreen(meshList[GEO_PuzzlePlayer], puzzle.playeractualpox, (puzzle.playeractualpoy), 3, 3);
 
 
-	RenderTextOnScreen(meshList[GEO_TEXT], "Time left: "+ std::to_string(puzzletimer), Color(1, 1, 1), 2, 37, 3);
+	RenderTextOnScreen(meshList[GEO_TEXT], "Time left: "+ std::to_string(puzzletimer), Color(1, 1, 1), 2, 39, 3);
 	
 	
 }
@@ -2957,6 +3032,9 @@ void Splevel1::UpdatePuzzleControls()
 
 				puzzle.Border->position.x = puzzle.playeractualpox;
 				puzzle.Border->position.y = puzzle.playeractualpoy;
+
+				PlaySound(TEXT("WOW.wav"), NULL, SND_ASYNC);
+				
 			}
 
 		}
@@ -3022,6 +3100,8 @@ void Splevel1::UpdatePuzzleControls()
 					{
 						puzzle.Paper[i]->prevposition.x = puzzle.Paper[i]->actlposition.x;
 						puzzle.Paper[i]->prevposition.y = puzzle.Paper[i]->actlposition.y;
+
+						PlaySound(TEXT("LoseMinigame.wav"), NULL, SND_ASYNC);
 						
 					}
 					break;
@@ -3201,6 +3281,7 @@ void Splevel1::UpdateMainControls()
 			}
 			else if (win == true)
 			{
+				PlaySound(TEXT("WinMinigame.wav"), NULL, SND_ASYNC);
 				win = false;
 				timerstart = false;
 				clearpolice = false;
@@ -3208,6 +3289,7 @@ void Splevel1::UpdateMainControls()
 			}
 			else if (lose == true)
 			{
+				PlaySound(TEXT("LoseMinigame.wav"), NULL, SND_ASYNC);
 				lose = false;
 				timerstart = false;
 				clearpolice = false;
