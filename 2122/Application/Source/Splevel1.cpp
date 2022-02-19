@@ -271,6 +271,7 @@ void Splevel1::Init()
 	}
 
 	RenderUI = 0;
+	RenderPrestige = 1;
 	PageNum = 1;
 
 	puzzle.Init();
@@ -1251,7 +1252,25 @@ void Splevel1::Update(double dt)
 		}
 	}
 	
-	
+	if (Application::IsKeyPressed('C')) //enable crouching
+	{
+		std::cout << "\nLvl1:", lvl1, "\nLvl2:", lvl2, "\nLvl3:", lvl3;
+		if (lvl1 == true)
+		{
+			camera.target.y = 14 - camera.position.y + camera.target.y;
+			camera.position.y = 14;
+		}
+		if (lvl2 == true)
+		{
+			camera.target.y = 64 - camera.position.y + camera.target.y;
+			camera.position.y = 64;
+		}
+		if (lvl3 == true)
+		{
+			camera.target.y = 114 - camera.position.y + camera.target.y;
+			camera.position.y = 114;
+		}
+	}
 
 }
 
@@ -3308,18 +3327,22 @@ void Splevel1::UpdateMainControls()
 		{
 			PageNum = 1;
 			RenderUI = 1;
+			PlaySound(TEXT("ButtonSound.wav"), NULL, SND_ASYNC);
 		}
 		if ((posY <= 59 && posY >= 53.5) && (posX >= 15.5 && posX <= 26.5)) //Click Owned
 		{
 			RenderUI = 2;
+			PlaySound(TEXT("ButtonSound.wav"), NULL, SND_ASYNC);
 		}
 		if ((posY >= 46 && posY <= 49) && (posX >= 18.5 && posX <= 25.5)) //Top Computer clicked
 		{
 			RenderUI = 2;
+			PlaySound(TEXT("ButtonSound.wav"), NULL, SND_ASYNC);
 		}
 		if ((posY >= 43 && posY <= 46) && (posX >= 18.5 && posX <= 25.5)) //Bot Phone Clicked
 		{
 			RenderUI = 3;
+			PlaySound(TEXT("ButtonSound.wav"), NULL, SND_ASYNC);
 		}
 		if (RenderUI == 2 || RenderUI == 3)
 		{
@@ -3327,6 +3350,7 @@ void Splevel1::UpdateMainControls()
 			{
 				if (PageNum != 1)
 				{
+					PlaySound(TEXT("ButtonSound.wav"), NULL, SND_ASYNC);
 					--PageNum;
 				}
 			}
@@ -3334,26 +3358,31 @@ void Splevel1::UpdateMainControls()
 			{
 				if (PageNum != 3)
 				{
+					PlaySound(TEXT("ButtonSound.wav"), NULL, SND_ASYNC);
 					++PageNum;
 				}
 			}
 		}
 		if ((posY >= 46 && posY <= 48.5) && (posX >= 62 && posX <= 63.5)) //Click Cross Button
 		{
+			PlaySound(TEXT("ButtonSound.wav"), NULL, SND_ASYNC);
 			RenderUI = 0;
 		}
 		if ((posY >= 32 && posY <= 35.5) && (posX >= 76.5 && posX <= 78)) //Side Open Arrow Button
 		{
+			PlaySound(TEXT("ButtonSound.wav"), NULL, SND_ASYNC);
 			RenderPrestige = 1;
 		}
 		if ((posY >= 32 && posY <= 35.5) && (posX >= 67 && posX <= 68.5)) //Side Close Arrow Button
 		{
+			PlaySound(TEXT("ButtonSound.wav"), NULL, SND_ASYNC);
 			RenderPrestige = 0;
 		}
 		if (RenderPrestige == 1)  //Upgrade Prestige
 		{
 			if ((posY >= 30 && posY <= 33) && (posX >= 70 && posX <= 78))
 			{
+				PlaySound(TEXT("ButtonSound.wav"), NULL, SND_ASYNC);
 				Manager.UpgradePrestige(true);
 			}
 		}
@@ -3362,14 +3391,17 @@ void Splevel1::UpdateMainControls()
 			if (RenderUI == 1)
 			{
 				Manager.UnlockComputer(true);
+				PlaySound(TEXT("ButtonSound.wav"), NULL, SND_ASYNC);
 			}
 			else if (RenderUI == 2)
 			{
 				Manager.UpgradeComputer(true, (PageNum - 1) * 6 + 0);
+				PlaySound(TEXT("ButtonSound.wav"), NULL, SND_ASYNC);
 			}
 			else if (RenderUI == 3)
 			{
 				Manager.UpgradePhone(true, (PageNum - 1) * 6 + 0);
+				PlaySound(TEXT("ButtonSound.wav"), NULL, SND_ASYNC);
 			}
 		}
 		if ((posY >= 31.5 && posY <= 34) && (posX >= 36.5 && posX <= 43.5)) //Top Mid Button
@@ -3377,14 +3409,17 @@ void Splevel1::UpdateMainControls()
 			if (RenderUI == 1)
 			{
 				Manager.UnlockPhone(true);
+				PlaySound(TEXT("ButtonSound.wav"), NULL, SND_ASYNC);
 			}
 			else if (RenderUI == 2)
 			{
 				Manager.UpgradeComputer(true, (PageNum - 1) * 6 + 1);
+				PlaySound(TEXT("ButtonSound.wav"), NULL, SND_ASYNC);
 			}
 			else if (RenderUI == 3)
 			{
 				Manager.UpgradePhone(true, (PageNum - 1) * 6 + 1);
+				PlaySound(TEXT("ButtonSound.wav"), NULL, SND_ASYNC);
 			}
 		}
 		if ((posY >= 31.5 && posY <= 34) && (posX >= 52.5 && posX <= 59.5)) //Top Right Button
@@ -3392,29 +3427,35 @@ void Splevel1::UpdateMainControls()
 			if (RenderUI == 1)
 			{
 				Manager.UnlockLuckyCat(true);
+				PlaySound(TEXT("ButtonSound.wav"), NULL, SND_ASYNC);
 			}
 			else if (RenderUI == 2)
 			{
 				Manager.UpgradeComputer(true, (PageNum - 1) * 6 + 2);
+				PlaySound(TEXT("ButtonSound.wav"), NULL, SND_ASYNC);
 			}
 			else if (RenderUI == 3)
 			{
 				Manager.UpgradePhone(true, (PageNum - 1) * 6 + 2);
+				PlaySound(TEXT("ButtonSound.wav"), NULL, SND_ASYNC);
 			}
 		}
 		if ((posY >= 18.5 && posY <= 21.5) && (posX >= 20.5 && posX <= 27.5)) //Bot Left Button
 		{
 			if (RenderUI == 1)
 			{
-				Manager.UnlockMoneyPlant(true); 
+				Manager.UnlockMoneyPlant(true);
+				PlaySound(TEXT("ButtonSound.wav"), NULL, SND_ASYNC);
 			}
 			else if (RenderUI == 2)
 			{
 				Manager.UpgradeComputer(true, (PageNum - 1) * 6 + 3);
+				PlaySound(TEXT("ButtonSound.wav"), NULL, SND_ASYNC);
 			}
 			else if (RenderUI == 3)
 			{
 				Manager.UpgradePhone(true, (PageNum - 1) * 6 + 3);
+				PlaySound(TEXT("ButtonSound.wav"), NULL, SND_ASYNC);
 			}
 		}
 		if ((posY >= 18.5 && posY <= 21.5) && (posX >= 36.5 && posX <= 43.5)) //Bot Mid Button
@@ -3422,10 +3463,12 @@ void Splevel1::UpdateMainControls()
 			if (RenderUI == 2)
 			{
 				Manager.UpgradeComputer(true, (PageNum - 1) * 6 + 4);
+				PlaySound(TEXT("ButtonSound.wav"), NULL, SND_ASYNC);
 			}
 			else if (RenderUI == 3)
 			{
 				Manager.UpgradePhone(true, (PageNum - 1) * 6 + 4);
+				PlaySound(TEXT("ButtonSound.wav"), NULL, SND_ASYNC);
 			}
 		}
 		if ((posY >= 18.5 && posY <= 21.5) && (posX >= 52.5 && posX <= 59.5)) //Bot Right Button
@@ -3433,10 +3476,12 @@ void Splevel1::UpdateMainControls()
 			if (RenderUI == 2)
 			{
 				Manager.UpgradeComputer(true, (PageNum - 1) * 6 + 5);
+				PlaySound(TEXT("ButtonSound.wav"), NULL, SND_ASYNC);
 			}
 			else if (RenderUI == 3)
 			{
 				Manager.UpgradePhone(true, (PageNum - 1) * 6 + 5);
+				PlaySound(TEXT("ButtonSound.wav"), NULL, SND_ASYNC);
 			}
 		}
 
@@ -3497,6 +3542,7 @@ void Splevel1::UpdateMainControls()
 	{
 		bRButtonState = false;
 	}
+	
 }
 
 void Splevel1::RenderMesh(Mesh* mesh, bool enableLight)
