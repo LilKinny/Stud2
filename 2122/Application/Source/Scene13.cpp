@@ -854,6 +854,8 @@ void Scene13::RenderSkybox()
 		modelStack.PopMatrix();
 	}
 
+	// NPC
+
 
 	//Surrounding buildings
 	{

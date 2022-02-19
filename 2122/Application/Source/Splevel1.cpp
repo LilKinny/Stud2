@@ -450,9 +450,9 @@ void Splevel1::Init()
 	projectionStack.LoadMatrix(projection);
 }
 
-bool setuppolice = false, clearpolice, paper1, paper2, paper3, paper4, timerstart, win, lose, startlaptop = false, evidence_won_bonus, die;
+bool setuppolice = false, clearpolice, paper1, paper2, paper3, paper4, timerstart, win, lose, NPC, startlaptop = false, evidence_won_bonus, die;
 double scaleevidence = 0.1, countdown, timer;
-float pposx, pposz, pposx2, pposz2, pposx4, pposx3, pposz3, pposz4, rotateangle, pposy, pposy2, pposy3, pposy4, pushaway;
+float pposx, pposz, pposx2, pposz2, pposx4, pposx3, pposz3, pposz4, rotateangle, pposy, pposy2, pposy3, pposy4, pushaway, movex = -500, movez;
 string timerstring, beetsinstringform;
 int totalbeets = 0, countdownbonus = 1500, spinD = 0;
 
@@ -616,7 +616,7 @@ void Splevel1::Update(double dt)
 	}
 
 
-	int randomno = rand() % 5 + 0;
+	int randomno = rand() % 6 + 0;
 	/*cout << randomno << " ";*/
 	if (randomno == 1 && spawnpolice == false && spawntruck == false && spawntaxi == false)
 	{
@@ -631,6 +631,18 @@ void Splevel1::Update(double dt)
 	{spawntruck = true;
 	/*cout << "SPAWNED TRUCK";*/
 	}
+
+	if (randomno == 4)
+	{
+		NPC = true;
+		movex += 5;
+		if (movex >= 500)
+		{
+			movex = -500;
+			NPC = false;
+		}
+	}
+
 	if (spawnpolice == true)
 	{
 		movecar += 20;
@@ -659,6 +671,7 @@ void Splevel1::Update(double dt)
 		}
 	}
 
+	
 	//static const float 
 	if (Application::IsKeyPressed('1')) //enable back face culling
 		glEnable(GL_CULL_FACE);
@@ -1969,7 +1982,22 @@ void Splevel1::Render()
 		modelStack.PopMatrix();
 
 
-		
+		if (NPC == true)
+		{
+			//Render NPC
+			modelStack.PushMatrix();
+			modelStack.Translate(movex, 5, 200);
+			modelStack.Scale(5, 5, 5);
+			RenderMesh(meshList[GEO_Body], false);
+			{
+				modelStack.PushMatrix();
+				modelStack.Translate(0, 0, 0);
+				modelStack.Scale(1, 1, 1);
+				RenderMesh(meshList[GEO_Head], false);
+				modelStack.PopMatrix();
+			}
+			modelStack.PopMatrix();
+		}
 
 		
 

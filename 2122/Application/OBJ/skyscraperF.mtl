@@ -4,83 +4,111 @@
 newmtl _defaultMat.001
 Kd 0.764151 0.764151 0.764151
 
+
 newmtl _defaultMat.002
+
 Kd 0.764151 0.764151 0.764151
 
 newmtl _defaultMat.003
+
 Kd 0.764151 0.764151 0.764151
 
 newmtl _defaultMat.004
+
 Kd 0.764151 0.764151 0.764151
 
 newmtl _defaultMat.005
+
 Kd 0.764151 0.764151 0.764151
 
 newmtl _defaultMat.006
+
 Kd 0.764151 0.764151 0.764151
 
 newmtl _defaultMat.007
+
 Kd 0.764151 0.764151 0.764151
 
 newmtl _defaultMat.008
+
 Kd 0.764151 0.764151 0.764151
 
 newmtl _defaultMat.009
+
 Kd 0.764151 0.764151 0.764151
 
 newmtl border.001
+
 Kd 0.560784 0.568627 0.600000
 
 newmtl border.002
+
 Kd 0.560784 0.568627 0.600000
 
 newmtl border.003
+
 Kd 0.560784 0.568627 0.600000
 
 newmtl border.004
+
 Kd 0.560784 0.568627 0.600000
 
 newmtl border.005
+
 Kd 0.560784 0.568627 0.600000
 
 newmtl border.006
+
 Kd 0.560784 0.568627 0.600000
 
 newmtl border.007
+
 Kd 0.560784 0.568627 0.600000
 
 newmtl border.008
+
 Kd 0.560784 0.568627 0.600000
 
 newmtl border.009
+
 Kd 0.560784 0.568627 0.600000
 
 newmtl door.001
+
 Kd 0.388235 0.400000 0.447059
 
 newmtl window.001
+
 Kd 0.737255 0.886275 1.000000
 
 newmtl window.002
+
 Kd 0.737255 0.886275 1.000000
 
 newmtl window.003
+
 Kd 0.737255 0.886275 1.000000
 
 newmtl window.004
+
 Kd 0.737255 0.886275 1.000000
 
 newmtl window.005
+
 Kd 0.737255 0.886275 1.000000
 
 newmtl window.006
+
 Kd 0.737255 0.886275 1.000000
 
 newmtl window.007
+
 Kd 0.737255 0.886275 1.000000
 
 newmtl window.008
+
 Kd 0.737255 0.886275 1.000000
 
 newmtl window.009
+
 Kd 0.737255 0.886275 1.000000
