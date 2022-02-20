@@ -2,6 +2,7 @@
 #define CAMERA_3_H
 
 #include "Camera.h"
+#include "EquipmentManager.h"
 
 class Camera3 : public Camera
 {
@@ -15,6 +16,9 @@ public:
 	Vector3 defaultUp;
 
 	bool minigamestatus;
+	int EquipNum;
+	int LevelNum;
+	bool AbleStand;
 
 	Camera3();
 	~Camera3();
@@ -22,6 +26,9 @@ public:
 	virtual void Update(double dt);
 	virtual void UpdateMini(double dt);
 	virtual void Reset();
+	bool WorkStationBoundary(void);
+	void DetectAbleStand(void);
+	void BoundaryCheck(Vector3 view, Vector3 right, static const float ZOOM_SPEED,double dt, char KeyPressed);
 };
 
 #endif

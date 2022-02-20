@@ -701,11 +701,6 @@ void Splevel1::Update(double dt)
 		glUniform1i(m_parameters[U_LIGHT0_TYPE], light[0].type);
 	}
 
-	if (camera.minigamestatus == false)
-	{
-		camera.Update(dt);
-	}
-
 	if (Application::IsKeyPressed('I'))
 		light[0].position.z -= (float)(10 * dt);
 	if (Application::IsKeyPressed('K'))
@@ -1169,16 +1164,19 @@ void Splevel1::Update(double dt)
 		{
 			camera.target.y = 30 - camera.position.y + camera.target.y;
 			camera.position.y = 30;
+			camera.LevelNum = 1;
 		}
 		if (lvl2 == true)
 		{
 			camera.target.y = 80 - camera.position.y + camera.target.y;
 			camera.position.y = 80;
+			camera.LevelNum = 2;
 		}
 		if (lvl3 == true)
 		{
 			camera.target.y = 130 - camera.position.y + camera.target.y;
 			camera.position.y = 130;
+			camera.LevelNum = 3;
 		}
 
 		//Level Checker
@@ -1252,9 +1250,9 @@ void Splevel1::Update(double dt)
 		}
 	}
 	
-	if (Application::IsKeyPressed('C')) //enable crouching
+
+	if (Application::IsKeyPressed('C') || camera.AbleStand == false) //enable crouching
 	{
-		std::cout << "\nLvl1:", lvl1, "\nLvl2:", lvl2, "\nLvl3:", lvl3;
 		if (lvl1 == true)
 		{
 			camera.target.y = 14 - camera.position.y + camera.target.y;
@@ -1270,8 +1268,20 @@ void Splevel1::Update(double dt)
 			camera.target.y = 114 - camera.position.y + camera.target.y;
 			camera.position.y = 114;
 		}
+		camera.LevelNum += 3;
 	}
-
+	if (camera.minigamestatus == false)
+	{
+		if (Manager.NumOfComputers() >= Manager.NumOfPhones())
+		{
+			camera.EquipNum = Manager.NumOfComputers();
+		}
+		else
+		{
+			camera.EquipNum = Manager.NumOfPhones();
+		}
+		camera.Update(dt);
+	}
 }
 
 
