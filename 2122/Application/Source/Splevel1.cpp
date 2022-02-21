@@ -431,6 +431,9 @@ void Splevel1::Init()
 	meshList[GEO_EMPTYBOX] = MeshBuilder::GenerateQuad("quad", Color(1, 1, 1), 1.f);
 	meshList[GEO_EMPTYBOX]->textureID = LoadTGA("Image//TitleFrame.tga");
 
+	meshList[GEO_DOORS] = MeshBuilder::GenerateQuad("quad", Color(1, 1, 1), 1.f);
+	meshList[GEO_DOORS]->textureID = LoadTGA("Image//Elevator.tga");
+
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16,16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Image//Agency_FB.tga");
 
@@ -456,6 +459,7 @@ void Splevel1::Init()
 	Mtx44 projection;
 	projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 10000.f);
 	projectionStack.LoadMatrix(projection);
+	liftdoor2 = 80;
 }
 
 bool setuppolice = false, clearpolice, paper1, paper2, paper3, paper4, timerstart, win, lose, NPC, startlaptop = false, evidence_won_bonus, die;
@@ -464,10 +468,17 @@ float pposx, pposz, pposx2, pposz2, pposx4, pposx3, pposz3, pposz4, rotateangle,
 string timerstring, beetsinstringform, Dialogue, Answer1, Answer2;
 int totalbeets = 0, countdownbonus = 1500, spinD = 0;
 
+<<<<<<< Updated upstream
 int mg1_start, dialoguepart;
 bool lvl2, lvl3,lvl1=true, playonce, NPCInteract;
 bool OP1, OP2, OP3,OP1check, OP2check,OP3check,deleterest,LS_start,LS_Win,LS_Lose,POP1,POP2,POP3, rotateback = true, spawntaxi, spawnpolice, spawntruck;
+=======
+int mg1_start;
+bool lvl2, lvl3,lvl1=true;
+bool OP1, OP2, OP3,OP1check, OP2check,OP3check,deleterest,LS_start,LS_Win,LS_Lose,POP1,POP2,POP3, rotateback = true, spawntaxi, spawnpolice, spawntruck,closed,closed2,closing;
+>>>>>>> Stashed changes
 float cposx, cposz, movecar;
+
 void Splevel1::Update(double dt)
 {
 	Manager.UpdateMoney(dt);
@@ -1170,6 +1181,49 @@ void Splevel1::Update(double dt)
 	if (rotateAngle >= 45) rotateback = true;
 	else if (rotateAngle < 0) rotateback = false;
 	
+
+	//lift animation
+	{
+		//door left
+		if (closed==false) 
+		{
+			liftdoor += (float)(20 * dt);
+		}
+		if (closed == true)
+		{
+			liftdoor -= (float)(20 * dt);
+		}
+		if (liftdoor >= 10)
+		{
+			closed = true;
+		}
+		else if (liftdoor <= -35)
+		{
+			closed = false;
+			closing = false;
+		}
+
+		//door right
+		
+		if (closed2 == false)
+		{
+			liftdoor2 -= (float)(20 * dt);
+		}
+		if (closed2 == true)
+		{
+			liftdoor2 += (float)(20 * dt);
+		}
+		if (liftdoor2 >= 115)
+		{
+			closed2 = false;
+		}
+		else if (liftdoor2 <= 70)
+		{
+			closed2 = true;
+			closing = false;
+		}
+	}
+
 	//Levels
 	{
 		static bool BButtonState = false;
@@ -1204,6 +1258,7 @@ void Splevel1::Update(double dt)
 				{
 					lvl2 = true;
 					lvl1 = false;
+					closing = true;
 				}
 			}
 			else if (BButtonState && !Application::IsKeyPressed('E'))
@@ -1221,6 +1276,7 @@ void Splevel1::Update(double dt)
 				{
 					lvl3 = true;
 					lvl2 = false;
+					closing = true;
 				}
 			}
 			else if (BButtonState && !Application::IsKeyPressed('E'))
@@ -1232,6 +1288,7 @@ void Splevel1::Update(double dt)
 				CButtonState = true;
 				lvl2 = false;
 				lvl1 = true;
+				closing = true;
 			}
 			else if (CButtonState && !Application::IsKeyPressed('F'))
 			{
@@ -1245,7 +1302,7 @@ void Splevel1::Update(double dt)
 				BButtonState = true;
 				lvl3 = false;
 				lvl2 = true;
-				
+				closing = true;
 			}
 			else if (BButtonState && !Application::IsKeyPressed('E'))
 			{
@@ -1256,6 +1313,7 @@ void Splevel1::Update(double dt)
 				CButtonState = true;
 				lvl3 = false;
 				lvl1 = true;
+				closing = true;
 			}
 			else if (CButtonState && !Application::IsKeyPressed('F'))
 			{
@@ -1931,34 +1989,37 @@ void Splevel1::Render()
 		{
 			if (Manager.PrestigeLvl > 0)
 			{
-				RenderTextOnScreen(meshList[GEO_TEXT], "Press 'E' to L2", Color(0, 1, 0), 4, 10, 30);
+				RenderTextOnScreen(meshList[GEO_TEXT], "Press 'E' to L2", Color(0, 1, 0), 4,25, 30);
 			}
 			else
 			{
-				RenderTextOnScreen(meshList[GEO_TEXT], "Reach prestige 1 for lift access", Color(0, 1, 0), 4, 10, 30);
+				RenderTextOnScreen(meshList[GEO_TEXT], "Reach prestige 1 for lift access", Color(0, 1, 0), 4, 25, 30);
 			}
 		}
 		//L2 lift
 		if (camera.position.x > 25 && camera.position.x < 60 && (camera.position.z < -50 && camera.position.z > -60) && (lvl2 == true))
 		{
-			RenderTextOnScreen(meshList[GEO_TEXT], "Press 'F' to L1", Color(0, 1, 0), 4, 10, 27);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Press 'F' to L1", Color(0, 1, 0), 4, 25, 27);
 
 			if (Manager.PrestigeLvl > 1)
 			{
-				RenderTextOnScreen(meshList[GEO_TEXT], "Press 'E' to L3", Color(0, 1, 0), 4, 10, 30);
+				RenderTextOnScreen(meshList[GEO_TEXT], "Press 'E' to L3", Color(0, 1, 0), 4, 25, 30);
 			}
 			else
 			{
-				RenderTextOnScreen(meshList[GEO_TEXT], "Reach prestige 2 for L3", Color(0, 1, 0), 4, 15, 30);
+				RenderTextOnScreen(meshList[GEO_TEXT], "Reach prestige 2 for L3", Color(0, 1, 0), 4, 25, 30);
 			}
 		}
 		//L3 lift
 		if (camera.position.x > 25 && camera.position.x < 60 && (camera.position.z < -50 && camera.position.z > -60) && (lvl3 == true))
 		{
-			RenderTextOnScreen(meshList[GEO_TEXT], "Press 'E' to L2", Color(0, 1, 0), 4, 10, 30);
-			RenderTextOnScreen(meshList[GEO_TEXT], "Press 'F' to L1", Color(0, 1, 0), 4, 10, 27);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Press 'E' to L2", Color(0, 1, 0), 4, 25, 30);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Press 'F' to L1", Color(0, 1, 0), 4, 25, 27);
 		}
 	}
+
+
+
 
 	//streetlight
 	for (int i = 0; i < 5; i++)
@@ -2191,6 +2252,14 @@ void Splevel1::Render()
 
 			}
 		}
+
+		if (closing == true)
+		{
+			RenderMeshOnScreen(meshList[GEO_EMPTYBOX], liftdoor, 30, 60, 60);
+			RenderMeshOnScreen(meshList[GEO_EMPTYBOX], liftdoor2, 30, 60, 60);
+		}
+		
+
 		
 	}
 
