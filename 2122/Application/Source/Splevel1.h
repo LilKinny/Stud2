@@ -7,6 +7,7 @@
 #include "Light.h"
 #include "Material.h"
 #include "EquipmentManager.h"
+#include "../donotcarepackage.h"
 #include "../Puzzle.h"
 #include <windows.h>
 class Splevel1 : public Scene
@@ -49,7 +50,6 @@ class Splevel1 : public Scene
 		GEO_SKYSCRAPER1,
 		GEO_LVL2,
 		GEO_LVL3,
-		GEO_LAPTOP,
 		GEO_LAPTOP_UI,
 		GEO_TopUI,
 		GEO_BotUI,
@@ -64,7 +64,11 @@ class Splevel1 : public Scene
 		GEO_UPGRADETEXT,
 		GEO_Table,
 		GEO_Laptop,
+		GEO_Laptop2,
+		GEO_Laptop3,
 		GEO_Phone1,
+		GEO_Phone2,
+		GEO_Phone3,
 		GEO_Lift,
 		GEO_Lift2,
 		GEO_Lift3,
@@ -85,6 +89,7 @@ class Splevel1 : public Scene
 		GEO_Head,
 		GEO_Arms,
 		GEO_GRASS3D,
+		GEO_CHEST,
 
 		GEO_TAXI,
 		GEO_TRUCK,
@@ -207,6 +212,9 @@ private:
 	void UpdatePuzzleControls();
 	void UpdateMainControls();
 
+	void UpdateCarepackage(double dt);
+	void RenderCarepackage();
+
 	EquipmentManager Manager;
 
 	Puzzle puzzle;
@@ -217,8 +225,11 @@ private:
 	bool PuzzlePlayerPickup;
 
 	float puzzletimer;
+	float packagetimer;
 
 	enum class Gamestate {MainGame,PuzzleGame}gamestate;
+
+	donotcarepackage* carepackage;
 
 	int RenderUI;
 	int RenderPrestige;

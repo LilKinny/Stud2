@@ -16,6 +16,7 @@
 #include <GLFW/glfw3.h>
 #include <ctime>
 #include "../Puzzle.h"
+#include "../donotcarepackage.h"
 #include <mmsystem.h>
 #pragma comment(lib, "winmm.lib")
 
@@ -281,6 +282,8 @@ void Splevel1::Init()
 
 	puzzle.Init();
 
+	packagetimer = 60;
+
 	//Initialize camera settings
 	camera.Init(Vector3(0, 30, 345), Vector3(0, 0, 0), Vector3(0, 1, 0));
 
@@ -289,6 +292,8 @@ void Splevel1::Init()
 	PuzzlePlayerPickup = false;
 
 	gamestate = Splevel1::Gamestate::MainGame;
+
+	carepackage = new donotcarepackage();
 
 	puzzletimer = 60;
 	
@@ -408,6 +413,7 @@ void Splevel1::Init()
 
 	meshList[GEO_Tree] = MeshBuilder::GenerateOBJMTL("Tree", "OBJ//TreeTall.obj", "OBJ//TreeTall.mtl");
 	meshList[GEO_Laptop] = MeshBuilder::GenerateOBJMTL("Laptop", "OBJ//Laptop.obj", "OBJ//Laptop.mtl");
+	meshList[GEO_Laptop2] = MeshBuilder::GenerateOBJMTL("Computerlvl2", "OBJ//ComputerLVL2.obj", "OBJ//ComputerLVL2.mtl");
 	meshList[GEO_Phone1] = MeshBuilder::GenerateOBJMTL("Phone1", "OBJ//Phone1.obj", "OBJ//Phone1.mtl");
 	meshList[GEO_Body] = MeshBuilder::GenerateOBJMTL("Body", "OBJ//Body.obj", "OBJ//Body.mtl");
 	meshList[GEO_Head] = MeshBuilder::GenerateOBJMTL("Head", "OBJ//Head.obj", "OBJ//Head.mtl");
@@ -454,7 +460,7 @@ void Splevel1::Init()
 
 	meshList[GEO_GRASS3D] = MeshBuilder::GenerateOBJMTL("Grass3D", "OBJ//Grass.obj", "OBJ//Grass.mtl");
 
-	
+	meshList[GEO_CHEST] = MeshBuilder::GenerateOBJMTL("Grass3D", "OBJ//chest.obj", "OBJ//chest.mtl");
 
 	Mtx44 projection;
 	projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 10000.f);
@@ -481,6 +487,21 @@ void Splevel1::Update(double dt)
 	cposz = camera.position.z;
 	//cout << cposx;
 	rotateangle = rotateangle + 0.1;
+
+	int carepackagerand;
+	carepackagerand = (rand() % 20) + 1;
+
+	
+	if (carepackagerand == 5 && carepackage->active == false)
+	{
+		carepackage->reset(-430,430,307,429);
+		packagetimer = 60;
+		carepackage->active = true;
+		carepackage->notitext = true;
+		
+	}
+
+	UpdateCarepackage(dt);
 
 	if (PuzzleActive == true)
 	{
@@ -758,7 +779,7 @@ void Splevel1::Update(double dt)
 		if (puzzle.Wincheck() == true)
 		{
 			PuzzleActive = false;
-			puzzle.Resetgame();
+			//puzzle.Resetgame();
 			if (Manager.PrestigeLvl == 0)
 			{
 				puzzletimer = 60;
@@ -785,7 +806,7 @@ void Splevel1::Update(double dt)
 		else if (puzzletimer < 0)
 		{
 			PuzzleActive = false;
-			puzzle.Resetgame();
+			//puzzle.Resetgame();
 			if (Manager.PrestigeLvl == 0)
 			{
 				puzzletimer = 60;
@@ -1114,6 +1135,7 @@ void Splevel1::Update(double dt)
 				{
 					cout << "Bruu moment";
 					PuzzleActive = true;
+					puzzle.Resetgame();
 					PuzzleUIActive = false;
 				}
 			}
@@ -1359,11 +1381,10 @@ void Splevel1::Update(double dt)
 			camera.EquipNum = Manager.NumOfPhones();
 		}
 		camera.Update(dt);
-		/*std::cout << camera.AbleStand << std::endl;*/
 	}
 
 	//NPC interactions
-	cout << dialoguepart;
+	//cout << dialoguepart;
 	{
 		static bool BButtonState = false;
 		static bool CButtonState = false;
@@ -1716,8 +1737,9 @@ void Splevel1::Render()
 		{
 		
 				modelStack.PushMatrix();
-				//modelStack.Rotate(-90, 1, 0, 0);
+				
 				modelStack.Translate(-450 + (i * 30), 0, -450);
+				modelStack.Rotate(scaleval[i] * scaleval[i], 0, 1, 0);
 				modelStack.Scale(scaleval[i], scaleval[i], scaleval[i]);
 
 				RenderMesh(meshList[GEO_Tree], true);
@@ -1731,6 +1753,7 @@ void Splevel1::Render()
 			modelStack.PushMatrix();
 			//modelStack.Rotate(-90, 1, 0, 0);
 			modelStack.Translate(-450 + (i * 30), 0, 450);
+			modelStack.Rotate(scaleval[i] * scaleval[i], 0, 1, 0);
 			modelStack.Scale(scaleval[i], scaleval[i], scaleval[i]);
 
 			RenderMesh(meshList[GEO_Tree], true);
@@ -1746,6 +1769,7 @@ void Splevel1::Render()
 				modelStack.PushMatrix();
 				//modelStack.Rotate(-90, 1, 0, 0);
 				modelStack.Translate(-450, 0, -450 + (i * 30));
+				modelStack.Rotate(scaleval[i] * scaleval[i], 0, 1, 0);
 				modelStack.Scale(scaleval[i], scaleval[i], scaleval[i]);
 
 				RenderMesh(meshList[GEO_Tree], true);
@@ -1762,6 +1786,7 @@ void Splevel1::Render()
 				modelStack.PushMatrix();
 				//modelStack.Rotate(-90, 1, 0, 0);
 				modelStack.Translate(450, 0, -450 + (i * 30));
+				modelStack.Rotate(scaleval[i] * scaleval[i], 0, 1, 0);
 				modelStack.Scale(scaleval[i], scaleval[i], scaleval[i]);
 
 				RenderMesh(meshList[GEO_Tree], true);
@@ -1779,7 +1804,7 @@ void Splevel1::Render()
 			modelStack.PushMatrix();
 
 			modelStack.Translate(-500 + (i * 30), 0, 320 + (x * 40));
-			modelStack.Rotate(scaleval[i], 0, 1, 0);
+			modelStack.Rotate(scaleval[i] * scaleval[i], 0, 1, 0);
 			//modelStack.Scale(scaleval[i], scaleval[i], scaleval[i]);
 			modelStack.Scale(scalevalgrass[i], scalevalgrass[i], scalevalgrass[i]);
 
@@ -1796,7 +1821,7 @@ void Splevel1::Render()
 			modelStack.PushMatrix();
 
 			modelStack.Translate(-500 + (i * 30), 0, -220 - (x * 40));
-			modelStack.Rotate(scaleval[i], 0, 1, 0);
+			modelStack.Rotate(scaleval[i] * scaleval[i], 0, 1, 0);
 			//modelStack.Scale(scaleval[i], scaleval[i], scaleval[i]);
 			modelStack.Scale(scalevalgrass[i], scalevalgrass[i], scalevalgrass[i]);
 
@@ -1813,7 +1838,7 @@ void Splevel1::Render()
 			modelStack.PushMatrix();
 
 			modelStack.Translate(-210 - (i * 30), 0, 180 - (x * 40));
-			modelStack.Rotate(scaleval[i], 0, 1, 0);
+			modelStack.Rotate(scaleval[i] * scaleval[i], 0, 1, 0);
 			//modelStack.Scale(scaleval[i], scaleval[i], scaleval[i]);
 			modelStack.Scale(scalevalgrass[i], scalevalgrass[i], scalevalgrass[i]);
 
@@ -1830,7 +1855,7 @@ void Splevel1::Render()
 			modelStack.PushMatrix();
 
 			modelStack.Translate(210 + (i * 30), 0, 180 - (x * 40));
-			modelStack.Rotate(scaleval[i], 0, 1, 0);
+			modelStack.Rotate(scaleval[i] * scaleval[i], 0, 1, 0);
 			//modelStack.Scale(scaleval[i], scaleval[i], scaleval[i]);
 			modelStack.Scale(scalevalgrass[i], scalevalgrass[i], scalevalgrass[i]);
 
@@ -2148,6 +2173,23 @@ void Splevel1::Render()
 		modelStack.PopMatrix();
 	}
 
+	if (NPC == true)
+	{
+		//Render NPC
+		modelStack.PushMatrix();
+		modelStack.Translate(movex, 5, 200);
+		modelStack.Scale(5, 5, 5);
+		RenderMesh(meshList[GEO_Body], false);
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(0, 0, 0);
+			modelStack.Scale(1, 1, 1);
+			RenderMesh(meshList[GEO_Head], false);
+			modelStack.PopMatrix();
+		}
+		modelStack.PopMatrix();
+	}
+
 
 
 	//WorkStation Rendering
@@ -2190,6 +2232,8 @@ void Splevel1::Render()
 		}
 		RenderMesh(meshList[GEO_Table], true);
 		modelStack.PopMatrix();
+
+		RenderCarepackage();
 
 		//Evidence mini game
 		if (camera.position.x > 30 && camera.position.x < 45 && (camera.position.z > 55 && camera.position.z < 65) && (lvl1 == true))
@@ -2403,22 +2447,7 @@ void Splevel1::Render()
 		modelStack.PopMatrix();
 
 
-		if (NPC == true)
-		{
-			//Render NPC
-			modelStack.PushMatrix();
-			modelStack.Translate(movex, 5, 200);
-			modelStack.Scale(5, 5, 5);
-			RenderMesh(meshList[GEO_Body], false);
-			{
-				modelStack.PushMatrix();
-				modelStack.Translate(0, 0, 0);
-				modelStack.Scale(1, 1, 1);
-				RenderMesh(meshList[GEO_Head], false);
-				modelStack.PopMatrix();
-			}
-			modelStack.PopMatrix();
-		}
+		
 
 		
 
@@ -3404,7 +3433,7 @@ void Splevel1::RenderWorkStation(int WorkStation)
 						modelStack.Translate(0, 2.05, 0);
 						modelStack.Rotate(90, 0, 1, 0);
 						modelStack.Scale(0.4, 0.3, 0.7);
-						RenderMesh(meshList[GEO_Laptop], true); //Render Laptop 2
+						RenderMesh(meshList[GEO_Laptop2], true); //Render Laptop 2
 					}
 					else if (Manager.EquipArray[WorkStation]->ComputerLvl == 3)
 					{
@@ -3955,6 +3984,73 @@ void Splevel1::UpdateMainControls()
 	else if (bRButtonState && !Application::IsMousePressed(1))
 	{
 		bRButtonState = false;
+	}
+	
+}
+
+void Splevel1::UpdateCarepackage(double dt)
+{
+	if (carepackage->active == true)
+	{
+		packagetimer -= dt;
+		if (packagetimer < 56)
+		{
+			carepackage->notitext = false;
+		}
+		if (packagetimer < 0)
+		{
+			carepackage->active = false;
+		}
+		if ((camera.position.x > (carepackage->position.x - 10) && camera.position.x < (carepackage->position.x +10)) && (camera.position.z > (carepackage->position.z - 10) && camera.position.z < (carepackage->position.z + 10)))
+		{
+			carepackage->pickuptext = true;
+			if (Application::IsKeyPressed('E'))
+			{
+				int result = (rand() % 10) + 1;
+				if (result > 5)
+				{
+					Manager.Money += Manager.Money;
+					carepackage->notitext = false;
+					carepackage->pickuptext = false;
+					carepackage->active = false;
+				}
+				else
+				{
+					die = true;
+					carepackage->notitext = false;
+					carepackage->pickuptext = false;
+					carepackage->active = false;
+				}
+			}
+		}
+		else
+		{
+			carepackage->pickuptext = false;
+		}
+	}
+}
+
+void Splevel1::RenderCarepackage()
+{
+	if (carepackage->active == true)
+	{
+		modelStack.PushMatrix();
+		//modelStack.Rotate(-90, 1, 0, 0);
+		modelStack.Translate(carepackage->position.x, 0, carepackage->position.z);
+		modelStack.Scale(10, 10, 10);
+
+		RenderMesh(meshList[GEO_CHEST], true);
+		modelStack.PopMatrix();
+	}
+	if (carepackage->notitext == true)
+	{
+		RenderMeshOnScreen(meshList[GEO_EMPTYBOX], 40, 25, 45, 15);
+		RenderTextOnScreen(meshList[GEO_TEXT], "A CAREPACKAGE HAS DROPPED SOMEWHERE OUTSIDE!", Color(1, 1, 1), 2, 18, 25);
+
+	}
+	if (carepackage->pickuptext == true)
+	{
+		RenderTextOnScreen(meshList[GEO_TEXT], "Press 'E' to open the GIFT", Color(1, 1, 1), 3, 20, 25);
 	}
 	
 }
