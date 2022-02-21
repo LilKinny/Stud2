@@ -2169,6 +2169,23 @@ void Splevel1::Render()
 		modelStack.PopMatrix();
 	}
 
+	if (NPC == true)
+	{
+		//Render NPC
+		modelStack.PushMatrix();
+		modelStack.Translate(movex, 5, 200);
+		modelStack.Scale(5, 5, 5);
+		RenderMesh(meshList[GEO_Body], false);
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(0, 0, 0);
+			modelStack.Scale(1, 1, 1);
+			RenderMesh(meshList[GEO_Head], false);
+			modelStack.PopMatrix();
+		}
+		modelStack.PopMatrix();
+	}
+
 
 
 	//WorkStation Rendering
@@ -2426,22 +2443,7 @@ void Splevel1::Render()
 		modelStack.PopMatrix();
 
 
-		if (NPC == true)
-		{
-			//Render NPC
-			modelStack.PushMatrix();
-			modelStack.Translate(movex, 5, 200);
-			modelStack.Scale(5, 5, 5);
-			RenderMesh(meshList[GEO_Body], false);
-			{
-				modelStack.PushMatrix();
-				modelStack.Translate(0, 0, 0);
-				modelStack.Scale(1, 1, 1);
-				RenderMesh(meshList[GEO_Head], false);
-				modelStack.PopMatrix();
-			}
-			modelStack.PopMatrix();
-		}
+		
 
 		
 
