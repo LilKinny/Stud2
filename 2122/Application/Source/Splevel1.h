@@ -27,6 +27,7 @@ class Splevel1 : public Scene
 		GEO_CUBE_WHITE,
 		GEO_PAPER,
 		GEO_EMPTYBOX,
+		GEO_DOORS,
 		GEO_CUBE_GREY,
 		GEO_SPHERE_JOINT,
 		GEO_CIRCLE,
@@ -66,6 +67,8 @@ class Splevel1 : public Scene
 		GEO_Laptop,
 		GEO_Phone1,
 		GEO_Lift,
+		GEO_Lift2,
+		GEO_Lift3,
 		GEO_Tree,
 		GEO_Puzzlebg,
 		GEO_Puzzlebgbg,
@@ -192,6 +195,8 @@ private:
 	float rotateAngleF;
 	float rotateAngleSF;
 	float rotateAnglesC;
+	float liftdoor;
+	float liftdoor2;
 	bool bEnableLight;
 	bool questions,Pqeustions;
 

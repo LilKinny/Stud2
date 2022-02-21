@@ -72,22 +72,25 @@ void Camera3::Update(double dt)
 		target = position + view;
 	}
 
-	AbleStand = true;
+	AbleStand = 0;
 	if (Application::IsKeyPressed('W'))
 	{
 		position = position + view * ZOOM_SPEED * static_cast<float>(dt);
 		BoundaryCheck(view, right, ZOOM_SPEED, dt, 'W');
 	}
+	DetectAbleStand();
 	if (Application::IsKeyPressed('S'))
 	{
 		position = position - view * ZOOM_SPEED * static_cast<float>(dt);
 		BoundaryCheck(view, right, ZOOM_SPEED, dt, 'S');
 	}
+	DetectAbleStand();
 	if (Application::IsKeyPressed('A'))
 	{
 		position = position - right * ZOOM_SPEED * static_cast<float>(dt);
 		BoundaryCheck(view, right, ZOOM_SPEED, dt, 'A');
 	}
+	DetectAbleStand();
 	if (Application::IsKeyPressed('D'))
 	{
 		position = position + right * ZOOM_SPEED * static_cast<float>(dt);
@@ -161,52 +164,69 @@ bool Camera3::WorkStationBoundary()
 			}
 		}
 	}
+	//Equipment Table
+	if ((position.x > 39 && position.x < 63) && (position.y < 35 && position.y > 25))
+	{
+		if (position.z > 24 && position.z < 60)
+		{
+			return true;
+		}
+	}
 	return false;
 }
 
 void Camera3::DetectAbleStand()
 {
-	if (LevelNum <= 3 && LevelNum > 0)
-		position.y = LevelNum * 50 - 20;
-	else if (LevelNum >= 4)
-		position.y = (LevelNum - 3) * 50 - 36;
 	//Boundary Checking for the table
 	for (int i = 0; i < EquipNum; ++i)
 	{
 		//std::cout << "\ni%6:" << i % 6 << " EquipNum:" << EquipNum << " Ypos:" << position.y << " LevelNum:" << LevelNum;
-		if (((position.x >= -60 && position.x <= -40) && LevelNum <= 3) || ((position.x >= -60 && position.x <= -54) && LevelNum >= 4))
+		if (position.x >= -60 && position.x <= -40)
 		{
 			if (i % 6 == 0 && (position.z >= 44 && position.z <= 63))
 			{
-				AbleStand = false;
+				AbleStand = 1;
 			}
 			else if (i % 6 == 1 && (position.z >= 25 && position.z <= 44))
 			{
-				AbleStand = false;
+				AbleStand = 1;
 			}
 			else if (i % 6 == 2 && (position.z >= 6 && position.z <= 25))
 			{
-				AbleStand = false;
+				AbleStand = 1;
 			}
 			else if (i % 6 == 3 && (position.z <= -44 && position.z >= -63))
 			{
-				AbleStand = false;
+				AbleStand = 1;
 			}
 			else if (i % 6 == 4 && (position.z <= -25 && position.z >= -44))
 			{
-				AbleStand = false;
+				AbleStand = 1;
 			}
 			else if (i % 6 == 5 && (position.z <= -6 && position.z >= -25))
 			{
-				AbleStand = false;
+				AbleStand = 1;
 			}
 		}
+	}
+	if ((position.x > 39 && position.x < 63) && position.y < 35)
+	{
+		if (position.z > 24 && position.z < 60)
+		{
+			AbleStand = 1;
+		}
+	}
+	if (AbleStand == 0)
+	{
+		AbleStand == 2;
 	}
 }
 
 void Camera3::BoundaryCheck(Vector3 view, Vector3 right, const float ZOOM_SPEED, double dt, char KeyPressed)
 {
 	static bool InvalidMovement = false;
+
+	//Map Boundary
 	if (position.x > 445 || position.x < -445 || position.z > 445 || position.z < -445)
 	{
 		InvalidMovement = true;
@@ -256,6 +276,7 @@ void Camera3::BoundaryCheck(Vector3 view, Vector3 right, const float ZOOM_SPEED,
 		}
 	}
 
+	//Front Wall for 2nd lvl and 3rd lvl
 	if (position.x < 75 && position.x > -58 && position.y > 31)
 	{
 		if (position.z < 70 && position.z > 60)
