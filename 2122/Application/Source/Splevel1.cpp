@@ -1737,8 +1737,9 @@ void Splevel1::Render()
 		{
 		
 				modelStack.PushMatrix();
-				//modelStack.Rotate(-90, 1, 0, 0);
+				
 				modelStack.Translate(-450 + (i * 30), 0, -450);
+				modelStack.Rotate(scaleval[i] * scaleval[i], 0, 1, 0);
 				modelStack.Scale(scaleval[i], scaleval[i], scaleval[i]);
 
 				RenderMesh(meshList[GEO_Tree], true);
@@ -1752,6 +1753,7 @@ void Splevel1::Render()
 			modelStack.PushMatrix();
 			//modelStack.Rotate(-90, 1, 0, 0);
 			modelStack.Translate(-450 + (i * 30), 0, 450);
+			modelStack.Rotate(scaleval[i] * scaleval[i], 0, 1, 0);
 			modelStack.Scale(scaleval[i], scaleval[i], scaleval[i]);
 
 			RenderMesh(meshList[GEO_Tree], true);
@@ -1767,6 +1769,7 @@ void Splevel1::Render()
 				modelStack.PushMatrix();
 				//modelStack.Rotate(-90, 1, 0, 0);
 				modelStack.Translate(-450, 0, -450 + (i * 30));
+				modelStack.Rotate(scaleval[i] * scaleval[i], 0, 1, 0);
 				modelStack.Scale(scaleval[i], scaleval[i], scaleval[i]);
 
 				RenderMesh(meshList[GEO_Tree], true);
@@ -1783,6 +1786,7 @@ void Splevel1::Render()
 				modelStack.PushMatrix();
 				//modelStack.Rotate(-90, 1, 0, 0);
 				modelStack.Translate(450, 0, -450 + (i * 30));
+				modelStack.Rotate(scaleval[i] * scaleval[i], 0, 1, 0);
 				modelStack.Scale(scaleval[i], scaleval[i], scaleval[i]);
 
 				RenderMesh(meshList[GEO_Tree], true);
@@ -1800,7 +1804,7 @@ void Splevel1::Render()
 			modelStack.PushMatrix();
 
 			modelStack.Translate(-500 + (i * 30), 0, 320 + (x * 40));
-			modelStack.Rotate(scaleval[i], 0, 1, 0);
+			modelStack.Rotate(scaleval[i] * scaleval[i], 0, 1, 0);
 			//modelStack.Scale(scaleval[i], scaleval[i], scaleval[i]);
 			modelStack.Scale(scalevalgrass[i], scalevalgrass[i], scalevalgrass[i]);
 
@@ -1817,7 +1821,7 @@ void Splevel1::Render()
 			modelStack.PushMatrix();
 
 			modelStack.Translate(-500 + (i * 30), 0, -220 - (x * 40));
-			modelStack.Rotate(scaleval[i], 0, 1, 0);
+			modelStack.Rotate(scaleval[i] * scaleval[i], 0, 1, 0);
 			//modelStack.Scale(scaleval[i], scaleval[i], scaleval[i]);
 			modelStack.Scale(scalevalgrass[i], scalevalgrass[i], scalevalgrass[i]);
 
@@ -1834,7 +1838,7 @@ void Splevel1::Render()
 			modelStack.PushMatrix();
 
 			modelStack.Translate(-210 - (i * 30), 0, 180 - (x * 40));
-			modelStack.Rotate(scaleval[i], 0, 1, 0);
+			modelStack.Rotate(scaleval[i] * scaleval[i], 0, 1, 0);
 			//modelStack.Scale(scaleval[i], scaleval[i], scaleval[i]);
 			modelStack.Scale(scalevalgrass[i], scalevalgrass[i], scalevalgrass[i]);
 
@@ -1851,7 +1855,7 @@ void Splevel1::Render()
 			modelStack.PushMatrix();
 
 			modelStack.Translate(210 + (i * 30), 0, 180 - (x * 40));
-			modelStack.Rotate(scaleval[i], 0, 1, 0);
+			modelStack.Rotate(scaleval[i] * scaleval[i], 0, 1, 0);
 			//modelStack.Scale(scaleval[i], scaleval[i], scaleval[i]);
 			modelStack.Scale(scalevalgrass[i], scalevalgrass[i], scalevalgrass[i]);
 
