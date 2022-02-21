@@ -413,6 +413,7 @@ void Splevel1::Init()
 
 	meshList[GEO_Tree] = MeshBuilder::GenerateOBJMTL("Tree", "OBJ//TreeTall.obj", "OBJ//TreeTall.mtl");
 	meshList[GEO_Laptop] = MeshBuilder::GenerateOBJMTL("Laptop", "OBJ//Laptop.obj", "OBJ//Laptop.mtl");
+	meshList[GEO_Laptop2] = MeshBuilder::GenerateOBJMTL("Computerlvl2", "OBJ//ComputerLVL2.obj", "OBJ//ComputerLVL2.mtl");
 	meshList[GEO_Phone1] = MeshBuilder::GenerateOBJMTL("Phone1", "OBJ//Phone1.obj", "OBJ//Phone1.mtl");
 	meshList[GEO_Body] = MeshBuilder::GenerateOBJMTL("Body", "OBJ//Body.obj", "OBJ//Body.mtl");
 	meshList[GEO_Head] = MeshBuilder::GenerateOBJMTL("Head", "OBJ//Head.obj", "OBJ//Head.mtl");
@@ -1380,11 +1381,10 @@ void Splevel1::Update(double dt)
 			camera.EquipNum = Manager.NumOfPhones();
 		}
 		camera.Update(dt);
-		/*std::cout << camera.AbleStand << std::endl;*/
 	}
 
 	//NPC interactions
-	cout << dialoguepart;
+	//cout << dialoguepart;
 	{
 		static bool BButtonState = false;
 		static bool CButtonState = false;
@@ -3427,7 +3427,7 @@ void Splevel1::RenderWorkStation(int WorkStation)
 						modelStack.Translate(0, 2.05, 0);
 						modelStack.Rotate(90, 0, 1, 0);
 						modelStack.Scale(0.4, 0.3, 0.7);
-						RenderMesh(meshList[GEO_Laptop], true); //Render Laptop 2
+						RenderMesh(meshList[GEO_Laptop2], true); //Render Laptop 2
 					}
 					else if (Manager.EquipArray[WorkStation]->ComputerLvl == 3)
 					{

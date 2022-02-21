@@ -285,6 +285,98 @@ void Camera3::BoundaryCheck(Vector3 view, Vector3 right, const float ZOOM_SPEED,
 		}
 	}
 
+	//Buildings
+	{
+
+		//Left Building
+		if (position.x > -185 && position.x < 185)
+		{
+			if (position.z > -413 && position.z < -186)
+			{
+				InvalidMovement = true;
+			}
+		}
+
+		//Back Left Building
+		if (position.x > -397 && position.x < -240)
+		{
+			if (position.z > -125 && position.z < 125)
+			{
+				InvalidMovement = true;
+			}
+		}
+
+		//Middle Building
+		if (position.x > -377 && position.x < -221)
+		{
+			if (position.z > -378 && position.z < -222)
+			{
+				InvalidMovement = true;
+			}
+		}
+
+		//Right Building
+		{
+			if (position.x > 206 && position.x < 433)
+			{
+				if (position.z > 100 && position.z < 185)
+				{
+					InvalidMovement = true;
+				}
+			}
+
+			if (position.x > 224 && position.x < 415)
+			{
+				if (position.z > 32 && position.z < 110)
+				{
+					InvalidMovement = true;
+				}
+			}
+
+			if (position.x > 206 && position.x < 433)
+			{
+				if (position.z > -43 && position.z < 42)
+				{
+					InvalidMovement = true;
+				}
+			}
+
+			if (position.x > 224 && position.x < 415)
+			{
+				if (position.z > -113 && position.z < -33)
+				{
+					InvalidMovement = true;
+				}
+			}
+
+			if (position.x > 206 && position.x < 433)
+			{
+				if (position.z > -183 && position.z < -103)
+				{
+					InvalidMovement = true;
+				}
+			}
+		}
+
+		//Back Right Building
+		{
+			if (position.x > 245 && position.x < 415)
+			{
+				if (position.z > -386 && position.z < -215)
+				{
+					InvalidMovement = true;
+				}
+			}
+			if (position.x > 228 && position.x < 247)
+			{
+				if (position.z > -389 && position.z < -294)
+				{
+					InvalidMovement = true;
+				}
+			}
+		}
+	}
+
 	if (WorkStationBoundary() == true)
 	{
 		InvalidMovement = true;
