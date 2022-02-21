@@ -414,7 +414,10 @@ void Splevel1::Init()
 	meshList[GEO_Tree] = MeshBuilder::GenerateOBJMTL("Tree", "OBJ//TreeTall.obj", "OBJ//TreeTall.mtl");
 	meshList[GEO_Laptop] = MeshBuilder::GenerateOBJMTL("Laptop", "OBJ//Laptop.obj", "OBJ//Laptop.mtl");
 	meshList[GEO_Laptop2] = MeshBuilder::GenerateOBJMTL("Computerlvl2", "OBJ//ComputerLVL2.obj", "OBJ//ComputerLVL2.mtl");
-	meshList[GEO_Phone1] = MeshBuilder::GenerateOBJMTL("Phone1", "OBJ//Phone1.obj", "OBJ//Phone1.mtl");
+	meshList[GEO_Laptop3] = MeshBuilder::GenerateOBJMTL("Computerlvl3", "OBJ//ComputerLVL3.obj", "OBJ//ComputerLVL3.mtL");
+	meshList[GEO_Phone1] = MeshBuilder::GenerateOBJMTL("Phone1", "OBJ//PhoneLVL1.obj", "OBJ//PhoneLVL1.mtl");
+	meshList[GEO_Phone2] = MeshBuilder::GenerateOBJMTL("Phone1", "OBJ//Phone1.obj", "OBJ//Phone1.mtl");
+	meshList[GEO_Phone3] = MeshBuilder::GenerateOBJMTL("Phone1", "OBJ//PhoneLVL3.obj", "OBJ//PhoneLVL3.mtl");
 	meshList[GEO_Body] = MeshBuilder::GenerateOBJMTL("Body", "OBJ//Body.obj", "OBJ//Body.mtl");
 	meshList[GEO_Head] = MeshBuilder::GenerateOBJMTL("Head", "OBJ//Head.obj", "OBJ//Head.mtl");
 	meshList[GEO_Arms] = MeshBuilder::GenerateOBJMTL("Arms", "OBJ//Arms.obj", "OBJ//Arms.mtl");
@@ -2217,10 +2220,10 @@ void Splevel1::Render()
 				modelStack.Scale(0.6, 0.5, 1.5);
 				{
 					modelStack.PushMatrix();
-					modelStack.Translate(-1, 0, 3.5);
+					modelStack.Translate(-1, 1, 3.5);
 					/*modelStack.Rotate(90, 0, 1, 0);
 					modelStack.Rotate(90, 1, 0, 0);*/
-					modelStack.Scale(1, 3, 1);
+					modelStack.Scale(1, 1.5, 0.8);
 					RenderMesh(meshList[GEO_Phone1], true);
 					modelStack.PopMatrix();
 				}
@@ -3440,14 +3443,14 @@ void Splevel1::RenderWorkStation(int WorkStation)
 						modelStack.Translate(0, 2.05, 0);
 						modelStack.Rotate(90, 0, 1, 0);
 						modelStack.Scale(0.4, 0.3, 0.7);
-						RenderMesh(meshList[GEO_Laptop], true); //Render Laptop 3
+						RenderMesh(meshList[GEO_Laptop3], true); //Render Laptop 3
 					}
 					modelStack.PopMatrix();
 
 					modelStack.PushMatrix();
 					if (Manager.EquipArray[WorkStation]->PhoneLvl == 1)
 					{
-						modelStack.Translate(1, 2.2, 0);
+						modelStack.Translate(1, 2.1, -0.4);
 						modelStack.Rotate(90, 0, 1, 0);
 						modelStack.Rotate(90, 1, 0, 0);
 						modelStack.Scale(0.4, 0.3, 0.6);
@@ -3455,19 +3458,19 @@ void Splevel1::RenderWorkStation(int WorkStation)
 					}
 					else if (Manager.EquipArray[WorkStation]->PhoneLvl == 2)
 					{
-						modelStack.Translate(1, 2.2, 0);
+						modelStack.Translate(1, 2.2, -0.4);
 						modelStack.Rotate(90, 0, 1, 0);
 						modelStack.Rotate(90, 1, 0, 0);
 						modelStack.Scale(0.4, 0.3, 0.6);
-						RenderMesh(meshList[GEO_Phone1], true); //Render Phone 2
+						RenderMesh(meshList[GEO_Phone2], true); //Render Phone 2
 					}
 					else if (Manager.EquipArray[WorkStation]->PhoneLvl == 3)
 					{
-						modelStack.Translate(1, 2.2, 0);
+						modelStack.Translate(0, 3.7, -0.4);
 						modelStack.Rotate(90, 0, 1, 0);
 						modelStack.Rotate(90, 1, 0, 0);
 						modelStack.Scale(0.4, 0.3, 0.6);
-						RenderMesh(meshList[GEO_Phone1], true); //Render Phone 3
+						RenderMesh(meshList[GEO_Phone3], true); //Render Phone 3
 					}
 					modelStack.PopMatrix();
 				}

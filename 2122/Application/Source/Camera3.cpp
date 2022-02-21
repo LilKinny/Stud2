@@ -287,7 +287,6 @@ void Camera3::BoundaryCheck(Vector3 view, Vector3 right, const float ZOOM_SPEED,
 
 	//Buildings
 	{
-
 		//Left Building
 		if (position.x > -185 && position.x < 185)
 		{
@@ -376,6 +375,19 @@ void Camera3::BoundaryCheck(Vector3 view, Vector3 right, const float ZOOM_SPEED,
 			}
 		}
 	}
+
+	//Street Lights
+	{
+		//Left Building
+		if (position.x > -185 && position.x < 185)
+		{
+			if (position.z > -413 && position.z < -186)
+			{
+				InvalidMovement = true;
+			}
+		}
+	}
+
 
 	if (WorkStationBoundary() == true)
 	{
