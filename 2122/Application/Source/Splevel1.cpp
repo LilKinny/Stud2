@@ -460,12 +460,12 @@ void Splevel1::Init()
 
 bool setuppolice = false, clearpolice, paper1, paper2, paper3, paper4, timerstart, win, lose, NPC, startlaptop = false, evidence_won_bonus, die;
 double scaleevidence = 0.1, countdown, timer;
-float pposx, pposz, pposx2, pposz2, pposx4, pposx3, pposz3, pposz4, rotateangle, pposy, pposy2, pposy3, pposy4, pushaway, movex = -500, movez;
-string timerstring, beetsinstringform;
+float pposx, pposz, pposx2, pposz2, pposx4, pposx3, pposz3, pposz4, rotateangle, pposy, pposy2, pposy3, pposy4, pushaway, movex = -500, movez, AlignX;
+string timerstring, beetsinstringform, Dialogue, Answer1, Answer2;
 int totalbeets = 0, countdownbonus = 1500, spinD = 0;
 
-int mg1_start;
-bool lvl2, lvl3,lvl1=true;
+int mg1_start, dialoguepart;
+bool lvl2, lvl3,lvl1=true, playonce, NPCInteract;
 bool OP1, OP2, OP3,OP1check, OP2check,OP3check,deleterest,LS_start,LS_Win,LS_Lose,POP1,POP2,POP3, rotateback = true, spawntaxi, spawnpolice, spawntruck;
 float cposx, cposz, movecar;
 void Splevel1::Update(double dt)
@@ -640,7 +640,7 @@ void Splevel1::Update(double dt)
 	/*cout << "SPAWNED TRUCK";*/
 	}
 
-	if (randomno == 4)
+	if (randomno == 4 && NPCInteract == false)
 	{
 		NPC = true;
 		movex += 5;
@@ -1148,6 +1148,13 @@ void Splevel1::Update(double dt)
 		if (camera.position.x > movecar - 25 && camera.position.x < movecar + 25)
 		{
 			die = true;
+			PlaySound(TEXT("Die.wav"), NULL, SND_ASYNC);
+		}
+
+		else if (camera.position.x > movecar - 25 && camera.position.x < movecar + 1200 && playonce == false )
+		{
+			PlaySound(TEXT("Horn.wav"), NULL, SND_ASYNC);
+			playonce = true;
 		}
 	}
 
@@ -1288,6 +1295,139 @@ void Splevel1::Update(double dt)
 			camera.EquipNum = Manager.NumOfPhones();
 		}
 		camera.Update(dt);
+	}
+
+	//NPC interactions
+
+	{
+		static bool BButtonState = false;
+		static bool CButtonState = false;
+		if (camera.position.x > movex - 40 && camera.position.x < movex + 40 && (camera.position.z < 240 && camera.position.z > 160))//L3
+		{
+			RenderTextOnScreen(meshList[GEO_TEXT], "Press 'E' to Interact with NPC", Color(0, 1, 0), 4, 10, 30);
+
+			if (!BButtonState && Application::IsKeyPressed('E'))
+			{
+				NPCInteract = true;
+
+			}
+			else if (BButtonState && !Application::IsKeyPressed('E'))
+			{
+				BButtonState = false;
+			}
+		}
+
+		if (NPCInteract == true)
+		{
+			static bool bLButtonState = false;
+			if (dialoguepart == 0)
+			{
+				Dialogue = "Whats up?";
+				AlignX = 24;
+				Answer1 = "Do you want a FREE product?";
+				Answer2 = "Im here to scam you";
+				if (!bLButtonState && Application::IsMousePressed(0))
+				{
+					bLButtonState = true;
+					double x, y;
+					Application::GetCursorPos(&x, &y);
+					unsigned w = Application::GetWindowWidth();
+					unsigned h = Application::GetWindowHeight();
+					float posX = x / w * 80; //convert (0,800) to (0,80)
+					float posY = 60 - y / h * 60; //convert (600,0) to (0,60)
+					if (posX > 5 && posX < 35 && (posY > 8 && posY < 14)) // Box1
+					{
+						dialoguepart = 1;
+					}
+					if (posX > 45 && posX < 75 && (posY > 8 && posY < 14)) // Box2
+					{
+						dialoguepart = 0;
+					}
+				}
+			}
+			if (dialoguepart == 1)
+			{
+				Dialogue = "Sounds legit, im listening.";
+				Answer1 = "There is a shipping fee";
+				Answer2 = "I need your credit card info";
+
+				if (!bLButtonState && Application::IsMousePressed(0))
+				{
+					bLButtonState = true;
+					double x, y;
+					Application::GetCursorPos(&x, &y);
+					unsigned w = Application::GetWindowWidth();
+					unsigned h = Application::GetWindowHeight();
+					float posX = x / w * 80; //convert (0,800) to (0,80)
+					float posY = 60 - y / h * 60; //convert (600,0) to (0,60)
+					if (posX > 5 && posX < 35 && (posY > 8 && posY < 14)) // Box1
+					{
+
+						dialoguepart = 2;
+					}
+					if (posX > 45 && posX < 75 && (posY > 8 && posY < 14)) // Box2
+					{
+						dialoguepart = 0;
+					}
+				}
+			}
+
+			if (dialoguepart == 2)
+			{
+				Dialogue = "Whats the fee?";
+				Answer1 = "$50";
+				Answer2 = "$400";
+
+				if (!bLButtonState && Application::IsMousePressed(0))
+				{
+					bLButtonState = true;
+					double x, y;
+					Application::GetCursorPos(&x, &y);
+					unsigned w = Application::GetWindowWidth();
+					unsigned h = Application::GetWindowHeight();
+					float posX = x / w * 80; //convert (0,800) to (0,80)
+					float posY = 60 - y / h * 60; //convert (600,0) to (0,60)
+					if (posX > 5 && posX < 35 && (posY > 8 && posY < 14)) // Box1
+					{
+						dialoguepart = 3;
+					}
+					if (posX > 45 && posX < 75 && (posY > 8 && posY < 14)) // Box2
+					{
+						dialoguepart = 0;
+					}
+				}
+			}
+
+			if (dialoguepart == 3)
+			{
+				Dialogue = "Sounds totally legit!";
+				Answer1 = "Nice";
+				Answer2 = "Nice";
+
+				if (!bLButtonState && Application::IsMousePressed(0))
+				{
+					bLButtonState = true;
+					double x, y;
+					Application::GetCursorPos(&x, &y);
+					unsigned w = Application::GetWindowWidth();
+					unsigned h = Application::GetWindowHeight();
+					float posX = x / w * 80; //convert (0,800) to (0,80)
+					float posY = 60 - y / h * 60; //convert (600,0) to (0,60)
+					if (posX > 5 && posX < 35 && (posY > 8 && posY < 14)) // Box1
+					{
+						Manager.Money += 50;
+						dialoguepart = 0;
+						NPCInteract = false;
+					}
+					if (posX > 45 && posX < 75 && (posY > 8 && posY < 14)) // Box2
+					{
+						Manager.Money += 50;
+						dialoguepart = 0;
+						NPCInteract = false;
+					}
+				}
+			}
+		}
 	}
 }
 
@@ -2168,6 +2308,18 @@ void Splevel1::Render()
 			RenderMeshOnScreen(meshList[GEO_EMPTYBOX], 40, 10, 10, 6);
 			RenderTextOnScreen(meshList[GEO_TEXT], "Pay up", Color(1, 1, 1), 2, 37, 9);
 		}
+
+		if (NPCInteract == true)
+		{
+			RenderMeshOnScreen(meshList[GEO_EMPTYBOX], 40, 20, 40, 10);
+			RenderTextOnScreen(meshList[GEO_TEXT], Dialogue, Color(1, 1, 1), 2, AlignX, 20);
+			RenderMeshOnScreen(meshList[GEO_EMPTYBOX], 20, 10, 30, 6);
+			RenderTextOnScreen(meshList[GEO_TEXT], Answer1, Color(1, 1, 1), 2, 7, 9);
+
+			RenderMeshOnScreen(meshList[GEO_EMPTYBOX], 60, 10, 30, 6);
+			RenderTextOnScreen(meshList[GEO_TEXT], Answer2, Color(1, 1, 1), 2, 47, 9);
+		}
+		
 	}
 
 	//UI
