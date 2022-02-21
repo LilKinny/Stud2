@@ -1265,7 +1265,7 @@ void Splevel1::Update(double dt)
 	}
 	
 
-	if (Application::IsKeyPressed('C') || camera.AbleStand == false) //enable crouching
+	if (Application::IsKeyPressed('C') || camera.AbleStand == 1 ) //enable crouching
 	{
 		if (lvl1 == true)
 		{
@@ -1295,6 +1295,7 @@ void Splevel1::Update(double dt)
 			camera.EquipNum = Manager.NumOfPhones();
 		}
 		camera.Update(dt);
+		std::cout << camera.AbleStand << std::endl;
 	}
 
 	//NPC interactions

@@ -18,7 +18,7 @@ public:
 	bool minigamestatus;
 	int EquipNum;
 	int LevelNum;
-	bool AbleStand;
+	int AbleStand;
 
 	Camera3();
 	~Camera3();

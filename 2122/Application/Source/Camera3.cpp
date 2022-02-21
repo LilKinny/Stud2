@@ -72,22 +72,25 @@ void Camera3::Update(double dt)
 		target = position + view;
 	}
 
-	AbleStand = true;
+	AbleStand = 0;
 	if (Application::IsKeyPressed('W'))
 	{
 		position = position + view * ZOOM_SPEED * static_cast<float>(dt);
 		BoundaryCheck(view, right, ZOOM_SPEED, dt, 'W');
 	}
+	DetectAbleStand();
 	if (Application::IsKeyPressed('S'))
 	{
 		position = position - view * ZOOM_SPEED * static_cast<float>(dt);
 		BoundaryCheck(view, right, ZOOM_SPEED, dt, 'S');
 	}
+	DetectAbleStand();
 	if (Application::IsKeyPressed('A'))
 	{
 		position = position - right * ZOOM_SPEED * static_cast<float>(dt);
 		BoundaryCheck(view, right, ZOOM_SPEED, dt, 'A');
 	}
+	DetectAbleStand();
 	if (Application::IsKeyPressed('D'))
 	{
 		position = position + right * ZOOM_SPEED * static_cast<float>(dt);
@@ -166,41 +169,41 @@ bool Camera3::WorkStationBoundary()
 
 void Camera3::DetectAbleStand()
 {
-	if (LevelNum <= 3 && LevelNum > 0)
-		position.y = LevelNum * 50 - 20;
-	else if (LevelNum >= 4)
-		position.y = (LevelNum - 3) * 50 - 36;
 	//Boundary Checking for the table
 	for (int i = 0; i < EquipNum; ++i)
 	{
 		//std::cout << "\ni%6:" << i % 6 << " EquipNum:" << EquipNum << " Ypos:" << position.y << " LevelNum:" << LevelNum;
-		if (((position.x >= -60 && position.x <= -40) && LevelNum <= 3) || ((position.x >= -60 && position.x <= -54) && LevelNum >= 4))
+		if (position.x >= -60 && position.x <= -40)
 		{
 			if (i % 6 == 0 && (position.z >= 44 && position.z <= 63))
 			{
-				AbleStand = false;
+				AbleStand = 1;
 			}
 			else if (i % 6 == 1 && (position.z >= 25 && position.z <= 44))
 			{
-				AbleStand = false;
+				AbleStand = 1;
 			}
 			else if (i % 6 == 2 && (position.z >= 6 && position.z <= 25))
 			{
-				AbleStand = false;
+				AbleStand = 1;
 			}
 			else if (i % 6 == 3 && (position.z <= -44 && position.z >= -63))
 			{
-				AbleStand = false;
+				AbleStand = 1;
 			}
 			else if (i % 6 == 4 && (position.z <= -25 && position.z >= -44))
 			{
-				AbleStand = false;
+				AbleStand = 1;
 			}
 			else if (i % 6 == 5 && (position.z <= -6 && position.z >= -25))
 			{
-				AbleStand = false;
+				AbleStand = 1;
 			}
 		}
+	}
+	if (AbleStand == 0)
+	{
+		AbleStand == 2;
 	}
 }
 
