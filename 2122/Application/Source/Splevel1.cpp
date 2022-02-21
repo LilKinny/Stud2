@@ -468,15 +468,10 @@ float pposx, pposz, pposx2, pposz2, pposx4, pposx3, pposz3, pposz4, rotateangle,
 string timerstring, beetsinstringform, Dialogue, Answer1, Answer2;
 int totalbeets = 0, countdownbonus = 1500, spinD = 0;
 
-<<<<<<< Updated upstream
 int mg1_start, dialoguepart;
 bool lvl2, lvl3,lvl1=true, playonce, NPCInteract;
-bool OP1, OP2, OP3,OP1check, OP2check,OP3check,deleterest,LS_start,LS_Win,LS_Lose,POP1,POP2,POP3, rotateback = true, spawntaxi, spawnpolice, spawntruck;
-=======
-int mg1_start;
-bool lvl2, lvl3,lvl1=true;
 bool OP1, OP2, OP3,OP1check, OP2check,OP3check,deleterest,LS_start,LS_Win,LS_Lose,POP1,POP2,POP3, rotateback = true, spawntaxi, spawnpolice, spawntruck,closed,closed2,closing;
->>>>>>> Stashed changes
+
 float cposx, cposz, movecar;
 
 void Splevel1::Update(double dt)
@@ -873,7 +868,7 @@ void Splevel1::Update(double dt)
 					if (deleterest == false)
 					{
 						int rnd = rand() % 3 + 0;
-						cout << rnd;
+						/*cout << rnd;*/
 						if (rnd == 0 && OP1check == false && OP2 != true && OP3 != true)
 						{
 							POP1 = true;
@@ -927,7 +922,7 @@ void Splevel1::Update(double dt)
 				}
 				else if (deleterest == true)
 				{
-					cout << "PressedE->deleterest true";
+					/*cout << "PressedE->deleterest true";*/
 					OP1 = false;
 					OP2 = false;
 					OP3 = false;
@@ -947,7 +942,7 @@ void Splevel1::Update(double dt)
 			unsigned h = Application::GetWindowHeight();
 			float posX = x / w * 80; //convert (0,800) to (0,80)
 			float posY = 60 - y / h * 60; //convert (600,0) to (0,60)
-			std::cout << "posX:" << posX << " , posY:" << posY << std::endl;
+		/*	std::cout << "posX:" << posX << " , posY:" << posY << std::endl;*/
 			if (LS_start == true)
 			{
 				if (posX > 35 && posX < 45 && posY > 8 && posY < 14)
@@ -1094,7 +1089,7 @@ void Splevel1::Update(double dt)
 				else if (posX > 35 && posX < 44 && (posY > 8 && posY < 13))
 				{
 					
-					cout << "Playing sound here!";
+					/*cout << "Playing sound here!";*/
 					Manager.Money = Manager.Money + 50;
 					LS_Win = false;
 				}
@@ -1148,7 +1143,7 @@ void Splevel1::Update(double dt)
 		else if (bLButtonState && !Application::IsMousePressed(0))
 		{
 		bLButtonState = false;
-		std::cout << "LBUTTON UP" << std::endl;
+		/*std::cout << "LBUTTON UP" << std::endl;*/
 		}
 	}
 
@@ -1353,11 +1348,11 @@ void Splevel1::Update(double dt)
 			camera.EquipNum = Manager.NumOfPhones();
 		}
 		camera.Update(dt);
-		std::cout << camera.AbleStand << std::endl;
+		/*std::cout << camera.AbleStand << std::endl;*/
 	}
 
 	//NPC interactions
-
+	cout << dialoguepart;
 	{
 		static bool BButtonState = false;
 		static bool CButtonState = false;
@@ -1375,115 +1370,214 @@ void Splevel1::Update(double dt)
 				BButtonState = false;
 			}
 		}
+		else NPCInteract = false;
 
 		if (NPCInteract == true)
 		{
+			int ran = rand() % 1 + 1;
 			static bool bLButtonState = false;
-			if (dialoguepart == 0)
+			if (ran == 1)
 			{
-				Dialogue = "Whats up?";
-				AlignX = 24;
-				Answer1 = "Do you want a FREE product?";
-				Answer2 = "Im here to scam you";
-				if (!bLButtonState && Application::IsMousePressed(0))
+				if (dialoguepart == 0)
 				{
-					bLButtonState = true;
-					double x, y;
-					Application::GetCursorPos(&x, &y);
-					unsigned w = Application::GetWindowWidth();
-					unsigned h = Application::GetWindowHeight();
-					float posX = x / w * 80; //convert (0,800) to (0,80)
-					float posY = 60 - y / h * 60; //convert (600,0) to (0,60)
-					if (posX > 5 && posX < 35 && (posY > 8 && posY < 14)) // Box1
+					Dialogue = "Whats up?";
+					AlignX = 24;
+					Answer1 = "Do you want a FREE product?";
+					Answer2 = "Im here to scam you";
+					if (!bLButtonState && Application::IsMousePressed(0))
 					{
-						dialoguepart = 1;
+						bLButtonState = true;
+						double x, y;
+						Application::GetCursorPos(&x, &y);
+						unsigned w = Application::GetWindowWidth();
+						unsigned h = Application::GetWindowHeight();
+						float posX = x / w * 80; //convert (0,800) to (0,80)
+						float posY = 60 - y / h * 60; //convert (600,0) to (0,60)
+						Sleep(150);
+						if (posX > 5 && posX < 35 && (posY > 8 && posY < 14)) // Box1
+						{
+							dialoguepart = 1;
+						}
+						if (posX > 45 && posX < 75 && (posY > 8 && posY < 14)) // Box2
+						{
+							dialoguepart = 4;
+						}
 					}
-					if (posX > 45 && posX < 75 && (posY > 8 && posY < 14)) // Box2
-					{
-						dialoguepart = 0;
-					}
+					else bLButtonState = false;
 				}
-			}
-			if (dialoguepart == 1)
-			{
-				Dialogue = "Sounds legit, im listening.";
-				Answer1 = "There is a shipping fee";
-				Answer2 = "I need your credit card info";
-
-				if (!bLButtonState && Application::IsMousePressed(0))
+				if (dialoguepart == 1)
 				{
-					bLButtonState = true;
-					double x, y;
-					Application::GetCursorPos(&x, &y);
-					unsigned w = Application::GetWindowWidth();
-					unsigned h = Application::GetWindowHeight();
-					float posX = x / w * 80; //convert (0,800) to (0,80)
-					float posY = 60 - y / h * 60; //convert (600,0) to (0,60)
-					if (posX > 5 && posX < 35 && (posY > 8 && posY < 14)) // Box1
-					{
+					Dialogue = "Sounds legit, im listening.";
+					Answer2 = "There is a shipping fee";
+					Answer1 = "I need your credit card info";
 
-						dialoguepart = 2;
-					}
-					if (posX > 45 && posX < 75 && (posY > 8 && posY < 14)) // Box2
+					if (!bLButtonState && Application::IsMousePressed(0))
 					{
-						dialoguepart = 0;
+						bLButtonState = true;
+						double x, y;
+						Application::GetCursorPos(&x, &y);
+						unsigned w = Application::GetWindowWidth();
+						unsigned h = Application::GetWindowHeight();
+						float posX = x / w * 80; //convert (0,800) to (0,80)
+						float posY = 60 - y / h * 60; //convert (600,0) to (0,60)
+						Sleep(150);
+						if (posX > 5 && posX < 35 && (posY > 8 && posY < 14)) // Box1
+						{
+
+							dialoguepart = 5;
+						}
+						if (posX > 45 && posX < 75 && (posY > 8 && posY < 14)) // Box2
+						{
+							dialoguepart = 2;
+						}
 					}
+					else bLButtonState = false;
 				}
-			}
 
-			if (dialoguepart == 2)
-			{
-				Dialogue = "Whats the fee?";
-				Answer1 = "$50";
-				Answer2 = "$400";
-
-				if (!bLButtonState && Application::IsMousePressed(0))
+				if (dialoguepart == 2)
 				{
-					bLButtonState = true;
-					double x, y;
-					Application::GetCursorPos(&x, &y);
-					unsigned w = Application::GetWindowWidth();
-					unsigned h = Application::GetWindowHeight();
-					float posX = x / w * 80; //convert (0,800) to (0,80)
-					float posY = 60 - y / h * 60; //convert (600,0) to (0,60)
-					if (posX > 5 && posX < 35 && (posY > 8 && posY < 14)) // Box1
+					Dialogue = "Whats the fee?";
+					Answer2 = "$50";
+					Answer1 = "$400";
+
+					if (!bLButtonState && Application::IsMousePressed(0))
 					{
-						dialoguepart = 3;
+						bLButtonState = true;
+						double x, y;
+						Application::GetCursorPos(&x, &y);
+						unsigned w = Application::GetWindowWidth();
+						unsigned h = Application::GetWindowHeight();
+						float posX = x / w * 80; //convert (0,800) to (0,80)
+						float posY = 60 - y / h * 60; //convert (600,0) to (0,60)
+						Sleep(150);
+						if (posX > 5 && posX < 35 && (posY > 8 && posY < 14)) // Box1
+						{
+							dialoguepart = 6;
+						}
+						if (posX > 45 && posX < 75 && (posY > 8 && posY < 14)) // Box2
+						{
+							dialoguepart = 3;
+						}
 					}
-					if (posX > 45 && posX < 75 && (posY > 8 && posY < 14)) // Box2
-					{
-						dialoguepart = 0;
-					}
+					else bLButtonState = false;
 				}
-			}
 
-			if (dialoguepart == 3)
-			{
-				Dialogue = "Sounds totally legit!";
-				Answer1 = "Nice";
-				Answer2 = "Nice";
-
-				if (!bLButtonState && Application::IsMousePressed(0))
+				if (dialoguepart == 3)
 				{
-					bLButtonState = true;
-					double x, y;
-					Application::GetCursorPos(&x, &y);
-					unsigned w = Application::GetWindowWidth();
-					unsigned h = Application::GetWindowHeight();
-					float posX = x / w * 80; //convert (0,800) to (0,80)
-					float posY = 60 - y / h * 60; //convert (600,0) to (0,60)
-					if (posX > 5 && posX < 35 && (posY > 8 && posY < 14)) // Box1
+					Dialogue = "Sounds totally legit! Im in!";
+					Answer1 = "Nice";
+					Answer2 = "Nice";
+
+					if (!bLButtonState && Application::IsMousePressed(0))
 					{
-						Manager.Money += 50;
-						dialoguepart = 0;
-						NPCInteract = false;
+						bLButtonState = true;
+						double x, y;
+						Application::GetCursorPos(&x, &y);
+						unsigned w = Application::GetWindowWidth();
+						unsigned h = Application::GetWindowHeight();
+						float posX = x / w * 80; //convert (0,800) to (0,80)
+						float posY = 60 - y / h * 60; //convert (600,0) to (0,60)
+						if (posX > 5 && posX < 35 && (posY > 8 && posY < 14)) // Box1
+						{
+							Manager.Money += 50;
+							dialoguepart = 0;
+							NPCInteract = false;
+						}
+						if (posX > 45 && posX < 75 && (posY > 8 && posY < 14)) // Box2
+						{
+							Manager.Money += 50;
+							dialoguepart = 0;
+							NPCInteract = false;
+						}
 					}
-					if (posX > 45 && posX < 75 && (posY > 8 && posY < 14)) // Box2
+					else bLButtonState = false;
+				}
+
+				if (dialoguepart == 4)
+				{
+					Dialogue = "What? Get away from me you creep!";
+					Answer1 = "Ok";
+					Answer2 = "Ok";
+
+					if (!bLButtonState && Application::IsMousePressed(0))
 					{
-						Manager.Money += 50;
-						dialoguepart = 0;
-						NPCInteract = false;
+						bLButtonState = true;
+						double x, y;
+						Application::GetCursorPos(&x, &y);
+						unsigned w = Application::GetWindowWidth();
+						unsigned h = Application::GetWindowHeight();
+						float posX = x / w * 80; //convert (0,800) to (0,80)
+						float posY = 60 - y / h * 60; //convert (600,0) to (0,60)
+						if (posX > 5 && posX < 35 && (posY > 8 && posY < 14)) // Box1
+						{
+							dialoguepart = 0;
+							NPCInteract = false;
+						}
+						if (posX > 45 && posX < 75 && (posY > 8 && posY < 14)) // Box2
+						{
+							dialoguepart = 0;
+							NPCInteract = false;
+						}
 					}
+					else bLButtonState = false;
+				}
+
+				if (dialoguepart == 5)
+				{
+					Dialogue = "i need my credit card for a free product? scam!";
+					Answer1 = "end";
+					Answer2 = "end";
+
+					if (!bLButtonState && Application::IsMousePressed(0))
+					{
+						bLButtonState = true;
+						double x, y;
+						Application::GetCursorPos(&x, &y);
+						unsigned w = Application::GetWindowWidth();
+						unsigned h = Application::GetWindowHeight();
+						float posX = x / w * 80; //convert (0,800) to (0,80)
+						float posY = 60 - y / h * 60; //convert (600,0) to (0,60)
+						if (posX > 5 && posX < 35 && (posY > 8 && posY < 14)) // Box1
+						{
+							dialoguepart = 0;
+							NPCInteract = false;
+						}
+						if (posX > 45 && posX < 75 && (posY > 8 && posY < 14)) // Box2
+						{
+							dialoguepart = 0;
+							NPCInteract = false;
+						}
+					}
+					else bLButtonState = false;
+				}
+
+				if (dialoguepart == 6)
+				{
+					Dialogue = "Thats way too expensive! Clearly a scam!";
+					Answer1 = "end";
+					Answer2 = "end";
+
+					if (!bLButtonState && Application::IsMousePressed(0))
+					{
+						bLButtonState = true;
+						double x, y;
+						Application::GetCursorPos(&x, &y);
+						unsigned w = Application::GetWindowWidth();
+						unsigned h = Application::GetWindowHeight();
+						float posX = x / w * 80; //convert (0,800) to (0,80)
+						float posY = 60 - y / h * 60; //convert (600,0) to (0,60)
+						if (posX > 5 && posX < 35 && (posY > 8 && posY < 14)) // Box1
+						{
+							dialoguepart = 0;
+							NPCInteract = false;
+						}
+						if (posX > 45 && posX < 75 && (posY > 8 && posY < 14)) // Box2
+						{
+							dialoguepart = 0;
+							NPCInteract = false;
+						}
+					}
+					else bLButtonState = false;
 				}
 			}
 		}
@@ -2382,7 +2476,7 @@ void Splevel1::Render()
 		if (NPCInteract == true)
 		{
 			RenderMeshOnScreen(meshList[GEO_EMPTYBOX], 40, 20, 40, 10);
-			RenderTextOnScreen(meshList[GEO_TEXT], Dialogue, Color(1, 1, 1), 2, AlignX, 20);
+			RenderTextOnScreen(meshList[GEO_TEXT], Dialogue, Color(1, 1, 1), 1.5, AlignX, 20);
 			RenderMeshOnScreen(meshList[GEO_EMPTYBOX], 20, 10, 30, 6);
 			RenderTextOnScreen(meshList[GEO_TEXT], Answer1, Color(1, 1, 1), 2, 7, 9);
 
@@ -3631,7 +3725,7 @@ void Splevel1::UpdateMainControls()
 		unsigned h = Application::GetWindowHeight();
 		float posX = (x / w) * 80; //convert (0,800) to (0,80)
 		float posY = 60 - (y / h) * 60; //convert (600,0) to (0,60)
-		std::cout << "posX:" << posX << " , posY:" << posY << std::endl;
+		/*std::cout << "posX:" << posX << " , posY:" << posY << std::endl;*/
 		if ((posY <= 59 && posY >= 53.5) && (posX >= 1.5 && posX <= 12.5)) //Clck Store
 		{
 			PageNum = 1;
