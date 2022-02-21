@@ -1099,12 +1099,12 @@ void Splevel1::Update(double dt)
 			{
 				if (Manager.PrestigeLvl >= 1 && (posX > 35 && posX < 44 && (posY > 8 && posY < 13)))
 				{
-					Manager.Money = Manager.Money - 100;
+					Manager.Money = Manager.Money - 150;
 					LS_Lose = false;
 				}
 				if (posX > 35 && posX < 44 && (posY > 8 && posY < 13))
 				{
-					Manager.Money = Manager.Money - 50;
+					Manager.Money = Manager.Money - 100;
 					LS_Lose = false;
 				}
 			}
@@ -2226,7 +2226,7 @@ void Splevel1::Render()
 			RenderTextOnScreen(meshList[GEO_TEXT], "the most convincing answer without", Color(1, 1, 1), 2, 21, 29);
 			RenderTextOnScreen(meshList[GEO_TEXT], "raising suspicion.", Color(1, 1, 1), 2, 21, 26);
 			RenderTextOnScreen(meshList[GEO_TEXT], "Reward: $50  Premium Reward: $100", Color(1, 1, 1), 2, 21, 21);
-			RenderTextOnScreen(meshList[GEO_TEXT], "Penalty: -$50  Premium Penalty: -$100", Color(1, 1, 1), 2, 21, 18);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Penalty: -$100  Premium Penalty: -$150", Color(1, 1, 1), 2, 21, 18);
 			RenderMeshOnScreen(meshList[GEO_EMPTYBOX], 40, 10, 10, 6);
 			RenderTextOnScreen(meshList[GEO_TEXT], "Start!", Color(1, 1, 1), 2, 37, 9);
 		}
@@ -2257,7 +2257,7 @@ void Splevel1::Render()
 			RenderTextOnScreen(meshList[GEO_TEXT], "You didn't manage to convince", Color(1, 1, 1), 2, 21, 35);
 			RenderTextOnScreen(meshList[GEO_TEXT], "the target they've reported you and", Color(1, 1, 1), 2, 21, 32);
 			RenderTextOnScreen(meshList[GEO_TEXT], "have to pay a fine.", Color(1, 1, 1), 2, 21, 29);
-			RenderTextOnScreen(meshList[GEO_TEXT], "Penalty: -$50", Color(1, 1, 1), 2, 21, 18);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Penalty: -$100", Color(1, 1, 1), 2, 21, 18);
 			RenderMeshOnScreen(meshList[GEO_EMPTYBOX], 40, 10, 10, 6);
 			RenderTextOnScreen(meshList[GEO_TEXT], "Pay up", Color(1, 1, 1), 2, 37, 9);
 		}
@@ -2268,7 +2268,7 @@ void Splevel1::Render()
 			RenderTextOnScreen(meshList[GEO_TEXT], "You didn't manage to convince", Color(1, 1, 1), 2, 21, 35);
 			RenderTextOnScreen(meshList[GEO_TEXT], "the target they've reported you and", Color(1, 1, 1), 2, 21, 32);
 			RenderTextOnScreen(meshList[GEO_TEXT], "have to pay a fine.", Color(1, 1, 1), 2, 21, 29);
-			RenderTextOnScreen(meshList[GEO_TEXT], "Penalty: -$100", Color(1, 1, 1), 2, 21, 18);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Penalty: -$150", Color(1, 1, 1), 2, 21, 18);
 			RenderMeshOnScreen(meshList[GEO_EMPTYBOX], 40, 10, 10, 6);
 			RenderTextOnScreen(meshList[GEO_TEXT], "Pay up", Color(1, 1, 1), 2, 37, 9);
 		}
