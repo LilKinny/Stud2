@@ -164,6 +164,14 @@ bool Camera3::WorkStationBoundary()
 			}
 		}
 	}
+	//Equipment Table
+	if ((position.x > 39 && position.x < 63) && (position.y < 35 && position.y > 25))
+	{
+		if (position.z > 24 && position.z < 60)
+		{
+			return true;
+		}
+	}
 	return false;
 }
 
@@ -201,6 +209,13 @@ void Camera3::DetectAbleStand()
 			}
 		}
 	}
+	if ((position.x > 39 && position.x < 63) && position.y < 35)
+	{
+		if (position.z > 24 && position.z < 60)
+		{
+			AbleStand = 1;
+		}
+	}
 	if (AbleStand == 0)
 	{
 		AbleStand == 2;
@@ -210,6 +225,8 @@ void Camera3::DetectAbleStand()
 void Camera3::BoundaryCheck(Vector3 view, Vector3 right, const float ZOOM_SPEED, double dt, char KeyPressed)
 {
 	static bool InvalidMovement = false;
+
+	//Map Boundary
 	if (position.x > 445 || position.x < -445 || position.z > 445 || position.z < -445)
 	{
 		InvalidMovement = true;
@@ -259,6 +276,7 @@ void Camera3::BoundaryCheck(Vector3 view, Vector3 right, const float ZOOM_SPEED,
 		}
 	}
 
+	//Front Wall for 2nd lvl and 3rd lvl
 	if (position.x < 75 && position.x > -58 && position.y > 31)
 	{
 		if (position.z < 70 && position.z > 60)
