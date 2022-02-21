@@ -378,10 +378,34 @@ void Camera3::BoundaryCheck(Vector3 view, Vector3 right, const float ZOOM_SPEED,
 
 	//Street Lights
 	{
-		//Left Building
-		if (position.x > -185 && position.x < 185)
+		//Grass Side
+		if (position.z > 284 && position.z < 294)
 		{
-			if (position.z > -413 && position.z < -186)
+			if (position.x > -404 && position.x < -394)
+			{
+				InvalidMovement = true;
+			}
+			if (position.x > -104 && position.x < -94)
+			{
+				InvalidMovement = true;
+			}
+			if (position.x > 196 && position.x < 206)
+			{
+				InvalidMovement = true;
+			}
+		}
+		//Building Side
+		if (position.z > 205 && position.z < 215)
+		{
+			if (position.x > -256 && position.x < -246)
+			{
+				InvalidMovement = true;
+			}
+			if (position.x > 45 && position.x < 55)
+			{
+				InvalidMovement = true;
+			}
+			if (position.x > 345 && position.x < 355)
 			{
 				InvalidMovement = true;
 			}
