@@ -147,6 +147,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="donotcarepackage.cpp" />
     <ClCompile Include="Puzzle.cpp" />
     <ClCompile Include="PuzzleEntity.cpp" />
     <ClCompile Include="Source\Application.cpp" />
@@ -178,6 +179,7 @@
     <ClCompile Include="Source\Utility.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="donotcarepackage.h" />
     <ClInclude Include="Puzzle.h" />
     <ClInclude Include="PuzzleEntity.h" />
     <ClInclude Include="Source\Application.h" />
