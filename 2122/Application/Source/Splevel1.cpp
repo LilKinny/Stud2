@@ -265,9 +265,14 @@ void Splevel1::Init()
 	//variable to rotate geometry
 	rotateAngle = 0;
 
-	for (int i = 0; i < 30; i++)
+	for (int i = 0; i < 50; i++)
 	{
 		scaleval[i] = (rand() % 60) + 60;
+	}
+
+	for (int i = 0; i < 50; i++)
+	{
+		scalevalgrass[i] = (rand() % 20) + 10;
 	}
 
 	RenderUI = 0;
@@ -443,6 +448,8 @@ void Splevel1::Init()
 
 	meshList[GEO_PuzzleBorder] = MeshBuilder::GenerateQuad("puzzlebord", Color(1, 1, 1), 1.f);
 	meshList[GEO_PuzzleBorder]->textureID = LoadTGA("Image//PlayerBorder.tga");
+
+	meshList[GEO_GRASS3D] = MeshBuilder::GenerateOBJMTL("Grass3D", "OBJ//Grass.obj", "OBJ//Grass.mtl");
 
 	
 
@@ -1458,6 +1465,76 @@ void Splevel1::Render()
 			}
 		}
 	}
+
+	//Grass3D
+	//front
+	for (int x = 0; x < 4; x++)
+	{
+		for (int i = 0; i < 40; i++)
+		{
+			modelStack.PushMatrix();
+
+			modelStack.Translate(-500 + (i * 30), 0, 320 + (x * 40));
+			modelStack.Rotate(scaleval[i], 0, 1, 0);
+			//modelStack.Scale(scaleval[i], scaleval[i], scaleval[i]);
+			modelStack.Scale(scalevalgrass[i], scalevalgrass[i], scalevalgrass[i]);
+
+			RenderMesh(meshList[GEO_GRASS3D], true);
+			modelStack.PopMatrix();
+		}
+	}
+
+	//back
+	for (int x = 0; x < 6; x++)
+	{
+		for (int i = 0; i < 40; i++)
+		{
+			modelStack.PushMatrix();
+
+			modelStack.Translate(-500 + (i * 30), 0, -220 - (x * 40));
+			modelStack.Rotate(scaleval[i], 0, 1, 0);
+			//modelStack.Scale(scaleval[i], scaleval[i], scaleval[i]);
+			modelStack.Scale(scalevalgrass[i], scalevalgrass[i], scalevalgrass[i]);
+
+			RenderMesh(meshList[GEO_GRASS3D], true);
+			modelStack.PopMatrix();
+		}
+	}
+
+	//left
+	for (int x = 0; x < 10; x++)
+	{
+		for (int i = 0; i < 10; i++)
+		{
+			modelStack.PushMatrix();
+
+			modelStack.Translate(-210 - (i * 30), 0, 180 - (x * 40));
+			modelStack.Rotate(scaleval[i], 0, 1, 0);
+			//modelStack.Scale(scaleval[i], scaleval[i], scaleval[i]);
+			modelStack.Scale(scalevalgrass[i], scalevalgrass[i], scalevalgrass[i]);
+
+			RenderMesh(meshList[GEO_GRASS3D], true);
+			modelStack.PopMatrix();
+		}
+	}
+
+	//right
+	for (int x = 0; x < 10; x++)
+	{
+		for (int i = 0; i < 10; i++)
+		{
+			modelStack.PushMatrix();
+
+			modelStack.Translate(210 + (i * 30), 0, 180 - (x * 40));
+			modelStack.Rotate(scaleval[i], 0, 1, 0);
+			//modelStack.Scale(scaleval[i], scaleval[i], scaleval[i]);
+			modelStack.Scale(scalevalgrass[i], scalevalgrass[i], scalevalgrass[i]);
+
+			RenderMesh(meshList[GEO_GRASS3D], true);
+			modelStack.PopMatrix();
+		}
+	}
+	
 
 	//WorkStation Rendering
 	{

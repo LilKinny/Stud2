@@ -81,6 +81,7 @@ class Splevel1 : public Scene
 		GEO_Body,
 		GEO_Head,
 		GEO_Arms,
+		GEO_GRASS3D,
 
 		GEO_TAXI,
 		GEO_TRUCK,
@@ -218,7 +219,8 @@ private:
 	int RenderPrestige;
 	int PageNum;
 
-	int scaleval[30];
+	int scaleval[50];
+	int scalevalgrass[50];
 
 	float debugmouseposx;
 	float debugmouseposy;
