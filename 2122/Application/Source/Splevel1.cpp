@@ -488,7 +488,7 @@ void Splevel1::Update(double dt)
 	rotateangle = rotateangle + 0.1;
 
 	int carepackagerand;
-	carepackagerand = (rand() % 10) + 1;
+	carepackagerand = (rand() % 20) + 1;
 
 	
 	if (carepackagerand == 5 && carepackage->active == false)
