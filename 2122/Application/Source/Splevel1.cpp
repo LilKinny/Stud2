@@ -2193,13 +2193,6 @@ void Splevel1::Render()
 		modelStack.PopMatrix();
 	}
 
-
-
-	//WorkStation Rendering
-	{
-
-	}
-
 	//kjcode
 	{
 		//Default Equipment
@@ -2220,11 +2213,10 @@ void Splevel1::Render()
 				modelStack.Scale(0.6, 0.5, 1.5);
 				{
 					modelStack.PushMatrix();
-					modelStack.Translate(-1, 1, 3.5);
-					/*modelStack.Rotate(90, 0, 1, 0);
-					modelStack.Rotate(90, 1, 0, 0);*/
-					modelStack.Scale(1, 1.5, 0.8);
-					RenderMesh(meshList[GEO_Phone1], true);
+					modelStack.Translate(0, 0, 3);
+					modelStack.Rotate(90, 1, 0, 0);
+					modelStack.Scale(1, 0.6, 1.2);
+					RenderMesh(meshList[GEO_Phone1], true); //Render Phone 1
 					modelStack.PopMatrix();
 				}
 				RenderMesh(meshList[GEO_Laptop], true);
