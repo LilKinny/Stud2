@@ -484,13 +484,13 @@ void Splevel1::Init()
 
 bool setuppolice = false, clearpolice, paper1, paper2, paper3, paper4, timerstart, win, lose, NPC, startlaptop = false, evidence_won_bonus, die;
 double scaleevidence = 0.1, countdown, timer;
-float pposx, pposz, pposx2, pposz2, pposx4, pposx3, pposz3, pposz4, rotateangle, pposy, pposy2, pposy3, pposy4, pushaway, movex = -500, movez, AlignX;
+float prologuey = -40, scaletitle = 0 , pposx, pposz, pposx2, pposz2, pposx4, pposx3, pposz3, pposz4, rotateangle, pposy, pposy2, pposy3, pposy4, pushaway, movex = -500, movez, AlignX;
 string timerstring, beetsinstringform, Dialogue, Answer1, Answer2;
 int totalbeets = 0, countdownbonus = 1500, spinD = 0;
 
 int mg1_start, dialoguepart, rannpc;
 bool lvl2, lvl3,lvl1=true, playonce, NPCInteract;
-bool doneonce, OP1, OP2, OP3,OP1check, OP2check,OP3check,deleterest,LS_start,LS_Win,LS_Lose,POP1,POP2,POP3, rotateback = true, spawntaxi, spawnpolice, spawntruck,closed,closed2,closing;
+bool prologue = true, doneonce, OP1, OP2, OP3,OP1check, OP2check,OP3check,deleterest,LS_start,LS_Win,LS_Lose,POP1,POP2,POP3, rotateback = true, spawntaxi, spawnpolice, spawntruck,closed,closed2,closing;
 
 float cposx, cposz, movecar;
 
@@ -1846,6 +1846,45 @@ void Splevel1::Update(double dt)
 			}
 		}
 	}
+
+
+	// prologue
+	
+
+	if (prologue == true)
+	{
+		static bool bLButtonState = false;
+		prologuey += 0.1;
+
+		if (prologuey >= 50)
+		{
+			scaletitle += 0.3;
+		}
+		
+		if (scaletitle >= 6)
+		{
+			Sleep(500);
+			prologue = false;
+		}
+		if (!bLButtonState && Application::IsMousePressed(0))
+		{
+			bLButtonState = true;
+			double x, y;
+			Application::GetCursorPos(&x, &y);
+			unsigned w = Application::GetWindowWidth();
+			unsigned h = Application::GetWindowHeight();
+			float posX = x / w * 80; //convert (0,800) to (0,80)
+			float posY = 60 - y / h * 60; //convert (600,0) to (0,60)
+			if (posX > 0 && posX < 12 && (posY > 18 && posY < 25)) // Box1
+			{
+				prologue = false;
+			}
+			else
+				prologuey += 0.5;
+		}
+		else bLButtonState = false;
+	}
+	
 }
 
 	
@@ -2864,6 +2903,27 @@ void Splevel1::Render()
 			RenderTextOnScreen(meshList[GEO_TEXT], "Penalty: 50% of total income", Color(1, 1, 1), 2, 24, 18);
 			RenderMeshOnScreen(meshList[GEO_EMPTYBOX], 40, 10, 10, 6);
 			RenderTextOnScreen(meshList[GEO_TEXT], "Pay up", Color(1, 1, 1), 2, 37, 9);
+		}
+
+
+		if (prologue == true)
+		{
+			camera.Reset();
+			RenderMeshOnScreen(meshList[GEO_EMPTYBOX], 40, 25, 100, 100);
+			RenderTextOnScreen(meshList[GEO_TEXT], "-- PROLOGUE --", Color(1, 1, 1), 2, 22, 40 + prologuey);
+			RenderTextOnScreen(meshList[GEO_TEXT], "A long time ago", Color(1, 1, 1), 2, 22, 35 + prologuey);
+			RenderTextOnScreen(meshList[GEO_TEXT], "In Nigeria, far far away", Color(1, 1, 1), 2, 22, 30 + prologuey);
+			RenderTextOnScreen(meshList[GEO_TEXT], "There lived Ben Dover", Color(1, 1, 1), 2, 22, 25 + prologuey);
+			RenderTextOnScreen(meshList[GEO_TEXT], "One day, he fell in love with a woman", Color(1, 1, 1), 2, 22, 20 + prologuey);
+			RenderTextOnScreen(meshList[GEO_TEXT], "The woman asked for financial help", Color(1, 1, 1), 2, 22, 15 + prologuey);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Which Ben Dover obliged", Color(1, 1, 1), 2, 22, 10 + prologuey);
+			RenderTextOnScreen(meshList[GEO_TEXT], "But it turned out to be a SCAM!", Color(1, 1, 1), 2, 22, 5 + prologuey);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Heartbroken, Ben sought revenge", Color(1, 1, 1), 2, 22, 0 + prologuey);
+			RenderTextOnScreen(meshList[GEO_TEXT], "And he will do it by scamming other people!", Color(1, 1, 1), 2, 22, -5 + prologuey);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Welcome to...", Color(1, 1, 1), 2, 22, -10 + prologuey);
+			RenderTextOnScreen(meshList[GEO_TEXT], "SCAMMER TYCOON!", Color(1, 1, 1), scaletitle, 22, 20);
+			RenderMeshOnScreen(meshList[GEO_EMPTYBOX], 4, 20, 11, 5);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Skip", Color(1, 1, 1), 2, 2, 18);
 		}
 
 		if (NPCInteract == true)
