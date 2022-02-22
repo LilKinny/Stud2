@@ -89,6 +89,8 @@ class Splevel1 : public Scene
 		GEO_PREop1,
 		GEO_PREop2,
 		GEO_PREop3,
+		GEO_HTP,
+		GEO_HTPSCREEN,
 		GEO_Body,
 		GEO_Head,
 		GEO_Arms,

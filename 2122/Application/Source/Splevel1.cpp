@@ -415,6 +415,12 @@ void Splevel1::Init()
 	meshList[GEO_PREop3] = MeshBuilder::GenerateRec("Rec", Color(1, 1, 1), 1.f, 1.f);
 	meshList[GEO_PREop3]->textureID = LoadTGA("Image//Pre_OP3.tga");
 
+	meshList[GEO_HTP] = MeshBuilder::GenerateRec("Rec", Color(1, 1, 1), 1.f, 1.f);
+	meshList[GEO_HTP]->textureID = LoadTGA("Image//HTP.tga");
+
+	meshList[GEO_HTPSCREEN] = MeshBuilder::GenerateQuad("Quad", Color(1, 1, 1), 1.f);
+	meshList[GEO_HTPSCREEN]->textureID = LoadTGA("Image//HTPscreen.tga");
+
 	meshList[GEO_Tree] = MeshBuilder::GenerateOBJMTL("Tree", "OBJ//TreeTall.obj", "OBJ//TreeTall.mtl");
 	meshList[GEO_Laptop] = MeshBuilder::GenerateOBJMTL("Laptop", "OBJ//Laptop.obj", "OBJ//Laptop.mtl");
 	meshList[GEO_Laptop2] = MeshBuilder::GenerateOBJMTL("Computerlvl2", "OBJ//ComputerLVL2.obj", "OBJ//ComputerLVL2.mtl");
@@ -491,6 +497,7 @@ int totalbeets = 0, countdownbonus = 1500, spinD = 0;
 int mg1_start, dialoguepart, rannpc;
 bool lvl2, lvl3,lvl1=true, playonce, NPCInteract;
 bool prologue = true, doneonce, OP1, OP2, OP3,OP1check, OP2check,OP3check,deleterest,LS_start,LS_Win,LS_Lose,POP1,POP2,POP3, rotateback = true, spawntaxi, spawnpolice, spawntruck,closed,closed2,closing;
+bool doneonce, OP1, OP2, OP3,OP1check, OP2check,OP3check,deleterest,LS_start,LS_Win,LS_Lose,POP1,POP2,POP3, rotateback = true, spawntaxi, spawnpolice, spawntruck,closed,closed2,closing,HTP;
 
 float cposx, cposz, movecar;
 
@@ -1184,6 +1191,17 @@ void Splevel1::Update(double dt)
 					die = false;
 				}
 			}
+			if (posX > 72 && posX < 79.9 && posY > 5 && posY < 12)
+			{
+				HTP = true;
+			}
+			if (HTP == true)
+			{
+				if (posX > 56 && posX < 60 && posY > 8 && posY < 12)
+				{
+					HTP = false;
+				}
+			}
 		}
 		else if (bLButtonState && !Application::IsMousePressed(0))
 		{
@@ -1191,6 +1209,7 @@ void Splevel1::Update(double dt)
 		/*std::cout << "LBUTTON UP" << std::endl;*/
 		}
 	}
+
 
 	// Player get hit by car
 
@@ -2800,7 +2819,12 @@ void Splevel1::Render()
 			RenderMeshOnScreen(meshList[GEO_EMPTYBOX], liftdoor2, 30, 60, 60);
 		}
 		
+		RenderMeshOnScreen(meshList[GEO_HTP], 76, 5, 8, 8, true);
 
+		if (HTP == true)
+		{
+			RenderMeshOnScreen(meshList[GEO_HTPSCREEN], 40, 25, 40, 40);
+		}
 		
 	}
 
