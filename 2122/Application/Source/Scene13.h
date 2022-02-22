@@ -18,6 +18,7 @@ class Scene13 : public Scene
 		GEO_GRASS,
 		GEO_GRASS_V,
 		GEO_CUBE,
+		GEO_Tree,
 		GEO_CUBE_PURPLE,
 		GEO_CUBE_GREEN,
 		GEO_CUBE_BROWN,
@@ -55,9 +56,11 @@ class Scene13 : public Scene
 		GEO_Arms,
 		GEO_TAXI,
 		GEO_TRUCK,
+		GEO_GRASS3D,
 		GEO_POLICE,
 		GEO_ROAD,
 		GEO_LBUILDING1,
+		GEO_STREETLIGHT,
 		GEO_LBUILDING2,
 		GEO_LBUILDING3,
 		GEO_SKYSCRAPER1,
@@ -158,6 +161,10 @@ private:
 	void RenderSkybox();
 	float rotateAngle;
 	float rotateAngleF;
+
+	int scalevall[50];
+	int scalevalgrasss[50];
+
 	float rotateAngleSF;
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
 	void RenderText(Mesh* mesh, std::string text, Color color);

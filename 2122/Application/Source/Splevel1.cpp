@@ -1404,23 +1404,7 @@ void Splevel1::Update(double dt)
 	//NPC interactions
 	//cout << dialoguepart;
 	{
-		static bool BButtonState = false;
-		static bool CButtonState = false;
-		if (camera.position.x > movex - 40 && camera.position.x < movex + 40 && (camera.position.z < 240 && camera.position.z > 160))//L3
-		{
-			RenderTextOnScreen(meshList[GEO_TEXT], "Press 'E' to Interact with NPC", Color(0, 1, 0), 4, 10, 30);
-
-			if (!BButtonState && Application::IsKeyPressed('E'))
-			{
-				NPCInteract = true;
-
-			}
-			else if (BButtonState && !Application::IsKeyPressed('E'))
-			{
-				BButtonState = false;
-			}
-		}
-		else NPCInteract = false;
+		
 		if (NPCInteract == true)
 		{
 			int ran = rand() % 1 + 1;
@@ -1972,7 +1956,6 @@ void Splevel1::Render()
 
 	
 	srand(time(0));
-	RenderMesh(meshList[GEO_AXES], false);
 	RenderSkybox();
 
 	
@@ -2499,6 +2482,29 @@ void Splevel1::Render()
 				RenderTextOnScreen(meshList[GEO_TEXT], "Press 'E' to start phone", Color(0, 1, 0), 4, 10, 30);
 			}
 		}
+
+		// NPC
+		static bool BButtonState = false;
+		static bool CButtonState = false;
+		if (camera.position.x > movex - 40 && camera.position.x < movex + 40 && (camera.position.z < 240 && camera.position.z > 160))//L3
+		{
+			
+			if (NPCInteract == false)
+			{
+				RenderTextOnScreen(meshList[GEO_TEXT], "Press 'E' to Interact with NPC", Color(0, 1, 0), 4, 10, 30);
+			}
+			if (!BButtonState && Application::IsKeyPressed('E'))
+			{
+				NPCInteract = true;
+
+			}
+			else if (BButtonState && !Application::IsKeyPressed('E'))
+			{
+
+				BButtonState = false;
+			}
+		}
+		else NPCInteract = false;
 		
 		//Lovescam mini game
 		if (LS_start == true)
@@ -3596,9 +3602,9 @@ void Splevel1::RenderSkybox()
 	modelStack.PopMatrix();*/
 
 	modelStack.PushMatrix();
-	modelStack.Translate(light[0].position.x, light[0].position.y, light[0].position.z);
+	modelStack.Translate(light[0].position.x, light[0].position.y + 800, light[0].position.z);
 	modelStack.Rotate(180, 0, 180, 180);
-	modelStack.Scale(5, 5, 5);
+	modelStack.Scale(1, 1, 1);
 	RenderMesh(meshList[GEO_LIGHTBALL], false);
 	modelStack.PopMatrix();
 
