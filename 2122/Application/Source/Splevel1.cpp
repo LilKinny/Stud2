@@ -2869,7 +2869,7 @@ void Splevel1::Render()
 			RenderTextOnScreen(meshList[GEO_TEXT], "Reward: +15% income boost for 30s", Color(1, 1, 1), 2, 22, 21);
 			RenderMeshOnScreen(meshList[GEO_EMPTYBOX], 40, 10, 10, 6);
 			RenderTextOnScreen(meshList[GEO_TEXT], "Hooray!", Color(1, 1, 1), 2, 37, 9);
-			Manager.MinigameBuffs += 15;
+			
 		}
 		else if (lose == true)
 		{
@@ -3652,14 +3652,6 @@ void Splevel1::Render()
 			RenderTextOnScreen(meshList[GEO_TEXT], "Computer", Color(1, 0, 0), 1.5, 19, 43);
 			modelStack.PopMatrix();
 		}
-
-		modelStack.PushMatrix();
-		modelStack.Translate(0, 0, -10);
-		modelStack.Rotate(180, 0, 1, 1);
-		modelStack.Scale(5, 5, 5);
-		RenderText(meshList[GEO_TEXT], "Hello world", Color(0, 1, 0));
-		modelStack.PopMatrix();
-
 	}
 
 	
@@ -4348,6 +4340,7 @@ void Splevel1::UpdateMainControls()
 			else if (win == true)
 			{
 				PlaySound(TEXT("WinMinigame.wav"), NULL, SND_ASYNC);
+				Manager.MinigameBuffs += 15;
 				win = false;
 				timerstart = false;
 				clearpolice = false;
