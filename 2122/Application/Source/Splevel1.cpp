@@ -435,6 +435,10 @@ void Splevel1::Init()
 	meshList[GEO_ROADTURN] = MeshBuilder::GenerateOBJMTL("Turn", "OBJ//road_bendSquare.obj", "OBJ//road_bendSquare.mtl");
 	meshList[GEO_ROADTSECT] = MeshBuilder::GenerateOBJMTL("Tsect", "OBJ//road_drivewaySingle.obj", "OBJ//road_drivewaySingle.mtl");
 	meshList[GEO_STREETLIGHT] = MeshBuilder::GenerateOBJMTL("streetlight", "OBJ//streetlight.obj", "OBJ//streetlight.mtl");
+	meshList[GEO_CASH] = MeshBuilder::GenerateOBJMTL("streetlight", "OBJ//Cash.obj", "OBJ//Cash.mtl");
+	meshList[GEO_MONEYCAT] = MeshBuilder::GenerateOBJMTL("streetlight", "OBJ//Moneycat.obj", "OBJ//Moneycat.mtl");
+	meshList[GEO_MONEYPLANT] = MeshBuilder::GenerateOBJMTL("streetlight", "OBJ//Moneyplant.obj", "OBJ//Moneyplant.mtl");
+
 
 	meshList[GEO_Lift] = MeshBuilder::GenerateOBJ("modelBUIDLING", "OBJ//Elevator.obj");
 	meshList[GEO_Lift]->textureID = LoadTGA("Image//Elevator.tga");
@@ -2127,7 +2131,44 @@ void Splevel1::Render()
 		RenderMesh(meshList[GEO_SBUILDING1], true);
 		modelStack.PopMatrix();
 	}
-
+	//upgrades
+	{
+		if (Manager.MoneyPlantUpgrade == 1)
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(-50, 0, 150);
+			modelStack.Scale(5,7,5);
+			{
+				modelStack.PushMatrix();
+				modelStack.Translate(0, 3, 2);
+				modelStack.Rotate(90, 0, 1, 0);
+				modelStack.Rotate(90, 0, 0, 1);
+				modelStack.Rotate(rotateAngle, 0, 1, 0);
+				modelStack.Scale(0.7, 0.7, 0.7);
+				RenderMesh(meshList[GEO_CASH], true);
+				modelStack.PopMatrix();
+			}
+			RenderMesh(meshList[GEO_MONEYPLANT], true);
+			modelStack.PopMatrix();
+		}
+		if (Manager.LuckyCatUpgrade == 1)
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(50, -7, 150);
+			modelStack.Rotate(90, 0, 1, 0);
+			modelStack.Scale(10, 10, 10);
+			{
+				modelStack.PushMatrix();
+				modelStack.Translate(0, 3, 0);
+				modelStack.Rotate(rotateAngle, 0, 1, 0);
+				modelStack.Scale(0.3, 0.3, 0.3);
+				RenderMesh(meshList[GEO_CASH], true);
+				modelStack.PopMatrix();
+			}
+			RenderMesh(meshList[GEO_MONEYCAT], true);
+			modelStack.PopMatrix();
+		}
+	}
 	//Outside Border
 	{
 		//HighWay Gate

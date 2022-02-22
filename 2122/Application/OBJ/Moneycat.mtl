@@ -1,0 +1,52 @@
+# Blender MTL File: 'None'
+# Material Count: 13
+
+newmtl Material.021
+Kd 1.000000 0.718579 0.188531
+
+
+newmtl Material.022
+Kd 0.000000 0.000000 0.000000
+
+
+newmtl Material.023
+Kd 0.000000 0.000000 0.000000
+
+
+newmtl Material.024
+Kd 1.000000 0.731180 0.182650
+
+newmtl Material.025
+Kd 0.000000 0.000000 0.000000
+
+
+newmtl Material.026
+Kd 0.000000 0.000000 0.000000
+
+
+newmtl Material.027
+Kd 1.000000 0.691910 0.188766
+
+
+newmtl Material.028
+Kd 0.000000 0.000000 0.000000
+
+
+newmtl Material.029
+Kd 0.000000 0.000000 0.000000
+
+
+newmtl Material.030
+Kd 0.000000 0.000000 0.000000
+
+illum 2
+
+newmtl Material.031
+Kd 1.000000 1.000000 1.000000
+
+
+newmtl Material.032
+Kd 0.000000 0.000000 0.000000
+
+newmtl Material.033
+Kd 1.000000 1.000000 1.000000
