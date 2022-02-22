@@ -211,7 +211,7 @@ private:
 	float liftdoor2;
 	bool bEnableLight;
 	bool questions,Pqeustions;
-
+	std::string NameList[36];
 	//void Playsoundfile(string filename)	
 	//{
 	//	mciSendString("play mp3", NULL, 0, NULL);
@@ -262,6 +262,7 @@ private:
 	void RenderText(Mesh* mesh, std::string text, Color color);
 	void RenderMeshOnScreen(Mesh* mesh, int x, int y, int sizex, int sizey, bool RotateX = false);
 	int Random(int range);
+	void InitName(void);
 	Camera3 camera;
 };
 

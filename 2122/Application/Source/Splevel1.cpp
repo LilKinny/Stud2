@@ -486,6 +486,7 @@ void Splevel1::Init()
 	projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 100000.f);
 	projectionStack.LoadMatrix(projection);
 	liftdoor2 = 80;
+	InitName();
 }
 
 bool setuppolice = false, clearpolice, paper1, paper2, paper3, paper4, timerstart, win, lose, NPC, startlaptop = false, evidence_won_bonus, die;
@@ -499,7 +500,6 @@ bool lvl2, lvl3,lvl1=true, playonce, NPCInteract;
 bool prologue = true, doneonce, OP1, OP2, OP3,OP1check, OP2check,OP3check,deleterest,LS_start,LS_Win,LS_Lose,POP1,POP2,POP3, rotateback = true, spawntaxi, spawnpolice, spawntruck,closed,closed2,closing, HTP;
 
 float cposx, cposz, movecar;
-
 void Splevel1::Update(double dt)
 {
 	Manager.UpdateMoney(dt);
@@ -1902,7 +1902,6 @@ void Splevel1::Update(double dt)
 		}
 		else bLButtonState = false;
 	}
-	
 }
 
 	
@@ -1957,8 +1956,6 @@ void Splevel1::Render()
 	
 	srand(time(0));
 	RenderSkybox();
-
-	
 
 	//Render trees
 	{
@@ -2089,64 +2086,6 @@ void Splevel1::Render()
 			modelStack.Scale(scalevalgrass[i], scalevalgrass[i], scalevalgrass[i]);
 
 			RenderMesh(meshList[GEO_GRASS3D], true);
-			modelStack.PopMatrix();
-		}
-	}
-	
-
-	//WorkStation Rendering
-	{
-		int WorkStationPositionX, WorkStationPositionY, WorkStationPositionZ;
-		WorkStationPositionX = WorkStationPositionY = WorkStationPositionZ = 0;
-		for (int i = 0; i < (Manager.PrestigeLvl + 1) * 6; ++i)
-		{
-			/*std::cout << i % 6 << std::endl;*/
-			if (i < 6)
-			{
-				WorkStationPositionY = 0;
-			}
-			else if (i < 12)
-			{
-				WorkStationPositionY = 50;
-			}
-			else if (i < 18)
-			{
-				WorkStationPositionY = 100;
-			}
-			if (i % 6 == 0)
-			{
-				WorkStationPositionX = -75;
-				WorkStationPositionZ = 40;
-			}
-			else if (i % 6 == 1)
-			{
-				WorkStationPositionX = -75;
-				WorkStationPositionZ = 20;
-			}
-			else if (i % 6 == 2)
-			{
-				WorkStationPositionX = -75;
-				WorkStationPositionZ = 0;
-			}
-			else if (i % 6 == 3)
-			{
-				WorkStationPositionX = -75;
-				WorkStationPositionZ = -30;
-			}
-			else if (i % 6 == 4)
-			{
-				WorkStationPositionX = -75;
-				WorkStationPositionZ = -50;
-			}
-			else if (i % 6 == 5)
-			{
-				WorkStationPositionX = -75;
-				WorkStationPositionZ = -70;
-			}
-			modelStack.PushMatrix();
-			modelStack.Scale(1, 1, 1);
-			modelStack.Translate(WorkStationPositionX, WorkStationPositionY, WorkStationPositionZ);
-			RenderWorkStation(i);
 			modelStack.PopMatrix();
 		}
 	}
@@ -2467,6 +2406,48 @@ void Splevel1::Render()
 
 	packagedieanimation();
 
+	//streetlight
+	for (int i = 0; i < 5; i++)
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(-400 + (i * 300), 0, 290);
+		/*modelStack.Rotate(90, 0, 1, 0);
+		modelStack.Rotate(90, 1, 0, 0);*/
+		modelStack.Scale(150, 250, 150);
+		RenderMesh(meshList[GEO_STREETLIGHT], true);
+		modelStack.PopMatrix();
+	}
+	for (int i = 0; i < 5; i++)
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(-550 + (i * 300), 0, 210);
+		modelStack.Rotate(180, 0, 1, 0);
+
+		modelStack.Scale(150, 250, 150);
+		RenderMesh(meshList[GEO_STREETLIGHT], true);
+		modelStack.PopMatrix();
+	}
+
+	if (NPC == true)
+	{
+		//Render NPC
+		modelStack.PushMatrix();
+		modelStack.Translate(movex, 5, 200);
+		modelStack.Scale(5, 5, 5);
+		RenderMesh(meshList[GEO_Body], false);
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(0, 0, 0);
+			modelStack.Scale(1, 1, 1);
+			RenderMesh(meshList[GEO_Head], false);
+			modelStack.PopMatrix();
+		}
+		modelStack.PopMatrix();
+	}
+
+
+
+
 	//Building
 	{
 		modelStack.PushMatrix();
@@ -2550,46 +2531,63 @@ void Splevel1::Render()
 	}
 
 
-
-
-	//streetlight
-	for (int i = 0; i < 5; i++)
+	//WorkStation Rendering
 	{
-		modelStack.PushMatrix();
-		modelStack.Translate(-400 + (i * 300), 0, 290);
-		/*modelStack.Rotate(90, 0, 1, 0);
-		modelStack.Rotate(90, 1, 0, 0);*/
-		modelStack.Scale(150, 250, 150);
-		RenderMesh(meshList[GEO_STREETLIGHT], true);
-		modelStack.PopMatrix();
-	}
-	for (int i = 0; i < 5; i++)
-	{
-		modelStack.PushMatrix();
-		modelStack.Translate(-550 + (i * 300), 0, 210);
-		modelStack.Rotate(180, 0, 1, 0);
-		
-		modelStack.Scale(150, 250, 150);
-		RenderMesh(meshList[GEO_STREETLIGHT], true);
-		modelStack.PopMatrix();
-	}
-
-	if (NPC == true)
-	{
-		//Render NPC
-		modelStack.PushMatrix();
-		modelStack.Translate(movex, 5, 200);
-		modelStack.Scale(5, 5, 5);
-		RenderMesh(meshList[GEO_Body], false);
+		int WorkStationPositionX, WorkStationPositionY, WorkStationPositionZ;
+		WorkStationPositionX = WorkStationPositionY = WorkStationPositionZ = 0;
+		for (int i = 0; i < (Manager.PrestigeLvl + 1) * 6; ++i)
 		{
+			/*std::cout << i % 6 << std::endl;*/
+			if (i < 6)
+			{
+				WorkStationPositionY = 0;
+			}
+			else if (i < 12)
+			{
+				WorkStationPositionY = 50;
+			}
+			else if (i < 18)
+			{
+				WorkStationPositionY = 100;
+			}
+			if (i % 6 == 0)
+			{
+				WorkStationPositionX = -75;
+				WorkStationPositionZ = 40;
+			}
+			else if (i % 6 == 1)
+			{
+				WorkStationPositionX = -75;
+				WorkStationPositionZ = 20;
+			}
+			else if (i % 6 == 2)
+			{
+				WorkStationPositionX = -75;
+				WorkStationPositionZ = 0;
+			}
+			else if (i % 6 == 3)
+			{
+				WorkStationPositionX = -75;
+				WorkStationPositionZ = -30;
+			}
+			else if (i % 6 == 4)
+			{
+				WorkStationPositionX = -75;
+				WorkStationPositionZ = -50;
+			}
+			else if (i % 6 == 5)
+			{
+				WorkStationPositionX = -75;
+				WorkStationPositionZ = -70;
+			}
 			modelStack.PushMatrix();
-			modelStack.Translate(0, 0, 0);
 			modelStack.Scale(1, 1, 1);
-			RenderMesh(meshList[GEO_Head], false);
+			modelStack.Translate(WorkStationPositionX, WorkStationPositionY, WorkStationPositionZ);
+			RenderWorkStation(i);
 			modelStack.PopMatrix();
 		}
-		modelStack.PopMatrix();
 	}
+
 
 	//kjcode
 	{
@@ -3075,7 +3073,7 @@ void Splevel1::Render()
 						RenderMeshOnScreen(meshList[GEO_GREENBUTTON], 56, 29, 24, 3, true);
 						modelStack.PopMatrix();
 					}
-					if (Manager.UnlockMoneyPlant(false) == 1)
+					if (Manager.UnlockMoneyPlant(false) == 1 )
 					{
 						//GreenButton Left Bot
 						modelStack.PushMatrix();
@@ -3702,6 +3700,8 @@ void Splevel1::Render()
 	/*RenderTextOnScreen(meshList[GEO_TEXT], "Pos Y puzzle:" + std::to_string(puzzle.playeractualpoy), Color(1, 1, 0), 2, 0, 20);
 	RenderTextOnScreen(meshList[GEO_TEXT], "Pos X puzzle: " + std::to_string(puzzle.playeractualpox), Color(1, 1, 0), 2, 0, 23);*/
 
+
+
 }
 
 void Splevel1::RenderSkybox()
@@ -3824,8 +3824,16 @@ void Splevel1::RenderWorkStation(int WorkStation)
 			RenderMesh(meshList[GEO_Body], false);
 			{
 				modelStack.PushMatrix();
-				modelStack.Translate(0, 0, 0);
-				modelStack.Scale(1, 1, 1);
+				modelStack.Scale(0.3, 0.3, 0.3);
+				modelStack.Rotate(90, 0, 1, 0);
+				modelStack.Translate(-5, 20, 0);
+				RenderText(meshList[GEO_TEXT], NameList[WorkStation+18], Color(1, 1, 1));
+				modelStack.PushMatrix();
+				modelStack.Translate(0, 2, 0);
+				RenderText(meshList[GEO_TEXT], NameList[WorkStation], Color(1, 1, 1));
+				modelStack.PopMatrix();
+				modelStack.PopMatrix();
+
 				RenderMesh(meshList[GEO_Head], false);
 				{
 					modelStack.PushMatrix();
@@ -3836,7 +3844,6 @@ void Splevel1::RenderWorkStation(int WorkStation)
 					RenderMesh(meshList[GEO_Arms], false);
 					modelStack.PopMatrix();
 				}
-				modelStack.PopMatrix();
 				//Render Desk and Equipment
 				modelStack.PushMatrix();
 				modelStack.Rotate(90, 0, 1, 0);
@@ -4680,6 +4687,15 @@ void Splevel1::RenderMeshOnScreen(Mesh* mesh, int x, int y, int sizex, int sizey
 int Splevel1::Random(int range)
 {
 	srand(time(0));  // Initialize random number generator.
-
 	return rand()%1 + range;
+}
+
+
+void Splevel1::InitName(void)
+{
+	std::string Temp[36] = { "Watson","Pat","Frankie","Valentine","Sidney","Wilson","Tilden","Sanford","Madison","Sid","Kirby","Peter","Maurice","Hugh","Almer","Wiley","John","Perry","Pruitt","Roger","Hayes","Parks","Flowers","Russell","Armstrong","Dillon", "Barnett","Roberson","Mays","Sims","Kelley", "Hickman","Mueller","Tyler","Cena","Johnson"};
+	for (int i = 0; i < 36; ++i)
+	{
+		NameList[i] = Temp[i];
+	}
 }
