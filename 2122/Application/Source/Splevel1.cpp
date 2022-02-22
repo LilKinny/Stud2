@@ -358,12 +358,10 @@ void Splevel1::Init()
 
 	meshList[GEO_UPGRADETEXT] = MeshBuilder::GenerateRec("UpgradeText", Color(1, 1, 1), 5.f, 1.f);
 	meshList[GEO_UPGRADETEXT]->textureID = LoadTGA("Image//UpgradeText.tga");
-	/*
-	meshList[GEO_NYP] = MeshBuilder::GenerateQuad("nyplogo", Color(1, 1, 1), 1.f);
-	meshList[GEO_NYP]->textureID = LoadTGA("Image//NYP.tga");
 
-	meshList[GEO_CUBE] = MeshBuilder::GenerateCube("Cube", Color(1, 1, 1), 1.f);
- */
+	//meshList[GEO_CAT] = MeshBuilder::GenerateOBJ("Cat", "OBJ//cat.obj");
+	//meshList[GEO_CAT]->textureID = LoadTGA("Image//Gold.tga");
+
 	meshList[GEO_TITLEBUTTONS] = MeshBuilder::GenerateQuad("quad", Color(1, 1, 1), 1.f);
 	meshList[GEO_TITLEBUTTONS]->textureID = LoadTGA("Image//TitleButton.tga");
 
@@ -470,8 +468,10 @@ void Splevel1::Init()
 
 	meshList[GEO_CHEST] = MeshBuilder::GenerateOBJMTL("Grass3D", "OBJ//chest.obj", "OBJ//chest.mtl");
 
+	meshList[GEO_HIGHHOLE] = MeshBuilder::GenerateOBJMTL("HighHole", "OBJ//HighHole.obj", "OBJ//HighHole.mtl");
+
 	Mtx44 projection;
-	projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 10000.f);
+	projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 100000.f);
 	projectionStack.LoadMatrix(projection);
 	liftdoor2 = 80;
 }
@@ -1849,70 +1849,8 @@ void Splevel1::Update(double dt)
 
 void Splevel1::Render()
 {
-	
-	//// Render VBO here
-	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	//RenderSkybox();
-	//RenderLevel();
-	////Temp variables
-	//Mtx44 translate, rotate, scale;
-	//Mtx44 MVP;
-	////These will be replaced by matrix stack soon
-	//Mtx44 model;
-	//Mtx44 view;
-	//Mtx44 projection;
-
-	////Set all matrices to identity
-	//translate.SetToIdentity();
-	//rotate.SetToIdentity();
-	//scale.SetToIdentity();
-	//model.SetToIdentity();
-
-	////Set view matrix using camera settings
-	//viewStack.LoadIdentity();
-	//viewStack.LookAt(
-
-	//	camera.position.x, camera.position.y, camera.position.z,
-	//	camera.target.x, camera.target.y, camera.target.z,
-	//	camera.up.x, camera.up.y, camera.up.z);
-	//modelStack.LoadIdentity();
-	//Mtx44 mvp = projectionStack.Top() * viewStack.Top() * modelStack.Top();
-
-	//Position lightPosition_cameraspace = viewStack.Top() * light[0].position;
-	//glUniform3fv(m_parameters[U_LIGHT0_POSITION], 1, &lightPosition_cameraspace.x);
-	//
-	//if (light[0].type == Light::LIGHT_DIRECTIONAL)
-	//{
-	//	Vector3 lightDir(light[0].position.x, light[0].position.y, light[0].position.z);
-	//	Vector3 lightDirection_cameraspace = viewStack.Top() * lightDir;
-	//	glUniform3fv(m_parameters[U_LIGHT0_POSITION], 1, &lightDirection_cameraspace.x);
-	//}
-	//else if (light[0].type == Light::LIGHT_SPOT)
-	//{
-	//	Position lightPosition_cameraspace = viewStack.Top() * light[0].position;
-	//	glUniform3fv(m_parameters[U_LIGHT0_POSITION], 1, &lightPosition_cameraspace.x);
-	//	Vector3 spotDirection_cameraspace = viewStack.Top() * light[0].spotDirection;
-	//	glUniform3fv(m_parameters[U_LIGHT0_SPOTDIRECTION], 1, &spotDirection_cameraspace.x);
-	//}
-	//else
-	//{
-	//	Position lightPosition_cameraspace = viewStack.Top() * light[0].position;
-	//	glUniform3fv(m_parameters[U_LIGHT0_POSITION], 1, &lightPosition_cameraspace.x);
-	//}
-
-	//modelStack.PushMatrix();
-	////scale, translate, rotate
-	/*------------------------------------------PREVIOUS CODE---------------------------------*/
-
-
 	//Clear color & depth buffer every frame
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-	//glEnableVertexAttribArray(0); // 1st attribute buffer : vertices
-	//glEnableVertexAttribArray(1);
-
-	
-
 
 	viewStack.LoadIdentity();
 	viewStack.LookAt(camera.position.x, camera.position.y, camera.position.z,camera.target.x, camera.target.y, camera.target.z,camera.up.x, camera.up.y, camera.up.z);
@@ -2187,6 +2125,119 @@ void Splevel1::Render()
 		modelStack.Scale(200, 200, 200);
 		RenderMesh(meshList[GEO_SBUILDING1], true);
 		modelStack.PopMatrix();
+	}
+
+	//Outside Border
+	{
+		//HighWay Gate
+		modelStack.PushMatrix();
+		modelStack.Scale(50, 120, 180);
+		modelStack.Rotate(90, 0, 1, 0);
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(-1.4, 0, 21.5);
+			RenderMesh(meshList[GEO_HIGHHOLE], true);
+			modelStack.PopMatrix();
+			modelStack.PushMatrix();
+			modelStack.Translate(-1.4, 0, -21.5);
+			RenderMesh(meshList[GEO_HIGHHOLE], true);
+			modelStack.PopMatrix();
+		}
+		modelStack.PopMatrix();
+
+		//Grass Side
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(300, 0, 600);
+			modelStack.Scale(300, 180, 180);
+			modelStack.Rotate(180, 0, 1, 0);
+			RenderMesh(meshList[GEO_LBUILDING2], true);
+			modelStack.PopMatrix();
+
+			modelStack.PushMatrix();
+			modelStack.Translate(-300, 0, 600);
+			modelStack.Scale(300, 180, 180);
+			modelStack.Rotate(180, 0, 1, 0);
+			RenderMesh(meshList[GEO_LBUILDING2], true);
+			modelStack.PopMatrix();
+
+			modelStack.PushMatrix();
+			modelStack.Rotate(180, 0, 1, 0);
+			modelStack.Translate(0, 0, -650);
+			modelStack.Scale(300, 180, 180);
+			RenderMesh(meshList[GEO_LBUILDING3], true);
+			modelStack.PopMatrix();
+
+			modelStack.PushMatrix();
+			modelStack.Translate(-650, 0, 650);
+			modelStack.Scale(180, 180, 180);
+			RenderMesh(meshList[GEO_LBUILDING1], true);
+			modelStack.PopMatrix();
+
+			modelStack.PushMatrix();
+			modelStack.Translate(650, 0, 650);
+			modelStack.Scale(180, 180, 180);
+			RenderMesh(meshList[GEO_LBUILDING1], true);
+			modelStack.PopMatrix();
+
+			modelStack.PushMatrix();
+			modelStack.Translate(450, 0, 900);
+			modelStack.Scale(120, 120, 120);
+			modelStack.Rotate(180, 0, 1, 0);
+			RenderMesh(meshList[GEO_SKYSCRAPER1], true);
+			modelStack.PopMatrix();
+
+			modelStack.PushMatrix();
+			modelStack.Translate(-450, 0, 900);
+			modelStack.Scale(120, 120, 120);
+			modelStack.Rotate(180, 0, 1, 0);
+			RenderMesh(meshList[GEO_SKYSCRAPER1], true);
+			modelStack.PopMatrix();
+		}
+		//Building Side
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(300, 0, -600);
+			modelStack.Scale(300, 180, 180);
+			RenderMesh(meshList[GEO_LBUILDING2], true);
+			modelStack.PopMatrix();
+
+			modelStack.PushMatrix();
+			modelStack.Translate(-300, 0, -600);
+			modelStack.Scale(300, 180, 180);
+			RenderMesh(meshList[GEO_LBUILDING2], true);
+			modelStack.PopMatrix();
+
+			modelStack.PushMatrix();
+			modelStack.Translate(0, 0, -650);
+			modelStack.Scale(300, 180, 180);
+			RenderMesh(meshList[GEO_LBUILDING3], true);
+			modelStack.PopMatrix();
+
+			modelStack.PushMatrix();
+			modelStack.Translate(-650, 0, -650);
+			modelStack.Scale(180, 180, 180);
+			RenderMesh(meshList[GEO_LBUILDING1], true);
+			modelStack.PopMatrix();
+
+			modelStack.PushMatrix();
+			modelStack.Translate(650, 0, -650);
+			modelStack.Scale(180, 180, 180);
+			RenderMesh(meshList[GEO_LBUILDING1], true);
+			modelStack.PopMatrix();
+
+			modelStack.PushMatrix();
+			modelStack.Translate(450, 0, -900);
+			modelStack.Scale(120, 120, 120);
+			RenderMesh(meshList[GEO_SKYSCRAPER1], true);
+			modelStack.PopMatrix();
+
+			modelStack.PushMatrix();
+			modelStack.Translate(-450, 0, -900);
+			modelStack.Scale(120, 120, 120);
+			RenderMesh(meshList[GEO_SKYSCRAPER1], true);
+			modelStack.PopMatrix();
+		}
 	}
 
 	//Road and cars
@@ -3510,57 +3561,45 @@ void Splevel1::Render()
 
 void Splevel1::RenderSkybox()
 {
-
-	
-
-	/*modelStack.PushMatrix();
-	modelStack.Translate(0, 0, -10);
-	modelStack.Rotate(180, 0, 180, 180);
-	modelStack.Scale(500, 500, 500);
-	RenderMesh(meshList[GEO_QUAD], false);
-	modelStack.PopMatrix();*/
-
-
-
 	modelStack.PushMatrix();
-	modelStack.Translate(cposx, 0, -998 + cposz);
-	modelStack.Scale(2000, 2000, 2000);
+	modelStack.Translate(cposx, 0, -9979 + cposz);
+	modelStack.Scale(20000, 20000, 20000);
 	RenderMesh(meshList[GEO_FRONT], false);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(cposx, 0, 998 + cposz);
+	modelStack.Translate(cposx, 0, 9979 + cposz);
 	modelStack.Rotate(180, 0, 1, 0);
-	modelStack.Scale(2000, 2000, 2000);
+	modelStack.Scale(20000, 20000, 20000);
 	RenderMesh(meshList[GEO_BACK], false);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(-998 + cposx, 0, cposz);
+	modelStack.Translate(-9979 + cposx, 0, cposz);
 	modelStack.Rotate(90, 0, 1, 0);
-	modelStack.Scale(2000, 2000, 2000);
+	modelStack.Scale(20000, 20000, 20000);
 	RenderMesh(meshList[GEO_LEFT], false);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(998 + cposx, 0, cposz);
+	modelStack.Translate(9979 + cposx, 0, cposz);
 	modelStack.Rotate(-90, 0, 1, 0);
-	modelStack.Scale(2000, 2000, 2000);
+	modelStack.Scale(20000, 20000, 20000);
 	RenderMesh(meshList[GEO_RIGHT], false);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(cposx, 998, cposz);
+	modelStack.Translate(cposx, 9979, cposz);
 	modelStack.Rotate(90, 1, 0, 0);
-	modelStack.Scale(2000, 2000, 2000);
+	modelStack.Scale(20000, 20000, 20000);
 	RenderMesh(meshList[GEO_TOP], false);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(cposx, -998, cposz);
+	modelStack.Translate(cposx, -9979, cposz);
 	modelStack.Rotate(-90, 0, 1, 0);
 	modelStack.Rotate(-90, 1, 0, 0);
-	modelStack.Scale(2000, 2000, 2000);
+	modelStack.Scale(20000, 20000, 20000);
 	RenderMesh(meshList[GEO_BOTTOM], false);
 	modelStack.PopMatrix();
 

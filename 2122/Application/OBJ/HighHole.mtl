@@ -1,0 +1,8 @@
+# Blender MTL File: 'None'
+# Material Count: 2
+
+newmtl Black
+Kd 0.000000 0.000000 0.000000
+
+newmtl metal
+Kd 0.784314 0.807843 0.890196
