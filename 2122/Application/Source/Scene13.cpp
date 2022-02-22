@@ -317,8 +317,11 @@ void Scene13::Init()
 	meshList[GEO_Laptop] = MeshBuilder::GenerateOBJMTL("Laptop", "OBJ//Laptop.obj", "OBJ//Laptop.mtl");
 	meshList[GEO_Phone1] = MeshBuilder::GenerateOBJMTL("Phone1", "OBJ//Phone1.obj", "OBJ//Phone1.mtl");
 	meshList[GEO_Body] = MeshBuilder::GenerateOBJMTL("Body", "OBJ//Body.obj", "OBJ//Body.mtl");
+	meshList[GEO_Body]->textureID = LoadTGA("Image//Body.tga");
 	meshList[GEO_Head] = MeshBuilder::GenerateOBJMTL("Head", "OBJ//Head.obj", "OBJ//Head.mtl");
+	meshList[GEO_Head]->textureID = LoadTGA("Image//Skin.tga");
 	meshList[GEO_Arms] = MeshBuilder::GenerateOBJMTL("Arms", "OBJ//Arms.obj", "OBJ//Arms.mtl");
+	meshList[GEO_Arms]->textureID = LoadTGA("Image//Skin.tga");
 
 	meshList[GEO_TAXI] = MeshBuilder::GenerateOBJMTL("Tree", "OBJ//taxi.obj", "OBJ//taxi.mtl");
 	meshList[GEO_POLICE] = MeshBuilder::GenerateOBJMTL("Tree", "OBJ//police.obj", "OBJ//police.mtl");
@@ -802,10 +805,10 @@ void Scene13::RenderSkybox()
 	modelStack.PopMatrix();*/
 
 	modelStack.PushMatrix();
-	modelStack.Translate(0, 50, 0);
+	modelStack.Translate(0, -50, 0);
 	modelStack.Rotate(180, 0, 180, 180);
-	modelStack.Scale(5, 5, 5);
-	RenderMesh(meshList[GEO_LIGHTBALL], true);
+	modelStack.Scale(1, 1, 1);
+	RenderMesh(meshList[GEO_LIGHTBALL], false);
 	modelStack.PopMatrix();
 
 	/*modelStack.PushMatrix();
