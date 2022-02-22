@@ -418,7 +418,6 @@ void Splevel1::Init()
 	meshList[GEO_Phone1] = MeshBuilder::GenerateOBJMTL("Phone1", "OBJ//PhoneLVL1.obj", "OBJ//PhoneLVL1.mtl");
 	meshList[GEO_Phone2] = MeshBuilder::GenerateOBJMTL("Phone1", "OBJ//Phone1.obj", "OBJ//Phone1.mtl");
 	meshList[GEO_Phone3] = MeshBuilder::GenerateOBJMTL("Phone1", "OBJ//PhoneLVL3.obj", "OBJ//PhoneLVL3.mtl");
-	meshList[GEO_Body] = MeshBuilder::GenerateOBJMTL("Body", "OBJ//Body.obj", "OBJ//Body.mtl");
 	meshList[GEO_Body]->textureID = LoadTGA("Image//Body.tga");
 	meshList[GEO_Head] = MeshBuilder::GenerateOBJMTL("Head", "OBJ//Head.obj", "OBJ//Head.mtl");
 	meshList[GEO_Head]->textureID = LoadTGA("Image//Skin.tga");
@@ -430,6 +429,7 @@ void Splevel1::Init()
 	meshList[GEO_ROAD] = MeshBuilder::GenerateOBJMTL("Tree", "OBJ//road_straight.obj", "OBJ//road_straight.mtl");
 	meshList[GEO_ROADTURN] = MeshBuilder::GenerateOBJMTL("Turn", "OBJ//road_bendSquare.obj", "OBJ//road_bendSquare.mtl");
 	meshList[GEO_ROADTSECT] = MeshBuilder::GenerateOBJMTL("Tsect", "OBJ//road_drivewaySingle.obj", "OBJ//road_drivewaySingle.mtl");
+
 	meshList[GEO_STREETLIGHT] = MeshBuilder::GenerateOBJMTL("streetlight", "OBJ//streetlight.obj", "OBJ//streetlight.mtl");
 
 	meshList[GEO_Lift] = MeshBuilder::GenerateOBJ("modelBUIDLING", "OBJ//Elevator.obj");
@@ -4270,8 +4270,8 @@ void Splevel1::RenderCarepackage()
 	}
 	if (carepackage->notitext == true)
 	{
-		RenderMeshOnScreen(meshList[GEO_EMPTYBOX], 40, 15, 45, 15);
-		RenderTextOnScreen(meshList[GEO_TEXT], "A CAREPACKAGE HAS DROPPED SOMEWHERE OUTSIDE!", Color(1, 1, 1), 2, 18, 15);
+		RenderMeshOnScreen(meshList[GEO_EMPTYBOX], 40, 25, 45, 15);
+		RenderTextOnScreen(meshList[GEO_TEXT], "A CAREPACKAGE HAS DROPPED SOMEWHERE OUTSIDE!", Color(1, 1, 1), 2, 18, 25);
 
 	}
 	if (carepackage->pickuptext == true)
