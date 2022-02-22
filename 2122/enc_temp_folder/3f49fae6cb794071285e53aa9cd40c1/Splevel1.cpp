@@ -284,8 +284,6 @@ void Splevel1::Init()
 
 	packagetimer = 60;
 
-	packagecooltimer = 15;
-
 	//Initialize camera settings
 	camera.Init(Vector3(0, 30, 345), Vector3(0, 0, 0), Vector3(0, 1, 0));
 
@@ -420,7 +418,6 @@ void Splevel1::Init()
 	meshList[GEO_Phone1] = MeshBuilder::GenerateOBJMTL("Phone1", "OBJ//PhoneLVL1.obj", "OBJ//PhoneLVL1.mtl");
 	meshList[GEO_Phone2] = MeshBuilder::GenerateOBJMTL("Phone1", "OBJ//Phone1.obj", "OBJ//Phone1.mtl");
 	meshList[GEO_Phone3] = MeshBuilder::GenerateOBJMTL("Phone1", "OBJ//PhoneLVL3.obj", "OBJ//PhoneLVL3.mtl");
-	meshList[GEO_Body] = MeshBuilder::GenerateOBJMTL("Body", "OBJ//Body.obj", "OBJ//Body.mtl");
 	meshList[GEO_Body]->textureID = LoadTGA("Image//Body.tga");
 	meshList[GEO_Head] = MeshBuilder::GenerateOBJMTL("Head", "OBJ//Head.obj", "OBJ//Head.mtl");
 	meshList[GEO_Head]->textureID = LoadTGA("Image//Skin.tga");
@@ -432,6 +429,7 @@ void Splevel1::Init()
 	meshList[GEO_ROAD] = MeshBuilder::GenerateOBJMTL("Tree", "OBJ//road_straight.obj", "OBJ//road_straight.mtl");
 	meshList[GEO_ROADTURN] = MeshBuilder::GenerateOBJMTL("Turn", "OBJ//road_bendSquare.obj", "OBJ//road_bendSquare.mtl");
 	meshList[GEO_ROADTSECT] = MeshBuilder::GenerateOBJMTL("Tsect", "OBJ//road_drivewaySingle.obj", "OBJ//road_drivewaySingle.mtl");
+
 	meshList[GEO_STREETLIGHT] = MeshBuilder::GenerateOBJMTL("streetlight", "OBJ//streetlight.obj", "OBJ//streetlight.mtl");
 
 	meshList[GEO_Lift] = MeshBuilder::GenerateOBJ("modelBUIDLING", "OBJ//Elevator.obj");
@@ -495,20 +493,13 @@ void Splevel1::Update(double dt)
 	rotateangle = rotateangle + 0.1;
 
 	int carepackagerand;
-	carepackagerand = (rand() % 100) + 1;
-
-	if (carepackage->active == false)
-	{
-		packagecooltimer -= dt;
-	}
+	carepackagerand = (rand() % 20) + 1;
 
 	
-	if (carepackagerand == 69 && carepackage->active == false && packagecooltimer < 0)
+	if(carepackagerand == 5 && carepackage->active == false && NPCInteract == false)
 	{
 		carepackage->reset(-430,430,307,429);
 		packagetimer = 60;
-		packagecooltimer = 15;
-
 		carepackage->active = true;
 		carepackage->notitext = true;
 		
@@ -988,17 +979,17 @@ void Splevel1::Update(double dt)
 
 			if (OP1 == true)
 			{
-				if (posX > 47 && posX < 62 && (posY > 47 && posY < 62))//op1
+				if (posX > 47 && posX < 62 && (posY > 42 && posY < 55))//op1
 				{
 					questions = false;
 					LS_Win = true;
 				}
-				else if (posX > 47 && posX < 62 && (posY > 27 && posY < 40))//op2
+				else if (posX > 47 && posX < 62 && (posY > 25 && posY < 37))//op2
 				{
 					questions = false;
 					LS_Lose = true;
 				}
-				else if (posX > 47 && posX < 62 && (posY > 10 && posY < 22))//op3
+				else if (posX > 47 && posX < 62 && (posY > 8 && posY < 20))//op3
 				{
 					questions = false;
 					LS_Lose = true;
@@ -1006,17 +997,17 @@ void Splevel1::Update(double dt)
 			}
 			if (OP2 == true)
 			{
-				if (posX > 47 && posX < 62 && (posY > 27 && posY < 40))//op2
+				if (posX > 47 && posX < 62 && (posY > 25 && posY < 37))//op2
 				{
 					questions = false;
 					LS_Win = true;
 				}
-				else if (posX > 47 && posX < 62 && (posY > 47 && posY < 62))//op1
+				else if (posX > 47 && posX < 62 && (posY > 42 && posY < 55))//op1
 				{
 					questions = false;
 					LS_Lose = true;
 				}
-				else if (posX > 47 && posX < 62 && (posY > 10 && posY < 22))//op3
+				else if (posX > 47 && posX < 62 && (posY > 8 && posY < 20))//op3
 				{
 					questions = false;
 					LS_Lose = true;
@@ -1024,41 +1015,42 @@ void Splevel1::Update(double dt)
 			}
 			if (OP3 == true)
 			{
-				if (posX > 47 && posX < 62 && (posY > 10 && posY < 22))//op3
+				if (posX > 47 && posX < 62 && (posY > 8 && posY < 20))//op3
 				{
 					questions = false;
 					LS_Win = true;
 				}
-				else if (posX > 47 && posX < 62 && (posY > 27 && posY < 40))//op2
+				else if (posX > 47 && posX < 62 && (posY > 25 && posY < 37))//op2
 				{
 					questions = false;
 					LS_Lose = true;
 				}
-				else if (posX > 47 && posX < 62 && (posY > 47 && posY < 62))//op1
+				else if (posX > 47 && posX < 62 && (posY > 42 && posY < 55))//op1
 				{
 					questions = false;
 					LS_Lose = true;
+					LS_Win = true;
 				}
 			}
 			//Prestiege ans
 			if (POP1 == true)
 			{
-				if (posX > 47 && posX < 62 && (posY > 49 && posY < 58))//op1
-				{
-					questions = false;
-					LS_Lose = true;
-				}
-				else if (posX > 47 && posX < 62 && (posY > 35 && posY < 45))//op2 win
+				if (posX > 47 && posX < 62 && (posY > 36 && posY < 45))//win
 				{
 					questions = false;
 					LS_Win = true;
 				}
-				else if (posX > 47 && posX < 62 && (posY > 23 && posY < 32))//op3
+				else if (posX > 47 && posX < 62 && (posY > 49 && posY < 53))
 				{
 					questions = false;
 					LS_Lose = true;
 				}
-				else if (posX > 47 && posX < 62 && (posY > 9.5 && posY < 19))//op4
+				else if (posX > 47 && posX < 62 && (posY > 22 && posY < 32))
+				{
+					questions = false;
+					LS_Lose = true;
+				}
+				else if (posX > 47 && posX < 62 && (posY > 9 && posY < 19))
 				{
 					questions = false;
 					LS_Lose = true;
@@ -1066,45 +1058,46 @@ void Splevel1::Update(double dt)
 			}
 			if (POP2 == true)
 			{
-				if (posX > 47 && posX < 62 && (posY > 49 && posY < 58))//op1
+				if (posX > 47 && posX < 62 && (posY > 36 && posY < 45))
 				{
 					questions = false;
 					LS_Lose = true;
 				}
-				else if (posX > 47 && posX < 62 && (posY > 35 && posY < 45))//op2
+				else if (posX > 47 && posX < 62 && (posY > 49 && posY < 53))
 				{
 					questions = false;
 					LS_Lose = true;
 				}
-				else if (posX > 47 && posX < 62 && (posY > 23 && posY < 32))//op3
+				else if (posX > 47 && posX < 62 && (posY > 22 && posY < 32))
 				{
 					questions = false;
 					LS_Lose = true;
 				}
-				else if (posX > 47 && posX < 62 && (posY > 9.5 && posY < 19))//op4 win
+				else if (posX > 47 && posX < 62 && (posY > 9 && posY < 19))//win
 				{
 					questions = false;
 					LS_Win = true;
+
 				}
 			}
 			if (POP3 == true)
 			{
-				if (posX > 47 && posX < 62 && (posY > 49 && posY < 58))//op1
+				if (posX > 47 && posX < 62 && (posY > 49 && posY < 53))
 				{
 					questions = false;
 					LS_Lose = true;
 				}
-				else if (posX > 47 && posX < 62 && (posY > 35 && posY < 45))//op2
+				else if (posX > 47 && posX < 62 && (posY > 36 && posY < 45))
 				{
 					questions = false;
 					LS_Lose = true;
 				}
-				else if (posX > 47 && posX < 62 && (posY > 23 && posY < 32))//op3 win
+				else if (posX > 47 && posX < 62 && (posY > 22 && posY < 32))//win
 				{
 					questions = false;
 					LS_Win = true;
 				}
-				else if (posX > 47 && posX < 62 && (posY > 9.5 && posY < 19))//op4 
+				else if (posX > 47 && posX < 62 && (posY > 9 && posY < 19))
 				{
 					questions = false;
 					LS_Lose = true;
@@ -1116,14 +1109,14 @@ void Splevel1::Update(double dt)
 				if (Manager.PrestigeLvl>=1 && (posX > 35 && posX < 44 && (posY > 8 && posY < 13)))
 				{
 					Manager.Money = Manager.Money + 100;
-					PlaySound(TEXT("Sent.wav"), NULL, SND_ASYNC);
 					LS_Win = false;
 					PlaySound(TEXT("Sent.wav"), NULL, SND_ASYNC);
 				}
 				else if (posX > 35 && posX < 44 && (posY > 8 && posY < 13))
 				{
+					
+					/*cout << "Playing sound here!";*/
 					Manager.Money = Manager.Money + 50;
-					PlaySound(TEXT("Sent.wav"), NULL, SND_ASYNC);
 					LS_Win = false;
 					PlaySound(TEXT("Sent.wav"), NULL, SND_ASYNC);
 				}
@@ -1134,13 +1127,11 @@ void Splevel1::Update(double dt)
 				if (Manager.PrestigeLvl >= 1 && (posX > 35 && posX < 44 && (posY > 8 && posY < 13)))
 				{
 					Manager.Money = Manager.Money - 150;
-					PlaySound(TEXT("Sent.wav"), NULL, SND_ASYNC);
 					LS_Lose = false;
 				}
 				if (posX > 35 && posX < 44 && (posY > 8 && posY < 13))
 				{
 					Manager.Money = Manager.Money - 100;
-					PlaySound(TEXT("Sent.wav"), NULL, SND_ASYNC);
 					LS_Lose = false;
 				}
 			}
@@ -2599,31 +2590,37 @@ void Splevel1::Render()
 			{
 				RenderMeshOnScreen(meshList[GEO_Screen], 40, 30, 16, 54, true);
 				RenderMeshOnScreen(meshList[GEO_op1], 55, 30, 16, 54, true);
+				std::cout << "OP1";
 			}
 			else if (OP2 == true && OP2check == false)
 			{
 				RenderMeshOnScreen(meshList[GEO_Screen], 40, 30, 16, 54, true);
 				RenderMeshOnScreen(meshList[GEO_op2], 55, 30, 16, 54, true);
+				std::cout << "OP2";
 			}
 			else if (OP3 == true && OP3check == false)
 			{
 				RenderMeshOnScreen(meshList[GEO_Screen], 40, 30, 16, 54, true);
 				RenderMeshOnScreen(meshList[GEO_op3], 55, 30, 16, 54, true);
+				std::cout << "OP3";
 			}
 			else if(POP1 == true && OP1check == false)
 			{
 				RenderMeshOnScreen(meshList[GEO_Screen], 40, 30, 16, 54, true);
 				RenderMeshOnScreen(meshList[GEO_PREop1], 55, 30, 16, 54, true);
+				std::cout << "POP1";
 			}
 			else if (POP2 == true && OP1check == false)
 			{
 				RenderMeshOnScreen(meshList[GEO_Screen], 40, 30, 16, 54, true);
 				RenderMeshOnScreen(meshList[GEO_PREop2], 55, 30, 16, 54, true);
+				std::cout << "POP2";
 			}
 			else if (POP3 == true && OP1check == false)
 			{
 				RenderMeshOnScreen(meshList[GEO_Screen], 40, 30, 16, 54, true);
 				RenderMeshOnScreen(meshList[GEO_PREop3], 55, 30, 16, 54, true);
+				std::cout << "POP3";
 			}
 			else
 			{
@@ -4273,8 +4270,8 @@ void Splevel1::RenderCarepackage()
 	}
 	if (carepackage->notitext == true)
 	{
-		RenderMeshOnScreen(meshList[GEO_EMPTYBOX], 40, 15, 45, 15);
-		RenderTextOnScreen(meshList[GEO_TEXT], "A CAREPACKAGE HAS DROPPED SOMEWHERE OUTSIDE!", Color(1, 1, 1), 2, 18, 15);
+		RenderMeshOnScreen(meshList[GEO_EMPTYBOX], 40, 25, 45, 15);
+		RenderTextOnScreen(meshList[GEO_TEXT], "A CAREPACKAGE HAS DROPPED SOMEWHERE OUTSIDE!", Color(1, 1, 1), 2, 18, 25);
 
 	}
 	if (carepackage->pickuptext == true)
