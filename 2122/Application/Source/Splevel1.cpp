@@ -387,6 +387,8 @@ void Splevel1::Init()
 
 	meshList[GEO_Table] = MeshBuilder::GenerateOBJMTL("modelBUIDLING", "OBJ//simple_table.obj", "OBJ//simple_table.mtl");
 
+	meshList[GEO_ROCK] = MeshBuilder::GenerateOBJMTL("Rock", "OBJ//rock_largeB.obj", "OBJ//rock_largeB.mtl");
+
 	meshList[GEO_Screen] = MeshBuilder::GenerateRec("Rec", Color(1, 1, 1), 3.f, 5.f);
 	meshList[GEO_Screen]->textureID = LoadTGA("Image//Phone.tga"); // beats me
 	//whatever
@@ -2141,6 +2143,26 @@ void Splevel1::Render()
 			modelStack.PushMatrix();
 			modelStack.Translate(-1.4, 0, -21.5);
 			RenderMesh(meshList[GEO_HIGHHOLE], true);
+			modelStack.PopMatrix();
+
+		}
+		modelStack.PopMatrix();
+
+
+		modelStack.PushMatrix();
+		modelStack.Scale(500, 500, 500);
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(-2.4, 0, 0.6);
+			modelStack.Rotate(-45, 0, 1, 0);
+			RenderMesh(meshList[GEO_ROCK], true);
+			modelStack.PopMatrix();
+
+			modelStack.PushMatrix();
+			modelStack.Translate(2.4, 0, 0.5);
+			modelStack.Rotate(-45, 0, 1, 0);
+			modelStack.Rotate(-180, 0, 1, 0);
+			RenderMesh(meshList[GEO_ROCK], true);
 			modelStack.PopMatrix();
 		}
 		modelStack.PopMatrix();
