@@ -4253,13 +4253,17 @@ void Splevel1::UpdateCarepackage(double dt)
 					carepackage->notitext = false;
 					carepackage->pickuptext = false;
 					carepackage->active = false;
+					
 				}
 				else
 				{
+					
 					packagedie = true;
 					carepackage->notitext = false;
 					carepackage->pickuptext = false;
 					carepackage->active = false;
+					camera.position = camera.target;
+					camera.target.y = camera.position.y + 1;
 				}
 			}
 		}
