@@ -1102,13 +1102,13 @@ void Splevel1::Update(double dt)
 			}
 			if (LS_Win == true)
 			{
-				if (Manager.PrestigeLvl>=1 && (posX > 35 && posX < 44 && (posY > 8 && posY < 13)))
+				if (Manager.PrestigeLvl>=1 && (posX > 35 && posX < 44 && (posY > 10 && posY < 17)))
 				{
 					Manager.Money = Manager.Money + 100;
 					PlaySound(TEXT("Sent.wav"), NULL, SND_ASYNC);
 					LS_Win = false;
 				}
-				else if (posX > 35 && posX < 44 && (posY > 8 && posY < 13))
+				else if (posX > 35 && posX < 44 && (posY > 10 && posY < 17))
 				{
 					Manager.Money = Manager.Money + 50;
 					PlaySound(TEXT("Sent.wav"), NULL, SND_ASYNC);
@@ -1118,13 +1118,13 @@ void Splevel1::Update(double dt)
 			}
 			if (LS_Lose == true)
 			{
-				if (Manager.PrestigeLvl >= 1 && (posX > 35 && posX < 44 && (posY > 8 && posY < 13)))
+				if (Manager.PrestigeLvl >= 1 && (posX > 35 && posX < 44 && (posY > 10 && posY < 17)))
 				{
 					Manager.Money = Manager.Money - 150;
 					PlaySound(TEXT("Sent.wav"), NULL, SND_ASYNC);
 					LS_Lose = false;
 				}
-				if (posX > 35 && posX < 44 && (posY > 8 && posY < 13))
+				if (posX > 35 && posX < 44 && (posY > 10 && posY < 17))
 				{
 					Manager.Money = Manager.Money - 100;
 					PlaySound(TEXT("Sent.wav"), NULL, SND_ASYNC);
@@ -2075,9 +2075,9 @@ void Splevel1::Render()
 		modelStack.Scale(10, 10, 10);
 		{
 			modelStack.PushMatrix();
-			modelStack.Translate(6.52, 3, -7);
+			modelStack.Translate(6.52, 2.5, -7);
 			modelStack.Rotate(90, 0, 0, 1);
-			modelStack.Scale(1.5, 0.9, 1);
+			modelStack.Scale(1.3, 0.9, 1);
 			RenderMesh(meshList[GEO_Lift], true);
 			modelStack.PopMatrix();
 		}
@@ -2091,9 +2091,9 @@ void Splevel1::Render()
 			modelStack.Scale(10, 10, 10);
 			{
 				modelStack.PushMatrix();
-				modelStack.Translate(6.52, 3, -7);
+				modelStack.Translate(6.52, 2.5, -7);
 				modelStack.Rotate(90, 0, 0, 1);
-				modelStack.Scale(1.5, 0.9, 1);
+				modelStack.Scale(1.3, 0.9, 1);
 				RenderMesh(meshList[GEO_Lift], true);
 				modelStack.PopMatrix();
 			}
@@ -2107,9 +2107,9 @@ void Splevel1::Render()
 			modelStack.Scale(10, 10, 10);
 			{
 				modelStack.PushMatrix();
-				modelStack.Translate(6.52, 3, -7);
+				modelStack.Translate(6.52, 2.5, -7);
 				modelStack.Rotate(90, 0, 0, 1);
-				modelStack.Scale(1.5, 0.9, 1);
+				modelStack.Scale(1.3, 0.9, 1);
 				RenderMesh(meshList[GEO_Lift], true);
 				modelStack.PopMatrix();
 			}
