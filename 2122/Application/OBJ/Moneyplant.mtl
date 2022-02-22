@@ -1,0 +1,10 @@
+# Blender MTL File: 'None'
+# Material Count: 2
+
+newmtl colorYellow.001
+Kd 0.996078 0.694118 0.278431
+
+
+newmtl grass.002
+Kd 0.172549 0.847059 0.721569
+

@@ -280,6 +280,8 @@ void Splevel1::Init()
 	RenderPrestige = 1;
 	PageNum = 1;
 
+	coinsrotation = 0;
+
 	puzzle.Init();
 
 	packagetimer = 60;
@@ -388,6 +390,8 @@ void Splevel1::Init()
 	meshList[GEO_Table] = MeshBuilder::GenerateOBJMTL("modelBUIDLING", "OBJ//simple_table.obj", "OBJ//simple_table.mtl");
 
 	meshList[GEO_ROCK] = MeshBuilder::GenerateOBJMTL("Rock", "OBJ//rock_largeB.obj", "OBJ//rock_largeB.mtl");
+
+	meshList[GEO_COIN] = MeshBuilder::GenerateOBJMTL("Coin", "OBJ//Coin.obj", "OBJ//Coin.mtl");
 
 	meshList[GEO_Screen] = MeshBuilder::GenerateRec("Rec", Color(1, 1, 1), 3.f, 5.f);
 	meshList[GEO_Screen]->textureID = LoadTGA("Image//Phone.tga"); // beats me
@@ -4396,6 +4400,16 @@ void Splevel1::packagedieanimation()
 
 }
 
+void Splevel1::rendermoneyfly()
+{
+
+
+
+	//RenderCoinsOnScreen(meshList[GEO_COIN]);
+
+
+}
+
 void Splevel1::RenderMesh(Mesh* mesh, bool enableLight)
 {
 	Mtx44 MVP, modelView, modelView_inverse_transpose;
@@ -4550,6 +4564,31 @@ void Splevel1::RenderMeshOnScreen(Mesh* mesh, int x, int y, int sizex, int sizey
 	viewStack.PopMatrix();
 	modelStack.PopMatrix();
 	glEnable(GL_DEPTH_TEST);
+}
+
+void Splevel1::RenderCoinsOnScreen(Mesh* mesh, int x, int y, int sizex, int sizey)
+{
+	glDisable(GL_DEPTH_TEST);
+	Mtx44 ortho;
+	ortho.SetToOrtho(0, 80, 0, 60, -10, 10); //size of screen UI
+	projectionStack.PushMatrix();
+	projectionStack.LoadMatrix(ortho);
+	viewStack.PushMatrix();
+	viewStack.LoadIdentity(); //No need camera for ortho mode
+	modelStack.PushMatrix();
+	modelStack.LoadIdentity();//to do: scale and translate accordingly
+	modelStack.Translate(x, y, 0);
+
+	modelStack.Rotate(coinsrotation, 0, 0, 1);
+	modelStack.Rotate(coinsrotation, 0, 1, 0);
+	
+	modelStack.Scale(sizex, sizey, 1);
+	RenderMesh(mesh, false); //UI should not have light
+	projectionStack.PopMatrix();
+	viewStack.PopMatrix();
+	modelStack.PopMatrix();
+	glEnable(GL_DEPTH_TEST);
+
 }
 
 int Splevel1::Random(int range)

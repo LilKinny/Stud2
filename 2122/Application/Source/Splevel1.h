@@ -93,6 +93,7 @@ class Splevel1 : public Scene
 		GEO_HIGHHOLE,
 		GEO_CAT,
 		GEO_ROCK,
+		GEO_COIN,
 
 		GEO_TAXI,
 		GEO_TRUCK,
@@ -220,6 +221,10 @@ private:
 
 	void packagedieanimation();
 
+	void rendermoneyfly();
+
+	
+
 	EquipmentManager Manager;
 
 	Puzzle puzzle;
@@ -246,8 +251,12 @@ private:
 	int RenderPrestige;
 	int PageNum;
 
+	int coinsrotation;
+
 	int scaleval[50];
 	int scalevalgrass[50];
+
+	int coinsarray[50];
 
 	float debugmouseposx;
 	float debugmouseposy;
@@ -255,6 +264,7 @@ private:
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
 	void RenderText(Mesh* mesh, std::string text, Color color);
 	void RenderMeshOnScreen(Mesh* mesh, int x, int y, int sizex, int sizey, bool RotateX = false);
+	void RenderCoinsOnScreen(Mesh* mesh, int x, int y, int sizex, int sizey);
 	int Random(int range);
 	Camera3 camera;
 };
