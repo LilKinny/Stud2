@@ -1246,43 +1246,45 @@ void Splevel1::Update(double dt)
 
 	//lift animation
 	{
-		//door left
-		if (closed==false) 
+		if (closing == true)
 		{
-			liftdoor += (float)(40 * dt);
-		}
-		if (closed == true)
-		{
-			liftdoor -= (float)(40 * dt);
-		}
-		if (liftdoor >= 10)
-		{
-			closed = true;
-		}
-		else if (liftdoor <= -35)
-		{
-			closed = false;
-			closing = false;
-		}
+			//door left
+			if (closed == false)
+			{
+				liftdoor += (float)(40 * dt);
+			}
+			if (closed == true)
+			{
+				liftdoor -= (float)(40 * dt);
+			}
+			if (liftdoor >= 10)
+			{
+				closed = true;
+			}
+			else if (liftdoor <= -35)
+			{
+				closed = false;
+				closing = false;
+			}
 
-		//door right
-		
-		if (closed2 == false)
-		{
-			liftdoor2 -= (float)(40 * dt);
-		}
-		if (closed2 == true)
-		{
-			liftdoor2 += (float)(40 * dt);
-		}
-		if (liftdoor2 >= 115)
-		{
-			closed2 = false;
-		}
-		else if (liftdoor2 <= 70)
-		{
-			closed2 = true;
-			closing = false;
+			//door right
+			if (closed2 == false)
+			{
+				liftdoor2 -= (float)(40 * dt);
+			}
+			if (closed2 == true)
+			{
+				liftdoor2 += (float)(40 * dt);
+			}
+			if (liftdoor2 >= 115)
+			{
+				closed2 = false;
+			}
+			else if (liftdoor2 <= 70)
+			{
+				closed2 = true;
+				closing = false;
+			}
 		}
 	}
 
@@ -1321,9 +1323,6 @@ void Splevel1::Update(double dt)
 					lvl2 = true;
 					lvl1 = false;
 					closing = true;
-					liftdoor = -35;
-					liftdoor2 = 115;
-
 				}
 			}
 			else if (BButtonState && !Application::IsKeyPressed('E'))
@@ -1342,8 +1341,6 @@ void Splevel1::Update(double dt)
 					lvl3 = true;
 					lvl2 = false;
 					closing = true;
-					liftdoor = -35;
-					liftdoor2 = 115;
 				}
 			}
 			else if (BButtonState && !Application::IsKeyPressed('E'))
@@ -1356,8 +1353,6 @@ void Splevel1::Update(double dt)
 				lvl2 = false;
 				lvl1 = true;
 				closing = true;
-				liftdoor = -35;
-				liftdoor2 = 115;
 			}
 			else if (CButtonState && !Application::IsKeyPressed('F'))
 			{
@@ -1372,8 +1367,6 @@ void Splevel1::Update(double dt)
 				lvl3 = false;
 				lvl2 = true;
 				closing = true;
-				liftdoor = -35;
-				liftdoor2 = 115;
 			}
 			else if (BButtonState && !Application::IsKeyPressed('E'))
 			{
@@ -1385,8 +1378,6 @@ void Splevel1::Update(double dt)
 				lvl3 = false;
 				lvl1 = true;
 				closing = true;
-				liftdoor = -35;
-				liftdoor2 = 115;
 			}
 			else if (CButtonState && !Application::IsKeyPressed('F'))
 			{
