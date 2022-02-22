@@ -7,7 +7,7 @@ EquipmentManager::EquipmentManager()
 	LuckyCatUpgrade = 0;
 	MoneyPlantUpgrade = 0;
 	PrestigeLvl = 0;
-	Money = 50000;
+	Money = 10;
 	InitEquipArray();
 }
 
@@ -29,7 +29,7 @@ int EquipmentManager::UpgradePrestige(bool Upgrade)
 				DeleteEquipArray();
 				InitEquipArray();
 				CalculateTotalIncome();
-				//Money = 0;
+				Money = 0;
 			}
 			return 1;
 		}
@@ -45,7 +45,7 @@ int EquipmentManager::UpgradePrestige(bool Upgrade)
 				DeleteEquipArray();
 				InitEquipArray();
 				CalculateTotalIncome();
-				//Money = 0;
+				Money = 0;
 			}
 			return 1;
 		}
@@ -61,7 +61,7 @@ int EquipmentManager::UpgradePrestige(bool Upgrade)
 				DeleteEquipArray();
 				InitEquipArray(); 
 				CalculateTotalIncome();
-				//Money = 0;
+				Money = 0;
 			}
 			return 1;
 		}

@@ -17,6 +17,7 @@ class Splevel1 : public Scene
 		GEO_AXES,
 		GEO_QUAD,
 		GEO_TITLE,
+		GEO_NAME,
 		GEO_TITLEBUTTONS,
 		GEO_CUBE,
 		GEO_GRASS,

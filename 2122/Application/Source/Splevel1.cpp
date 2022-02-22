@@ -284,7 +284,7 @@ void Splevel1::Init()
 
 	packagetimer = 60;
 
-	packagecooltimer = 15;
+	packagecooltimer = 10;
 
 	packagetruckoffset = 2000;
 
@@ -503,7 +503,7 @@ void Splevel1::Update(double dt)
 	rotateangle = rotateangle + 0.1;
 
 	int carepackagerand;
-	carepackagerand = (rand() % 100) + 1;
+	carepackagerand = (rand() % 10) + 1;
 	/*carepackagerand = 69;*/
 
 	if (carepackage->active == false)
@@ -512,11 +512,11 @@ void Splevel1::Update(double dt)
 	}
 
 	
-	if (carepackagerand == 69 && carepackage->active == false && packagecooltimer < 0)
+	if (carepackagerand == 9 && carepackage->active == false && packagecooltimer < 0)
 	{
 		carepackage->reset(-430,430,307,429);
 		packagetimer = 60;
-		packagecooltimer = 15;
+		packagecooltimer = 10;
 
 		carepackage->active = true;
 		carepackage->notitext = true;
@@ -633,7 +633,7 @@ void Splevel1::Update(double dt)
 			{
 				bLButtonState = true;
 				totalbeets++;
-				Manager.Money = Manager.Money + 10;
+				Manager.Money = Manager.Money + 1;
 				beetsinstringform = to_string(totalbeets);
 			}
 			else if (bLButtonState && !Application::IsMousePressed(0))
@@ -1863,7 +1863,7 @@ void Splevel1::Update(double dt)
 		
 		if (scaletitle >= 6)
 		{
-			Sleep(500);
+			Sleep(1500);
 			prologue = false;
 		}
 		if (!bLButtonState && Application::IsMousePressed(0))
@@ -3652,6 +3652,14 @@ void Splevel1::Render()
 			RenderTextOnScreen(meshList[GEO_TEXT], "Computer", Color(1, 0, 0), 1.5, 19, 43);
 			modelStack.PopMatrix();
 		}
+
+		modelStack.PushMatrix();
+		modelStack.Translate(0, 0, -10);
+		modelStack.Rotate(180, 0, 1, 1);
+		modelStack.Scale(5, 5, 5);
+		RenderText(meshList[GEO_TEXT], "Hello world", Color(0, 1, 0));
+		modelStack.PopMatrix();
+
 	}
 
 	
@@ -4394,7 +4402,7 @@ void Splevel1::UpdateCarepackage(double dt)
 	if (carepackage->active == true)
 	{
 		packagetimer -= dt;
-		if (packagetimer < 56)
+		if (packagetimer < 55)
 		{
 			carepackage->notitext = false;
 		}
@@ -4408,7 +4416,7 @@ void Splevel1::UpdateCarepackage(double dt)
 			if (Application::IsKeyPressed('E'))
 			{
 				int result = (rand() % 10) + 1;
-				if (result > 5)
+				if (result > 8)
 				{
 					Manager.Money += Manager.Money;
 					carepackage->notitext = false;
