@@ -284,6 +284,8 @@ void Splevel1::Init()
 
 	packagetimer = 60;
 
+	packagecooltimer = 15;
+
 	//Initialize camera settings
 	camera.Init(Vector3(0, 30, 345), Vector3(0, 0, 0), Vector3(0, 1, 0));
 
@@ -492,13 +494,20 @@ void Splevel1::Update(double dt)
 	rotateangle = rotateangle + 0.1;
 
 	int carepackagerand;
-	carepackagerand = (rand() % 20) + 1;
+	carepackagerand = (rand() % 100) + 1;
+
+	if (carepackage->active == false)
+	{
+		packagecooltimer -= dt;
+	}
 
 	
-	if (carepackagerand == 5 && carepackage->active == false)
+	if (carepackagerand == 69 && carepackage->active == false && packagecooltimer < 0)
 	{
 		carepackage->reset(-430,430,307,429);
 		packagetimer = 60;
+		packagecooltimer = 15;
+
 		carepackage->active = true;
 		carepackage->notitext = true;
 		

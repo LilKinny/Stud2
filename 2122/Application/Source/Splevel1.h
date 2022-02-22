@@ -226,6 +226,7 @@ private:
 
 	float puzzletimer;
 	float packagetimer;
+	float packagecooltimer;
 
 	enum class Gamestate {MainGame,PuzzleGame}gamestate;
 
