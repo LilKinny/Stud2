@@ -106,12 +106,6 @@ void Camera3::Update(double dt)
 		//std::cout << "\nRight:" << right.x << " " << right.y << " " << right.z << " " << "\n";
 		std::cout << "\nx: " << position.x << "   z: " << position.z;
 	}
-
-
-	if (Application::IsKeyPressed('R'))
-	{
-		Reset();
-	}
 }
 
 void Camera3::UpdateMini(double dt)

@@ -286,7 +286,7 @@ void Splevel1::Init()
 
 	packagetimer = 60;
 
-	packagecooltimer = 15;
+	packagecooltimer = 10;
 
 	packagetruckoffset = 2000;
 
@@ -419,6 +419,12 @@ void Splevel1::Init()
 	meshList[GEO_PREop3] = MeshBuilder::GenerateRec("Rec", Color(1, 1, 1), 1.f, 1.f);
 	meshList[GEO_PREop3]->textureID = LoadTGA("Image//Pre_OP3.tga");
 
+	meshList[GEO_HTP] = MeshBuilder::GenerateRec("Rec", Color(1, 1, 1), 1.f, 1.f);
+	meshList[GEO_HTP]->textureID = LoadTGA("Image//HTP.tga");
+
+	meshList[GEO_HTPSCREEN] = MeshBuilder::GenerateQuad("Quad", Color(1, 1, 1), 1.f);
+	meshList[GEO_HTPSCREEN]->textureID = LoadTGA("Image//HTPscreen.tga");
+
 	meshList[GEO_Tree] = MeshBuilder::GenerateOBJMTL("Tree", "OBJ//TreeTall.obj", "OBJ//TreeTall.mtl");
 	meshList[GEO_Laptop] = MeshBuilder::GenerateOBJMTL("Laptop", "OBJ//Laptop.obj", "OBJ//Laptop.mtl");
 	meshList[GEO_Laptop2] = MeshBuilder::GenerateOBJMTL("Computerlvl2", "OBJ//ComputerLVL2.obj", "OBJ//ComputerLVL2.mtl");
@@ -439,6 +445,10 @@ void Splevel1::Init()
 	meshList[GEO_ROADTURN] = MeshBuilder::GenerateOBJMTL("Turn", "OBJ//road_bendSquare.obj", "OBJ//road_bendSquare.mtl");
 	meshList[GEO_ROADTSECT] = MeshBuilder::GenerateOBJMTL("Tsect", "OBJ//road_drivewaySingle.obj", "OBJ//road_drivewaySingle.mtl");
 	meshList[GEO_STREETLIGHT] = MeshBuilder::GenerateOBJMTL("streetlight", "OBJ//streetlight.obj", "OBJ//streetlight.mtl");
+	meshList[GEO_CASH] = MeshBuilder::GenerateOBJMTL("streetlight", "OBJ//Cash.obj", "OBJ//Cash.mtl");
+	meshList[GEO_MONEYCAT] = MeshBuilder::GenerateOBJMTL("streetlight", "OBJ//Moneycat.obj", "OBJ//Moneycat.mtl");
+	meshList[GEO_MONEYPLANT] = MeshBuilder::GenerateOBJMTL("streetlight", "OBJ//Moneyplant.obj", "OBJ//Moneyplant.mtl");
+
 
 	meshList[GEO_Lift] = MeshBuilder::GenerateOBJ("modelBUIDLING", "OBJ//Elevator.obj");
 	meshList[GEO_Lift]->textureID = LoadTGA("Image//Elevator.tga");
@@ -480,20 +490,20 @@ void Splevel1::Init()
 	projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 100000.f);
 	projectionStack.LoadMatrix(projection);
 	liftdoor2 = 80;
+	InitName();
 }
 
 bool setuppolice = false, clearpolice, paper1, paper2, paper3, paper4, timerstart, win, lose, NPC, startlaptop = false, evidence_won_bonus, die;
 double scaleevidence = 0.1, countdown, timer;
-float pposx, pposz, pposx2, pposz2, pposx4, pposx3, pposz3, pposz4, rotateangle, pposy, pposy2, pposy3, pposy4, pushaway, movex = -500, movez, AlignX;
+float prologuey = -40, scaletitle = 0 , pposx, pposz, pposx2, pposz2, pposx4, pposx3, pposz3, pposz4, rotateangle, pposy, pposy2, pposy3, pposy4, pushaway, movex = -500, movez, AlignX;
 string timerstring, beetsinstringform, Dialogue, Answer1, Answer2;
 int totalbeets = 0, countdownbonus = 1500, spinD = 0;
 
 int mg1_start, dialoguepart, rannpc;
 bool lvl2, lvl3,lvl1=true, playonce, NPCInteract;
-bool doneonce, OP1, OP2, OP3,OP1check, OP2check,OP3check,deleterest,LS_start,LS_Win,LS_Lose,POP1,POP2,POP3, rotateback = true, spawntaxi, spawnpolice, spawntruck,closed,closed2,closing;
+bool prologue = true, doneonce, OP1, OP2, OP3,OP1check, OP2check,OP3check,deleterest,LS_start,LS_Win,LS_Lose,POP1,POP2,POP3, rotateback = true, spawntaxi, spawnpolice, spawntruck,closed,closed2,closing, HTP;
 
 float cposx, cposz, movecar;
-
 void Splevel1::Update(double dt)
 {
 	Manager.UpdateMoney(dt);
@@ -503,7 +513,7 @@ void Splevel1::Update(double dt)
 	rotateangle = rotateangle + 0.1;
 
 	int carepackagerand;
-	carepackagerand = (rand() % 100) + 1;
+	carepackagerand = (rand() % 10) + 1;
 	/*carepackagerand = 69;*/
 
 	if (carepackage->active == false)
@@ -512,11 +522,11 @@ void Splevel1::Update(double dt)
 	}
 
 	
-	if (carepackagerand == 69 && carepackage->active == false && packagecooltimer < 0)
+	if (carepackagerand == 9 && carepackage->active == false && packagecooltimer < 0)
 	{
 		carepackage->reset(-430,430,307,429);
 		packagetimer = 60;
-		packagecooltimer = 15;
+		packagecooltimer = 10;
 
 		carepackage->active = true;
 		carepackage->notitext = true;
@@ -633,7 +643,7 @@ void Splevel1::Update(double dt)
 			{
 				bLButtonState = true;
 				totalbeets++;
-				Manager.Money = Manager.Money + 10;
+				Manager.Money = Manager.Money + 1;
 				beetsinstringform = to_string(totalbeets);
 			}
 			else if (bLButtonState && !Application::IsMousePressed(0))
@@ -1184,6 +1194,17 @@ void Splevel1::Update(double dt)
 					die = false;
 				}
 			}
+			if (posX > 72 && posX < 79.9 && posY > 5 && posY < 12)
+			{
+				HTP = true;
+			}
+			if (HTP == true)
+			{
+				if (posX > 56 && posX < 60 && posY > 8 && posY < 12)
+				{
+					HTP = false;
+				}
+			}
 		}
 		else if (bLButtonState && !Application::IsMousePressed(0))
 		{
@@ -1191,6 +1212,7 @@ void Splevel1::Update(double dt)
 		/*std::cout << "LBUTTON UP" << std::endl;*/
 		}
 	}
+
 
 	// Player get hit by car
 
@@ -1846,6 +1868,44 @@ void Splevel1::Update(double dt)
 			}
 		}
 	}
+
+
+	// prologue
+	
+
+	if (prologue == true)
+	{
+		static bool bLButtonState = false;
+		prologuey += 0.1;
+
+		if (prologuey >= 50)
+		{
+			scaletitle += 0.3;
+		}
+		
+		if (scaletitle >= 6)
+		{
+			Sleep(1500);
+			prologue = false;
+		}
+		if (!bLButtonState && Application::IsMousePressed(0))
+		{
+			bLButtonState = true;
+			double x, y;
+			Application::GetCursorPos(&x, &y);
+			unsigned w = Application::GetWindowWidth();
+			unsigned h = Application::GetWindowHeight();
+			float posX = x / w * 80; //convert (0,800) to (0,80)
+			float posY = 60 - y / h * 60; //convert (600,0) to (0,60)
+			if (posX > 0 && posX < 12 && (posY > 18 && posY < 25)) // Box1
+			{
+				prologue = false;
+			}
+			else
+				prologuey += 0.5;
+		}
+		else bLButtonState = false;
+	}
 }
 
 	
@@ -1900,8 +1960,6 @@ void Splevel1::Render()
 	
 	srand(time(0));
 	RenderSkybox();
-
-	
 
 	//Render trees
 	{
@@ -2035,64 +2093,6 @@ void Splevel1::Render()
 			modelStack.PopMatrix();
 		}
 	}
-	
-
-	//WorkStation Rendering
-	{
-		int WorkStationPositionX, WorkStationPositionY, WorkStationPositionZ;
-		WorkStationPositionX = WorkStationPositionY = WorkStationPositionZ = 0;
-		for (int i = 0; i < (Manager.PrestigeLvl + 1) * 6; ++i)
-		{
-			/*std::cout << i % 6 << std::endl;*/
-			if (i < 6)
-			{
-				WorkStationPositionY = 0;
-			}
-			else if (i < 12)
-			{
-				WorkStationPositionY = 50;
-			}
-			else if (i < 18)
-			{
-				WorkStationPositionY = 100;
-			}
-			if (i % 6 == 0)
-			{
-				WorkStationPositionX = -75;
-				WorkStationPositionZ = 40;
-			}
-			else if (i % 6 == 1)
-			{
-				WorkStationPositionX = -75;
-				WorkStationPositionZ = 20;
-			}
-			else if (i % 6 == 2)
-			{
-				WorkStationPositionX = -75;
-				WorkStationPositionZ = 0;
-			}
-			else if (i % 6 == 3)
-			{
-				WorkStationPositionX = -75;
-				WorkStationPositionZ = -30;
-			}
-			else if (i % 6 == 4)
-			{
-				WorkStationPositionX = -75;
-				WorkStationPositionZ = -50;
-			}
-			else if (i % 6 == 5)
-			{
-				WorkStationPositionX = -75;
-				WorkStationPositionZ = -70;
-			}
-			modelStack.PushMatrix();
-			modelStack.Scale(1, 1, 1);
-			modelStack.Translate(WorkStationPositionX, WorkStationPositionY, WorkStationPositionZ);
-			RenderWorkStation(i);
-			modelStack.PopMatrix();
-		}
-	}
 
 	//Surrounding buildings
 	{
@@ -2131,7 +2131,44 @@ void Splevel1::Render()
 		RenderMesh(meshList[GEO_SBUILDING1], true);
 		modelStack.PopMatrix();
 	}
-
+	//upgrades
+	{
+		if (Manager.MoneyPlantUpgrade == 1)
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(-50, 0, 150);
+			modelStack.Scale(5,7,5);
+			{
+				modelStack.PushMatrix();
+				modelStack.Translate(0, 3, 2);
+				modelStack.Rotate(90, 0, 1, 0);
+				modelStack.Rotate(90, 0, 0, 1);
+				modelStack.Rotate(rotateAngle, 0, 1, 0);
+				modelStack.Scale(0.7, 0.7, 0.7);
+				RenderMesh(meshList[GEO_CASH], true);
+				modelStack.PopMatrix();
+			}
+			RenderMesh(meshList[GEO_MONEYPLANT], true);
+			modelStack.PopMatrix();
+		}
+		if (Manager.LuckyCatUpgrade == 1)
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(50, -7, 150);
+			modelStack.Rotate(90, 0, 1, 0);
+			modelStack.Scale(10, 10, 10);
+			{
+				modelStack.PushMatrix();
+				modelStack.Translate(0, 3, 0);
+				modelStack.Rotate(rotateAngle, 0, 1, 0);
+				modelStack.Scale(0.3, 0.3, 0.3);
+				RenderMesh(meshList[GEO_CASH], true);
+				modelStack.PopMatrix();
+			}
+			RenderMesh(meshList[GEO_MONEYCAT], true);
+			modelStack.PopMatrix();
+		}
+	}
 	//Outside Border
 	{
 		//HighWay Gate
@@ -2373,6 +2410,48 @@ void Splevel1::Render()
 
 	packagedieanimation();
 
+	//streetlight
+	for (int i = 0; i < 5; i++)
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(-400 + (i * 300), 0, 290);
+		/*modelStack.Rotate(90, 0, 1, 0);
+		modelStack.Rotate(90, 1, 0, 0);*/
+		modelStack.Scale(150, 250, 150);
+		RenderMesh(meshList[GEO_STREETLIGHT], true);
+		modelStack.PopMatrix();
+	}
+	for (int i = 0; i < 5; i++)
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(-550 + (i * 300), 0, 210);
+		modelStack.Rotate(180, 0, 1, 0);
+
+		modelStack.Scale(150, 250, 150);
+		RenderMesh(meshList[GEO_STREETLIGHT], true);
+		modelStack.PopMatrix();
+	}
+
+	if (NPC == true)
+	{
+		//Render NPC
+		modelStack.PushMatrix();
+		modelStack.Translate(movex, 5, 200);
+		modelStack.Scale(5, 5, 5);
+		RenderMesh(meshList[GEO_Body], false);
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(0, 0, 0);
+			modelStack.Scale(1, 1, 1);
+			RenderMesh(meshList[GEO_Head], false);
+			modelStack.PopMatrix();
+		}
+		modelStack.PopMatrix();
+	}
+
+
+
+
 	//Building
 	{
 		modelStack.PushMatrix();
@@ -2456,46 +2535,63 @@ void Splevel1::Render()
 	}
 
 
-
-
-	//streetlight
-	for (int i = 0; i < 5; i++)
+	//WorkStation Rendering
 	{
-		modelStack.PushMatrix();
-		modelStack.Translate(-400 + (i * 300), 0, 290);
-		/*modelStack.Rotate(90, 0, 1, 0);
-		modelStack.Rotate(90, 1, 0, 0);*/
-		modelStack.Scale(150, 250, 150);
-		RenderMesh(meshList[GEO_STREETLIGHT], true);
-		modelStack.PopMatrix();
-	}
-	for (int i = 0; i < 5; i++)
-	{
-		modelStack.PushMatrix();
-		modelStack.Translate(-550 + (i * 300), 0, 210);
-		modelStack.Rotate(180, 0, 1, 0);
-		
-		modelStack.Scale(150, 250, 150);
-		RenderMesh(meshList[GEO_STREETLIGHT], true);
-		modelStack.PopMatrix();
-	}
-
-	if (NPC == true)
-	{
-		//Render NPC
-		modelStack.PushMatrix();
-		modelStack.Translate(movex, 5, 200);
-		modelStack.Scale(5, 5, 5);
-		RenderMesh(meshList[GEO_Body], false);
+		int WorkStationPositionX, WorkStationPositionY, WorkStationPositionZ;
+		WorkStationPositionX = WorkStationPositionY = WorkStationPositionZ = 0;
+		for (int i = 0; i < (Manager.PrestigeLvl + 1) * 6; ++i)
 		{
+			/*std::cout << i % 6 << std::endl;*/
+			if (i < 6)
+			{
+				WorkStationPositionY = 0;
+			}
+			else if (i < 12)
+			{
+				WorkStationPositionY = 50;
+			}
+			else if (i < 18)
+			{
+				WorkStationPositionY = 100;
+			}
+			if (i % 6 == 0)
+			{
+				WorkStationPositionX = -75;
+				WorkStationPositionZ = 40;
+			}
+			else if (i % 6 == 1)
+			{
+				WorkStationPositionX = -75;
+				WorkStationPositionZ = 20;
+			}
+			else if (i % 6 == 2)
+			{
+				WorkStationPositionX = -75;
+				WorkStationPositionZ = 0;
+			}
+			else if (i % 6 == 3)
+			{
+				WorkStationPositionX = -75;
+				WorkStationPositionZ = -30;
+			}
+			else if (i % 6 == 4)
+			{
+				WorkStationPositionX = -75;
+				WorkStationPositionZ = -50;
+			}
+			else if (i % 6 == 5)
+			{
+				WorkStationPositionX = -75;
+				WorkStationPositionZ = -70;
+			}
 			modelStack.PushMatrix();
-			modelStack.Translate(0, 0, 0);
 			modelStack.Scale(1, 1, 1);
-			RenderMesh(meshList[GEO_Head], false);
+			modelStack.Translate(WorkStationPositionX, WorkStationPositionY, WorkStationPositionZ);
+			RenderWorkStation(i);
 			modelStack.PopMatrix();
 		}
-		modelStack.PopMatrix();
 	}
+
 
 	//kjcode
 	{
@@ -2724,7 +2820,12 @@ void Splevel1::Render()
 			RenderMeshOnScreen(meshList[GEO_EMPTYBOX], liftdoor2, 30, 60, 60);
 		}
 		
+		RenderMeshOnScreen(meshList[GEO_HTP], 76, 5, 8, 8, true);
 
+		if (HTP == true)
+		{
+			RenderMeshOnScreen(meshList[GEO_HTPSCREEN], 40, 25, 40, 40);
+		}
 		
 	}
 
@@ -2793,7 +2894,7 @@ void Splevel1::Render()
 			RenderTextOnScreen(meshList[GEO_TEXT], "Reward: +15% income boost for 30s", Color(1, 1, 1), 2, 22, 21);
 			RenderMeshOnScreen(meshList[GEO_EMPTYBOX], 40, 10, 10, 6);
 			RenderTextOnScreen(meshList[GEO_TEXT], "Hooray!", Color(1, 1, 1), 2, 37, 9);
-			Manager.MinigameBuffs += 15;
+			
 		}
 		else if (lose == true)
 		{
@@ -2827,6 +2928,27 @@ void Splevel1::Render()
 			RenderTextOnScreen(meshList[GEO_TEXT], "Penalty: 50% of total income", Color(1, 1, 1), 2, 24, 18);
 			RenderMeshOnScreen(meshList[GEO_EMPTYBOX], 40, 10, 10, 6);
 			RenderTextOnScreen(meshList[GEO_TEXT], "Pay up", Color(1, 1, 1), 2, 37, 9);
+		}
+
+
+		if (prologue == true)
+		{
+			camera.Reset();
+			RenderMeshOnScreen(meshList[GEO_EMPTYBOX], 40, 25, 100, 100);
+			RenderTextOnScreen(meshList[GEO_TEXT], "-- PROLOGUE --", Color(1, 1, 1), 2, 22, 40 + prologuey);
+			RenderTextOnScreen(meshList[GEO_TEXT], "A long time ago", Color(1, 1, 1), 2, 22, 35 + prologuey);
+			RenderTextOnScreen(meshList[GEO_TEXT], "In Nigeria, far far away", Color(1, 1, 1), 2, 22, 30 + prologuey);
+			RenderTextOnScreen(meshList[GEO_TEXT], "There lived Ben Dover", Color(1, 1, 1), 2, 22, 25 + prologuey);
+			RenderTextOnScreen(meshList[GEO_TEXT], "One day, he fell in love with a woman", Color(1, 1, 1), 2, 22, 20 + prologuey);
+			RenderTextOnScreen(meshList[GEO_TEXT], "The woman asked for financial help", Color(1, 1, 1), 2, 22, 15 + prologuey);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Which Ben Dover obliged", Color(1, 1, 1), 2, 22, 10 + prologuey);
+			RenderTextOnScreen(meshList[GEO_TEXT], "But it turned out to be a SCAM!", Color(1, 1, 1), 2, 22, 5 + prologuey);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Heartbroken, Ben sought revenge", Color(1, 1, 1), 2, 22, 0 + prologuey);
+			RenderTextOnScreen(meshList[GEO_TEXT], "And he will do it by scamming other people!", Color(1, 1, 1), 2, 22, -5 + prologuey);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Welcome to...", Color(1, 1, 1), 2, 22, -10 + prologuey);
+			RenderTextOnScreen(meshList[GEO_TEXT], "SCAMMER TYCOON!", Color(1, 1, 1), scaletitle, 22, 20);
+			RenderMeshOnScreen(meshList[GEO_EMPTYBOX], 4, 20, 11, 5);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Skip", Color(1, 1, 1), 2, 2, 18);
 		}
 
 		if (NPCInteract == true)
@@ -2955,7 +3077,7 @@ void Splevel1::Render()
 						RenderMeshOnScreen(meshList[GEO_GREENBUTTON], 56, 29, 24, 3, true);
 						modelStack.PopMatrix();
 					}
-					if (Manager.UnlockMoneyPlant(false) == 1)
+					if (Manager.UnlockMoneyPlant(false) == 1 )
 					{
 						//GreenButton Left Bot
 						modelStack.PushMatrix();
@@ -3582,6 +3704,8 @@ void Splevel1::Render()
 	/*RenderTextOnScreen(meshList[GEO_TEXT], "Pos Y puzzle:" + std::to_string(puzzle.playeractualpoy), Color(1, 1, 0), 2, 0, 20);
 	RenderTextOnScreen(meshList[GEO_TEXT], "Pos X puzzle: " + std::to_string(puzzle.playeractualpox), Color(1, 1, 0), 2, 0, 23);*/
 
+
+
 }
 
 void Splevel1::RenderSkybox()
@@ -3704,8 +3828,16 @@ void Splevel1::RenderWorkStation(int WorkStation)
 			RenderMesh(meshList[GEO_Body], false);
 			{
 				modelStack.PushMatrix();
-				modelStack.Translate(0, 0, 0);
-				modelStack.Scale(1, 1, 1);
+				modelStack.Scale(0.3, 0.3, 0.3);
+				modelStack.Rotate(90, 0, 1, 0);
+				modelStack.Translate(-5, 20, 0);
+				RenderText(meshList[GEO_TEXT], NameList[WorkStation+18], Color(1, 1, 1));
+				modelStack.PushMatrix();
+				modelStack.Translate(0, 2, 0);
+				RenderText(meshList[GEO_TEXT], NameList[WorkStation], Color(1, 1, 1));
+				modelStack.PopMatrix();
+				modelStack.PopMatrix();
+
 				RenderMesh(meshList[GEO_Head], false);
 				{
 					modelStack.PushMatrix();
@@ -3716,7 +3848,6 @@ void Splevel1::RenderWorkStation(int WorkStation)
 					RenderMesh(meshList[GEO_Arms], false);
 					modelStack.PopMatrix();
 				}
-				modelStack.PopMatrix();
 				//Render Desk and Equipment
 				modelStack.PushMatrix();
 				modelStack.Rotate(90, 0, 1, 0);
@@ -4243,6 +4374,7 @@ void Splevel1::UpdateMainControls()
 			else if (win == true)
 			{
 				PlaySound(TEXT("WinMinigame.wav"), NULL, SND_ASYNC);
+				Manager.MinigameBuffs += 15;
 				win = false;
 				timerstart = false;
 				clearpolice = false;
@@ -4297,7 +4429,7 @@ void Splevel1::UpdateCarepackage(double dt)
 	if (carepackage->active == true)
 	{
 		packagetimer -= dt;
-		if (packagetimer < 56)
+		if (packagetimer < 55)
 		{
 			carepackage->notitext = false;
 		}
@@ -4311,7 +4443,7 @@ void Splevel1::UpdateCarepackage(double dt)
 			if (Application::IsKeyPressed('E'))
 			{
 				int result = (rand() % 10) + 1;
-				if (result > 5)
+				if (result > 8)
 				{
 					Manager.Money += Manager.Money;
 					carepackage->notitext = false;
@@ -4594,6 +4726,15 @@ void Splevel1::RenderCoinsOnScreen(Mesh* mesh, int x, int y, int sizex, int size
 int Splevel1::Random(int range)
 {
 	srand(time(0));  // Initialize random number generator.
-
 	return rand()%1 + range;
+}
+
+
+void Splevel1::InitName(void)
+{
+	std::string Temp[36] = { "Watson","Pat","Frankie","Valentine","Sidney","Wilson","Tilden","Sanford","Madison","Sid","Kirby","Peter","Maurice","Hugh","Almer","Wiley","John","Perry","Pruitt","Roger","Hayes","Parks","Flowers","Russell","Armstrong","Dillon", "Barnett","Roberson","Mays","Sims","Kelley", "Hickman","Mueller","Tyler","Cena","Johnson"};
+	for (int i = 0; i < 36; ++i)
+	{
+		NameList[i] = Temp[i];
+	}
 }

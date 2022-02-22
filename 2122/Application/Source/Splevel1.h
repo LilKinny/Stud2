@@ -17,6 +17,7 @@ class Splevel1 : public Scene
 		GEO_AXES,
 		GEO_QUAD,
 		GEO_TITLE,
+		GEO_NAME,
 		GEO_TITLEBUTTONS,
 		GEO_CUBE,
 		GEO_GRASS,
@@ -53,6 +54,9 @@ class Splevel1 : public Scene
 		GEO_LAPTOP_UI,
 		GEO_TopUI,
 		GEO_BotUI,
+		GEO_CASH,
+		GEO_MONEYPLANT,
+		GEO_MONEYCAT,
 		GEO_SideUIBig,
 		GEO_SideUISmall,
 		GEO_MaxPrestige,
@@ -85,6 +89,8 @@ class Splevel1 : public Scene
 		GEO_PREop1,
 		GEO_PREop2,
 		GEO_PREop3,
+		GEO_HTP,
+		GEO_HTPSCREEN,
 		GEO_Body,
 		GEO_Head,
 		GEO_Arms,
@@ -206,7 +212,7 @@ private:
 	float liftdoor2;
 	bool bEnableLight;
 	bool questions,Pqeustions;
-
+	std::string NameList[36];
 	//void Playsoundfile(string filename)	
 	//{
 	//	mciSendString("play mp3", NULL, 0, NULL);
@@ -266,6 +272,7 @@ private:
 	void RenderMeshOnScreen(Mesh* mesh, int x, int y, int sizex, int sizey, bool RotateX = false);
 	void RenderCoinsOnScreen(Mesh* mesh, int x, int y, int sizex, int sizey);
 	int Random(int range);
+	void InitName(void);
 	Camera3 camera;
 };
 

@@ -7,7 +7,7 @@ EquipmentManager::EquipmentManager()
 	LuckyCatUpgrade = 0;
 	MoneyPlantUpgrade = 0;
 	PrestigeLvl = 0;
-	Money = 50000;
+	Money = 10;
 	InitEquipArray();
 }
 
@@ -29,7 +29,7 @@ int EquipmentManager::UpgradePrestige(bool Upgrade)
 				DeleteEquipArray();
 				InitEquipArray();
 				CalculateTotalIncome();
-				//Money = 0;
+				Money = 0;
 			}
 			return 1;
 		}
@@ -45,7 +45,7 @@ int EquipmentManager::UpgradePrestige(bool Upgrade)
 				DeleteEquipArray();
 				InitEquipArray();
 				CalculateTotalIncome();
-				//Money = 0;
+				Money = 0;
 			}
 			return 1;
 		}
@@ -61,7 +61,7 @@ int EquipmentManager::UpgradePrestige(bool Upgrade)
 				DeleteEquipArray();
 				InitEquipArray(); 
 				CalculateTotalIncome();
-				//Money = 0;
+				Money = 0;
 			}
 			return 1;
 		}
@@ -194,7 +194,12 @@ int EquipmentManager::UnlockPhone(bool unlock)
 {
 	float IncrementPrice = 50;
 	//Checks if got space for Phone
-	for(int i = 0; i < (PrestigeLvl+1)*6;++i)
+	int Temp = 1;
+	if (PrestigeLvl == 3)
+	{
+		Temp = 0;
+	}
+	for(int i = 0; i < (PrestigeLvl+Temp)*6;++i)
 	{
 		//Check if Equip Array got empty "Work station"
 		if (EquipArray[i] == nullptr && unlock == true)
@@ -227,8 +232,13 @@ int EquipmentManager::UnlockPhone(bool unlock)
 int EquipmentManager::UnlockComputer(bool unlock)
 {
 	float IncrementPrice = 50;
-	//Checks if got space for Computer
-	for (int i = 0; i < (PrestigeLvl + 1) * 6; ++i)
+	//Checks if got space for Phone
+	int Temp = 1;
+	if (PrestigeLvl == 3)
+	{
+		Temp = 0;
+	}
+	for (int i = 0; i < (PrestigeLvl + Temp) * 6; ++i)
 	{
 		//Check if Equip Array got empty "Work station"
 		if (EquipArray[i] == nullptr && unlock == true)
