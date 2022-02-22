@@ -1953,7 +1953,6 @@ void Splevel1::Render()
 
 	
 	srand(time(0));
-	RenderMesh(meshList[GEO_AXES], false);
 	RenderSkybox();
 
 	
@@ -3598,9 +3597,9 @@ void Splevel1::RenderSkybox()
 	modelStack.PopMatrix();*/
 
 	modelStack.PushMatrix();
-	modelStack.Translate(light[0].position.x, light[0].position.y, light[0].position.z);
+	modelStack.Translate(light[0].position.x, light[0].position.y + 800, light[0].position.z);
 	modelStack.Rotate(180, 0, 180, 180);
-	modelStack.Scale(5, 5, 5);
+	modelStack.Scale(1, 1, 1);
 	RenderMesh(meshList[GEO_LIGHTBALL], false);
 	modelStack.PopMatrix();
 
