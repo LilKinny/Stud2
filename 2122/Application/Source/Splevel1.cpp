@@ -496,8 +496,7 @@ int totalbeets = 0, countdownbonus = 1500, spinD = 0;
 
 int mg1_start, dialoguepart, rannpc;
 bool lvl2, lvl3,lvl1=true, playonce, NPCInteract;
-bool prologue = true, doneonce, OP1, OP2, OP3,OP1check, OP2check,OP3check,deleterest,LS_start,LS_Win,LS_Lose,POP1,POP2,POP3, rotateback = true, spawntaxi, spawnpolice, spawntruck,closed,closed2,closing;
-bool doneonce, OP1, OP2, OP3,OP1check, OP2check,OP3check,deleterest,LS_start,LS_Win,LS_Lose,POP1,POP2,POP3, rotateback = true, spawntaxi, spawnpolice, spawntruck,closed,closed2,closing,HTP;
+bool prologue = true, doneonce, OP1, OP2, OP3,OP1check, OP2check,OP3check,deleterest,LS_start,LS_Win,LS_Lose,POP1,POP2,POP3, rotateback = true, spawntaxi, spawnpolice, spawntruck,closed,closed2,closing, HTP;
 
 float cposx, cposz, movecar;
 
