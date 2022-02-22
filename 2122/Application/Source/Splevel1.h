@@ -215,6 +215,8 @@ private:
 	void UpdateCarepackage(double dt);
 	void RenderCarepackage();
 
+	void packagedieanimation();
+
 	EquipmentManager Manager;
 
 	Puzzle puzzle;
@@ -224,9 +226,14 @@ private:
 	bool PuzzleLoseUI;
 	bool PuzzlePlayerPickup;
 
+	bool packagedie;
+
 	float puzzletimer;
 	float packagetimer;
 	float packagecooltimer;
+
+	float packagetruckoffset;
+
 
 	enum class Gamestate {MainGame,PuzzleGame}gamestate;
 

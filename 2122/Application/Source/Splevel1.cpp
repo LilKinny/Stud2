@@ -286,6 +286,8 @@ void Splevel1::Init()
 
 	packagecooltimer = 15;
 
+	packagetruckoffset = 2000;
+
 	//Initialize camera settings
 	camera.Init(Vector3(0, 30, 345), Vector3(0, 0, 0), Vector3(0, 1, 0));
 
@@ -495,7 +497,8 @@ void Splevel1::Update(double dt)
 	rotateangle = rotateangle + 0.1;
 
 	int carepackagerand;
-	carepackagerand = (rand() % 100) + 1;
+	//carepackagerand = (rand() % 100) + 1;
+	carepackagerand = 69;
 
 	if (carepackage->active == false)
 	{
@@ -2308,6 +2311,8 @@ void Splevel1::Render()
 		//RenderMesh(meshList[GEO_TRUCK], true);
 		//modelStack.PopMatrix();
 	}
+
+	packagedieanimation();
 
 	//Building
 	{
@@ -4245,7 +4250,7 @@ void Splevel1::UpdateCarepackage(double dt)
 				}
 				else
 				{
-					die = true;
+					packagedie = true;
 					carepackage->notitext = false;
 					carepackage->pickuptext = false;
 					carepackage->active = false;
@@ -4255,6 +4260,18 @@ void Splevel1::UpdateCarepackage(double dt)
 		else
 		{
 			carepackage->pickuptext = false;
+		}
+	}
+
+	if (packagedie == true)
+	{
+		packagetruckoffset -= 1000 * dt;
+
+		if (packagetruckoffset < 0)
+		{
+			packagedie = false;
+			die = true;
+			packagetruckoffset = 2000;
 		}
 	}
 }
@@ -4282,6 +4299,31 @@ void Splevel1::RenderCarepackage()
 		RenderTextOnScreen(meshList[GEO_TEXT], "Press 'E' to open the GIFT", Color(1, 1, 1), 3, 20, 25);
 	}
 	
+}
+
+void Splevel1::packagedieanimation()
+{
+
+	if (packagedie == true)
+	{
+		
+
+		modelStack.PushMatrix();
+		modelStack.Translate(camera.position.x, packagetruckoffset, camera.position.z - 10);
+		modelStack.Rotate(90, 1, 0, 0);
+		
+		modelStack.Scale(30, 30, 30);
+		RenderMesh(meshList[GEO_TRUCK], true);
+		modelStack.PopMatrix();
+
+		
+	}
+
+
+
+	
+
+
 }
 
 void Splevel1::RenderMesh(Mesh* mesh, bool enableLight)
