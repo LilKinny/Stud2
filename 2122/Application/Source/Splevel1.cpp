@@ -284,6 +284,10 @@ void Splevel1::Init()
 
 	packagetimer = 60;
 
+	packagecooltimer = 15;
+
+	packagetruckoffset = 2000;
+
 	//Initialize camera settings
 	camera.Init(Vector3(0, 30, 345), Vector3(0, 0, 0), Vector3(0, 1, 0));
 
@@ -354,12 +358,10 @@ void Splevel1::Init()
 
 	meshList[GEO_UPGRADETEXT] = MeshBuilder::GenerateRec("UpgradeText", Color(1, 1, 1), 5.f, 1.f);
 	meshList[GEO_UPGRADETEXT]->textureID = LoadTGA("Image//UpgradeText.tga");
-	/*
-	meshList[GEO_NYP] = MeshBuilder::GenerateQuad("nyplogo", Color(1, 1, 1), 1.f);
-	meshList[GEO_NYP]->textureID = LoadTGA("Image//NYP.tga");
 
-	meshList[GEO_CUBE] = MeshBuilder::GenerateCube("Cube", Color(1, 1, 1), 1.f);
- */
+	//meshList[GEO_CAT] = MeshBuilder::GenerateOBJ("Cat", "OBJ//cat.obj");
+	//meshList[GEO_CAT]->textureID = LoadTGA("Image//Gold.tga");
+
 	meshList[GEO_TITLEBUTTONS] = MeshBuilder::GenerateQuad("quad", Color(1, 1, 1), 1.f);
 	meshList[GEO_TITLEBUTTONS]->textureID = LoadTGA("Image//TitleButton.tga");
 
@@ -384,6 +386,8 @@ void Splevel1::Init()
 	meshList[GEO_LVL3] = MeshBuilder::GenerateOBJMTL("modelLVL3", "OBJ//LVL3.obj", "OBJ//LVL3.mtl");
 
 	meshList[GEO_Table] = MeshBuilder::GenerateOBJMTL("modelBUIDLING", "OBJ//simple_table.obj", "OBJ//simple_table.mtl");
+
+	meshList[GEO_ROCK] = MeshBuilder::GenerateOBJMTL("Rock", "OBJ//rock_largeB.obj", "OBJ//rock_largeB.mtl");
 
 	meshList[GEO_Screen] = MeshBuilder::GenerateRec("Rec", Color(1, 1, 1), 3.f, 5.f);
 	meshList[GEO_Screen]->textureID = LoadTGA("Image//Phone.tga"); // beats me
@@ -419,16 +423,17 @@ void Splevel1::Init()
 	meshList[GEO_Phone2] = MeshBuilder::GenerateOBJMTL("Phone1", "OBJ//Phone1.obj", "OBJ//Phone1.mtl");
 	meshList[GEO_Phone3] = MeshBuilder::GenerateOBJMTL("Phone1", "OBJ//PhoneLVL3.obj", "OBJ//PhoneLVL3.mtl");
 	meshList[GEO_Body] = MeshBuilder::GenerateOBJMTL("Body", "OBJ//Body.obj", "OBJ//Body.mtl");
+	meshList[GEO_Body]->textureID = LoadTGA("Image//Body.tga");
 	meshList[GEO_Head] = MeshBuilder::GenerateOBJMTL("Head", "OBJ//Head.obj", "OBJ//Head.mtl");
+	meshList[GEO_Head]->textureID = LoadTGA("Image//Skin.tga");
 	meshList[GEO_Arms] = MeshBuilder::GenerateOBJMTL("Arms", "OBJ//Arms.obj", "OBJ//Arms.mtl");
-
+	meshList[GEO_Arms]->textureID = LoadTGA("Image//Skin.tga");
 	meshList[GEO_TAXI] = MeshBuilder::GenerateOBJMTL("Tree", "OBJ//taxi.obj", "OBJ//taxi.mtl");
 	meshList[GEO_POLICE] = MeshBuilder::GenerateOBJMTL("Tree", "OBJ//police.obj", "OBJ//police.mtl");
 	meshList[GEO_TRUCK] = MeshBuilder::GenerateOBJMTL("Tree", "OBJ//delivery.obj", "OBJ//delivery.mtl");
 	meshList[GEO_ROAD] = MeshBuilder::GenerateOBJMTL("Tree", "OBJ//road_straight.obj", "OBJ//road_straight.mtl");
 	meshList[GEO_ROADTURN] = MeshBuilder::GenerateOBJMTL("Turn", "OBJ//road_bendSquare.obj", "OBJ//road_bendSquare.mtl");
 	meshList[GEO_ROADTSECT] = MeshBuilder::GenerateOBJMTL("Tsect", "OBJ//road_drivewaySingle.obj", "OBJ//road_drivewaySingle.mtl");
-
 	meshList[GEO_STREETLIGHT] = MeshBuilder::GenerateOBJMTL("streetlight", "OBJ//streetlight.obj", "OBJ//streetlight.mtl");
 
 	meshList[GEO_Lift] = MeshBuilder::GenerateOBJ("modelBUIDLING", "OBJ//Elevator.obj");
@@ -465,8 +470,10 @@ void Splevel1::Init()
 
 	meshList[GEO_CHEST] = MeshBuilder::GenerateOBJMTL("Grass3D", "OBJ//chest.obj", "OBJ//chest.mtl");
 
+	meshList[GEO_HIGHHOLE] = MeshBuilder::GenerateOBJMTL("HighHole", "OBJ//HighHole.obj", "OBJ//HighHole.mtl");
+
 	Mtx44 projection;
-	projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 10000.f);
+	projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 100000.f);
 	projectionStack.LoadMatrix(projection);
 	liftdoor2 = 80;
 }
@@ -477,9 +484,9 @@ float pposx, pposz, pposx2, pposz2, pposx4, pposx3, pposz3, pposz4, rotateangle,
 string timerstring, beetsinstringform, Dialogue, Answer1, Answer2;
 int totalbeets = 0, countdownbonus = 1500, spinD = 0;
 
-int mg1_start, dialoguepart;
+int mg1_start, dialoguepart, rannpc;
 bool lvl2, lvl3,lvl1=true, playonce, NPCInteract;
-bool OP1, OP2, OP3,OP1check, OP2check,OP3check,deleterest,LS_start,LS_Win,LS_Lose,POP1,POP2,POP3, rotateback = true, spawntaxi, spawnpolice, spawntruck,closed,closed2,closing;
+bool doneonce, OP1, OP2, OP3,OP1check, OP2check,OP3check,deleterest,LS_start,LS_Win,LS_Lose,POP1,POP2,POP3, rotateback = true, spawntaxi, spawnpolice, spawntruck,closed,closed2,closing;
 
 float cposx, cposz, movecar;
 
@@ -492,13 +499,21 @@ void Splevel1::Update(double dt)
 	rotateangle = rotateangle + 0.1;
 
 	int carepackagerand;
-	carepackagerand = (rand() % 20) + 1;
+	carepackagerand = (rand() % 100) + 1;
+	/*carepackagerand = 69;*/
+
+	if (carepackage->active == false)
+	{
+		packagecooltimer -= dt;
+	}
 
 	
-	if (carepackagerand == 5 && carepackage->active == false)
+	if (carepackagerand == 69 && carepackage->active == false && packagecooltimer < 0)
 	{
 		carepackage->reset(-430,430,307,429);
 		packagetimer = 60;
+		packagecooltimer = 15;
+
 		carepackage->active = true;
 		carepackage->notitext = true;
 		
@@ -608,7 +623,7 @@ void Splevel1::Update(double dt)
 	if (startlaptop == true)
 	{
 		static bool bLButtonState = false;
-		if (debugmouseposx > 35 && debugmouseposx < 48 && debugmouseposy > 18 && debugmouseposy < 30)
+		if (debugmouseposx > 35 && debugmouseposx < 48 && debugmouseposy > 18 && debugmouseposy < 35)
 		{
 			if (!bLButtonState && Application::IsMousePressed(0))
 			{
@@ -1107,12 +1122,14 @@ void Splevel1::Update(double dt)
 					Manager.Money = Manager.Money + 100;
 					PlaySound(TEXT("Sent.wav"), NULL, SND_ASYNC);
 					LS_Win = false;
+					PlaySound(TEXT("Sent.wav"), NULL, SND_ASYNC);
 				}
 				else if (posX > 35 && posX < 44 && (posY > 10 && posY < 17))
 				{
 					Manager.Money = Manager.Money + 50;
 					PlaySound(TEXT("Sent.wav"), NULL, SND_ASYNC);
 					LS_Win = false;
+					PlaySound(TEXT("Sent.wav"), NULL, SND_ASYNC);
 				}
 				
 			}
@@ -1148,7 +1165,7 @@ void Splevel1::Update(double dt)
 
 			if (PuzzleLoseUI == true)
 			{
-				if (posX > 35 && posX < 45 && posY > 8 && posY < 14)
+				if (posX > 35 && posX < 45 && posY > 8 && posY < 19)
 				{
 					PuzzleLoseUI = false;
 					Manager.Money -= Manager.Money / 5;
@@ -1156,7 +1173,7 @@ void Splevel1::Update(double dt)
 			}
 			if (die == true)
 			{
-				if (posX > 35 && posX < 45 && posY > 8 && posY < 14)
+				if (posX > 35 && posX < 45 && posY > 8 && posY < 19)
 				{
 
 					Manager.Money -= Manager.Money / 2;
@@ -1388,303 +1405,453 @@ void Splevel1::Update(double dt)
 	//NPC interactions
 	//cout << dialoguepart;
 	{
-		static bool BButtonState = false;
-		static bool CButtonState = false;
-		if (camera.position.x > movex - 40 && camera.position.x < movex + 40 && (camera.position.z < 240 && camera.position.z > 160))//L3
-		{
-			RenderTextOnScreen(meshList[GEO_TEXT], "Press 'E' to Interact with NPC", Color(0, 1, 0), 4, 10, 30);
-
-			if (!BButtonState && Application::IsKeyPressed('E'))
-			{
-				NPCInteract = true;
-
-			}
-			else if (BButtonState && !Application::IsKeyPressed('E'))
-			{
-				BButtonState = false;
-			}
-		}
-		else NPCInteract = false;
-
+		
 		if (NPCInteract == true)
 		{
 			int ran = rand() % 1 + 1;
+
+			if (doneonce == false)
+			{
+				rannpc = rand() % 2 + 1;
+				doneonce = true;
+			}
 			static bool bLButtonState = false;
 			if (ran == 1)
-			{
-				if (dialoguepart == 0)
+				if (rannpc == 1)
 				{
-					Dialogue = "Whats up?";
-					AlignX = 24;
-					Answer1 = "Do you want a FREE product?";
-					Answer2 = "Im here to scam you";
-					if (!bLButtonState && Application::IsMousePressed(0))
+					if (dialoguepart == 0)
 					{
-						bLButtonState = true;
-						double x, y;
-						Application::GetCursorPos(&x, &y);
-						unsigned w = Application::GetWindowWidth();
-						unsigned h = Application::GetWindowHeight();
-						float posX = x / w * 80; //convert (0,800) to (0,80)
-						float posY = 60 - y / h * 60; //convert (600,0) to (0,60)
-						Sleep(150);
-						if (posX > 5 && posX < 35 && (posY > 8 && posY < 14)) // Box1
+						Dialogue = "Whats up?";
+						AlignX = 24;
+						Answer1 = "Do you want a FREE product?";
+						Answer2 = "Im here to scam you";
+						if (!bLButtonState && Application::IsMousePressed(0))
 						{
-							dialoguepart = 1;
+							bLButtonState = true;
+							double x, y;
+							Application::GetCursorPos(&x, &y);
+							unsigned w = Application::GetWindowWidth();
+							unsigned h = Application::GetWindowHeight();
+							float posX = x / w * 80; //convert (0,800) to (0,80)
+							float posY = 60 - y / h * 60; //convert (600,0) to (0,60)
+							Sleep(150);
+							if (posX > 5 && posX < 35 && (posY > 8 && posY < 14)) // Box1
+							{
+								dialoguepart = 1;
+							}
+							if (posX > 45 && posX < 75 && (posY > 8 && posY < 14)) // Box2
+							{
+								dialoguepart = 4;
+							}
 						}
-						if (posX > 45 && posX < 75 && (posY > 8 && posY < 14)) // Box2
-						{
-							dialoguepart = 4;
-						}
+						else bLButtonState = false;
 					}
-					else bLButtonState = false;
+					if (dialoguepart == 1)
+					{
+						Dialogue = "Sounds legit, im listening.";
+						Answer2 = "There is a shipping fee";
+						Answer1 = "I need your credit card info";
+
+						if (!bLButtonState && Application::IsMousePressed(0))
+						{
+							bLButtonState = true;
+							double x, y;
+							Application::GetCursorPos(&x, &y);
+							unsigned w = Application::GetWindowWidth();
+							unsigned h = Application::GetWindowHeight();
+							float posX = x / w * 80; //convert (0,800) to (0,80)
+							float posY = 60 - y / h * 60; //convert (600,0) to (0,60)
+							Sleep(150);
+							if (posX > 5 && posX < 35 && (posY > 8 && posY < 14)) // Box1
+							{
+
+								dialoguepart = 5;
+							}
+							if (posX > 45 && posX < 75 && (posY > 8 && posY < 14)) // Box2
+							{
+								dialoguepart = 2;
+							}
+						}
+						else bLButtonState = false;
+					}
+
+					if (dialoguepart == 2)
+					{
+						Dialogue = "Whats the fee?";
+						Answer2 = "$50";
+						Answer1 = "$400";
+
+						if (!bLButtonState && Application::IsMousePressed(0))
+						{
+							bLButtonState = true;
+							double x, y;
+							Application::GetCursorPos(&x, &y);
+							unsigned w = Application::GetWindowWidth();
+							unsigned h = Application::GetWindowHeight();
+							float posX = x / w * 80; //convert (0,800) to (0,80)
+							float posY = 60 - y / h * 60; //convert (600,0) to (0,60)
+							Sleep(150);
+							if (posX > 5 && posX < 35 && (posY > 8 && posY < 14)) // Box1
+							{
+								dialoguepart = 6;
+							}
+							if (posX > 45 && posX < 75 && (posY > 8 && posY < 14)) // Box2
+							{
+								dialoguepart = 3;
+							}
+						}
+						else bLButtonState = false;
+					}
+
+					if (dialoguepart == 3)
+					{
+						Dialogue = "Sounds totally legit! Im in!";
+						Answer1 = "Nice";
+						Answer2 = "Nice";
+
+						if (!bLButtonState && Application::IsMousePressed(0))
+						{
+							bLButtonState = true;
+							double x, y;
+							Application::GetCursorPos(&x, &y);
+							unsigned w = Application::GetWindowWidth();
+							unsigned h = Application::GetWindowHeight();
+							float posX = x / w * 80; //convert (0,800) to (0,80)
+							float posY = 60 - y / h * 60; //convert (600,0) to (0,60)
+							if (posX > 5 && posX < 35 && (posY > 8 && posY < 14)) // Box1
+							{
+								Manager.Money += 50;
+								dialoguepart = 0;
+								NPCInteract = false;
+								doneonce = false;
+							}
+							if (posX > 45 && posX < 75 && (posY > 8 && posY < 14)) // Box2
+							{
+								Manager.Money += 50;
+								dialoguepart = 0;
+								NPCInteract = false;
+								doneonce = false;
+							}
+						}
+						else bLButtonState = false;
+					}
+
+					if (dialoguepart == 4)
+					{
+						Dialogue = "What? Get away from me you creep!";
+						Answer1 = "Ok";
+						Answer2 = "Ok";
+
+						if (!bLButtonState && Application::IsMousePressed(0))
+						{
+							bLButtonState = true;
+							double x, y;
+							Application::GetCursorPos(&x, &y);
+							unsigned w = Application::GetWindowWidth();
+							unsigned h = Application::GetWindowHeight();
+							float posX = x / w * 80; //convert (0,800) to (0,80)
+							float posY = 60 - y / h * 60; //convert (600,0) to (0,60)
+							if (posX > 5 && posX < 35 && (posY > 8 && posY < 14)) // Box1
+							{
+								dialoguepart = 0;
+								NPCInteract = false;
+								doneonce = false;
+
+							}
+							if (posX > 45 && posX < 75 && (posY > 8 && posY < 14)) // Box2
+							{
+								dialoguepart = 0;
+								NPCInteract = false;
+								doneonce = false;
+							}
+						}
+						else bLButtonState = false;
+					}
+
+					if (dialoguepart == 5)
+					{
+						Dialogue = "i need my credit card for a free product? scam!";
+						Answer1 = "end";
+						Answer2 = "end";
+
+						if (!bLButtonState && Application::IsMousePressed(0))
+						{
+							bLButtonState = true;
+							double x, y;
+							Application::GetCursorPos(&x, &y);
+							unsigned w = Application::GetWindowWidth();
+							unsigned h = Application::GetWindowHeight();
+							float posX = x / w * 80; //convert (0,800) to (0,80)
+							float posY = 60 - y / h * 60; //convert (600,0) to (0,60)
+							if (posX > 5 && posX < 35 && (posY > 8 && posY < 14)) // Box1
+							{
+								dialoguepart = 0;
+								NPCInteract = false;
+								doneonce = false;
+							}
+							if (posX > 45 && posX < 75 && (posY > 8 && posY < 14)) // Box2
+							{
+								dialoguepart = 0;
+								NPCInteract = false;
+								doneonce = false;
+							}
+						}
+						else bLButtonState = false;
+					}
+
+					if (dialoguepart == 6)
+					{
+						Dialogue = "Thats way too expensive! Clearly a scam!";
+						Answer1 = "end";
+						Answer2 = "end";
+
+						if (!bLButtonState && Application::IsMousePressed(0))
+						{
+							bLButtonState = true;
+							double x, y;
+							Application::GetCursorPos(&x, &y);
+							unsigned w = Application::GetWindowWidth();
+							unsigned h = Application::GetWindowHeight();
+							float posX = x / w * 80; //convert (0,800) to (0,80)
+							float posY = 60 - y / h * 60; //convert (600,0) to (0,60)
+							if (posX > 5 && posX < 35 && (posY > 8 && posY < 14)) // Box1
+							{
+								dialoguepart = 0;
+								NPCInteract = false;
+								doneonce = false;
+							}
+							if (posX > 45 && posX < 75 && (posY > 8 && posY < 14)) // Box2
+							{
+								dialoguepart = 0;
+								NPCInteract = false;
+								doneonce = false;
+							}
+						}
+						else bLButtonState = false;
+					}
 				}
-				if (dialoguepart == 1)
+
+				else if (rannpc == 2)
 				{
-					Dialogue = "Sounds legit, im listening.";
-					Answer2 = "There is a shipping fee";
-					Answer1 = "I need your credit card info";
-
-					if (!bLButtonState && Application::IsMousePressed(0))
+					if (dialoguepart == 0)
 					{
-						bLButtonState = true;
-						double x, y;
-						Application::GetCursorPos(&x, &y);
-						unsigned w = Application::GetWindowWidth();
-						unsigned h = Application::GetWindowHeight();
-						float posX = x / w * 80; //convert (0,800) to (0,80)
-						float posY = 60 - y / h * 60; //convert (600,0) to (0,60)
-						Sleep(150);
-						if (posX > 5 && posX < 35 && (posY > 8 && posY < 14)) // Box1
+						Dialogue = "Hi! I can double your money!";
+						AlignX = 24;
+						Answer2 = "No, its a scam"; // w
+						Answer1 = "Sounds interesting!"; // c
+						if (!bLButtonState && Application::IsMousePressed(0))
 						{
-
-							dialoguepart = 5;
+							bLButtonState = true;
+							double x, y;
+							Application::GetCursorPos(&x, &y);
+							unsigned w = Application::GetWindowWidth();
+							unsigned h = Application::GetWindowHeight();
+							float posX = x / w * 80; //convert (0,800) to (0,80)
+							float posY = 60 - y / h * 60; //convert (600,0) to (0,60)
+							Sleep(150);
+							if (posX > 5 && posX < 35 && (posY > 8 && posY < 14)) // Box1
+							{
+								dialoguepart = 1;
+							}
+							if (posX > 45 && posX < 75 && (posY > 8 && posY < 14)) // Box2
+							{
+								dialoguepart = 0;
+								NPCInteract = false;
+							}
 						}
-						if (posX > 45 && posX < 75 && (posY > 8 && posY < 14)) // Box2
-						{
-							dialoguepart = 2;
-						}
+						else bLButtonState = false;
 					}
-					else bLButtonState = false;
-				}
-
-				if (dialoguepart == 2)
-				{
-					Dialogue = "Whats the fee?";
-					Answer2 = "$50";
-					Answer1 = "$400";
-
-					if (!bLButtonState && Application::IsMousePressed(0))
+					if (dialoguepart == 1)
 					{
-						bLButtonState = true;
-						double x, y;
-						Application::GetCursorPos(&x, &y);
-						unsigned w = Application::GetWindowWidth();
-						unsigned h = Application::GetWindowHeight();
-						float posX = x / w * 80; //convert (0,800) to (0,80)
-						float posY = 60 - y / h * 60; //convert (600,0) to (0,60)
-						Sleep(150);
-						if (posX > 5 && posX < 35 && (posY > 8 && posY < 14)) // Box1
+						Dialogue = "Just pay it now and ill return you double instantly!";
+						Answer1 = "Pay $2000"; // w
+						Answer2 = "Pay $50"; // c
+
+						if (!bLButtonState && Application::IsMousePressed(0))
 						{
-							dialoguepart = 6;
+							bLButtonState = true;
+							double x, y;
+							Application::GetCursorPos(&x, &y);
+							unsigned w = Application::GetWindowWidth();
+							unsigned h = Application::GetWindowHeight();
+							float posX = x / w * 80; //convert (0,800) to (0,80)
+							float posY = 60 - y / h * 60; //convert (600,0) to (0,60)
+							Sleep(150);
+							if (posX > 5 && posX < 35 && (posY > 8 && posY < 14)) // Box1
+							{
+
+								dialoguepart = 5;
+							}
+							if (posX > 45 && posX < 75 && (posY > 8 && posY < 14)) // Box2
+							{
+								dialoguepart = 2;
+							}
 						}
-						if (posX > 45 && posX < 75 && (posY > 8 && posY < 14)) // Box2
-						{
-							dialoguepart = 3;
-						}
+						else bLButtonState = false;
 					}
-					else bLButtonState = false;
-				}
 
-				if (dialoguepart == 3)
-				{
-					Dialogue = "Sounds totally legit! Im in!";
-					Answer1 = "Nice";
-					Answer2 = "Nice";
-
-					if (!bLButtonState && Application::IsMousePressed(0))
+					if (dialoguepart == 2)
 					{
-						bLButtonState = true;
-						double x, y;
-						Application::GetCursorPos(&x, &y);
-						unsigned w = Application::GetWindowWidth();
-						unsigned h = Application::GetWindowHeight();
-						float posX = x / w * 80; //convert (0,800) to (0,80)
-						float posY = 60 - y / h * 60; //convert (600,0) to (0,60)
-						if (posX > 5 && posX < 35 && (posY > 8 && posY < 14)) // Box1
+						Dialogue = "*he gives you $100, hoping you give more*";
+						Answer1 = "i believe you! Pay $2000"; // w
+						Answer2 = "Run with the money lol"; // c
+
+						if (!bLButtonState && Application::IsMousePressed(0))
 						{
-							Manager.Money += 50;
-							dialoguepart = 0;
-							NPCInteract = false;
+							bLButtonState = true;
+							double x, y;
+							Application::GetCursorPos(&x, &y);
+							unsigned w = Application::GetWindowWidth();
+							unsigned h = Application::GetWindowHeight();
+							float posX = x / w * 80; //convert (0,800) to (0,80)
+							float posY = 60 - y / h * 60; //convert (600,0) to (0,60)
+							Sleep(150);
+							if (posX > 5 && posX < 35 && (posY > 8 && posY < 14)) // Box1
+							{
+								dialoguepart = 5;
+							}
+							if (posX > 45 && posX < 75 && (posY > 8 && posY < 14)) // Box2
+							{
+								dialoguepart = 3;
+							}
 						}
-						if (posX > 45 && posX < 75 && (posY > 8 && posY < 14)) // Box2
-						{
-							Manager.Money += 50;
-							dialoguepart = 0;
-							NPCInteract = false;
-						}
+						else bLButtonState = false;
 					}
-					else bLButtonState = false;
-				}
 
-				if (dialoguepart == 4)
-				{
-					Dialogue = "What? Get away from me you creep!";
-					Answer1 = "Ok";
-					Answer2 = "Ok";
-
-					if (!bLButtonState && Application::IsMousePressed(0))
+					if (dialoguepart == 3)
 					{
-						bLButtonState = true;
-						double x, y;
-						Application::GetCursorPos(&x, &y);
-						unsigned w = Application::GetWindowWidth();
-						unsigned h = Application::GetWindowHeight();
-						float posX = x / w * 80; //convert (0,800) to (0,80)
-						float posY = 60 - y / h * 60; //convert (600,0) to (0,60)
-						if (posX > 5 && posX < 35 && (posY > 8 && posY < 14)) // Box1
+						Dialogue = "Hey! My money!";
+						Answer1 = "Run";
+						Answer2 = "Run";
+
+						if (!bLButtonState && Application::IsMousePressed(0))
 						{
-							dialoguepart = 0;
-							NPCInteract = false;
+							bLButtonState = true;
+							double x, y;
+							Application::GetCursorPos(&x, &y);
+							unsigned w = Application::GetWindowWidth();
+							unsigned h = Application::GetWindowHeight();
+							float posX = x / w * 80; //convert (0,800) to (0,80)
+							float posY = 60 - y / h * 60; //convert (600,0) to (0,60)
+							if (posX > 5 && posX < 35 && (posY > 8 && posY < 14)) // Box1
+							{
+								dialoguepart = 0;
+								Manager.Money += 100;
+								NPCInteract = false;
+							}
+							if (posX > 45 && posX < 75 && (posY > 8 && posY < 14)) // Box2
+							{
+								dialoguepart = 0;
+								Manager.Money += 100;
+								NPCInteract = false;
+							}
 						}
-						if (posX > 45 && posX < 75 && (posY > 8 && posY < 14)) // Box2
-						{
-							dialoguepart = 0;
-							NPCInteract = false;
-						}
+						else bLButtonState = false;
 					}
-					else bLButtonState = false;
-				}
 
-				if (dialoguepart == 5)
-				{
-					Dialogue = "i need my credit card for a free product? scam!";
-					Answer1 = "end";
-					Answer2 = "end";
-
-					if (!bLButtonState && Application::IsMousePressed(0))
+					if (dialoguepart == 4)
 					{
-						bLButtonState = true;
-						double x, y;
-						Application::GetCursorPos(&x, &y);
-						unsigned w = Application::GetWindowWidth();
-						unsigned h = Application::GetWindowHeight();
-						float posX = x / w * 80; //convert (0,800) to (0,80)
-						float posY = 60 - y / h * 60; //convert (600,0) to (0,60)
-						if (posX > 5 && posX < 35 && (posY > 8 && posY < 14)) // Box1
+						Dialogue = "What? Get away from me you creep!";
+						Answer1 = "Ok";
+						Answer2 = "Ok";
+
+						if (!bLButtonState && Application::IsMousePressed(0))
 						{
-							dialoguepart = 0;
-							NPCInteract = false;
+							bLButtonState = true;
+							double x, y;
+							Application::GetCursorPos(&x, &y);
+							unsigned w = Application::GetWindowWidth();
+							unsigned h = Application::GetWindowHeight();
+							float posX = x / w * 80; //convert (0,800) to (0,80)
+							float posY = 60 - y / h * 60; //convert (600,0) to (0,60)
+							if (posX > 5 && posX < 35 && (posY > 8 && posY < 14)) // Box1
+							{
+								dialoguepart = 0;
+								NPCInteract = false;
+							}
+							if (posX > 45 && posX < 75 && (posY > 8 && posY < 14)) // Box2
+							{
+								dialoguepart = 0;
+								NPCInteract = false;
+							}
 						}
-						if (posX > 45 && posX < 75 && (posY > 8 && posY < 14)) // Box2
-						{
-							dialoguepart = 0;
-							NPCInteract = false;
-						}
+						else bLButtonState = false;
 					}
-					else bLButtonState = false;
-				}
 
-				if (dialoguepart == 6)
-				{
-					Dialogue = "Thats way too expensive! Clearly a scam!";
-					Answer1 = "end";
-					Answer2 = "end";
-
-					if (!bLButtonState && Application::IsMousePressed(0))
+					if (dialoguepart == 5)
 					{
-						bLButtonState = true;
-						double x, y;
-						Application::GetCursorPos(&x, &y);
-						unsigned w = Application::GetWindowWidth();
-						unsigned h = Application::GetWindowHeight();
-						float posX = x / w * 80; //convert (0,800) to (0,80)
-						float posY = 60 - y / h * 60; //convert (600,0) to (0,60)
-						if (posX > 5 && posX < 35 && (posY > 8 && posY < 14)) // Box1
+						Dialogue = "*He takes your money and runs*";
+						Answer1 = "end";
+						Answer2 = "end";
+
+						if (!bLButtonState && Application::IsMousePressed(0))
 						{
-							dialoguepart = 0;
-							NPCInteract = false;
+							bLButtonState = true;
+							double x, y;
+							Application::GetCursorPos(&x, &y);
+							unsigned w = Application::GetWindowWidth();
+							unsigned h = Application::GetWindowHeight();
+							float posX = x / w * 80; //convert (0,800) to (0,80)
+							float posY = 60 - y / h * 60; //convert (600,0) to (0,60)
+							if (posX > 5 && posX < 35 && (posY > 8 && posY < 14)) // Box1
+							{
+								dialoguepart = 0;
+								Manager.Money += -2000;
+								NPCInteract = false;
+							}
+							if (posX > 45 && posX < 75 && (posY > 8 && posY < 14)) // Box2
+							{
+								dialoguepart = 0;
+								Manager.Money += -2000;
+								NPCInteract = false;
+							}
 						}
-						if (posX > 45 && posX < 75 && (posY > 8 && posY < 14)) // Box2
-						{
-							dialoguepart = 0;
-							NPCInteract = false;
-						}
+						else bLButtonState = false;
 					}
-					else bLButtonState = false;
-				}
+
+					if (dialoguepart == 6)
+					{
+						Dialogue = "*He takes your money and runs*";
+						Answer1 = "end";
+						Answer2 = "end";
+
+						if (!bLButtonState && Application::IsMousePressed(0))
+						{
+							bLButtonState = true;
+							double x, y;
+							Application::GetCursorPos(&x, &y);
+							unsigned w = Application::GetWindowWidth();
+							unsigned h = Application::GetWindowHeight();
+							float posX = x / w * 80; //convert (0,800) to (0,80)
+							float posY = 60 - y / h * 60; //convert (600,0) to (0,60)
+							if (posX > 5 && posX < 35 && (posY > 8 && posY < 14)) // Box1
+							{
+								dialoguepart = 0;
+								Manager.Money += -1950;
+								NPCInteract = false;
+							}
+							if (posX > 45 && posX < 75 && (posY > 8 && posY < 14)) // Box2
+							{
+								dialoguepart = 0;
+								Manager.Money += -1950;
+								NPCInteract = false;
+							}
+						}
+						else bLButtonState = false;
+					}
 			}
 		}
 	}
 }
 
+	
+
+
 
 void Splevel1::Render()
 {
-	
-	//// Render VBO here
-	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	//RenderSkybox();
-	//RenderLevel();
-	////Temp variables
-	//Mtx44 translate, rotate, scale;
-	//Mtx44 MVP;
-	////These will be replaced by matrix stack soon
-	//Mtx44 model;
-	//Mtx44 view;
-	//Mtx44 projection;
-
-	////Set all matrices to identity
-	//translate.SetToIdentity();
-	//rotate.SetToIdentity();
-	//scale.SetToIdentity();
-	//model.SetToIdentity();
-
-	////Set view matrix using camera settings
-	//viewStack.LoadIdentity();
-	//viewStack.LookAt(
-
-	//	camera.position.x, camera.position.y, camera.position.z,
-	//	camera.target.x, camera.target.y, camera.target.z,
-	//	camera.up.x, camera.up.y, camera.up.z);
-	//modelStack.LoadIdentity();
-	//Mtx44 mvp = projectionStack.Top() * viewStack.Top() * modelStack.Top();
-
-	//Position lightPosition_cameraspace = viewStack.Top() * light[0].position;
-	//glUniform3fv(m_parameters[U_LIGHT0_POSITION], 1, &lightPosition_cameraspace.x);
-	//
-	//if (light[0].type == Light::LIGHT_DIRECTIONAL)
-	//{
-	//	Vector3 lightDir(light[0].position.x, light[0].position.y, light[0].position.z);
-	//	Vector3 lightDirection_cameraspace = viewStack.Top() * lightDir;
-	//	glUniform3fv(m_parameters[U_LIGHT0_POSITION], 1, &lightDirection_cameraspace.x);
-	//}
-	//else if (light[0].type == Light::LIGHT_SPOT)
-	//{
-	//	Position lightPosition_cameraspace = viewStack.Top() * light[0].position;
-	//	glUniform3fv(m_parameters[U_LIGHT0_POSITION], 1, &lightPosition_cameraspace.x);
-	//	Vector3 spotDirection_cameraspace = viewStack.Top() * light[0].spotDirection;
-	//	glUniform3fv(m_parameters[U_LIGHT0_SPOTDIRECTION], 1, &spotDirection_cameraspace.x);
-	//}
-	//else
-	//{
-	//	Position lightPosition_cameraspace = viewStack.Top() * light[0].position;
-	//	glUniform3fv(m_parameters[U_LIGHT0_POSITION], 1, &lightPosition_cameraspace.x);
-	//}
-
-	//modelStack.PushMatrix();
-	////scale, translate, rotate
-	/*------------------------------------------PREVIOUS CODE---------------------------------*/
-
-
 	//Clear color & depth buffer every frame
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-	//glEnableVertexAttribArray(0); // 1st attribute buffer : vertices
-	//glEnableVertexAttribArray(1);
-
-	
-
 
 	viewStack.LoadIdentity();
 	viewStack.LookAt(camera.position.x, camera.position.y, camera.position.z,camera.target.x, camera.target.y, camera.target.z,camera.up.x, camera.up.y, camera.up.z);
@@ -1728,7 +1895,6 @@ void Splevel1::Render()
 
 	
 	srand(time(0));
-	RenderMesh(meshList[GEO_AXES], false);
 	RenderSkybox();
 
 	
@@ -1962,6 +2128,139 @@ void Splevel1::Render()
 		modelStack.PopMatrix();
 	}
 
+	//Outside Border
+	{
+		//HighWay Gate
+		modelStack.PushMatrix();
+		modelStack.Scale(50, 120, 180);
+		modelStack.Rotate(90, 0, 1, 0);
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(-1.4, 0, 21.5);
+			RenderMesh(meshList[GEO_HIGHHOLE], true);
+			modelStack.PopMatrix();
+			modelStack.PushMatrix();
+			modelStack.Translate(-1.4, 0, -21.5);
+			RenderMesh(meshList[GEO_HIGHHOLE], true);
+			modelStack.PopMatrix();
+
+		}
+		modelStack.PopMatrix();
+
+
+		modelStack.PushMatrix();
+		modelStack.Scale(500, 500, 500);
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(-2.4, 0, 0.6);
+			modelStack.Rotate(-45, 0, 1, 0);
+			RenderMesh(meshList[GEO_ROCK], true);
+			modelStack.PopMatrix();
+
+			modelStack.PushMatrix();
+			modelStack.Translate(2.4, 0, 0.5);
+			modelStack.Rotate(-45, 0, 1, 0);
+			modelStack.Rotate(-180, 0, 1, 0);
+			RenderMesh(meshList[GEO_ROCK], true);
+			modelStack.PopMatrix();
+		}
+		modelStack.PopMatrix();
+
+		//Grass Side
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(300, 0, 600);
+			modelStack.Scale(300, 180, 180);
+			modelStack.Rotate(180, 0, 1, 0);
+			RenderMesh(meshList[GEO_LBUILDING2], true);
+			modelStack.PopMatrix();
+
+			modelStack.PushMatrix();
+			modelStack.Translate(-300, 0, 600);
+			modelStack.Scale(300, 180, 180);
+			modelStack.Rotate(180, 0, 1, 0);
+			RenderMesh(meshList[GEO_LBUILDING2], true);
+			modelStack.PopMatrix();
+
+			modelStack.PushMatrix();
+			modelStack.Rotate(180, 0, 1, 0);
+			modelStack.Translate(0, 0, -650);
+			modelStack.Scale(300, 180, 180);
+			RenderMesh(meshList[GEO_LBUILDING3], true);
+			modelStack.PopMatrix();
+
+			modelStack.PushMatrix();
+			modelStack.Translate(-650, 0, 650);
+			modelStack.Scale(180, 180, 180);
+			RenderMesh(meshList[GEO_LBUILDING1], true);
+			modelStack.PopMatrix();
+
+			modelStack.PushMatrix();
+			modelStack.Translate(650, 0, 650);
+			modelStack.Scale(180, 180, 180);
+			RenderMesh(meshList[GEO_LBUILDING1], true);
+			modelStack.PopMatrix();
+
+			modelStack.PushMatrix();
+			modelStack.Translate(450, 0, 900);
+			modelStack.Scale(120, 120, 120);
+			modelStack.Rotate(180, 0, 1, 0);
+			RenderMesh(meshList[GEO_SKYSCRAPER1], true);
+			modelStack.PopMatrix();
+
+			modelStack.PushMatrix();
+			modelStack.Translate(-450, 0, 900);
+			modelStack.Scale(120, 120, 120);
+			modelStack.Rotate(180, 0, 1, 0);
+			RenderMesh(meshList[GEO_SKYSCRAPER1], true);
+			modelStack.PopMatrix();
+		}
+		//Building Side
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(300, 0, -600);
+			modelStack.Scale(300, 180, 180);
+			RenderMesh(meshList[GEO_LBUILDING2], true);
+			modelStack.PopMatrix();
+
+			modelStack.PushMatrix();
+			modelStack.Translate(-300, 0, -600);
+			modelStack.Scale(300, 180, 180);
+			RenderMesh(meshList[GEO_LBUILDING2], true);
+			modelStack.PopMatrix();
+
+			modelStack.PushMatrix();
+			modelStack.Translate(0, 0, -650);
+			modelStack.Scale(300, 180, 180);
+			RenderMesh(meshList[GEO_LBUILDING3], true);
+			modelStack.PopMatrix();
+
+			modelStack.PushMatrix();
+			modelStack.Translate(-650, 0, -650);
+			modelStack.Scale(180, 180, 180);
+			RenderMesh(meshList[GEO_LBUILDING1], true);
+			modelStack.PopMatrix();
+
+			modelStack.PushMatrix();
+			modelStack.Translate(650, 0, -650);
+			modelStack.Scale(180, 180, 180);
+			RenderMesh(meshList[GEO_LBUILDING1], true);
+			modelStack.PopMatrix();
+
+			modelStack.PushMatrix();
+			modelStack.Translate(450, 0, -900);
+			modelStack.Scale(120, 120, 120);
+			RenderMesh(meshList[GEO_SKYSCRAPER1], true);
+			modelStack.PopMatrix();
+
+			modelStack.PushMatrix();
+			modelStack.Translate(-450, 0, -900);
+			modelStack.Scale(120, 120, 120);
+			RenderMesh(meshList[GEO_SKYSCRAPER1], true);
+			modelStack.PopMatrix();
+		}
+	}
+
 	//Road and cars
 	{
 		modelStack.PushMatrix();
@@ -2067,6 +2366,8 @@ void Splevel1::Render()
 		//RenderMesh(meshList[GEO_TRUCK], true);
 		//modelStack.PopMatrix();
 	}
+
+	packagedieanimation();
 
 	//Building
 	{
@@ -2253,6 +2554,29 @@ void Splevel1::Render()
 				RenderTextOnScreen(meshList[GEO_TEXT], "Press 'E' to start phone", Color(0, 1, 0), 4, 10, 30);
 			}
 		}
+
+		// NPC
+		static bool BButtonState = false;
+		static bool CButtonState = false;
+		if (camera.position.x > movex - 40 && camera.position.x < movex + 40 && (camera.position.z < 240 && camera.position.z > 160))//L3
+		{
+			
+			if (NPCInteract == false)
+			{
+				RenderTextOnScreen(meshList[GEO_TEXT], "Press 'E' to Interact with NPC", Color(0, 1, 0), 4, 10, 30);
+			}
+			if (!BButtonState && Application::IsKeyPressed('E'))
+			{
+				NPCInteract = true;
+
+			}
+			else if (BButtonState && !Application::IsKeyPressed('E'))
+			{
+
+				BButtonState = false;
+			}
+		}
+		else NPCInteract = false;
 		
 		//Lovescam mini game
 		if (LS_start == true)
@@ -3258,57 +3582,45 @@ void Splevel1::Render()
 
 void Splevel1::RenderSkybox()
 {
-
-	
-
-	/*modelStack.PushMatrix();
-	modelStack.Translate(0, 0, -10);
-	modelStack.Rotate(180, 0, 180, 180);
-	modelStack.Scale(500, 500, 500);
-	RenderMesh(meshList[GEO_QUAD], false);
-	modelStack.PopMatrix();*/
-
-
-
 	modelStack.PushMatrix();
-	modelStack.Translate(cposx, 0, -998 + cposz);
-	modelStack.Scale(2000, 2000, 2000);
+	modelStack.Translate(cposx, 0, -9979 + cposz);
+	modelStack.Scale(20000, 20000, 20000);
 	RenderMesh(meshList[GEO_FRONT], false);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(cposx, 0, 998 + cposz);
+	modelStack.Translate(cposx, 0, 9979 + cposz);
 	modelStack.Rotate(180, 0, 1, 0);
-	modelStack.Scale(2000, 2000, 2000);
+	modelStack.Scale(20000, 20000, 20000);
 	RenderMesh(meshList[GEO_BACK], false);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(-998 + cposx, 0, cposz);
+	modelStack.Translate(-9979 + cposx, 0, cposz);
 	modelStack.Rotate(90, 0, 1, 0);
-	modelStack.Scale(2000, 2000, 2000);
+	modelStack.Scale(20000, 20000, 20000);
 	RenderMesh(meshList[GEO_LEFT], false);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(998 + cposx, 0, cposz);
+	modelStack.Translate(9979 + cposx, 0, cposz);
 	modelStack.Rotate(-90, 0, 1, 0);
-	modelStack.Scale(2000, 2000, 2000);
+	modelStack.Scale(20000, 20000, 20000);
 	RenderMesh(meshList[GEO_RIGHT], false);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(cposx, 998, cposz);
+	modelStack.Translate(cposx, 9979, cposz);
 	modelStack.Rotate(90, 1, 0, 0);
-	modelStack.Scale(2000, 2000, 2000);
+	modelStack.Scale(20000, 20000, 20000);
 	RenderMesh(meshList[GEO_TOP], false);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(cposx, -998, cposz);
+	modelStack.Translate(cposx, -9979, cposz);
 	modelStack.Rotate(-90, 0, 1, 0);
 	modelStack.Rotate(-90, 1, 0, 0);
-	modelStack.Scale(2000, 2000, 2000);
+	modelStack.Scale(20000, 20000, 20000);
 	RenderMesh(meshList[GEO_BOTTOM], false);
 	modelStack.PopMatrix();
 
@@ -3350,9 +3662,9 @@ void Splevel1::RenderSkybox()
 	modelStack.PopMatrix();*/
 
 	modelStack.PushMatrix();
-	modelStack.Translate(light[0].position.x, light[0].position.y, light[0].position.z);
+	modelStack.Translate(light[0].position.x, light[0].position.y + 800, light[0].position.z);
 	modelStack.Rotate(180, 0, 180, 180);
-	modelStack.Scale(5, 5, 5);
+	modelStack.Scale(1, 1, 1);
 	RenderMesh(meshList[GEO_LIGHTBALL], false);
 	modelStack.PopMatrix();
 
@@ -4001,19 +4313,35 @@ void Splevel1::UpdateCarepackage(double dt)
 					carepackage->notitext = false;
 					carepackage->pickuptext = false;
 					carepackage->active = false;
+					
 				}
 				else
 				{
-					die = true;
+					
+					packagedie = true;
 					carepackage->notitext = false;
 					carepackage->pickuptext = false;
 					carepackage->active = false;
+					camera.position = camera.target;
+					camera.target.y = camera.position.y + 1;
 				}
 			}
 		}
 		else
 		{
 			carepackage->pickuptext = false;
+		}
+	}
+
+	if (packagedie == true)
+	{
+		packagetruckoffset -= 1000 * dt;
+
+		if (packagetruckoffset < 0)
+		{
+			packagedie = false;
+			die = true;
+			packagetruckoffset = 2000;
 		}
 	}
 }
@@ -4032,8 +4360,8 @@ void Splevel1::RenderCarepackage()
 	}
 	if (carepackage->notitext == true)
 	{
-		RenderMeshOnScreen(meshList[GEO_EMPTYBOX], 40, 25, 45, 15);
-		RenderTextOnScreen(meshList[GEO_TEXT], "A CAREPACKAGE HAS DROPPED SOMEWHERE OUTSIDE!", Color(1, 1, 1), 2, 18, 25);
+		RenderMeshOnScreen(meshList[GEO_EMPTYBOX], 40, 15, 45, 15);
+		RenderTextOnScreen(meshList[GEO_TEXT], "A CAREPACKAGE HAS DROPPED SOMEWHERE OUTSIDE!", Color(1, 1, 1), 2, 18, 15);
 
 	}
 	if (carepackage->pickuptext == true)
@@ -4041,6 +4369,31 @@ void Splevel1::RenderCarepackage()
 		RenderTextOnScreen(meshList[GEO_TEXT], "Press 'E' to open the GIFT", Color(1, 1, 1), 3, 20, 25);
 	}
 	
+}
+
+void Splevel1::packagedieanimation()
+{
+
+	if (packagedie == true)
+	{
+		
+
+		modelStack.PushMatrix();
+		modelStack.Translate(camera.position.x, packagetruckoffset, camera.position.z - 10);
+		modelStack.Rotate(90, 1, 0, 0);
+		
+		modelStack.Scale(30, 30, 30);
+		RenderMesh(meshList[GEO_TRUCK], true);
+		modelStack.PopMatrix();
+
+		
+	}
+
+
+
+	
+
+
 }
 
 void Splevel1::RenderMesh(Mesh* mesh, bool enableLight)

@@ -90,6 +90,9 @@ class Splevel1 : public Scene
 		GEO_Arms,
 		GEO_GRASS3D,
 		GEO_CHEST,
+		GEO_HIGHHOLE,
+		GEO_CAT,
+		GEO_ROCK,
 
 		GEO_TAXI,
 		GEO_TRUCK,
@@ -215,6 +218,8 @@ private:
 	void UpdateCarepackage(double dt);
 	void RenderCarepackage();
 
+	void packagedieanimation();
+
 	EquipmentManager Manager;
 
 	Puzzle puzzle;
@@ -224,8 +229,14 @@ private:
 	bool PuzzleLoseUI;
 	bool PuzzlePlayerPickup;
 
+	bool packagedie;
+
 	float puzzletimer;
 	float packagetimer;
+	float packagecooltimer;
+
+	float packagetruckoffset;
+
 
 	enum class Gamestate {MainGame,PuzzleGame}gamestate;
 
