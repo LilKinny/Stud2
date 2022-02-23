@@ -628,6 +628,7 @@ void Splevel1::Update(double dt)
 				paper1 = false;
 				paper2 = false;
 				paper3 = false;
+				paper4 = false;
 				timerstart = false;
 			}
 		}
@@ -641,6 +642,7 @@ void Splevel1::Update(double dt)
 				paper1 = false;
 				paper2 = false;
 				paper3 = false;
+				paper4 = false;
 				timerstart = false;
 			}
 		}
@@ -692,6 +694,7 @@ void Splevel1::Update(double dt)
 		paper1 = false;
 		paper2 = false;
 		paper3 = false;
+		paper4 = false;
 	}
 
 
