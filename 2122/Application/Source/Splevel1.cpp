@@ -686,7 +686,7 @@ void Splevel1::Update(double dt)
 			}
 		}
 
-		if (debugmouseposx > 55 && debugmouseposx < 59 && debugmouseposy > 6 && debugmouseposy < 10)
+		if (debugmouseposx > 55 && debugmouseposx < 59 && debugmouseposy > 6 && debugmouseposy < 15)
 		{
 			if (!bLButtonState && Application::IsMousePressed(0))
 			{
@@ -1259,9 +1259,9 @@ void Splevel1::Update(double dt)
 				{
 
 					if (Manager.Money < 0)
-						Manager.Money -= 500;
+						Manager.Money += Manager.Money;
 
-					else Manager.Money += Manager.Money / 2;
+					else Manager.Money -= Manager.Money / 2;
 					die = false;
 				}
 			}
