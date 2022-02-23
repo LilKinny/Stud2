@@ -3839,6 +3839,44 @@ void Splevel1::Render()
 		}
 	}
 
+	if (questions == true)
+	{
+		if (OP1 == true && OP1check == false)
+		{
+			RenderMeshOnScreen(meshList[GEO_Screen], 40, 30, 16, 54, true);
+			RenderMeshOnScreen(meshList[GEO_op1], 55, 30, 16, 54, true);
+		}
+		else if (OP2 == true && OP2check == false)
+		{
+			RenderMeshOnScreen(meshList[GEO_Screen], 40, 30, 16, 54, true);
+			RenderMeshOnScreen(meshList[GEO_op2], 55, 30, 16, 54, true);
+		}
+		else if (OP3 == true && OP3check == false)
+		{
+			RenderMeshOnScreen(meshList[GEO_Screen], 40, 30, 16, 54, true);
+			RenderMeshOnScreen(meshList[GEO_op3], 55, 30, 16, 54, true);
+		}
+		else if (POP1 == true && OP1check == false)
+		{
+			RenderMeshOnScreen(meshList[GEO_Screen], 40, 30, 16, 54, true);
+			RenderMeshOnScreen(meshList[GEO_PREop1], 55, 30, 16, 54, true);
+		}
+		else if (POP2 == true && OP1check == false)
+		{
+			RenderMeshOnScreen(meshList[GEO_Screen], 40, 30, 16, 54, true);
+			RenderMeshOnScreen(meshList[GEO_PREop2], 55, 30, 16, 54, true);
+		}
+		else if (POP3 == true && OP1check == false)
+		{
+			RenderMeshOnScreen(meshList[GEO_Screen], 40, 30, 16, 54, true);
+			RenderMeshOnScreen(meshList[GEO_PREop3], 55, 30, 16, 54, true);
+		}
+		else
+		{
+
+		}
+	}
+
 	
 
 
