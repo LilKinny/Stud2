@@ -1063,7 +1063,7 @@ void Splevel1::Update(double dt)
 		/*	std::cout << "posX:" << posX << " , posY:" << posY << std::endl;*/
 			if (LS_start == true)
 			{
-				if (posX > 35 && posX < 45 && posY > 8 && posY < 14)
+				if (posX > 35 && posX < 45 && posY > 8 && posY < 18)
 				{
 					questions = true;
 					LS_start = false;
@@ -1196,14 +1196,14 @@ void Splevel1::Update(double dt)
 			}
 			if (LS_Win == true)
 			{
-				if (Manager.PrestigeLvl>=1 && (posX > 35 && posX < 44 && (posY > 10 && posY < 17)))
+				if (Manager.PrestigeLvl>=1 && (posX > 35 && posX < 44 && (posY > 10 && posY < 21)))
 				{
 					Manager.Money = Manager.Money + 100;
 					PlaySound(TEXT("Sent.wav"), NULL, SND_ASYNC);
 					LS_Win = false;
 					PlaySound(TEXT("Sent.wav"), NULL, SND_ASYNC);
 				}
-				else if (posX > 35 && posX < 44 && (posY > 10 && posY < 17))
+				else if (posX > 35 && posX < 44 && (posY > 10 && posY < 21))
 				{
 					Manager.Money = Manager.Money + 50;
 					PlaySound(TEXT("Sent.wav"), NULL, SND_ASYNC);
@@ -1214,13 +1214,13 @@ void Splevel1::Update(double dt)
 			}
 			if (LS_Lose == true)
 			{
-				if (Manager.PrestigeLvl >= 1 && (posX > 35 && posX < 44 && (posY > 10 && posY < 17)))
+				if (Manager.PrestigeLvl >= 1 && (posX > 35 && posX < 44 && (posY > 10 && posY < 21)))
 				{
 					Manager.Money = Manager.Money - 150;
 					PlaySound(TEXT("Sent.wav"), NULL, SND_ASYNC);
 					LS_Lose = false;
 				}
-				if (posX > 35 && posX < 44 && (posY > 10 && posY < 17))
+				if (posX > 35 && posX < 44 && (posY > 10 && posY < 21))
 				{
 					Manager.Money = Manager.Money - 100;
 					PlaySound(TEXT("Sent.wav"), NULL, SND_ASYNC);
@@ -1239,7 +1239,7 @@ void Splevel1::Update(double dt)
 			}
 			if (PuzzleWinUI == true)
 			{
-				if (posX > 35 && posX < 45 && posY > 8 && posY < 14) PuzzleWinUI = false;
+				if (posX > 35 && posX < 45 && posY > 8 && posY < 19) PuzzleWinUI = false;
 			}
 
 			if (PuzzleLoseUI == true)
@@ -4713,7 +4713,7 @@ void Splevel1::UpdateMainControls()
 			}
 		}
 
-		if (posX > 35 && posX < 45 && posY > 10 && posY < 18)
+		if (posX > 35 && posX < 45 && posY > 10 && posY < 20)
 		{
 			if (setuppolice == true)
 			{
