@@ -1465,7 +1465,13 @@ void Splevel1::Update(double dt)
 		{
 			camera.EquipNum = Manager.NumOfPhones();
 		}
-		camera.Update(dt);
+
+		if (packagedie == false)
+		{
+			camera.Update(dt);
+		}
+		
+
 	}
 
 	//NPC interactions
@@ -3962,7 +3968,7 @@ void Splevel1::Render()
 	
 
 	// -------------------------------------------------POSITION DEBUG----------------------------------------------
-	float pox = camera.position.x;
+	/*float pox = camera.position.x;
 	float poz = camera.position.z;
 	float poy = camera.position.y;
 
@@ -3972,7 +3978,7 @@ void Splevel1::Render()
 
 
 	RenderTextOnScreen(meshList[GEO_TEXT], "Pos X:" + std::to_string(debugmouseposx), Color(1, 1, 0), 2, 0, 30);
-	RenderTextOnScreen(meshList[GEO_TEXT], "Pos y: " + std::to_string(debugmouseposy), Color(1, 1, 0), 2, 0, 33);
+	RenderTextOnScreen(meshList[GEO_TEXT], "Pos y: " + std::to_string(debugmouseposy), Color(1, 1, 0), 2, 0, 33);*/
 
 	/*RenderTextOnScreen(meshList[GEO_TEXT], "Pos Y puzzle:" + std::to_string(puzzle.playeractualpoy), Color(1, 1, 0), 2, 0, 20);
 	RenderTextOnScreen(meshList[GEO_TEXT], "Pos X puzzle: " + std::to_string(puzzle.playeractualpox), Color(1, 1, 0), 2, 0, 23);*/
@@ -4778,7 +4784,7 @@ void Splevel1::UpdateCarepackage(double dt)
 			if (Application::IsKeyPressed('E'))
 			{
 				int result = (rand() % 10) + 1;
-				if (result > 1)
+				if (result > 5)
 				{
 					if (Manager.Money < 0) Manager.Money = Manager.Money / 2;
 					else Manager.Money = Manager.Money * 2;
@@ -4794,8 +4800,30 @@ void Splevel1::UpdateCarepackage(double dt)
 					carepackage->notitext = false;
 					carepackage->pickuptext = false;
 					carepackage->active = false;
-					camera.position = camera.target;
-					camera.target.y = camera.position.y + 1;
+					/*camera.up = camera.position;
+					camera.target.y = 5;*/
+
+					/*Mtx44 rotation;
+					rotation.SetToLookAt(0.0f, 0.0f, 3.0f,
+						0.0f, 0.0f, 0.0f,
+						0.0f, 1.0f, 0.0f);*/
+
+					/*camera.view = rotation * view;*/
+					camera.target.x = camera.position.x;
+					camera.target.y = 1000;
+					camera.target.z = camera.position.z;
+					
+
+					/*Vector3 view = (camera.target - camera.position).Normalized();
+					Vector3 right = view.Cross(camera.up);
+					right.y = 0;
+					right.Normalize();
+					camera.up = right.Cross(view).Normalized();
+					Mtx44 rotation;
+					rotation.SetToRotation(90, right.x, right.y, right.z);
+					
+					view = rotation * view;
+					camera.target = camera.position + view;*/
 				}
 			}
 		}
@@ -4814,6 +4842,7 @@ void Splevel1::UpdateCarepackage(double dt)
 			packagedie = false;
 			die = true;
 			packagetruckoffset = 2000;
+			PlaySound(TEXT("Die.wav"), NULL, SND_ASYNC);
 		}
 	}
 }
@@ -4833,12 +4862,12 @@ void Splevel1::RenderCarepackage()
 	if (carepackage->notitext == true)
 	{
 		RenderMeshOnScreen(meshList[GEO_EMPTYBOX], 40, 15, 45, 15);
-		RenderTextOnScreen(meshList[GEO_TEXT], "A CAREPACKAGE HAS DROPPED SOMEWHERE OUTSIDE!", Color(1, 1, 1), 2, 18, 15);
+		RenderTextOnScreen(meshList[GEO_TEXT], "A ?PACKAGE? HAS DROPPED SOMEWHERE OUTSIDE!", Color(1, 1, 1), 2, 18, 15);
 
 	}
 	if (carepackage->pickuptext == true)
 	{
-		RenderTextOnScreen(meshList[GEO_TEXT], "Press 'E' to open the GIFT", Color(1, 1, 1), 3, 20, 25);
+		RenderTextOnScreen(meshList[GEO_TEXT], "Press 'E' to open the ??GIFT??", Color(1, 1, 1), 3, 20, 25);
 	}
 	
 }

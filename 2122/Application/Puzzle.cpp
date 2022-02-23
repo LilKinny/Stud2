@@ -2,6 +2,7 @@
 #include <ctime>
 #include <cstdlib>
 
+//created by luke
 using namespace std;
 
 void Puzzle::Render()

@@ -1,5 +1,6 @@
 #include "donotcarepackage.h"
 
+// created by luke
 donotcarepackage::donotcarepackage()
 {
 	position.x = 0;
