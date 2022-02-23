@@ -2459,6 +2459,13 @@ void Splevel1::Render()
 		RenderMesh(meshList[GEO_BUILDING], true);
 		modelStack.PopMatrix();
 
+		if (lvl1 == true)
+		{
+			modelStack.PushMatrix();
+			RenderName(1);
+			modelStack.PopMatrix();
+		}
+
 		if (Manager.PrestigeLvl > 0)
 		{
 			modelStack.PushMatrix();
@@ -2474,6 +2481,12 @@ void Splevel1::Render()
 			}
 			RenderMesh(meshList[GEO_LVL2], true);
 			modelStack.PopMatrix();
+			if (lvl2 == true)
+			{
+				modelStack.PushMatrix();
+				RenderName(2);
+				modelStack.PopMatrix();
+			}
 		}
 		if (Manager.PrestigeLvl > 1)
 		{
@@ -2489,7 +2502,13 @@ void Splevel1::Render()
 				modelStack.PopMatrix();
 			}
 			RenderMesh(meshList[GEO_LVL3], true);
-			modelStack.PopMatrix();
+			modelStack.PopMatrix(); 
+			if (lvl3 == true)
+			{
+				modelStack.PushMatrix();
+				RenderName(3);
+				modelStack.PopMatrix();
+			}
 		}
 		//L1 lift
 		if (camera.position.x > 25 && camera.position.x < 60 && (camera.position.z < -50 && camera.position.z > -60) && (lvl1==true))
@@ -2545,34 +2564,29 @@ void Splevel1::Render()
 			{
 				WorkStationPositionY = 100;
 			}
+			WorkStationPositionX = -75;
 			if (i % 6 == 0)
 			{
-				WorkStationPositionX = -75;
 				WorkStationPositionZ = 40;
 			}
 			else if (i % 6 == 1)
 			{
-				WorkStationPositionX = -75;
 				WorkStationPositionZ = 20;
 			}
 			else if (i % 6 == 2)
 			{
-				WorkStationPositionX = -75;
 				WorkStationPositionZ = 0;
 			}
 			else if (i % 6 == 3)
 			{
-				WorkStationPositionX = -75;
 				WorkStationPositionZ = -30;
 			}
 			else if (i % 6 == 4)
 			{
-				WorkStationPositionX = -75;
 				WorkStationPositionZ = -50;
 			}
 			else if (i % 6 == 5)
 			{
-				WorkStationPositionX = -75;
 				WorkStationPositionZ = -70;
 			}
 			modelStack.PushMatrix();
@@ -3818,16 +3832,6 @@ void Splevel1::RenderWorkStation(int WorkStation)
 			modelStack.Scale(5, 5, 5);
 			RenderMesh(meshList[GEO_Body], false);
 			{
-				modelStack.PushMatrix();
-				modelStack.Scale(0.3, 0.3, 0.3);
-				modelStack.Rotate(90, 0, 1, 0);
-				modelStack.Translate(-5, 20, 0);
-				RenderText(meshList[GEO_TEXT], NameList[WorkStation+18], Color(1, 1, 1));
-				modelStack.PushMatrix();
-				modelStack.Translate(0, 2, 0);
-				RenderText(meshList[GEO_TEXT], NameList[WorkStation], Color(1, 1, 1));
-				modelStack.PopMatrix();
-				modelStack.PopMatrix();
 
 				RenderMesh(meshList[GEO_Head], false);
 				{
@@ -3895,6 +3899,73 @@ void Splevel1::RenderWorkStation(int WorkStation)
 						modelStack.Scale(0.4, 0.3, 0.6);
 						RenderMesh(meshList[GEO_Phone3], true); //Render Phone 3
 					}
+					modelStack.PopMatrix();
+				}
+				modelStack.PopMatrix();
+			}
+			modelStack.PopMatrix();
+		}
+	}
+}
+
+void Splevel1::RenderName(int Lvl)
+{
+	int XPos, YPos, ZPos;
+	XPos = YPos = ZPos = 0;
+	for (int i = (Lvl-1)*6; i < Lvl * 6; ++i)
+	{
+		if (Manager.EquipArray[i] != nullptr)
+		{
+			if (i < 6)
+			{
+				YPos = 0;
+			}
+			else if (i < 12)
+			{
+				YPos = 50;
+			}
+			else if (i < 18)
+			{
+				YPos = 100;
+			}
+			XPos = -75;
+			if (i % 6 == 0)
+			{
+				ZPos = 40;
+			}
+			else if (i % 6 == 1)
+			{
+				ZPos = 20;
+			}
+			else if (i % 6 == 2)
+			{
+				ZPos = 0;
+			}
+			else if (i % 6 == 3)
+			{
+				ZPos = -30;
+			}
+			else if (i % 6 == 4)
+			{
+				ZPos = -50;
+			}
+			else if (i % 6 == 5)
+			{
+				ZPos = -70;
+			}
+			modelStack.PushMatrix();
+			modelStack.Scale(1, 1, 1);
+			modelStack.Translate(XPos, YPos, ZPos);
+			{
+				modelStack.PushMatrix();
+				modelStack.Scale(2, 2, 2);
+				modelStack.Rotate(90, 0, 1, 0);
+				modelStack.Translate(-10, 20, 10);
+				RenderText(meshList[GEO_TEXT], NameList[i + 18], Color(1, 1, 1));
+				{
+					modelStack.PushMatrix();
+					modelStack.Translate(0, 2, 0);
+					RenderText(meshList[GEO_TEXT], NameList[i], Color(1, 1, 1));
 					modelStack.PopMatrix();
 				}
 				modelStack.PopMatrix();

@@ -204,6 +204,7 @@ private:
 	void RenderMesh(Mesh* mesh, bool enableLight);
 	void RenderSkybox(void);
 	void RenderWorkStation(int WorkStation);
+	void RenderName(int Lvl);
 	float rotateAngle;
 	float rotateAngleF;
 	float rotateAngleSF;
