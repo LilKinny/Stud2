@@ -493,9 +493,9 @@ void Splevel1::Init()
 	InitName();
 }
 
-bool setuppolice = false, clearpolice, paper1, paper2, paper3, paper4, timerstart, win, lose, NPC, startlaptop = false, evidence_won_bonus, die;
+bool setuppolice = false, clearpolice, paper1, paper2, paper3, paper4, timerstart, win, lose, NPC, NPC2, NPC3, NPC4, startlaptop = false, evidence_won_bonus, die;
 double scaleevidence = 0.1, countdown, timer;
-float prologuey = -40, scaletitle = 0 , pposx, pposz, pposx2, pposz2, pposx4, pposx3, pposz3, pposz4, rotateangle, pposy, pposy2, pposy3, pposy4, pushaway, movex = -500, movez, AlignX;
+float prologuey = -40, scaletitle = 0 , pposx, pposz, pposx2, pposz2, pposx4, pposx3, pposz3, pposz4, rotateangle, pposy, pposy2, pposy3, pposy4, pushaway, movex = -500, movex2 = -500, movex3 = 500, movex4 = 500, movez, AlignX;
 string timerstring, beetsinstringform, Dialogue, Answer1, Answer2;
 int totalbeets = 0, countdownbonus = 1500, spinD = 0;
 
@@ -717,7 +717,7 @@ void Splevel1::Update(double dt)
 	}
 
 
-	int randomno = rand() % 6 + 0;
+	int randomno = rand() % 7 + 0;
 	/*cout << randomno << " ";*/
 	if (randomno == 1 && spawnpolice == false && spawntruck == false && spawntaxi == false)
 	{
@@ -743,6 +743,37 @@ void Splevel1::Update(double dt)
 			NPC = false;
 		}
 	}
+	if (randomno == 5 && NPCInteract == false)
+	{
+		NPC2 = true;
+		movex2 += 6;
+		if (movex >= 500)
+		{
+			movex = -500;
+			NPC2 = false;
+		}
+	}
+	if (randomno == 6 && NPCInteract == false)
+	{
+		NPC3 = true;
+		movex3 -= 5;
+		if (movex <= -500)
+		{
+			movex3 = 500;
+			NPC3 = false;
+		}
+	}
+	if (randomno == 7 && NPCInteract == false)
+	{
+		NPC4 = true;
+		movex4 -= 4;
+		if (movex4 <= -500)
+		{
+			movex = 500;
+			NPC4 = false;
+		}
+	}
+
 
 	if (spawnpolice == true)
 	{
@@ -2584,6 +2615,56 @@ void Splevel1::Render()
 		modelStack.PopMatrix();
 	}
 
+	if (NPC2 == true)
+	{
+		//Render NPC
+		modelStack.PushMatrix();
+		modelStack.Translate(movex2, 5, 190);
+		modelStack.Scale(5, 5, 5);
+		RenderMesh(meshList[GEO_Body], false);
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(0, 0, 0);
+			modelStack.Scale(1, 1, 1);
+			RenderMesh(meshList[GEO_Head], false);
+			modelStack.PopMatrix();
+		}
+		modelStack.PopMatrix();
+	}
+
+	if (NPC3 == true)
+	{
+		//Render NPC
+		modelStack.PushMatrix();
+		modelStack.Translate(movex3, 5, 210);
+		modelStack.Scale(5, 5, 5);
+		RenderMesh(meshList[GEO_Body], false);
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(0, 0, 0);
+			modelStack.Scale(1, 1, 1);
+			RenderMesh(meshList[GEO_Head], false);
+			modelStack.PopMatrix();
+		}
+		modelStack.PopMatrix();
+	}
+	if (NPC4 == true)
+	{
+		//Render NPC
+		modelStack.PushMatrix();
+		modelStack.Translate(movex4, 5, 220);
+		modelStack.Scale(5, 5, 5);
+		RenderMesh(meshList[GEO_Body], false);
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(0, 0, 0);
+			modelStack.Scale(1, 1, 1);
+			RenderMesh(meshList[GEO_Head], false);
+			modelStack.PopMatrix();
+		}
+		modelStack.PopMatrix();
+	}
+
 
 
 
@@ -2825,8 +2906,60 @@ void Splevel1::Render()
 				BButtonState = false;
 			}
 		}
-		else NPCInteract = false;
-		
+		if (camera.position.x > movex2 - 40 && camera.position.x < movex2 + 40 && (camera.position.z < 240 && camera.position.z > 160))//L3
+		{
+
+			if (NPCInteract == false)
+			{
+				RenderTextOnScreen(meshList[GEO_TEXT], "Press 'E' to Interact with NPC", Color(0, 1, 0), 4, 10, 30);
+			}
+			if (!BButtonState && Application::IsKeyPressed('E'))
+			{
+				NPCInteract = true;
+
+			}
+			else if (BButtonState && !Application::IsKeyPressed('E'))
+			{
+
+				BButtonState = false;
+			}
+		}
+		if (camera.position.x > movex3 - 40 && camera.position.x < movex3 + 40 && (camera.position.z < 240 && camera.position.z > 160))//L3
+		{
+
+			if (NPCInteract == false)
+			{
+				RenderTextOnScreen(meshList[GEO_TEXT], "Press 'E' to Interact with NPC", Color(0, 1, 0), 4, 10, 30);
+			}
+			if (!BButtonState && Application::IsKeyPressed('E'))
+			{
+				NPCInteract = true;
+
+			}
+			else if (BButtonState && !Application::IsKeyPressed('E'))
+			{
+
+				BButtonState = false;
+			}
+		}
+		if (camera.position.x > movex4 - 40 && camera.position.x < movex4 + 40 && (camera.position.z < 240 && camera.position.z > 160))//L3
+		{
+
+			if (NPCInteract == false)
+			{
+				RenderTextOnScreen(meshList[GEO_TEXT], "Press 'E' to Interact with NPC", Color(0, 1, 0), 4, 10, 30);
+			}
+			if (!BButtonState && Application::IsKeyPressed('E'))
+			{
+				NPCInteract = true;
+
+			}
+			else if (BButtonState && !Application::IsKeyPressed('E'))
+			{
+
+				BButtonState = false;
+			}
+		}
 		//Lovescam mini game
 		if (LS_start == true)
 		{
