@@ -4,6 +4,4 @@
 newmtl GoldCoin
 Kd 1.000000 1.000000 1.000000
 
-map_Bump textures\Coin_Gold_nm.png
-map_Kd textures\Coin_Gold_albedo.png
 

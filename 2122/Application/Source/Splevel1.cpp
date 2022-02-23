@@ -276,6 +276,13 @@ void Splevel1::Init()
 		scalevalgrass[i] = (rand() % 20) + 10;
 	}
 
+	for (int i = 0; i < 30; i++)
+	{
+		coinsarray[i].x = (rand() % 80) + 1;
+		coinsarray[i].y = (rand() % 80) + 70;
+		coinsarray[i].z = (rand() % 20) + 20;
+	}
+
 	RenderUI = 0;
 	RenderPrestige = 1;
 	PageNum = 1;
@@ -392,6 +399,7 @@ void Splevel1::Init()
 	meshList[GEO_ROCK] = MeshBuilder::GenerateOBJMTL("Rock", "OBJ//rock_largeB.obj", "OBJ//rock_largeB.mtl");
 
 	meshList[GEO_COIN] = MeshBuilder::GenerateOBJMTL("Coin", "OBJ//Coin.obj", "OBJ//Coin.mtl");
+	meshList[GEO_COIN]->textureID = LoadTGA("Image//Coin.tga");
 
 	meshList[GEO_Screen] = MeshBuilder::GenerateRec("Rec", Color(1, 1, 1), 3.f, 5.f);
 	meshList[GEO_Screen]->textureID = LoadTGA("Image//Phone.tga"); // beats me
@@ -512,9 +520,13 @@ void Splevel1::Update(double dt)
 	//cout << cposx;
 	rotateangle = rotateangle + 0.1;
 
+	/*coinsrotation += 3;*/
+
 	int carepackagerand;
 	carepackagerand = (rand() % 10) + 1;
 	/*carepackagerand = 69;*/
+
+	UpdateCoinsAnimation(dt);
 
 	if (carepackage->active == false)
 	{
@@ -2621,6 +2633,8 @@ void Splevel1::Render()
 
 		RenderCarepackage();
 
+		rendermoneyfly();
+
 		//Evidence mini game
 		if (camera.position.x > 30 && camera.position.x < 45 && (camera.position.z > 55 && camera.position.z < 65) && (lvl1 == true))
 		{
@@ -4525,12 +4539,47 @@ void Splevel1::packagedieanimation()
 
 void Splevel1::rendermoneyfly()
 {
+	if (Manager.TotalIncomePerSecond > 0)
+	{
+		for (int i = 0; i < 10; i++)
+		{
+			RenderCoinsOnScreen(meshList[GEO_COIN], coinsarray[i * 2].x, coinsarray[i * 2].y, 1, 1);
+		}
+	}
+	else if (Manager.TotalIncomePerSecond > 700 )
+	{
+		for (int i = 0; i < 20; i++)
+		{
+			RenderCoinsOnScreen(meshList[GEO_COIN], coinsarray[i].x, coinsarray[i].y, 1, 1);
+		}
+	}
+	else if (Manager.TotalIncomePerSecond > 1400)
+	{
+		for (int i = 0; i < 30; i++)
+		{
+			RenderCoinsOnScreen(meshList[GEO_COIN], coinsarray[i].x, coinsarray[i].y, 1, 1);
+		}
+	}
+}
 
+void Splevel1::UpdateCoinsAnimation(double dt)
+{
+	coinsrotation += 3;
 
+	for (int i = 0; i < 30; i++)
+	{
+		
+		coinsarray[i].y -= (coinsarray[i].z)* dt; //z is speed
+		//coinsarray[i].z += 1;
+		//coinsarray[i].z
 
-	//RenderCoinsOnScreen(meshList[GEO_COIN]);
-
-
+		if (coinsarray[i].y < 0)
+		{
+			coinsarray[i].x = (rand() % 80) + 1;
+			coinsarray[i].y = 70;
+			//coinsarray[i].z = (rand() % 20) + 20;
+		}
+	}
 }
 
 void Splevel1::RenderMesh(Mesh* mesh, bool enableLight)

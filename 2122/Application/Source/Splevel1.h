@@ -229,6 +229,8 @@ private:
 
 	void rendermoneyfly();
 
+	void UpdateCoinsAnimation(double dt);
+
 	
 
 	EquipmentManager Manager;
@@ -262,7 +264,7 @@ private:
 	int scaleval[50];
 	int scalevalgrass[50];
 
-	int coinsarray[50];
+	Vector3 coinsarray[50];
 
 	float debugmouseposx;
 	float debugmouseposy;
