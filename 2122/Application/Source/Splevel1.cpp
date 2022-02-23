@@ -147,7 +147,7 @@ void Splevel1::Init()
 	light[0].type = Light::LIGHT_DIRECTIONAL;
 	light[0].position.Set(0, 20, 0);
 	light[0].color.Set(1, 1, 1);
-	light[0].power = 0.5;
+	light[0].power = 0.3;
 	light[0].kC = 1.f;
 	light[0].kL = 0.01f;
 	light[0].kQ = 0.001f;
@@ -170,7 +170,7 @@ void Splevel1::Init()
 	light[1].type = Light::LIGHT_DIRECTIONAL;
 	light[1].position.Set(0, 0, 1);
 	light[1].color.Set(1, 1, 1);
-	light[1].power = 0.5;
+	light[1].power = 0.3;
 	light[1].kC = 1.f;
 	light[1].kL = 0.01f;
 	light[1].kQ = 0.001f;
@@ -193,7 +193,7 @@ void Splevel1::Init()
 	light[2].type = Light::LIGHT_DIRECTIONAL;
 	light[2].position.Set(0, 0, -1);
 	light[2].color.Set(1, 1, 1);
-	light[2].power = 0.5;
+	light[2].power = 0.3;
 	light[2].kC = 1.f;
 	light[2].kL = 0.01f;
 	light[2].kQ = 0.001f;
@@ -216,7 +216,7 @@ void Splevel1::Init()
 	light[3].type = Light::LIGHT_DIRECTIONAL;
 	light[3].position.Set(1, 0, 0);
 	light[3].color.Set(1, 1, 1);
-	light[3].power = 0.5;
+	light[3].power = 0.3;
 	light[3].kC = 1.f;
 	light[3].kL = 0.01f;
 	light[3].kQ = 0.001f;
@@ -239,7 +239,7 @@ void Splevel1::Init()
 	light[4].type = Light::LIGHT_DIRECTIONAL;
 	light[4].position.Set(-1, 0, 0);
 	light[4].color.Set(1, 1, 1);
-	light[4].power = 0.5;
+	light[4].power = 0.3;
 	light[4].kC = 1.f;
 	light[4].kL = 0.01f;
 	light[4].kQ = 0.001f;
@@ -501,15 +501,15 @@ void Splevel1::Init()
 	InitName();
 }
 
-bool setuppolice = false, clearpolice, paper1, paper2, paper3, paper4, timerstart, win, lose, NPC, startlaptop = false, evidence_won_bonus, die;
+bool setuppolice = false, clearpolice, paper1, paper2, paper3, paper4, timerstart, win, lose, NPC, NPC2, NPC3, NPC4, startlaptop = false, evidence_won_bonus, die;
 double scaleevidence = 0.1, countdown, timer;
-float prologuey = -40, scaletitle = 0 , pposx, pposz, pposx2, pposz2, pposx4, pposx3, pposz3, pposz4, rotateangle, pposy, pposy2, pposy3, pposy4, pushaway, movex = -500, movez, AlignX;
+float prologuey = -40, scaletitle = 0 , pposx, pposz, pposx2, pposz2, pposx4, pposx3, pposz3, pposz4, rotateangle, pposy, pposy2, pposy3, pposy4, pushaway, movex = -500, movex2 = -500, movex3 = 500, movex4 = 500, movez, AlignX;
 string timerstring, beetsinstringform, Dialogue, Answer1, Answer2;
 int totalbeets = 0, countdownbonus = 1500, spinD = 0;
 
 int mg1_start, dialoguepart, rannpc;
 bool lvl2, lvl3,lvl1=true, playonce, NPCInteract;
-bool prologue = true, doneonce, OP1, OP2, OP3,OP1check, OP2check,OP3check,deleterest,LS_start,LS_Win,LS_Lose,POP1,POP2,POP3, rotateback = true, spawntaxi, spawnpolice, spawntruck,closed,closed2,closing, HTP;
+bool Bankrupt, prologue = true, doneonce, OP1, OP2, OP3,OP1check, OP2check,OP3check,deleterest,LS_start,LS_Win,LS_Lose,POP1,POP2,POP3, rotateback = true, spawntaxi, spawnpolice, spawntruck,closed,closed2,closing, HTP;
 
 float cposx, cposz, movecar;
 void Splevel1::Update(double dt)
@@ -664,7 +664,7 @@ void Splevel1::Update(double dt)
 			}
 		}
 
-		if (debugmouseposx > 55 && debugmouseposx < 59 && debugmouseposy > 6 && debugmouseposy < 10)
+		if (debugmouseposx > 55 && debugmouseposx < 59 && debugmouseposy > 6 && debugmouseposy < 15)
 		{
 			if (!bLButtonState && Application::IsMousePressed(0))
 			{
@@ -695,7 +695,7 @@ void Splevel1::Update(double dt)
 	}
 
 
-	int randomno = rand() % 6 + 0;
+	int randomno = rand() % 7 + 0;
 	/*cout << randomno << " ";*/
 	if (randomno == 1 && spawnpolice == false && spawntruck == false && spawntaxi == false)
 	{
@@ -721,6 +721,37 @@ void Splevel1::Update(double dt)
 			NPC = false;
 		}
 	}
+	if (randomno == 5 && NPCInteract == false)
+	{
+		NPC2 = true;
+		movex2 += 6;
+		if (movex >= 500)
+		{
+			movex = -500;
+			NPC2 = false;
+		}
+	}
+	if (randomno == 6 && NPCInteract == false)
+	{
+		NPC3 = true;
+		movex3 -= 5;
+		if (movex <= -500)
+		{
+			movex3 = 500;
+			NPC3 = false;
+		}
+	}
+	if (randomno == 7 && NPCInteract == false)
+	{
+		NPC4 = true;
+		movex4 -= 4;
+		if (movex4 <= -500)
+		{
+			movex = 500;
+			NPC4 = false;
+		}
+	}
+
 
 	if (spawnpolice == true)
 	{
@@ -1010,7 +1041,7 @@ void Splevel1::Update(double dt)
 		/*	std::cout << "posX:" << posX << " , posY:" << posY << std::endl;*/
 			if (LS_start == true)
 			{
-				if (posX > 35 && posX < 45 && posY > 8 && posY < 14)
+				if (posX > 35 && posX < 45 && posY > 8 && posY < 18)
 				{
 					questions = true;
 					LS_start = false;
@@ -1143,14 +1174,14 @@ void Splevel1::Update(double dt)
 			}
 			if (LS_Win == true)
 			{
-				if (Manager.PrestigeLvl>=1 && (posX > 35 && posX < 44 && (posY > 10 && posY < 17)))
+				if (Manager.PrestigeLvl>=1 && (posX > 35 && posX < 44 && (posY > 10 && posY < 21)))
 				{
 					Manager.Money = Manager.Money + 100;
 					PlaySound(TEXT("Sent.wav"), NULL, SND_ASYNC);
 					LS_Win = false;
 					PlaySound(TEXT("Sent.wav"), NULL, SND_ASYNC);
 				}
-				else if (posX > 35 && posX < 44 && (posY > 10 && posY < 17))
+				else if (posX > 35 && posX < 44 && (posY > 10 && posY < 21))
 				{
 					Manager.Money = Manager.Money + 50;
 					PlaySound(TEXT("Sent.wav"), NULL, SND_ASYNC);
@@ -1161,13 +1192,13 @@ void Splevel1::Update(double dt)
 			}
 			if (LS_Lose == true)
 			{
-				if (Manager.PrestigeLvl >= 1 && (posX > 35 && posX < 44 && (posY > 10 && posY < 17)))
+				if (Manager.PrestigeLvl >= 1 && (posX > 35 && posX < 44 && (posY > 10 && posY < 21)))
 				{
 					Manager.Money = Manager.Money - 150;
 					PlaySound(TEXT("Sent.wav"), NULL, SND_ASYNC);
 					LS_Lose = false;
 				}
-				if (posX > 35 && posX < 44 && (posY > 10 && posY < 17))
+				if (posX > 35 && posX < 44 && (posY > 10 && posY < 21))
 				{
 					Manager.Money = Manager.Money - 100;
 					PlaySound(TEXT("Sent.wav"), NULL, SND_ASYNC);
@@ -1186,7 +1217,7 @@ void Splevel1::Update(double dt)
 			}
 			if (PuzzleWinUI == true)
 			{
-				if (posX > 35 && posX < 45 && posY > 8 && posY < 14) PuzzleWinUI = false;
+				if (posX > 35 && posX < 45 && posY > 8 && posY < 19) PuzzleWinUI = false;
 			}
 
 			if (PuzzleLoseUI == true)
@@ -1194,7 +1225,10 @@ void Splevel1::Update(double dt)
 				if (posX > 35 && posX < 45 && posY > 8 && posY < 19)
 				{
 					PuzzleLoseUI = false;
-					Manager.Money -= Manager.Money / 5;
+					if(Manager.Money < 0)
+					Manager.Money += Manager.Money / 5;
+
+					else Manager.Money += Manager.Money / 5;
 				}
 			}
 			if (die == true)
@@ -1202,7 +1236,10 @@ void Splevel1::Update(double dt)
 				if (posX > 35 && posX < 45 && posY > 8 && posY < 19)
 				{
 
-					Manager.Money -= Manager.Money / 2;
+					if (Manager.Money < 0)
+						Manager.Money += Manager.Money;
+
+					else Manager.Money -= Manager.Money / 2;
 					die = false;
 				}
 			}
@@ -1464,11 +1501,11 @@ void Splevel1::Update(double dt)
 							float posX = x / w * 80; //convert (0,800) to (0,80)
 							float posY = 60 - y / h * 60; //convert (600,0) to (0,60)
 							Sleep(150);
-							if (posX > 5 && posX < 35 && (posY > 8 && posY < 14)) // Box1
+							if (posX > 5 && posX < 35 && (posY > 10 && posY < 18)) // Box1
 							{
 								dialoguepart = 1;
 							}
-							if (posX > 45 && posX < 75 && (posY > 8 && posY < 14)) // Box2
+							if (posX > 45 && posX < 75 && (posY > 10 && posY < 18)) // Box2
 							{
 								dialoguepart = 4;
 							}
@@ -1491,12 +1528,12 @@ void Splevel1::Update(double dt)
 							float posX = x / w * 80; //convert (0,800) to (0,80)
 							float posY = 60 - y / h * 60; //convert (600,0) to (0,60)
 							Sleep(150);
-							if (posX > 5 && posX < 35 && (posY > 8 && posY < 14)) // Box1
+							if (posX > 5 && posX < 35 && (posY > 10 && posY < 18)) // Box1
 							{
 
 								dialoguepart = 5;
 							}
-							if (posX > 45 && posX < 75 && (posY > 8 && posY < 14)) // Box2
+							if (posX > 45 && posX < 75 && (posY > 10 && posY < 18)) // Box2
 							{
 								dialoguepart = 2;
 							}
@@ -1520,11 +1557,11 @@ void Splevel1::Update(double dt)
 							float posX = x / w * 80; //convert (0,800) to (0,80)
 							float posY = 60 - y / h * 60; //convert (600,0) to (0,60)
 							Sleep(150);
-							if (posX > 5 && posX < 35 && (posY > 8 && posY < 14)) // Box1
+							if (posX > 5 && posX < 35 && (posY > 10 && posY < 18)) // Box1
 							{
 								dialoguepart = 6;
 							}
-							if (posX > 45 && posX < 75 && (posY > 8 && posY < 14)) // Box2
+							if (posX > 45 && posX < 75 && (posY > 10 && posY < 18)) // Box2
 							{
 								dialoguepart = 3;
 							}
@@ -1547,14 +1584,14 @@ void Splevel1::Update(double dt)
 							unsigned h = Application::GetWindowHeight();
 							float posX = x / w * 80; //convert (0,800) to (0,80)
 							float posY = 60 - y / h * 60; //convert (600,0) to (0,60)
-							if (posX > 5 && posX < 35 && (posY > 8 && posY < 14)) // Box1
+							if (posX > 5 && posX < 35 && (posY > 10 && posY < 18)) // Box1
 							{
 								Manager.Money += 50;
 								dialoguepart = 0;
 								NPCInteract = false;
 								doneonce = false;
 							}
-							if (posX > 45 && posX < 75 && (posY > 8 && posY < 14)) // Box2
+							if (posX > 45 && posX < 75 && (posY > 10 && posY < 18)) // Box2
 							{
 								Manager.Money += 50;
 								dialoguepart = 0;
@@ -1580,14 +1617,14 @@ void Splevel1::Update(double dt)
 							unsigned h = Application::GetWindowHeight();
 							float posX = x / w * 80; //convert (0,800) to (0,80)
 							float posY = 60 - y / h * 60; //convert (600,0) to (0,60)
-							if (posX > 5 && posX < 35 && (posY > 8 && posY < 14)) // Box1
+							if (posX > 5 && posX < 35 && (posY > 10 && posY < 18)) // Box1
 							{
 								dialoguepart = 0;
 								NPCInteract = false;
 								doneonce = false;
 
 							}
-							if (posX > 45 && posX < 75 && (posY > 8 && posY < 14)) // Box2
+							if (posX > 45 && posX < 75 && (posY > 10 && posY < 18)) // Box2
 							{
 								dialoguepart = 0;
 								NPCInteract = false;
@@ -1612,13 +1649,13 @@ void Splevel1::Update(double dt)
 							unsigned h = Application::GetWindowHeight();
 							float posX = x / w * 80; //convert (0,800) to (0,80)
 							float posY = 60 - y / h * 60; //convert (600,0) to (0,60)
-							if (posX > 5 && posX < 35 && (posY > 8 && posY < 14)) // Box1
+							if (posX > 5 && posX < 35 && (posY > 10 && posY < 18)) // Box1
 							{
 								dialoguepart = 0;
 								NPCInteract = false;
 								doneonce = false;
 							}
-							if (posX > 45 && posX < 75 && (posY > 8 && posY < 14)) // Box2
+							if (posX > 45 && posX < 75 && (posY > 10 && posY < 18)) // Box2
 							{
 								dialoguepart = 0;
 								NPCInteract = false;
@@ -1643,13 +1680,13 @@ void Splevel1::Update(double dt)
 							unsigned h = Application::GetWindowHeight();
 							float posX = x / w * 80; //convert (0,800) to (0,80)
 							float posY = 60 - y / h * 60; //convert (600,0) to (0,60)
-							if (posX > 5 && posX < 35 && (posY > 8 && posY < 14)) // Box1
+							if (posX > 5 && posX < 35 && (posY > 10 && posY < 18)) // Box1
 							{
 								dialoguepart = 0;
 								NPCInteract = false;
 								doneonce = false;
 							}
-							if (posX > 45 && posX < 75 && (posY > 8 && posY < 14)) // Box2
+							if (posX > 45 && posX < 75 && (posY > 10 && posY < 18)) // Box2
 							{
 								dialoguepart = 0;
 								NPCInteract = false;
@@ -1678,11 +1715,11 @@ void Splevel1::Update(double dt)
 							float posX = x / w * 80; //convert (0,800) to (0,80)
 							float posY = 60 - y / h * 60; //convert (600,0) to (0,60)
 							Sleep(150);
-							if (posX > 5 && posX < 35 && (posY > 8 && posY < 14)) // Box1
+							if (posX > 5 && posX < 35 && (posY > 10 && posY < 18)) // Box1
 							{
 								dialoguepart = 1;
 							}
-							if (posX > 45 && posX < 75 && (posY > 8 && posY < 14)) // Box2
+							if (posX > 45 && posX < 75 && (posY > 10 && posY < 18)) // Box2
 							{
 								dialoguepart = 0;
 								NPCInteract = false;
@@ -1706,12 +1743,12 @@ void Splevel1::Update(double dt)
 							float posX = x / w * 80; //convert (0,800) to (0,80)
 							float posY = 60 - y / h * 60; //convert (600,0) to (0,60)
 							Sleep(150);
-							if (posX > 5 && posX < 35 && (posY > 8 && posY < 14)) // Box1
+							if (posX > 5 && posX < 35 && (posY > 10 && posY < 18)) // Box1
 							{
 
 								dialoguepart = 5;
 							}
-							if (posX > 45 && posX < 75 && (posY > 8 && posY < 14)) // Box2
+							if (posX > 45 && posX < 75 && (posY > 10 && posY < 18)) // Box2
 							{
 								dialoguepart = 2;
 							}
@@ -1735,11 +1772,11 @@ void Splevel1::Update(double dt)
 							float posX = x / w * 80; //convert (0,800) to (0,80)
 							float posY = 60 - y / h * 60; //convert (600,0) to (0,60)
 							Sleep(150);
-							if (posX > 5 && posX < 35 && (posY > 8 && posY < 14)) // Box1
+							if (posX > 5 && posX < 35 && (posY > 10 && posY < 18)) // Box1
 							{
 								dialoguepart = 5;
 							}
-							if (posX > 45 && posX < 75 && (posY > 8 && posY < 14)) // Box2
+							if (posX > 45 && posX < 75 && (posY > 10 && posY < 18)) // Box2
 							{
 								dialoguepart = 3;
 							}
@@ -1762,13 +1799,13 @@ void Splevel1::Update(double dt)
 							unsigned h = Application::GetWindowHeight();
 							float posX = x / w * 80; //convert (0,800) to (0,80)
 							float posY = 60 - y / h * 60; //convert (600,0) to (0,60)
-							if (posX > 5 && posX < 35 && (posY > 8 && posY < 14)) // Box1
+							if (posX > 5 && posX < 35 && (posY > 10 && posY < 18)) // Box1
 							{
 								dialoguepart = 0;
 								Manager.Money += 100;
 								NPCInteract = false;
 							}
-							if (posX > 45 && posX < 75 && (posY > 8 && posY < 14)) // Box2
+							if (posX > 45 && posX < 75 && (posY > 10 && posY < 18)) // Box2
 							{
 								dialoguepart = 0;
 								Manager.Money += 100;
@@ -1793,12 +1830,12 @@ void Splevel1::Update(double dt)
 							unsigned h = Application::GetWindowHeight();
 							float posX = x / w * 80; //convert (0,800) to (0,80)
 							float posY = 60 - y / h * 60; //convert (600,0) to (0,60)
-							if (posX > 5 && posX < 35 && (posY > 8 && posY < 14)) // Box1
+							if (posX > 5 && posX < 35 && (posY > 10 && posY < 18)) // Box1
 							{
 								dialoguepart = 0;
 								NPCInteract = false;
 							}
-							if (posX > 45 && posX < 75 && (posY > 8 && posY < 14)) // Box2
+							if (posX > 45 && posX < 75 && (posY > 10 && posY < 18)) // Box2
 							{
 								dialoguepart = 0;
 								NPCInteract = false;
@@ -1822,13 +1859,13 @@ void Splevel1::Update(double dt)
 							unsigned h = Application::GetWindowHeight();
 							float posX = x / w * 80; //convert (0,800) to (0,80)
 							float posY = 60 - y / h * 60; //convert (600,0) to (0,60)
-							if (posX > 5 && posX < 35 && (posY > 8 && posY < 14)) // Box1
+							if (posX > 5 && posX < 35 && (posY > 10 && posY < 18)) // Box1
 							{
 								dialoguepart = 0;
 								Manager.Money += -2000;
 								NPCInteract = false;
 							}
-							if (posX > 45 && posX < 75 && (posY > 8 && posY < 14)) // Box2
+							if (posX > 45 && posX < 75 && (posY > 10 && posY < 18)) // Box2
 							{
 								dialoguepart = 0;
 								Manager.Money += -2000;
@@ -1853,13 +1890,13 @@ void Splevel1::Update(double dt)
 							unsigned h = Application::GetWindowHeight();
 							float posX = x / w * 80; //convert (0,800) to (0,80)
 							float posY = 60 - y / h * 60; //convert (600,0) to (0,60)
-							if (posX > 5 && posX < 35 && (posY > 8 && posY < 14)) // Box1
+							if (posX > 5 && posX < 35 && (posY > 10 && posY < 18)) // Box1
 							{
 								dialoguepart = 0;
 								Manager.Money += -1950;
 								NPCInteract = false;
 							}
-							if (posX > 45 && posX < 75 && (posY > 8 && posY < 14)) // Box2
+							if (posX > 45 && posX < 75 && (posY > 10 && posY < 18)) // Box2
 							{
 								dialoguepart = 0;
 								Manager.Money += -1950;
@@ -1909,6 +1946,10 @@ void Splevel1::Update(double dt)
 		}
 		else bLButtonState = false;
 	}
+
+	if (Manager.Money < 0) Bankrupt = false;
+
+	
 }
 
 	
@@ -2191,7 +2232,7 @@ void Splevel1::Render()
 		}
 		modelStack.PopMatrix();
 
-
+		//Gate Rock
 		modelStack.PushMatrix();
 		modelStack.Scale(500, 500, 500);
 		{
@@ -2303,6 +2344,106 @@ void Splevel1::Render()
 			RenderMesh(meshList[GEO_SKYSCRAPER1], true);
 			modelStack.PopMatrix();
 		}
+		//Road Side Right Side
+		modelStack.PushMatrix();
+		modelStack.Scale(1, 1, 1);
+		modelStack.Rotate(90, 0, 1, 0);
+		modelStack.Translate(300, 0, 0);
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(300, 0, 600);
+			modelStack.Scale(300, 180, 180);
+			modelStack.Rotate(180, 0, 1, 0);
+			RenderMesh(meshList[GEO_LBUILDING2], true);
+			modelStack.PopMatrix();
+
+			modelStack.PushMatrix();
+			modelStack.Translate(-300, 0, 600);
+			modelStack.Scale(300, 180, 180);
+			modelStack.Rotate(180, 0, 1, 0);
+			RenderMesh(meshList[GEO_LBUILDING2], true);
+			modelStack.PopMatrix();
+
+			modelStack.PushMatrix();
+			modelStack.Rotate(180, 0, 1, 0);
+			modelStack.Translate(0, 0, -650);
+			modelStack.Scale(300, 180, 180);
+			RenderMesh(meshList[GEO_LBUILDING3], true);
+			modelStack.PopMatrix();
+
+			modelStack.PushMatrix();
+			modelStack.Rotate(90, 0, 1, 0);
+			modelStack.Translate(-700, 0, -350);
+			modelStack.Scale(300, 180, 180);
+			RenderMesh(meshList[GEO_LBUILDING3], true);
+			modelStack.PopMatrix();
+
+			modelStack.PushMatrix();
+			modelStack.Rotate(90, 0, 1, 0);
+			modelStack.Translate(-1000, 0, -350);
+			modelStack.Scale(180, 180, 180);
+			RenderMesh(meshList[GEO_SKYSCRAPER1], true);
+			modelStack.PopMatrix();
+
+			modelStack.PushMatrix();
+			modelStack.Rotate(-90, 0, 1, 0);
+			modelStack.Translate(750, 0, 750);
+			modelStack.Scale(300, 180, 180);
+			RenderMesh(meshList[GEO_LBUILDING1], true);
+			modelStack.PopMatrix();
+		}
+		modelStack.PopMatrix();
+
+
+		//Road Side Left Side
+		modelStack.PushMatrix();
+		modelStack.Scale(1, 1, 1);
+		modelStack.Rotate(90, 0, 1, 0);
+		modelStack.Translate(300, 0, -1600);
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(300, 0, 600);
+			modelStack.Scale(300, 180, 180);
+			modelStack.Rotate(180, 0, 1, 0);
+			RenderMesh(meshList[GEO_LBUILDING2], true);
+			modelStack.PopMatrix();
+
+			modelStack.PushMatrix();
+			modelStack.Translate(-300, 0, 600);
+			modelStack.Scale(300, 180, 180);
+			modelStack.Rotate(180, 0, 1, 0);
+			RenderMesh(meshList[GEO_LBUILDING2], true);
+			modelStack.PopMatrix();
+
+			modelStack.PushMatrix();
+			modelStack.Rotate(180, 0, 1, 0);
+			modelStack.Translate(0, 0, -650);
+			modelStack.Scale(300, 180, 180);
+			RenderMesh(meshList[GEO_LBUILDING3], true);
+			modelStack.PopMatrix();
+
+			modelStack.PushMatrix();
+			modelStack.Rotate(90, 0, 1, 0);
+			modelStack.Translate(-700, 0, -350);
+			modelStack.Scale(300, 180, 180);
+			RenderMesh(meshList[GEO_LBUILDING3], true);
+			modelStack.PopMatrix();
+
+			modelStack.PushMatrix();
+			modelStack.Rotate(90, 0, 1, 0);
+			modelStack.Translate(-1000, 0, -350);
+			modelStack.Scale(180, 180, 180);
+			RenderMesh(meshList[GEO_SKYSCRAPER1], true);
+			modelStack.PopMatrix();
+
+			modelStack.PushMatrix();
+			modelStack.Rotate(-90, 0, 1, 0);
+			modelStack.Translate(750, 0, 750);
+			modelStack.Scale(300, 180, 180);
+			RenderMesh(meshList[GEO_LBUILDING1], true);
+			modelStack.PopMatrix();
+		}
+		modelStack.PopMatrix();
 	}
 
 	//Road and cars
@@ -2452,6 +2593,56 @@ void Splevel1::Render()
 		modelStack.PopMatrix();
 	}
 
+	if (NPC2 == true)
+	{
+		//Render NPC
+		modelStack.PushMatrix();
+		modelStack.Translate(movex2, 5, 190);
+		modelStack.Scale(5, 5, 5);
+		RenderMesh(meshList[GEO_Body], false);
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(0, 0, 0);
+			modelStack.Scale(1, 1, 1);
+			RenderMesh(meshList[GEO_Head], false);
+			modelStack.PopMatrix();
+		}
+		modelStack.PopMatrix();
+	}
+
+	if (NPC3 == true)
+	{
+		//Render NPC
+		modelStack.PushMatrix();
+		modelStack.Translate(movex3, 5, 210);
+		modelStack.Scale(5, 5, 5);
+		RenderMesh(meshList[GEO_Body], false);
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(0, 0, 0);
+			modelStack.Scale(1, 1, 1);
+			RenderMesh(meshList[GEO_Head], false);
+			modelStack.PopMatrix();
+		}
+		modelStack.PopMatrix();
+	}
+	if (NPC4 == true)
+	{
+		//Render NPC
+		modelStack.PushMatrix();
+		modelStack.Translate(movex4, 5, 220);
+		modelStack.Scale(5, 5, 5);
+		RenderMesh(meshList[GEO_Body], false);
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(0, 0, 0);
+			modelStack.Scale(1, 1, 1);
+			RenderMesh(meshList[GEO_Head], false);
+			modelStack.PopMatrix();
+		}
+		modelStack.PopMatrix();
+	}
+
 
 
 
@@ -2471,6 +2662,13 @@ void Splevel1::Render()
 		RenderMesh(meshList[GEO_BUILDING], true);
 		modelStack.PopMatrix();
 
+		if (lvl1 == true)
+		{
+			modelStack.PushMatrix();
+			RenderName(1);
+			modelStack.PopMatrix();
+		}
+
 		if (Manager.PrestigeLvl > 0)
 		{
 			modelStack.PushMatrix();
@@ -2486,6 +2684,12 @@ void Splevel1::Render()
 			}
 			RenderMesh(meshList[GEO_LVL2], true);
 			modelStack.PopMatrix();
+			if (lvl2 == true)
+			{
+				modelStack.PushMatrix();
+				RenderName(2);
+				modelStack.PopMatrix();
+			}
 		}
 		if (Manager.PrestigeLvl > 1)
 		{
@@ -2501,7 +2705,13 @@ void Splevel1::Render()
 				modelStack.PopMatrix();
 			}
 			RenderMesh(meshList[GEO_LVL3], true);
-			modelStack.PopMatrix();
+			modelStack.PopMatrix(); 
+			if (lvl3 == true)
+			{
+				modelStack.PushMatrix();
+				RenderName(3);
+				modelStack.PopMatrix();
+			}
 		}
 		//L1 lift
 		if (camera.position.x > 25 && camera.position.x < 60 && (camera.position.z < -50 && camera.position.z > -60) && (lvl1==true))
@@ -2557,34 +2767,29 @@ void Splevel1::Render()
 			{
 				WorkStationPositionY = 100;
 			}
+			WorkStationPositionX = -75;
 			if (i % 6 == 0)
 			{
-				WorkStationPositionX = -75;
 				WorkStationPositionZ = 40;
 			}
 			else if (i % 6 == 1)
 			{
-				WorkStationPositionX = -75;
 				WorkStationPositionZ = 20;
 			}
 			else if (i % 6 == 2)
 			{
-				WorkStationPositionX = -75;
 				WorkStationPositionZ = 0;
 			}
 			else if (i % 6 == 3)
 			{
-				WorkStationPositionX = -75;
 				WorkStationPositionZ = -30;
 			}
 			else if (i % 6 == 4)
 			{
-				WorkStationPositionX = -75;
 				WorkStationPositionZ = -50;
 			}
 			else if (i % 6 == 5)
 			{
-				WorkStationPositionX = -75;
 				WorkStationPositionZ = -70;
 			}
 			modelStack.PushMatrix();
@@ -2681,8 +2886,60 @@ void Splevel1::Render()
 				BButtonState = false;
 			}
 		}
-		else NPCInteract = false;
-		
+		if (camera.position.x > movex2 - 40 && camera.position.x < movex2 + 40 && (camera.position.z < 240 && camera.position.z > 160))//L3
+		{
+
+			if (NPCInteract == false)
+			{
+				RenderTextOnScreen(meshList[GEO_TEXT], "Press 'E' to Interact with NPC", Color(0, 1, 0), 4, 10, 30);
+			}
+			if (!BButtonState && Application::IsKeyPressed('E'))
+			{
+				NPCInteract = true;
+
+			}
+			else if (BButtonState && !Application::IsKeyPressed('E'))
+			{
+
+				BButtonState = false;
+			}
+		}
+		if (camera.position.x > movex3 - 40 && camera.position.x < movex3 + 40 && (camera.position.z < 240 && camera.position.z > 160))//L3
+		{
+
+			if (NPCInteract == false)
+			{
+				RenderTextOnScreen(meshList[GEO_TEXT], "Press 'E' to Interact with NPC", Color(0, 1, 0), 4, 10, 30);
+			}
+			if (!BButtonState && Application::IsKeyPressed('E'))
+			{
+				NPCInteract = true;
+
+			}
+			else if (BButtonState && !Application::IsKeyPressed('E'))
+			{
+
+				BButtonState = false;
+			}
+		}
+		if (camera.position.x > movex4 - 40 && camera.position.x < movex4 + 40 && (camera.position.z < 240 && camera.position.z > 160))//L3
+		{
+
+			if (NPCInteract == false)
+			{
+				RenderTextOnScreen(meshList[GEO_TEXT], "Press 'E' to Interact with NPC", Color(0, 1, 0), 4, 10, 30);
+			}
+			if (!BButtonState && Application::IsKeyPressed('E'))
+			{
+				NPCInteract = true;
+
+			}
+			else if (BButtonState && !Application::IsKeyPressed('E'))
+			{
+
+				BButtonState = false;
+			}
+		}
 		//Lovescam mini game
 		if (LS_start == true)
 		{
@@ -2779,45 +3036,18 @@ void Splevel1::Render()
 			RenderTextOnScreen(meshList[GEO_TEXT], "Pay up", Color(1, 1, 1), 2, 37, 9);
 		}
 
-
-
-		if (questions == true)
+		if (Bankrupt == true)
 		{
-			if (OP1 == true && OP1check == false)
-			{
-				RenderMeshOnScreen(meshList[GEO_Screen], 40, 30, 16, 54, true);
-				RenderMeshOnScreen(meshList[GEO_op1], 55, 30, 16, 54, true);
-			}
-			else if (OP2 == true && OP2check == false)
-			{
-				RenderMeshOnScreen(meshList[GEO_Screen], 40, 30, 16, 54, true);
-				RenderMeshOnScreen(meshList[GEO_op2], 55, 30, 16, 54, true);
-			}
-			else if (OP3 == true && OP3check == false)
-			{
-				RenderMeshOnScreen(meshList[GEO_Screen], 40, 30, 16, 54, true);
-				RenderMeshOnScreen(meshList[GEO_op3], 55, 30, 16, 54, true);
-			}
-			else if(POP1 == true && OP1check == false)
-			{
-				RenderMeshOnScreen(meshList[GEO_Screen], 40, 30, 16, 54, true);
-				RenderMeshOnScreen(meshList[GEO_PREop1], 55, 30, 16, 54, true);
-			}
-			else if (POP2 == true && OP1check == false)
-			{
-				RenderMeshOnScreen(meshList[GEO_Screen], 40, 30, 16, 54, true);
-				RenderMeshOnScreen(meshList[GEO_PREop2], 55, 30, 16, 54, true);
-			}
-			else if (POP3 == true && OP1check == false)
-			{
-				RenderMeshOnScreen(meshList[GEO_Screen], 40, 30, 16, 54, true);
-				RenderMeshOnScreen(meshList[GEO_PREop3], 55, 30, 16, 54, true);
-			}
-			else
-			{
+			RenderMeshOnScreen(meshList[GEO_EMPTYBOX], 40, 25, 60, 40);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Youre in debt!", Color(1, 1, 1), 2, 29, 40);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Would you like to restart or keep going?", Color(1, 1, 1), 2, 21, 35);
+			RenderMeshOnScreen(meshList[GEO_EMPTYBOX], 20, 10, 10, 6);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Restart", Color(1, 1, 1), 2, 13, 9);
 
-			}
+			RenderMeshOnScreen(meshList[GEO_EMPTYBOX], 60, 10, 10, 6);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Keep going", Color(1, 1, 1), 2, 47, 9);
 		}
+
 
 		if (closing == true)
 		{
@@ -3684,6 +3914,44 @@ void Splevel1::Render()
 		}
 	}
 
+	if (questions == true)
+	{
+		if (OP1 == true && OP1check == false)
+		{
+			RenderMeshOnScreen(meshList[GEO_Screen], 40, 30, 16, 54, true);
+			RenderMeshOnScreen(meshList[GEO_op1], 55, 30, 16, 54, true);
+		}
+		else if (OP2 == true && OP2check == false)
+		{
+			RenderMeshOnScreen(meshList[GEO_Screen], 40, 30, 16, 54, true);
+			RenderMeshOnScreen(meshList[GEO_op2], 55, 30, 16, 54, true);
+		}
+		else if (OP3 == true && OP3check == false)
+		{
+			RenderMeshOnScreen(meshList[GEO_Screen], 40, 30, 16, 54, true);
+			RenderMeshOnScreen(meshList[GEO_op3], 55, 30, 16, 54, true);
+		}
+		else if (POP1 == true && OP1check == false)
+		{
+			RenderMeshOnScreen(meshList[GEO_Screen], 40, 30, 16, 54, true);
+			RenderMeshOnScreen(meshList[GEO_PREop1], 55, 30, 16, 54, true);
+		}
+		else if (POP2 == true && OP1check == false)
+		{
+			RenderMeshOnScreen(meshList[GEO_Screen], 40, 30, 16, 54, true);
+			RenderMeshOnScreen(meshList[GEO_PREop2], 55, 30, 16, 54, true);
+		}
+		else if (POP3 == true && OP1check == false)
+		{
+			RenderMeshOnScreen(meshList[GEO_Screen], 40, 30, 16, 54, true);
+			RenderMeshOnScreen(meshList[GEO_PREop3], 55, 30, 16, 54, true);
+		}
+		else
+		{
+
+		}
+	}
+
 	
 
 
@@ -3832,16 +4100,6 @@ void Splevel1::RenderWorkStation(int WorkStation)
 			modelStack.Scale(5, 5, 5);
 			RenderMesh(meshList[GEO_Body], false);
 			{
-				modelStack.PushMatrix();
-				modelStack.Scale(0.3, 0.3, 0.3);
-				modelStack.Rotate(90, 0, 1, 0);
-				modelStack.Translate(-5, 20, 0);
-				RenderText(meshList[GEO_TEXT], NameList[WorkStation+18], Color(1, 1, 1));
-				modelStack.PushMatrix();
-				modelStack.Translate(0, 2, 0);
-				RenderText(meshList[GEO_TEXT], NameList[WorkStation], Color(1, 1, 1));
-				modelStack.PopMatrix();
-				modelStack.PopMatrix();
 
 				RenderMesh(meshList[GEO_Head], false);
 				{
@@ -3909,6 +4167,73 @@ void Splevel1::RenderWorkStation(int WorkStation)
 						modelStack.Scale(0.4, 0.3, 0.6);
 						RenderMesh(meshList[GEO_Phone3], true); //Render Phone 3
 					}
+					modelStack.PopMatrix();
+				}
+				modelStack.PopMatrix();
+			}
+			modelStack.PopMatrix();
+		}
+	}
+}
+
+void Splevel1::RenderName(int Lvl)
+{
+	int XPos, YPos, ZPos;
+	XPos = YPos = ZPos = 0;
+	for (int i = (Lvl-1)*6; i < Lvl * 6; ++i)
+	{
+		if (Manager.EquipArray[i] != nullptr)
+		{
+			if (i < 6)
+			{
+				YPos = 0;
+			}
+			else if (i < 12)
+			{
+				YPos = 50;
+			}
+			else if (i < 18)
+			{
+				YPos = 100;
+			}
+			XPos = -75;
+			if (i % 6 == 0)
+			{
+				ZPos = 40;
+			}
+			else if (i % 6 == 1)
+			{
+				ZPos = 20;
+			}
+			else if (i % 6 == 2)
+			{
+				ZPos = 0;
+			}
+			else if (i % 6 == 3)
+			{
+				ZPos = -30;
+			}
+			else if (i % 6 == 4)
+			{
+				ZPos = -50;
+			}
+			else if (i % 6 == 5)
+			{
+				ZPos = -70;
+			}
+			modelStack.PushMatrix();
+			modelStack.Scale(1, 1, 1);
+			modelStack.Translate(XPos, YPos, ZPos);
+			{
+				modelStack.PushMatrix();
+				modelStack.Scale(2, 2, 2);
+				modelStack.Rotate(90, 0, 1, 0);
+				modelStack.Translate(-10, 20, 10);
+				RenderText(meshList[GEO_TEXT], NameList[i + 18], Color(1, 1, 1));
+				{
+					modelStack.PushMatrix();
+					modelStack.Translate(0, 2, 0);
+					RenderText(meshList[GEO_TEXT], NameList[i], Color(1, 1, 1));
 					modelStack.PopMatrix();
 				}
 				modelStack.PopMatrix();
@@ -4368,7 +4693,7 @@ void Splevel1::UpdateMainControls()
 			}
 		}
 
-		if (posX > 35 && posX < 45 && posY > 8 && posY < 14)
+		if (posX > 35 && posX < 45 && posY > 10 && posY < 20)
 		{
 			if (setuppolice == true)
 			{
@@ -4391,8 +4716,13 @@ void Splevel1::UpdateMainControls()
 				lose = false;
 				timerstart = false;
 				clearpolice = false;
-				float takeaway = Manager.Money / 5;
-				Manager.Money = Manager.Money - takeaway;
+				float takeaway;
+				if(Manager.Money != 0) takeaway = Manager.Money / 5;
+				if (Manager.Money < 0)
+				{
+					Manager.Money = Manager.Money + takeaway;
+				}
+				else Manager.Money = Manager.Money - takeaway;
 
 			}
 		}
@@ -4448,9 +4778,10 @@ void Splevel1::UpdateCarepackage(double dt)
 			if (Application::IsKeyPressed('E'))
 			{
 				int result = (rand() % 10) + 1;
-				if (result > 8)
+				if (result > 1)
 				{
-					Manager.Money += Manager.Money;
+					if (Manager.Money < 0) Manager.Money = Manager.Money / 2;
+					else Manager.Money = Manager.Money * 2;
 					carepackage->notitext = false;
 					carepackage->pickuptext = false;
 					carepackage->active = false;
