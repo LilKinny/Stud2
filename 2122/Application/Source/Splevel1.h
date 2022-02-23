@@ -96,9 +96,9 @@ class Splevel1 : public Scene
 		GEO_Arms,
 		GEO_GRASS3D,
 		GEO_CHEST,
-		GEO_HIGHHOLE,
 		GEO_CAT,
 		GEO_ROCK,
+		GEO_HIGHHOLE,
 		GEO_COIN,
 
 		GEO_TAXI,
