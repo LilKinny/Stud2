@@ -501,7 +501,7 @@ int totalbeets = 0, countdownbonus = 1500, spinD = 0;
 
 int mg1_start, dialoguepart, rannpc;
 bool lvl2, lvl3,lvl1=true, playonce, NPCInteract;
-bool prologue = true, doneonce, OP1, OP2, OP3,OP1check, OP2check,OP3check,deleterest,LS_start,LS_Win,LS_Lose,POP1,POP2,POP3, rotateback = true, spawntaxi, spawnpolice, spawntruck,closed,closed2,closing, HTP;
+bool Bankrupt, prologue = true, doneonce, OP1, OP2, OP3,OP1check, OP2check,OP3check,deleterest,LS_start,LS_Win,LS_Lose,POP1,POP2,POP3, rotateback = true, spawntaxi, spawnpolice, spawntruck,closed,closed2,closing, HTP;
 
 float cposx, cposz, movecar;
 void Splevel1::Update(double dt)
@@ -515,6 +515,40 @@ void Splevel1::Update(double dt)
 	int carepackagerand;
 	carepackagerand = (rand() % 10) + 1;
 	/*carepackagerand = 69;*/
+
+	if (Bankrupt == true)
+	{
+		static bool bLButtonState = false;
+		bLButtonState = false;
+		if (!bLButtonState && Application::IsMousePressed(0))
+		{
+			bLButtonState = true;
+			double x, y;
+			Application::GetCursorPos(&x, &y);
+			unsigned w = Application::GetWindowWidth();
+			unsigned h = Application::GetWindowHeight();
+			float posX = x / w * 80; //convert (0,800) to (0,80)
+			float posY = 60 - y / h * 60; //convert (600,0) to (0,60)
+			if (posX > 5 && posX < 35 && (posY > 8 && posY < 14)) // Box1
+			{
+				Manager.Money = 10;
+				Manager.PrestigeLvl = 0;
+				Manager.MinigameBuffs = 0;
+				Manager.MoneyPlantUpgrade = 0;
+				Manager.LuckyCatUpgrade = 0;
+				Manager.DeleteEquipArray();
+				camera.Reset();
+				Bankrupt = false;
+			}
+			if (posX > 45 && posX < 75 && (posY > 8 && posY < 14)) // Box2
+			{
+				Bankrupt = false;
+			}
+		}
+		else bLButtonState = false;
+	}
+
+
 
 	if (carepackage->active == false)
 	{
@@ -1182,7 +1216,10 @@ void Splevel1::Update(double dt)
 				if (posX > 35 && posX < 45 && posY > 8 && posY < 19)
 				{
 					PuzzleLoseUI = false;
-					Manager.Money -= Manager.Money / 5;
+					if(Manager.Money < 0)
+					Manager.Money += Manager.Money / 5;
+
+					else Manager.Money += Manager.Money / 5;
 				}
 			}
 			if (die == true)
@@ -1190,7 +1227,10 @@ void Splevel1::Update(double dt)
 				if (posX > 35 && posX < 45 && posY > 8 && posY < 19)
 				{
 
-					Manager.Money -= Manager.Money / 2;
+					if (Manager.Money < 0)
+						Manager.Money += Manager.Money / 2;
+
+					else Manager.Money += Manager.Money / 2;
 					die = false;
 				}
 			}
@@ -1452,11 +1492,11 @@ void Splevel1::Update(double dt)
 							float posX = x / w * 80; //convert (0,800) to (0,80)
 							float posY = 60 - y / h * 60; //convert (600,0) to (0,60)
 							Sleep(150);
-							if (posX > 5 && posX < 35 && (posY > 8 && posY < 14)) // Box1
+							if (posX > 5 && posX < 35 && (posY > 10 && posY < 18)) // Box1
 							{
 								dialoguepart = 1;
 							}
-							if (posX > 45 && posX < 75 && (posY > 8 && posY < 14)) // Box2
+							if (posX > 45 && posX < 75 && (posY > 10 && posY < 18)) // Box2
 							{
 								dialoguepart = 4;
 							}
@@ -1479,12 +1519,12 @@ void Splevel1::Update(double dt)
 							float posX = x / w * 80; //convert (0,800) to (0,80)
 							float posY = 60 - y / h * 60; //convert (600,0) to (0,60)
 							Sleep(150);
-							if (posX > 5 && posX < 35 && (posY > 8 && posY < 14)) // Box1
+							if (posX > 5 && posX < 35 && (posY > 10 && posY < 18)) // Box1
 							{
 
 								dialoguepart = 5;
 							}
-							if (posX > 45 && posX < 75 && (posY > 8 && posY < 14)) // Box2
+							if (posX > 45 && posX < 75 && (posY > 10 && posY < 18)) // Box2
 							{
 								dialoguepart = 2;
 							}
@@ -1508,11 +1548,11 @@ void Splevel1::Update(double dt)
 							float posX = x / w * 80; //convert (0,800) to (0,80)
 							float posY = 60 - y / h * 60; //convert (600,0) to (0,60)
 							Sleep(150);
-							if (posX > 5 && posX < 35 && (posY > 8 && posY < 14)) // Box1
+							if (posX > 5 && posX < 35 && (posY > 10 && posY < 18)) // Box1
 							{
 								dialoguepart = 6;
 							}
-							if (posX > 45 && posX < 75 && (posY > 8 && posY < 14)) // Box2
+							if (posX > 45 && posX < 75 && (posY > 10 && posY < 18)) // Box2
 							{
 								dialoguepart = 3;
 							}
@@ -1535,14 +1575,14 @@ void Splevel1::Update(double dt)
 							unsigned h = Application::GetWindowHeight();
 							float posX = x / w * 80; //convert (0,800) to (0,80)
 							float posY = 60 - y / h * 60; //convert (600,0) to (0,60)
-							if (posX > 5 && posX < 35 && (posY > 8 && posY < 14)) // Box1
+							if (posX > 5 && posX < 35 && (posY > 10 && posY < 18)) // Box1
 							{
 								Manager.Money += 50;
 								dialoguepart = 0;
 								NPCInteract = false;
 								doneonce = false;
 							}
-							if (posX > 45 && posX < 75 && (posY > 8 && posY < 14)) // Box2
+							if (posX > 45 && posX < 75 && (posY > 10 && posY < 18)) // Box2
 							{
 								Manager.Money += 50;
 								dialoguepart = 0;
@@ -1568,14 +1608,14 @@ void Splevel1::Update(double dt)
 							unsigned h = Application::GetWindowHeight();
 							float posX = x / w * 80; //convert (0,800) to (0,80)
 							float posY = 60 - y / h * 60; //convert (600,0) to (0,60)
-							if (posX > 5 && posX < 35 && (posY > 8 && posY < 14)) // Box1
+							if (posX > 5 && posX < 35 && (posY > 10 && posY < 18)) // Box1
 							{
 								dialoguepart = 0;
 								NPCInteract = false;
 								doneonce = false;
 
 							}
-							if (posX > 45 && posX < 75 && (posY > 8 && posY < 14)) // Box2
+							if (posX > 45 && posX < 75 && (posY > 10 && posY < 18)) // Box2
 							{
 								dialoguepart = 0;
 								NPCInteract = false;
@@ -1600,13 +1640,13 @@ void Splevel1::Update(double dt)
 							unsigned h = Application::GetWindowHeight();
 							float posX = x / w * 80; //convert (0,800) to (0,80)
 							float posY = 60 - y / h * 60; //convert (600,0) to (0,60)
-							if (posX > 5 && posX < 35 && (posY > 8 && posY < 14)) // Box1
+							if (posX > 5 && posX < 35 && (posY > 10 && posY < 18)) // Box1
 							{
 								dialoguepart = 0;
 								NPCInteract = false;
 								doneonce = false;
 							}
-							if (posX > 45 && posX < 75 && (posY > 8 && posY < 14)) // Box2
+							if (posX > 45 && posX < 75 && (posY > 10 && posY < 18)) // Box2
 							{
 								dialoguepart = 0;
 								NPCInteract = false;
@@ -1631,13 +1671,13 @@ void Splevel1::Update(double dt)
 							unsigned h = Application::GetWindowHeight();
 							float posX = x / w * 80; //convert (0,800) to (0,80)
 							float posY = 60 - y / h * 60; //convert (600,0) to (0,60)
-							if (posX > 5 && posX < 35 && (posY > 8 && posY < 14)) // Box1
+							if (posX > 5 && posX < 35 && (posY > 10 && posY < 18)) // Box1
 							{
 								dialoguepart = 0;
 								NPCInteract = false;
 								doneonce = false;
 							}
-							if (posX > 45 && posX < 75 && (posY > 8 && posY < 14)) // Box2
+							if (posX > 45 && posX < 75 && (posY > 10 && posY < 18)) // Box2
 							{
 								dialoguepart = 0;
 								NPCInteract = false;
@@ -1666,11 +1706,11 @@ void Splevel1::Update(double dt)
 							float posX = x / w * 80; //convert (0,800) to (0,80)
 							float posY = 60 - y / h * 60; //convert (600,0) to (0,60)
 							Sleep(150);
-							if (posX > 5 && posX < 35 && (posY > 8 && posY < 14)) // Box1
+							if (posX > 5 && posX < 35 && (posY > 10 && posY < 18)) // Box1
 							{
 								dialoguepart = 1;
 							}
-							if (posX > 45 && posX < 75 && (posY > 8 && posY < 14)) // Box2
+							if (posX > 45 && posX < 75 && (posY > 10 && posY < 18)) // Box2
 							{
 								dialoguepart = 0;
 								NPCInteract = false;
@@ -1694,12 +1734,12 @@ void Splevel1::Update(double dt)
 							float posX = x / w * 80; //convert (0,800) to (0,80)
 							float posY = 60 - y / h * 60; //convert (600,0) to (0,60)
 							Sleep(150);
-							if (posX > 5 && posX < 35 && (posY > 8 && posY < 14)) // Box1
+							if (posX > 5 && posX < 35 && (posY > 10 && posY < 18)) // Box1
 							{
 
 								dialoguepart = 5;
 							}
-							if (posX > 45 && posX < 75 && (posY > 8 && posY < 14)) // Box2
+							if (posX > 45 && posX < 75 && (posY > 10 && posY < 18)) // Box2
 							{
 								dialoguepart = 2;
 							}
@@ -1723,11 +1763,11 @@ void Splevel1::Update(double dt)
 							float posX = x / w * 80; //convert (0,800) to (0,80)
 							float posY = 60 - y / h * 60; //convert (600,0) to (0,60)
 							Sleep(150);
-							if (posX > 5 && posX < 35 && (posY > 8 && posY < 14)) // Box1
+							if (posX > 5 && posX < 35 && (posY > 10 && posY < 18)) // Box1
 							{
 								dialoguepart = 5;
 							}
-							if (posX > 45 && posX < 75 && (posY > 8 && posY < 14)) // Box2
+							if (posX > 45 && posX < 75 && (posY > 10 && posY < 18)) // Box2
 							{
 								dialoguepart = 3;
 							}
@@ -1750,13 +1790,13 @@ void Splevel1::Update(double dt)
 							unsigned h = Application::GetWindowHeight();
 							float posX = x / w * 80; //convert (0,800) to (0,80)
 							float posY = 60 - y / h * 60; //convert (600,0) to (0,60)
-							if (posX > 5 && posX < 35 && (posY > 8 && posY < 14)) // Box1
+							if (posX > 5 && posX < 35 && (posY > 10 && posY < 18)) // Box1
 							{
 								dialoguepart = 0;
 								Manager.Money += 100;
 								NPCInteract = false;
 							}
-							if (posX > 45 && posX < 75 && (posY > 8 && posY < 14)) // Box2
+							if (posX > 45 && posX < 75 && (posY > 10 && posY < 18)) // Box2
 							{
 								dialoguepart = 0;
 								Manager.Money += 100;
@@ -1781,12 +1821,12 @@ void Splevel1::Update(double dt)
 							unsigned h = Application::GetWindowHeight();
 							float posX = x / w * 80; //convert (0,800) to (0,80)
 							float posY = 60 - y / h * 60; //convert (600,0) to (0,60)
-							if (posX > 5 && posX < 35 && (posY > 8 && posY < 14)) // Box1
+							if (posX > 5 && posX < 35 && (posY > 10 && posY < 18)) // Box1
 							{
 								dialoguepart = 0;
 								NPCInteract = false;
 							}
-							if (posX > 45 && posX < 75 && (posY > 8 && posY < 14)) // Box2
+							if (posX > 45 && posX < 75 && (posY > 10 && posY < 18)) // Box2
 							{
 								dialoguepart = 0;
 								NPCInteract = false;
@@ -1810,13 +1850,13 @@ void Splevel1::Update(double dt)
 							unsigned h = Application::GetWindowHeight();
 							float posX = x / w * 80; //convert (0,800) to (0,80)
 							float posY = 60 - y / h * 60; //convert (600,0) to (0,60)
-							if (posX > 5 && posX < 35 && (posY > 8 && posY < 14)) // Box1
+							if (posX > 5 && posX < 35 && (posY > 10 && posY < 18)) // Box1
 							{
 								dialoguepart = 0;
 								Manager.Money += -2000;
 								NPCInteract = false;
 							}
-							if (posX > 45 && posX < 75 && (posY > 8 && posY < 14)) // Box2
+							if (posX > 45 && posX < 75 && (posY > 10 && posY < 18)) // Box2
 							{
 								dialoguepart = 0;
 								Manager.Money += -2000;
@@ -1841,13 +1881,13 @@ void Splevel1::Update(double dt)
 							unsigned h = Application::GetWindowHeight();
 							float posX = x / w * 80; //convert (0,800) to (0,80)
 							float posY = 60 - y / h * 60; //convert (600,0) to (0,60)
-							if (posX > 5 && posX < 35 && (posY > 8 && posY < 14)) // Box1
+							if (posX > 5 && posX < 35 && (posY > 10 && posY < 18)) // Box1
 							{
 								dialoguepart = 0;
 								Manager.Money += -1950;
 								NPCInteract = false;
 							}
-							if (posX > 45 && posX < 75 && (posY > 8 && posY < 14)) // Box2
+							if (posX > 45 && posX < 75 && (posY > 10 && posY < 18)) // Box2
 							{
 								dialoguepart = 0;
 								Manager.Money += -1950;
@@ -1897,6 +1937,10 @@ void Splevel1::Update(double dt)
 		}
 		else bLButtonState = false;
 	}
+
+	if (Manager.Money < 0) Bankrupt = true;
+
+	
 }
 
 	
@@ -2879,6 +2923,17 @@ void Splevel1::Render()
 			RenderTextOnScreen(meshList[GEO_TEXT], "Pay up", Color(1, 1, 1), 2, 37, 9);
 		}
 
+		if (Bankrupt == true)
+		{
+			RenderMeshOnScreen(meshList[GEO_EMPTYBOX], 40, 25, 60, 40);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Youre in debt!", Color(1, 1, 1), 2, 29, 40);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Would you like to restart or keep going?", Color(1, 1, 1), 2, 21, 35);
+			RenderMeshOnScreen(meshList[GEO_EMPTYBOX], 20, 10, 10, 6);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Restart", Color(1, 1, 1), 2, 13, 9);
+
+			RenderMeshOnScreen(meshList[GEO_EMPTYBOX], 60, 10, 10, 6);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Keep going", Color(1, 1, 1), 2, 47, 9);
+		}
 
 
 		if (questions == true)
@@ -4525,7 +4580,7 @@ void Splevel1::UpdateMainControls()
 			}
 		}
 
-		if (posX > 35 && posX < 45 && posY > 8 && posY < 14)
+		if (posX > 35 && posX < 45 && posY > 10 && posY < 18)
 		{
 			if (setuppolice == true)
 			{
@@ -4548,8 +4603,13 @@ void Splevel1::UpdateMainControls()
 				lose = false;
 				timerstart = false;
 				clearpolice = false;
-				float takeaway = Manager.Money / 5;
-				Manager.Money = Manager.Money - takeaway;
+				float takeaway;
+				if(Manager.Money != 0) takeaway = Manager.Money / 5;
+				if (Manager.Money < 0)
+				{
+					Manager.Money = Manager.Money + takeaway;
+				}
+				else Manager.Money = Manager.Money - takeaway;
 
 			}
 		}
