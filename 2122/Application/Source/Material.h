@@ -29,7 +29,7 @@ struct Material
     Material() {
         kAmbient.Set(0.1f, 0.1f, 0.1f);
         kDiffuse.Set(0.6f, 0.6f, 0.6f);
-        kSpecular.Set(0.1f, 0.1f, 0.1f);
+        kSpecular.Set(0.6f, 0.6f, 0.6f);
         kShininess = 1.f;
     }
     Material& operator=(const Material& rhs)

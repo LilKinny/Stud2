@@ -147,7 +147,7 @@ void Splevel1::Init()
 	light[0].type = Light::LIGHT_DIRECTIONAL;
 	light[0].position.Set(0, 20, 0);
 	light[0].color.Set(1, 1, 1);
-	light[0].power = 0.5;
+	light[0].power = 0.3;
 	light[0].kC = 1.f;
 	light[0].kL = 0.01f;
 	light[0].kQ = 0.001f;
@@ -170,7 +170,7 @@ void Splevel1::Init()
 	light[1].type = Light::LIGHT_DIRECTIONAL;
 	light[1].position.Set(0, 0, 1);
 	light[1].color.Set(1, 1, 1);
-	light[1].power = 0.5;
+	light[1].power = 0.3;
 	light[1].kC = 1.f;
 	light[1].kL = 0.01f;
 	light[1].kQ = 0.001f;
@@ -193,7 +193,7 @@ void Splevel1::Init()
 	light[2].type = Light::LIGHT_DIRECTIONAL;
 	light[2].position.Set(0, 0, -1);
 	light[2].color.Set(1, 1, 1);
-	light[2].power = 0.5;
+	light[2].power = 0.3;
 	light[2].kC = 1.f;
 	light[2].kL = 0.01f;
 	light[2].kQ = 0.001f;
@@ -216,7 +216,7 @@ void Splevel1::Init()
 	light[3].type = Light::LIGHT_DIRECTIONAL;
 	light[3].position.Set(1, 0, 0);
 	light[3].color.Set(1, 1, 1);
-	light[3].power = 0.5;
+	light[3].power = 0.3;
 	light[3].kC = 1.f;
 	light[3].kL = 0.01f;
 	light[3].kQ = 0.001f;
@@ -239,7 +239,7 @@ void Splevel1::Init()
 	light[4].type = Light::LIGHT_DIRECTIONAL;
 	light[4].position.Set(-1, 0, 0);
 	light[4].color.Set(1, 1, 1);
-	light[4].power = 0.5;
+	light[4].power = 0.3;
 	light[4].kC = 1.f;
 	light[4].kL = 0.01f;
 	light[4].kQ = 0.001f;
