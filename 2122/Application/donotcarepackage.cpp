@@ -7,9 +7,12 @@ donotcarepackage::donotcarepackage()
 	position.y = 0;
 	position.z = 0;
 
+	wintexttimer = 3;
+
 	active = false;
 	notitext = false;
 	pickuptext = false;
+	wintext = false;
 }
 
 donotcarepackage::~donotcarepackage()

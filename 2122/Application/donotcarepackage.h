@@ -15,7 +15,10 @@ public:
 	bool active;
 	bool notitext;
 	bool pickuptext;
+	bool wintext;
 	Vector3 position;
+
+	float wintexttimer;
 private:
 	
 };

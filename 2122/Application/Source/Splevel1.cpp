@@ -4794,7 +4794,7 @@ void Splevel1::UpdateCarepackage(double dt)
 					carepackage->notitext = false;
 					carepackage->pickuptext = false;
 					carepackage->active = false;
-					
+					carepackage->wintext = true;
 				}
 				else
 				{
@@ -4848,6 +4848,16 @@ void Splevel1::UpdateCarepackage(double dt)
 			PlaySound(TEXT("Die.wav"), NULL, SND_ASYNC);
 		}
 	}
+
+	if (carepackage->wintext == true)
+	{
+		carepackage->wintexttimer -= dt;
+		if (carepackage->wintexttimer < 0)
+		{
+			carepackage->wintext = false;
+			carepackage->wintexttimer = 3;
+		}
+	}
 }
 
 void Splevel1::RenderCarepackage()
@@ -4871,6 +4881,12 @@ void Splevel1::RenderCarepackage()
 	if (carepackage->pickuptext == true)
 	{
 		RenderTextOnScreen(meshList[GEO_TEXT], "Press 'E' to open the ??GIFT??", Color(1, 1, 1), 3, 20, 25);
+	}
+	if (carepackage->wintext == true)
+	{
+		RenderMeshOnScreen(meshList[GEO_EMPTYBOX], 40, 15, 45, 15);
+		RenderTextOnScreen(meshList[GEO_TEXT], "Money DOUBLED!!!", Color(1, 1, 1), 2, 22, 15);
+
 	}
 	
 }
