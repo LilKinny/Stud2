@@ -99,7 +99,6 @@ void Camera3::Update(double dt)
 	DetectAbleStand();
 	target = position + view;
 
-
 	if (Application::IsKeyPressed('Q'))
 	{
 		//std::cout << "\nUp:" << up.x << " " << up.y << " " << up.z << " " << "\n";

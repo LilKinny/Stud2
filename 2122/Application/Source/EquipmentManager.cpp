@@ -156,12 +156,13 @@ void EquipmentManager::UpdateMoney(float dt)
 
 std::string EquipmentManager::ConvertMoneyToSuitableAmounts(float Amount) //Return Edited String
 {
+	std::cout << Amount << std::endl;
 	float Temp = Amount;
-	if (Amount >= 1000000)
+	if (Amount >= 1000000 || Amount <= -1000000)
 	{
 		Temp = Temp * 0.000001;
 	}
-	else if (Amount >= 1000)  
+	else if (Amount >= 1000 || Amount <= -1000)
 	{
 		Temp = Temp * 0.001;
 	}
@@ -179,11 +180,11 @@ std::string EquipmentManager::ConvertMoneyToSuitableAmounts(float Amount) //Retu
 	{
 		Temporary = Temporary.substr(0, Stoppos + 3);
 	}
-	if (Amount >= 1000000)
+	if (Amount >= 1000000 || Amount <= -1000000)
 	{
 		Temporary += 'm';
 	}
-	else if (Amount >= 1000)
+	else if (Amount >= 1000 || Amount <= -1000)
 	{
 		Temporary += 'k';
 	}
