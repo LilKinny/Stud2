@@ -7,7 +7,7 @@ EquipmentManager::EquipmentManager()
 	LuckyCatUpgrade = 0;
 	MoneyPlantUpgrade = 0;
 	PrestigeLvl = 0;
-	Money = 50000;
+	Money = -12400;
 	InitEquipArray();
 }
 

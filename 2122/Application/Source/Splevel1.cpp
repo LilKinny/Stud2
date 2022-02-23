@@ -1228,7 +1228,7 @@ void Splevel1::Update(double dt)
 				{
 
 					if (Manager.Money < 0)
-						Manager.Money += Manager.Money / 2;
+						Manager.Money -= 500;
 
 					else Manager.Money += Manager.Money / 2;
 					die = false;
@@ -1938,7 +1938,7 @@ void Splevel1::Update(double dt)
 		else bLButtonState = false;
 	}
 
-	if (Manager.Money < 0) Bankrupt = true;
+	if (Manager.Money < 0) Bankrupt = false;
 
 	
 }
@@ -4665,9 +4665,10 @@ void Splevel1::UpdateCarepackage(double dt)
 			if (Application::IsKeyPressed('E'))
 			{
 				int result = (rand() % 10) + 1;
-				if (result > 8)
+				if (result > 1)
 				{
-					Manager.Money += Manager.Money;
+					if (Manager.Money < 0) Manager.Money = Manager.Money / 2;
+					else Manager.Money = Manager.Money * 2;
 					carepackage->notitext = false;
 					carepackage->pickuptext = false;
 					carepackage->active = false;
