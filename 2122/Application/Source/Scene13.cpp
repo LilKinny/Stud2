@@ -339,12 +339,6 @@ void Scene13::Init()
 	meshList[GEO_ROCK] = MeshBuilder::GenerateOBJMTL("Rock", "OBJ//rock_largeB.obj", "OBJ//rock_largeB.mtl");
 	meshList[GEO_HIGHHOLE] = MeshBuilder::GenerateOBJMTL("HighHole", "OBJ//HighHole.obj", "OBJ//HighHole.mtl");
 
-	/*
-	meshList[GEO_NYP] = MeshBuilder::GenerateQuad("nyplogo", Color(1, 1, 1), 1.f);
-	meshList[GEO_NYP]->textureID = LoadTGA("Image//NYP.tga");
-
-	meshList[GEO_CUBE] = MeshBuilder::GenerateCube("Cube", Color(1, 1, 1), 1.f);
- */
 	meshList[GEO_TITLEBUTTONS] = MeshBuilder::GenerateQuad("quad", Color(1, 1, 1), 1.f);
 	meshList[GEO_TITLEBUTTONS]->textureID = LoadTGA("Image//TitleButton.tga");
 
@@ -357,21 +351,7 @@ void Scene13::Init()
 
 	meshList[GEO_LIGHTBALL] = MeshBuilder::GenerateSphere("lightball", Color(1, 1, 0), 1.f);
 
-	/*
-	meshList[GEO_CHAIR] = MeshBuilder::GenerateOBJ("model1","OBJ//chair.obj");
-	meshList[GEO_CHAIR]->textureID = LoadTGA("Image//chair.tga");
-
-	meshList[GEO_DART] = MeshBuilder::GenerateOBJ("model1", "OBJ//dart.obj");
-	meshList[GEO_DART]->textureID = LoadTGA("Image//dart.tga");
-
-	meshList[GEO_DOORMAN] = MeshBuilder::GenerateOBJ("model1", "OBJ//doorman.obj");
-	meshList[GEO_DOORMAN]->textureID = LoadTGA("Image//doorman.tga");
-
-	meshList[GEO_SHOE] = MeshBuilder::GenerateOBJ("model1", "OBJ//shoe.obj");
-	meshList[GEO_SHOE]->textureID = LoadTGA("Image//shoe.tga");
-
-	meshList[GEO_COTTAGE] = MeshBuilder::GenerateOBJMTL("model7",
-		"OBJ//cottage_obj.obj", "OBJ//cottage_obj.mtl");*/
+	
 
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16,16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Image//Agency_FB.tga");
@@ -440,12 +420,7 @@ void Scene13::Update(double dt)
 		{
 			if (posX > 30 && posX < 50 && posY > 24 && posY < 40)
 			{
-				std::cout << "Hit! transition start 2 black" << std::endl;
 				transition = true;
-			}
-			else
-			{
-				std::cout << "Miss!" << std::endl;
 			}
 		}
 
@@ -461,7 +436,6 @@ void Scene13::Update(double dt)
 	if (scalex >= 10)
 	{
 		Sleep(50);
-		cout << "Change scene";
 		
 	}
 
@@ -475,7 +449,6 @@ void Scene13::Update(double dt)
 	if (countdown >= 100) stage3 = true;
 	else stage3 = false;
 
-	//std::cout << countdown;
 
 	if (rotatebackk == false)
 	{
@@ -565,21 +538,17 @@ void Scene13::Render()
 
 
 	int randomno = rand() % 15 + 0;
-	/*cout << randomno << " ";*/
 	if (randomno == 1 && popo == false && truck == false && taxi == false)
 	{
 		taxi = true;
-		/*cout << "SPAWNED TAXI ";*/
 	}
 	if (randomno == 2 && popo == false && truck == false && taxi == false)
 	{
 		popo = true;
-		/*cout << "SPAWNED POLICE ";*/
 	}
 	if (randomno == 3 && popo == false && truck == false && taxi == false)
 	{
 		truck = true;
-		/*cout << "SPAWNED TRUCK";*/
 	}
 	if (popo == true)
 	{
@@ -612,15 +581,6 @@ void Scene13::Render()
 
 void Scene13::RenderSkybox()
 {
-
-	
-
-	/*modelStack.PushMatrix();
-	modelStack.Translate(0, 0, -10);
-	modelStack.Rotate(180, 0, 180, 180);
-	modelStack.Scale(500, 500, 500);
-	RenderMesh(meshList[GEO_QUAD], false);
-	modelStack.PopMatrix();*/
 
 
 	CONST FLOAT OFFSET = 900;

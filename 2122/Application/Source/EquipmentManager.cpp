@@ -156,7 +156,6 @@ void EquipmentManager::UpdateMoney(float dt)
 
 std::string EquipmentManager::ConvertMoneyToSuitableAmounts(float Amount) //Return Edited String
 {
-	std::cout << Amount << std::endl;
 	float Temp = Amount;
 	if (Amount >= 1000000 || Amount <= -1000000)
 	{

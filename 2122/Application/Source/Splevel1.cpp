@@ -511,14 +511,10 @@ void Splevel1::Update(double dt)
 	Manager.UpdateMoney(dt);
 	cposx = camera.position.x;
 	cposz = camera.position.z;
-	//cout << cposx;
 	rotateangle = rotateangle + 0.1;
-
-	/*coinsrotation += 3;*/
 
 	int carepackagerand;
 	carepackagerand = (rand() % 10) + 1;
-	/*carepackagerand = 69;*/
 
 	UpdateCoinsAnimation(dt);
 
@@ -957,7 +953,6 @@ void Splevel1::Update(double dt)
 					if (deleterest == false)
 					{
 						int rnd = rand() % 3 + 0;
-						/*cout << rnd;*/
 						if (rnd == 0 && OP1check == false && OP2 != true && OP3 != true)
 						{
 							POP1 = true;
@@ -977,7 +972,6 @@ void Splevel1::Update(double dt)
 				}
 				else if (deleterest == true)
 				{
-					cout << "PressedE->deleterest true";
 					POP1 = false;
 					POP2 = false;
 					POP3 = false;
@@ -991,7 +985,6 @@ void Splevel1::Update(double dt)
 					if (deleterest == false)
 					{
 						int rnd = rand() % 3 + 0;
-						cout << rnd;
 						if (rnd == 0 && OP1check == false && OP2 != true && OP3 != true)
 						{
 							OP1 = true;
@@ -1022,7 +1015,6 @@ void Splevel1::Update(double dt)
 		if (!bLButtonState && Application::IsMousePressed(0))
 		{
 			bLButtonState = true;
-			std::cout << "LBUTTON DOWN" << std::endl;
 			//Converting Viewport space to UI space
 			double x, y;
 			Application::GetCursorPos(&x, &y);
@@ -1200,7 +1192,6 @@ void Splevel1::Update(double dt)
 			{
 				if (posX > 35 && posX < 45 && posY > 8 && posY < 14)
 				{
-					cout << "Bruu moment";
 					PuzzleActive = true;
 					puzzle.Resetgame();
 					PuzzleUIActive = false;
@@ -2108,7 +2099,6 @@ void Splevel1::Render()
 
 			modelStack.Translate(-210 - (i * 30), 0, 180 - (x * 40));
 			modelStack.Rotate(scaleval[i] * scaleval[i], 0, 1, 0);
-			//modelStack.Scale(scaleval[i], scaleval[i], scaleval[i]);
 			modelStack.Scale(scalevalgrass[i], scalevalgrass[i], scalevalgrass[i]);
 
 			RenderMesh(meshList[GEO_GRASS3D], true);
@@ -2125,7 +2115,6 @@ void Splevel1::Render()
 
 			modelStack.Translate(210 + (i * 30), 0, 180 - (x * 40));
 			modelStack.Rotate(scaleval[i] * scaleval[i], 0, 1, 0);
-			//modelStack.Scale(scaleval[i], scaleval[i], scaleval[i]);
 			modelStack.Scale(scalevalgrass[i], scalevalgrass[i], scalevalgrass[i]);
 
 			RenderMesh(meshList[GEO_GRASS3D], true);
@@ -2742,7 +2731,6 @@ void Splevel1::Render()
 		WorkStationPositionX = WorkStationPositionY = WorkStationPositionZ = 0;
 		for (int i = 0; i < (Manager.PrestigeLvl + 1) * 6; ++i)
 		{
-			/*std::cout << i % 6 << std::endl;*/
 			if (i < 6)
 			{
 				WorkStationPositionY = 0;
