@@ -134,17 +134,9 @@ void Application::Run()
 		float posY = 60 - (y / h) * 60; //convert (600,0) to (0,60)
 		if (!bLButtonState && Application::IsMousePressed(0))
 		{
-			std::cout << "posX:" << posX << " , posY:" << posY << std::endl;
 			if (posX > 30 && posX < 50 && posY > 24 && posY < 40)
 			{
-				std::cout << "Hit! transition start" << std::endl;
-				changescene = true;
-
-				//trigger user action or function
-			}
-			else
-			{
-				std::cout << "Miss!" << std::endl;
+				changescene = true;   //trigger user action or function
 			}
 		}
 		if (timer < 10 && changescene == true)
@@ -155,7 +147,6 @@ void Application::Run()
 		if (timer >= 10 && done == false)
 		{
 			Sleep(50);
-			std::cout << "Change scene";
 			scene = scene2;
 			done = true;
 
