@@ -4254,6 +4254,8 @@ void Splevel1::RenderName(int Lvl)
 
 void Splevel1::PuzzleRender()
 {
+	//Luke
+	//Renderfunc for puzzle minigame
 	RenderMeshOnScreen(meshList[GEO_Puzzlebgbg], 40, 25, 80, 80);
 	RenderMeshOnScreen(meshList[GEO_Puzzlebg], 40, 25, 40, 40);
 
@@ -4261,38 +4263,17 @@ void Splevel1::PuzzleRender()
 
 	for (int i = 0; i < 10; i++)
 	{
-		/*int paperposx = puzzle.Paper[i]->position.x;
-		int paperposy = puzzle.Paper[i]->position.y;*/
-
 		RenderMeshOnScreen(meshList[GEO_PuzzlePaper], puzzle.Paper[i]->actlposition.x, puzzle.Paper[i]->actlposition.y, 3, 3);
 	}
 
-
-	//player render
-	//if (PuzzlePlayerPickup == true)
-	//{
-	//	RenderMeshOnScreen(meshList[GEO_PuzzlePlayer],puzzle.playeractualpox, puzzle.playeractualpoy, 3, 3);
-	//}
-	//else if (PuzzlePlayerPickup == false)
-	//{
-	//	//y offset by 4
-	//	RenderMeshOnScreen(meshList[GEO_PuzzlePlayer], 18 + (puzzle.Player->position.x * 4), 3 + (puzzle.Player->position.y * 4), 3, 3);
-	//	//RenderMeshOnScreen(meshList[GEO_PuzzlePlayer], 18 , 12 , 3, 3);
-
-	//}
-
 	RenderMeshOnScreen(meshList[GEO_PuzzlePlayer], puzzle.playeractualpox, (puzzle.playeractualpoy), 3, 3);
 
-
 	RenderTextOnScreen(meshList[GEO_TEXT], "Time left: "+ std::to_string(puzzletimer), Color(1, 1, 1), 2, 3, 50);
-	
-	
 }
 
 void Splevel1::UpdatePuzzleControls()
 {
-	
-
+	//Update Func for Puzzle minigame
 	static bool bLButtonState = false;
 	if (Application::IsMousePressed(0))
 	{
@@ -4309,15 +4290,12 @@ void Splevel1::UpdatePuzzleControls()
 		posY -= 3;
 
 		//player
-		
 		if (puzzle.ispickupsomthing == false)
 		{
 			if ((posY <= (puzzle.playeractualpoy + 1.5) && posY >= (puzzle.playeractualpoy - 1.5)) && (posX >= (puzzle.playeractualpox - 2) && posX <= (puzzle.playeractualpox + 2))) //Clck Store
 			{
 				puzzle.ispickupsomthing = true;
 				PuzzlePlayerPickup = true;
-				/*puzzle.playeractualpox = posX;
-				puzzle.playeractualpoy = posY;*/
 			}
 			else
 			{
@@ -4337,12 +4315,7 @@ void Splevel1::UpdatePuzzleControls()
 			}
 		}
 
-		
-
-
-
 		//checking
-
 		if (PuzzlePlayerPickup == true)
 		{
 
@@ -4513,16 +4486,7 @@ void Splevel1::UpdatePuzzleControls()
 				}
 			}
 		}
-		
-		
-		/*puzzle.playeractualpox = (18 + (puzzle.Player->position.x * 4));
-		puzzle.playeractualpoy = (8 + (puzzle.Player->position.y * 4));*/
-		//bLButtonState = false;
 	}
-	
-
-
-	
 }
 
 void Splevel1::UpdateMainControls()
@@ -4862,10 +4826,10 @@ void Splevel1::UpdateCarepackage(double dt)
 
 void Splevel1::RenderCarepackage()
 {
+	//Render func for the carepackage
 	if (carepackage->active == true)
 	{
 		modelStack.PushMatrix();
-		//modelStack.Rotate(-90, 1, 0, 0);
 		modelStack.Translate(carepackage->position.x, 0, carepackage->position.z);
 		modelStack.Scale(10, 10, 10);
 
@@ -4876,7 +4840,6 @@ void Splevel1::RenderCarepackage()
 	{
 		RenderMeshOnScreen(meshList[GEO_EMPTYBOX], 40, 15, 45, 15);
 		RenderTextOnScreen(meshList[GEO_TEXT], "A ?PACKAGE? HAS DROPPED SOMEWHERE OUTSIDE!", Color(1, 1, 1), 2, 18, 15);
-
 	}
 	if (carepackage->pickuptext == true)
 	{
@@ -4886,18 +4849,14 @@ void Splevel1::RenderCarepackage()
 	{
 		RenderMeshOnScreen(meshList[GEO_EMPTYBOX], 40, 15, 45, 15);
 		RenderTextOnScreen(meshList[GEO_TEXT], "Money DOUBLED!!!", Color(1, 1, 1), 2, 22, 15);
-
 	}
-	
 }
 
 void Splevel1::packagedieanimation()
 {
-
+	//Death animation for the care package 
 	if (packagedie == true)
 	{
-		
-
 		modelStack.PushMatrix();
 		modelStack.Translate(camera.position.x, packagetruckoffset, camera.position.z - 10);
 		modelStack.Rotate(90, 1, 0, 0);
@@ -4905,19 +4864,13 @@ void Splevel1::packagedieanimation()
 		modelStack.Scale(30, 30, 30);
 		RenderMesh(meshList[GEO_TRUCK], true);
 		modelStack.PopMatrix();
-
-		
 	}
-
-
-
-	
-
-
 }
 
 void Splevel1::rendermoneyfly()
 {
+	//Render animation for the coins falling UI
+	//Number of coins is relative to the income per second 
 	if (Manager.TotalIncomePerSecond > 0)
 	{
 		for (int i = 0; i < 10; i++)
@@ -4943,20 +4896,16 @@ void Splevel1::rendermoneyfly()
 
 void Splevel1::UpdateCoinsAnimation(double dt)
 {
+	//Update func for coins animation 
 	coinsrotation += 3;
 
 	for (int i = 0; i < 30; i++)
 	{
-		
 		coinsarray[i].y -= (coinsarray[i].z)* dt; //z is speed
-		//coinsarray[i].z += 1;
-		//coinsarray[i].z
-
 		if (coinsarray[i].y < 0)
 		{
 			coinsarray[i].x = (rand() % 80) + 1;
 			coinsarray[i].y = 70;
-			//coinsarray[i].z = (rand() % 20) + 20;
 		}
 	}
 }

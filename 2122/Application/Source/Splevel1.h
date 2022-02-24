@@ -252,7 +252,7 @@ private:
 	float packagetruckoffset;
 
 
-	enum class Gamestate {MainGame,PuzzleGame}gamestate;
+	enum class Gamestate {MainGame,PuzzleGame}gamestate;//gamestate enum
 
 	donotcarepackage* carepackage;
 
@@ -262,10 +262,10 @@ private:
 
 	int coinsrotation;
 
-	int scaleval[50];
-	int scalevalgrass[50];
+	int scaleval[50];//random scale for trees
+	int scalevalgrass[50];//random scale val for grass
 
-	Vector3 coinsarray[50];
+	Vector3 coinsarray[50];//array for ui coins
 
 	float debugmouseposx;
 	float debugmouseposy;

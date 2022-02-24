@@ -5,6 +5,10 @@
 class PuzzleEntity
 {
 public:
+	PuzzleEntity();
+	~PuzzleEntity();
+
+
 	Vector3 position;
 	Vector3 actlposition;
 	Vector3 prevposition;
