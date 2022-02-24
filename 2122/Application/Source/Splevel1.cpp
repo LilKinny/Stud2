@@ -53,10 +53,7 @@ void Splevel1::Init()
 	glBindVertexArray(m_vertexArrayID);
 
 	//Load vertex and fragment shaders
-	/*m_programID = LoadShaders("Shader//Shading.vertexshader", "Shader//Shading.fragmentshader");
-	m_programID = LoadShaders("Shader//Shading.vertexshader", "Shader//LightSource.fragmentshader");
-	*/m_programID = LoadShaders("Shader//Texture.vertexshader", "Shader//Blending.fragmentshader");
-	//m_programID = LoadShaders("Shader//Texture.vertexshader", "Shader//Texture.fragmentshader");
+	m_programID = LoadShaders("Shader//Texture.vertexshader", "Shader//Blending.fragmentshader");
 	m_programID = LoadShaders("Shader//Texture.vertexshader","Shader//Text.fragmentshader");
 
 
@@ -368,9 +365,6 @@ void Splevel1::Init()
 	meshList[GEO_UPGRADETEXT] = MeshBuilder::GenerateRec("UpgradeText", Color(1, 1, 1), 5.f, 1.f);
 	meshList[GEO_UPGRADETEXT]->textureID = LoadTGA("Image//UpgradeText.tga");
 
-	//meshList[GEO_CAT] = MeshBuilder::GenerateOBJ("Cat", "OBJ//cat.obj");
-	//meshList[GEO_CAT]->textureID = LoadTGA("Image//Gold.tga");
-
 	meshList[GEO_TITLEBUTTONS] = MeshBuilder::GenerateQuad("quad", Color(1, 1, 1), 1.f);
 	meshList[GEO_TITLEBUTTONS]->textureID = LoadTGA("Image//TitleButton.tga");
 
@@ -517,14 +511,10 @@ void Splevel1::Update(double dt)
 	Manager.UpdateMoney(dt);
 	cposx = camera.position.x;
 	cposz = camera.position.z;
-	//cout << cposx;
 	rotateangle = rotateangle + 0.1;
-
-	/*coinsrotation += 3;*/
 
 	int carepackagerand;
 	carepackagerand = (rand() % 10) + 1;
-	/*carepackagerand = 69;*/
 
 	UpdateCoinsAnimation(dt);
 
@@ -699,19 +689,17 @@ void Splevel1::Update(double dt)
 
 
 	int randomno = rand() % 7 + 0;
-	/*cout << randomno << " ";*/
 	if (randomno == 1 && spawnpolice == false && spawntruck == false && spawntaxi == false)
 	{
 		spawntaxi = true;
-		/*cout << "SPAWNED TAXI ";*/
 	}
 	if (randomno == 2 && spawnpolice == false && spawntruck == false && spawntaxi == false)
-	{spawnpolice = true;
-	/*cout << "SPAWNED POLICE ";*/
+	{
+		spawnpolice = true;
 	}
 	if (randomno == 3 && spawnpolice == false && spawntruck == false && spawntaxi == false)
-	{spawntruck = true;
-	/*cout << "SPAWNED TRUCK";*/
+	{
+		spawntruck = true;
 	}
 
 	if (randomno == 4 && NPCInteract == false)
@@ -857,7 +845,6 @@ void Splevel1::Update(double dt)
 		if (puzzle.Wincheck() == true)
 		{
 			PuzzleActive = false;
-			//puzzle.Resetgame();
 			if (Manager.PrestigeLvl == 0)
 			{
 				puzzletimer = 60;
@@ -884,7 +871,6 @@ void Splevel1::Update(double dt)
 		else if (puzzletimer < 0)
 		{
 			PuzzleActive = false;
-			//puzzle.Resetgame();
 			if (Manager.PrestigeLvl == 0)
 			{
 				puzzletimer = 60;
@@ -967,7 +953,6 @@ void Splevel1::Update(double dt)
 					if (deleterest == false)
 					{
 						int rnd = rand() % 3 + 0;
-						/*cout << rnd;*/
 						if (rnd == 0 && OP1check == false && OP2 != true && OP3 != true)
 						{
 							POP1 = true;
@@ -987,7 +972,6 @@ void Splevel1::Update(double dt)
 				}
 				else if (deleterest == true)
 				{
-					cout << "PressedE->deleterest true";
 					POP1 = false;
 					POP2 = false;
 					POP3 = false;
@@ -1001,7 +985,6 @@ void Splevel1::Update(double dt)
 					if (deleterest == false)
 					{
 						int rnd = rand() % 3 + 0;
-						cout << rnd;
 						if (rnd == 0 && OP1check == false && OP2 != true && OP3 != true)
 						{
 							OP1 = true;
@@ -1021,7 +1004,6 @@ void Splevel1::Update(double dt)
 				}
 				else if (deleterest == true)
 				{
-					/*cout << "PressedE->deleterest true";*/
 					OP1 = false;
 					OP2 = false;
 					OP3 = false;
@@ -1033,7 +1015,6 @@ void Splevel1::Update(double dt)
 		if (!bLButtonState && Application::IsMousePressed(0))
 		{
 			bLButtonState = true;
-			std::cout << "LBUTTON DOWN" << std::endl;
 			//Converting Viewport space to UI space
 			double x, y;
 			Application::GetCursorPos(&x, &y);
@@ -1041,7 +1022,6 @@ void Splevel1::Update(double dt)
 			unsigned h = Application::GetWindowHeight();
 			float posX = x / w * 80; //convert (0,800) to (0,80)
 			float posY = 60 - y / h * 60; //convert (600,0) to (0,60)
-		/*	std::cout << "posX:" << posX << " , posY:" << posY << std::endl;*/
 			if (LS_start == true)
 			{
 				if (posX > 35 && posX < 45 && posY > 8 && posY < 18)
@@ -1212,7 +1192,6 @@ void Splevel1::Update(double dt)
 			{
 				if (posX > 35 && posX < 45 && posY > 8 && posY < 14)
 				{
-					cout << "Bruu moment";
 					PuzzleActive = true;
 					puzzle.Resetgame();
 					PuzzleUIActive = false;
@@ -1261,7 +1240,6 @@ void Splevel1::Update(double dt)
 		else if (bLButtonState && !Application::IsMousePressed(0))
 		{
 		bLButtonState = false;
-		/*std::cout << "LBUTTON UP" << std::endl;*/
 		}
 	}
 
@@ -1478,7 +1456,6 @@ void Splevel1::Update(double dt)
 	}
 
 	//NPC interactions
-	//cout << dialoguepart;
 	{
 		
 		if (NPCInteract == true)
@@ -2122,7 +2099,6 @@ void Splevel1::Render()
 
 			modelStack.Translate(-210 - (i * 30), 0, 180 - (x * 40));
 			modelStack.Rotate(scaleval[i] * scaleval[i], 0, 1, 0);
-			//modelStack.Scale(scaleval[i], scaleval[i], scaleval[i]);
 			modelStack.Scale(scalevalgrass[i], scalevalgrass[i], scalevalgrass[i]);
 
 			RenderMesh(meshList[GEO_GRASS3D], true);
@@ -2139,7 +2115,6 @@ void Splevel1::Render()
 
 			modelStack.Translate(210 + (i * 30), 0, 180 - (x * 40));
 			modelStack.Rotate(scaleval[i] * scaleval[i], 0, 1, 0);
-			//modelStack.Scale(scaleval[i], scaleval[i], scaleval[i]);
 			modelStack.Scale(scalevalgrass[i], scalevalgrass[i], scalevalgrass[i]);
 
 			RenderMesh(meshList[GEO_GRASS3D], true);
@@ -2552,13 +2527,6 @@ void Splevel1::Render()
 			RenderMesh(meshList[GEO_TRUCK], true);
 			modelStack.PopMatrix();
 		}
-
-		//modelStack.PushMatrix();
-		//modelStack.Rotate (90, 0, 1, 0);
-		//modelStack.Translate(-250, 0, movecar);
-		//modelStack.Scale(40, 40, 40);
-		//RenderMesh(meshList[GEO_TRUCK], true);
-		//modelStack.PopMatrix();
 	}
 
 	packagedieanimation();
@@ -2763,7 +2731,6 @@ void Splevel1::Render()
 		WorkStationPositionX = WorkStationPositionY = WorkStationPositionZ = 0;
 		for (int i = 0; i < (Manager.PrestigeLvl + 1) * 6; ++i)
 		{
-			/*std::cout << i % 6 << std::endl;*/
 			if (i < 6)
 			{
 				WorkStationPositionY = 0;
@@ -3969,25 +3936,6 @@ void Splevel1::Render()
 		PuzzleRender();
 	}
 	
-
-	// -------------------------------------------------POSITION DEBUG----------------------------------------------
-	/*float pox = camera.position.x;
-	float poz = camera.position.z;
-	float poy = camera.position.y;
-
-	RenderTextOnScreen(meshList[GEO_TEXT], "Pos X:" + std::to_string(pox), Color(1, 1, 0), 2, 0, 43);
-	RenderTextOnScreen(meshList[GEO_TEXT], "Pos Z: " + std::to_string(poz), Color(1, 1, 0), 2, 0, 45);
-	RenderTextOnScreen(meshList[GEO_TEXT], "Pos Y: " + std::to_string(poy), Color(1, 1, 0), 2, 0, 41);
-
-
-	RenderTextOnScreen(meshList[GEO_TEXT], "Pos X:" + std::to_string(debugmouseposx), Color(1, 1, 0), 2, 0, 30);
-	RenderTextOnScreen(meshList[GEO_TEXT], "Pos y: " + std::to_string(debugmouseposy), Color(1, 1, 0), 2, 0, 33);*/
-
-	/*RenderTextOnScreen(meshList[GEO_TEXT], "Pos Y puzzle:" + std::to_string(puzzle.playeractualpoy), Color(1, 1, 0), 2, 0, 20);
-	RenderTextOnScreen(meshList[GEO_TEXT], "Pos X puzzle: " + std::to_string(puzzle.playeractualpox), Color(1, 1, 0), 2, 0, 23);*/
-
-
-
 }
 
 void Splevel1::RenderSkybox()
@@ -4041,36 +3989,6 @@ void Splevel1::RenderSkybox()
 	RenderMesh(meshList[GEO_GRASS], true);
 	modelStack.PopMatrix();
 
-	/*modelStack.PushMatrix();
-	modelStack.Translate(0, 30, 0);
-	modelStack.Scale(5, 5, 5);
-	RenderMesh(meshList[GEO_CHAIR], true);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	modelStack.Translate(0, 30, 0);
-	modelStack.Scale(5, 5, 5);
-	RenderMesh(meshList[GEO_DART], true);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	modelStack.Translate(0, 30, 0);
-	modelStack.Scale(5, 5, 5);
-	RenderMesh(meshList[GEO_DOORMAN], true);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	modelStack.Translate(0, 30, 0);
-	modelStack.Scale(5, 5, 5);
-	RenderMesh(meshList[GEO_SHOE], true);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	modelStack.Translate(0, 30, 0);
-	modelStack.Scale(100, 100, 100);
-	RenderMesh(meshList[GEO_COTTAGE], true);
-	modelStack.PopMatrix();*/
-
 	modelStack.PushMatrix();
 	modelStack.Translate(light[0].position.x, light[0].position.y + 800, light[0].position.z);
 	modelStack.Rotate(180, 0, 180, 180);
@@ -4086,14 +4004,6 @@ void Splevel1::RenderSkybox()
 	modelStack.PopMatrix();
 
 	
-
-	/*RenderMeshOnScreen(meshList[GEO_TITLEBUTTONS], 4, 3, 2, 1);
-	RenderTextOnScreen(meshList[GEO_TEXT], "PLAY", Color(0, 1, 0), 2, 36, 30);
-
-	RenderMeshOnScreen(meshList[GEO_TITLE], 4, 5, 3, 1);
-	RenderTextOnScreen(meshList[GEO_TEXT], "Scammer tycoon", Color(0, 1, 0), 2, 26, 50);*/
-
-
 }
 
 void Splevel1::RenderWorkStation(int WorkStation)
@@ -4503,7 +4413,6 @@ void Splevel1::UpdateMainControls()
 		unsigned h = Application::GetWindowHeight();
 		float posX = (x / w) * 80; //convert (0,800) to (0,80)
 		float posY = 60 - (y / h) * 60; //convert (600,0) to (0,60)
-		/*std::cout << "posX:" << posX << " , posY:" << posY << std::endl;*/
 		if ((posY <= 59 && posY >= 53.5) && (posX >= 1.5 && posX <= 12.5)) //Clck Store
 		{
 			PageNum = 1;
@@ -4699,21 +4608,6 @@ void Splevel1::UpdateMainControls()
 
 			}
 		}
-		//if (questions == true)
-		//{
-		//	if (posX > 45 && posX < 64 && posY > 43 && posY < 53)
-		//	{
-
-		//	}
-		//	if (posX > 45 && posX < 64 && posY > 48 && posY < 38)
-		//	{
-
-		//	}
-		//	if (posX > 45 && posX < 64 && posY > 13 && posY < 23)
-		//	{
-
-		//	}
-		//}
 
 	}
 	else if (bLButtonState && !Application::IsMousePressed(0))
@@ -4767,30 +4661,11 @@ void Splevel1::UpdateCarepackage(double dt)
 					carepackage->notitext = false;
 					carepackage->pickuptext = false;
 					carepackage->active = false;
-					/*camera.up = camera.position;
-					camera.target.y = 5;*/
-
-					/*Mtx44 rotation;
-					rotation.SetToLookAt(0.0f, 0.0f, 3.0f,
-						0.0f, 0.0f, 0.0f,
-						0.0f, 1.0f, 0.0f);*/
-
-					/*camera.view = rotation * view;*/
 					camera.target.x = camera.position.x;
 					camera.target.y = 1000;
 					camera.target.z = camera.position.z;
 					
 
-					/*Vector3 view = (camera.target - camera.position).Normalized();
-					Vector3 right = view.Cross(camera.up);
-					right.y = 0;
-					right.Normalize();
-					camera.up = right.Cross(view).Normalized();
-					Mtx44 rotation;
-					rotation.SetToRotation(90, right.x, right.y, right.z);
-					
-					view = rotation * view;
-					camera.target = camera.position + view;*/
 				}
 			}
 		}
