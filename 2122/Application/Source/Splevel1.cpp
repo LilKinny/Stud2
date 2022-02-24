@@ -646,6 +646,7 @@ void Splevel1::Update(double dt)
 			if (!bLButtonState && Application::IsMousePressed(0))
 			{
 				bLButtonState = true;
+				PlaySound(TEXT("ButtonSound.wav"), NULL, SND_ASYNC);
 				totalbeets++;
 				Manager.Money = Manager.Money + 1;
 				beetsinstringform = to_string(totalbeets);
@@ -661,6 +662,7 @@ void Splevel1::Update(double dt)
 			if (!bLButtonState && Application::IsMousePressed(0))
 			{
 				startlaptop = false;
+				PlaySound(TEXT("ButtonSound.wav"), NULL, SND_ASYNC);
 			}
 		}
 	}
@@ -1028,6 +1030,7 @@ void Splevel1::Update(double dt)
 				{
 					questions = true;
 					LS_start = false;
+					PlaySound(TEXT("ButtonSound.wav"), NULL, SND_ASYNC);
 				}
 			}
 
@@ -1037,16 +1040,19 @@ void Splevel1::Update(double dt)
 				{
 					questions = false;
 					LS_Win = true;
+					PlaySound(TEXT("ButtonSound.wav"), NULL, SND_ASYNC);
 				}
 				else if (posX > 47 && posX < 62 && (posY > 27 && posY < 40))//op2
 				{
 					questions = false;
 					LS_Lose = true;
+					PlaySound(TEXT("ButtonSound.wav"), NULL, SND_ASYNC);
 				}
 				else if (posX > 47 && posX < 62 && (posY > 10 && posY < 22))//op3
 				{
 					questions = false;
 					LS_Lose = true;
+					PlaySound(TEXT("ButtonSound.wav"), NULL, SND_ASYNC);
 				}
 			}
 			if (OP2 == true)
@@ -1055,16 +1061,19 @@ void Splevel1::Update(double dt)
 				{
 					questions = false;
 					LS_Win = true;
+					PlaySound(TEXT("ButtonSound.wav"), NULL, SND_ASYNC);
 				}
 				else if (posX > 47 && posX < 62 && (posY > 47 && posY < 62))//op1
 				{
 					questions = false;
 					LS_Lose = true;
+					PlaySound(TEXT("ButtonSound.wav"), NULL, SND_ASYNC);
 				}
 				else if (posX > 47 && posX < 62 && (posY > 10 && posY < 22))//op3
 				{
 					questions = false;
 					LS_Lose = true;
+					PlaySound(TEXT("ButtonSound.wav"), NULL, SND_ASYNC);
 				}
 			}
 			if (OP3 == true)
@@ -1073,16 +1082,19 @@ void Splevel1::Update(double dt)
 				{
 					questions = false;
 					LS_Win = true;
+					PlaySound(TEXT("ButtonSound.wav"), NULL, SND_ASYNC);
 				}
 				else if (posX > 47 && posX < 62 && (posY > 27 && posY < 40))//op2
 				{
 					questions = false;
 					LS_Lose = true;
+					PlaySound(TEXT("ButtonSound.wav"), NULL, SND_ASYNC);
 				}
 				else if (posX > 47 && posX < 62 && (posY > 47 && posY < 62))//op1
 				{
 					questions = false;
 					LS_Lose = true;
+					PlaySound(TEXT("ButtonSound.wav"), NULL, SND_ASYNC);
 				}
 			}
 			//Prestiege ans
@@ -1092,21 +1104,25 @@ void Splevel1::Update(double dt)
 				{
 					questions = false;
 					LS_Lose = true;
+					PlaySound(TEXT("ButtonSound.wav"), NULL, SND_ASYNC);
 				}
 				else if (posX > 47 && posX < 62 && (posY > 35 && posY < 45))//op2 win
 				{
 					questions = false;
 					LS_Win = true;
+					PlaySound(TEXT("ButtonSound.wav"), NULL, SND_ASYNC);
 				}
 				else if (posX > 47 && posX < 62 && (posY > 23 && posY < 32))//op3
 				{
 					questions = false;
 					LS_Lose = true;
+					PlaySound(TEXT("ButtonSound.wav"), NULL, SND_ASYNC);
 				}
 				else if (posX > 47 && posX < 62 && (posY > 9.5 && posY < 19))//op4
 				{
 					questions = false;
 					LS_Lose = true;
+					PlaySound(TEXT("ButtonSound.wav"), NULL, SND_ASYNC);
 				}
 			}
 			if (POP2 == true)
@@ -1115,21 +1131,25 @@ void Splevel1::Update(double dt)
 				{
 					questions = false;
 					LS_Lose = true;
+					PlaySound(TEXT("ButtonSound.wav"), NULL, SND_ASYNC);
 				}
 				else if (posX > 47 && posX < 62 && (posY > 35 && posY < 45))//op2
 				{
 					questions = false;
 					LS_Lose = true;
+					PlaySound(TEXT("ButtonSound.wav"), NULL, SND_ASYNC);
 				}
 				else if (posX > 47 && posX < 62 && (posY > 23 && posY < 32))//op3
 				{
 					questions = false;
 					LS_Lose = true;
+					PlaySound(TEXT("ButtonSound.wav"), NULL, SND_ASYNC);
 				}
 				else if (posX > 47 && posX < 62 && (posY > 9.5 && posY < 19))//op4 win
 				{
 					questions = false;
 					LS_Win = true;
+					PlaySound(TEXT("ButtonSound.wav"), NULL, SND_ASYNC);
 				}
 			}
 			if (POP3 == true)
@@ -1138,21 +1158,25 @@ void Splevel1::Update(double dt)
 				{
 					questions = false;
 					LS_Lose = true;
+					PlaySound(TEXT("ButtonSound.wav"), NULL, SND_ASYNC);
 				}
 				else if (posX > 47 && posX < 62 && (posY > 35 && posY < 45))//op2
 				{
 					questions = false;
 					LS_Lose = true;
+					PlaySound(TEXT("ButtonSound.wav"), NULL, SND_ASYNC);
 				}
 				else if (posX > 47 && posX < 62 && (posY > 23 && posY < 32))//op3 win
 				{
 					questions = false;
 					LS_Win = true;
+					PlaySound(TEXT("ButtonSound.wav"), NULL, SND_ASYNC);
 				}
 				else if (posX > 47 && posX < 62 && (posY > 9.5 && posY < 19))//op4 
 				{
 					questions = false;
 					LS_Lose = true;
+					PlaySound(TEXT("ButtonSound.wav"), NULL, SND_ASYNC);
 				}
 			}
 			if (LS_Win == true)
@@ -1195,11 +1219,16 @@ void Splevel1::Update(double dt)
 					PuzzleActive = true;
 					puzzle.Resetgame();
 					PuzzleUIActive = false;
+					PlaySound(TEXT("ButtonSound.wav"), NULL, SND_ASYNC);
 				}
 			}
 			if (PuzzleWinUI == true)
 			{
-				if (posX > 35 && posX < 45 && posY > 8 && posY < 19) PuzzleWinUI = false;
+				if (posX > 35 && posX < 45 && posY > 8 && posY < 19)
+				{
+					PuzzleWinUI = false;
+					PlaySound(TEXT("ButtonSound.wav"), NULL, SND_ASYNC);
+				}
 			}
 
 			if (PuzzleLoseUI == true)
@@ -1211,6 +1240,7 @@ void Splevel1::Update(double dt)
 					Manager.Money += Manager.Money / 5;
 
 					else Manager.Money += Manager.Money / 5;
+					PlaySound(TEXT("ButtonSound.wav"), NULL, SND_ASYNC);
 				}
 			}
 			if (die == true)
@@ -1223,17 +1253,20 @@ void Splevel1::Update(double dt)
 
 					else Manager.Money -= Manager.Money / 2;
 					die = false;
+					PlaySound(TEXT("ButtonSound.wav"), NULL, SND_ASYNC);
 				}
 			}
 			if (posX > 72 && posX < 79.9 && posY > 5 && posY < 12)
 			{
 				HTP = true;
+				PlaySound(TEXT("ButtonSound.wav"), NULL, SND_ASYNC);
 			}
 			if (HTP == true)
 			{
 				if (posX > 56 && posX < 60 && posY > 8 && posY < 12)
 				{
 					HTP = false;
+					PlaySound(TEXT("ButtonSound.wav"), NULL, SND_ASYNC);
 				}
 			}
 		}
@@ -1490,10 +1523,12 @@ void Splevel1::Update(double dt)
 							if (posX > 5 && posX < 35 && (posY > 10 && posY < 18)) // Box1
 							{
 								dialoguepart = 1;
+								PlaySound(TEXT("ButtonSound.wav"), NULL, SND_ASYNC);
 							}
 							if (posX > 45 && posX < 75 && (posY > 10 && posY < 18)) // Box2
 							{
 								dialoguepart = 4;
+								PlaySound(TEXT("ButtonSound.wav"), NULL, SND_ASYNC);
 							}
 						}
 						else bLButtonState = false;
@@ -1516,12 +1551,13 @@ void Splevel1::Update(double dt)
 							Sleep(150);
 							if (posX > 5 && posX < 35 && (posY > 10 && posY < 18)) // Box1
 							{
-
+								PlaySound(TEXT("ButtonSound.wav"), NULL, SND_ASYNC);
 								dialoguepart = 5;
 							}
 							if (posX > 45 && posX < 75 && (posY > 10 && posY < 18)) // Box2
 							{
 								dialoguepart = 2;
+								PlaySound(TEXT("ButtonSound.wav"), NULL, SND_ASYNC);
 							}
 						}
 						else bLButtonState = false;
@@ -1545,11 +1581,13 @@ void Splevel1::Update(double dt)
 							Sleep(150);
 							if (posX > 5 && posX < 35 && (posY > 10 && posY < 18)) // Box1
 							{
+								PlaySound(TEXT("ButtonSound.wav"), NULL, SND_ASYNC);
 								dialoguepart = 6;
 							}
 							if (posX > 45 && posX < 75 && (posY > 10 && posY < 18)) // Box2
 							{
 								dialoguepart = 3;
+								PlaySound(TEXT("ButtonSound.wav"), NULL, SND_ASYNC);
 							}
 						}
 						else bLButtonState = false;
@@ -1575,6 +1613,7 @@ void Splevel1::Update(double dt)
 								Manager.Money += 50;
 								dialoguepart = 0;
 								NPCInteract = false;
+								PlaySound(TEXT("ButtonSound.wav"), NULL, SND_ASYNC);
 								doneonce = false;
 							}
 							if (posX > 45 && posX < 75 && (posY > 10 && posY < 18)) // Box2
@@ -1582,6 +1621,7 @@ void Splevel1::Update(double dt)
 								Manager.Money += 50;
 								dialoguepart = 0;
 								NPCInteract = false;
+								PlaySound(TEXT("ButtonSound.wav"), NULL, SND_ASYNC);
 								doneonce = false;
 							}
 						}
@@ -1606,6 +1646,7 @@ void Splevel1::Update(double dt)
 							if (posX > 5 && posX < 35 && (posY > 10 && posY < 18)) // Box1
 							{
 								dialoguepart = 0;
+								PlaySound(TEXT("ButtonSound.wav"), NULL, SND_ASYNC);
 								NPCInteract = false;
 								doneonce = false;
 
@@ -1613,6 +1654,7 @@ void Splevel1::Update(double dt)
 							if (posX > 45 && posX < 75 && (posY > 10 && posY < 18)) // Box2
 							{
 								dialoguepart = 0;
+								PlaySound(TEXT("ButtonSound.wav"), NULL, SND_ASYNC);
 								NPCInteract = false;
 								doneonce = false;
 							}
@@ -1640,11 +1682,13 @@ void Splevel1::Update(double dt)
 								dialoguepart = 0;
 								NPCInteract = false;
 								doneonce = false;
+								PlaySound(TEXT("ButtonSound.wav"), NULL, SND_ASYNC);
 							}
 							if (posX > 45 && posX < 75 && (posY > 10 && posY < 18)) // Box2
 							{
 								dialoguepart = 0;
 								NPCInteract = false;
+								PlaySound(TEXT("ButtonSound.wav"), NULL, SND_ASYNC);
 								doneonce = false;
 							}
 						}
@@ -1671,12 +1715,14 @@ void Splevel1::Update(double dt)
 								dialoguepart = 0;
 								NPCInteract = false;
 								doneonce = false;
+								PlaySound(TEXT("ButtonSound.wav"), NULL, SND_ASYNC);
 							}
 							if (posX > 45 && posX < 75 && (posY > 10 && posY < 18)) // Box2
 							{
 								dialoguepart = 0;
 								NPCInteract = false;
 								doneonce = false;
+								PlaySound(TEXT("ButtonSound.wav"), NULL, SND_ASYNC);
 							}
 						}
 						else bLButtonState = false;
@@ -1704,10 +1750,12 @@ void Splevel1::Update(double dt)
 							if (posX > 5 && posX < 35 && (posY > 10 && posY < 18)) // Box1
 							{
 								dialoguepart = 1;
+								PlaySound(TEXT("ButtonSound.wav"), NULL, SND_ASYNC);
 							}
 							if (posX > 45 && posX < 75 && (posY > 10 && posY < 18)) // Box2
 							{
 								dialoguepart = 0;
+								PlaySound(TEXT("ButtonSound.wav"), NULL, SND_ASYNC);
 								NPCInteract = false;
 							}
 						}
@@ -1731,12 +1779,13 @@ void Splevel1::Update(double dt)
 							Sleep(150);
 							if (posX > 5 && posX < 35 && (posY > 10 && posY < 18)) // Box1
 							{
-
+								PlaySound(TEXT("ButtonSound.wav"), NULL, SND_ASYNC);
 								dialoguepart = 5;
 							}
 							if (posX > 45 && posX < 75 && (posY > 10 && posY < 18)) // Box2
 							{
 								dialoguepart = 2;
+								PlaySound(TEXT("ButtonSound.wav"), NULL, SND_ASYNC);
 							}
 						}
 						else bLButtonState = false;
@@ -1761,10 +1810,12 @@ void Splevel1::Update(double dt)
 							if (posX > 5 && posX < 35 && (posY > 10 && posY < 18)) // Box1
 							{
 								dialoguepart = 5;
+								PlaySound(TEXT("ButtonSound.wav"), NULL, SND_ASYNC);
 							}
 							if (posX > 45 && posX < 75 && (posY > 10 && posY < 18)) // Box2
 							{
 								dialoguepart = 3;
+								PlaySound(TEXT("ButtonSound.wav"), NULL, SND_ASYNC);
 							}
 						}
 						else bLButtonState = false;
@@ -1790,12 +1841,14 @@ void Splevel1::Update(double dt)
 								dialoguepart = 0;
 								Manager.Money += 100;
 								NPCInteract = false;
+								PlaySound(TEXT("ButtonSound.wav"), NULL, SND_ASYNC);
 							}
 							if (posX > 45 && posX < 75 && (posY > 10 && posY < 18)) // Box2
 							{
 								dialoguepart = 0;
 								Manager.Money += 100;
 								NPCInteract = false;
+								PlaySound(TEXT("ButtonSound.wav"), NULL, SND_ASYNC);
 							}
 						}
 						else bLButtonState = false;
@@ -1820,11 +1873,13 @@ void Splevel1::Update(double dt)
 							{
 								dialoguepart = 0;
 								NPCInteract = false;
+								PlaySound(TEXT("ButtonSound.wav"), NULL, SND_ASYNC);
 							}
 							if (posX > 45 && posX < 75 && (posY > 10 && posY < 18)) // Box2
 							{
 								dialoguepart = 0;
 								NPCInteract = false;
+								PlaySound(TEXT("ButtonSound.wav"), NULL, SND_ASYNC);
 							}
 						}
 						else bLButtonState = false;
@@ -1850,12 +1905,14 @@ void Splevel1::Update(double dt)
 								dialoguepart = 0;
 								Manager.Money += -2000;
 								NPCInteract = false;
+								PlaySound(TEXT("ButtonSound.wav"), NULL, SND_ASYNC);
 							}
 							if (posX > 45 && posX < 75 && (posY > 10 && posY < 18)) // Box2
 							{
 								dialoguepart = 0;
 								Manager.Money += -2000;
 								NPCInteract = false;
+								PlaySound(TEXT("ButtonSound.wav"), NULL, SND_ASYNC);
 							}
 						}
 						else bLButtonState = false;
@@ -1881,12 +1938,14 @@ void Splevel1::Update(double dt)
 								dialoguepart = 0;
 								Manager.Money += -1950;
 								NPCInteract = false;
+								PlaySound(TEXT("ButtonSound.wav"), NULL, SND_ASYNC);
 							}
 							if (posX > 45 && posX < 75 && (posY > 10 && posY < 18)) // Box2
 							{
 								dialoguepart = 0;
 								Manager.Money += -1950;
 								NPCInteract = false;
+								PlaySound(TEXT("ButtonSound.wav"), NULL, SND_ASYNC);
 							}
 						}
 						else bLButtonState = false;
@@ -1926,6 +1985,7 @@ void Splevel1::Update(double dt)
 			if (posX > 0 && posX < 12 && (posY > 18 && posY < 25)) // Box1
 			{
 				prologue = false;
+				PlaySound(TEXT("ButtonSound.wav"), NULL, SND_ASYNC);
 			}
 			else
 				prologuey += 0.5;
@@ -4424,12 +4484,12 @@ void Splevel1::UpdateMainControls()
 			RenderUI = 2;
 			PlaySound(TEXT("ButtonSound.wav"), NULL, SND_ASYNC);
 		}
-		if ((posY >= 46 && posY <= 49) && (posX >= 18.5 && posX <= 25.5)) //Top Computer clicked
+		if (((posY >= 46 && posY <= 49) && (posX >= 18.5 && posX <= 25.5)) && RenderUI == 3) //Top Computer clicked
 		{
 			RenderUI = 2;
 			PlaySound(TEXT("ButtonSound.wav"), NULL, SND_ASYNC);
 		}
-		if ((posY >= 43 && posY <= 46) && (posX >= 18.5 && posX <= 25.5)) //Bot Phone Clicked
+		if (((posY >= 43 && posY <= 46) && (posX >= 18.5 && posX <= 25.5)) && RenderUI == 2) //Bot Phone Clicked
 		{
 			RenderUI = 3;
 			PlaySound(TEXT("ButtonSound.wav"), NULL, SND_ASYNC);
@@ -4453,17 +4513,17 @@ void Splevel1::UpdateMainControls()
 				}
 			}
 		}
-		if ((posY >= 46 && posY <= 48.5) && (posX >= 62 && posX <= 63.5)) //Click Cross Button
+		if (((posY >= 46 && posY <= 48.5) && (posX >= 62 && posX <= 63.5)) && RenderUI > 0) //Click Cross Button
 		{
 			PlaySound(TEXT("ButtonSound.wav"), NULL, SND_ASYNC);
 			RenderUI = 0;
 		}
-		if ((posY >= 32 && posY <= 35.5) && (posX >= 76.5 && posX <= 78)) //Side Open Arrow Button
+		if (((posY >= 32 && posY <= 35.5) && (posX >= 76.5 && posX <= 78)) && RenderPrestige == 0) //Side Open Arrow Button
 		{
 			PlaySound(TEXT("ButtonSound.wav"), NULL, SND_ASYNC);
 			RenderPrestige = 1;
 		}
-		if ((posY >= 32 && posY <= 35.5) && (posX >= 67 && posX <= 68.5)) //Side Close Arrow Button
+		if (((posY >= 32 && posY <= 35.5) && (posX >= 67 && posX <= 68.5)) && RenderPrestige == 1) //Side Close Arrow Button
 		{
 			PlaySound(TEXT("ButtonSound.wav"), NULL, SND_ASYNC);
 			RenderPrestige = 0;
@@ -4472,7 +4532,7 @@ void Splevel1::UpdateMainControls()
 		{
 			if ((posY >= 30 && posY <= 33) && (posX >= 70 && posX <= 78))
 			{
-				PlaySound(TEXT("ButtonSound.wav"), NULL, SND_ASYNC);
+				PlaySound(TEXT("Lvlup.wav"), NULL, SND_ASYNC);
 				Manager.UpgradePrestige(true);
 			}
 		}
@@ -4581,6 +4641,7 @@ void Splevel1::UpdateMainControls()
 			{
 				timerstart = true;
 				setuppolice = false;
+				PlaySound(TEXT("ButtonSound.wav"), NULL, SND_ASYNC);
 
 			}
 			else if (win == true)

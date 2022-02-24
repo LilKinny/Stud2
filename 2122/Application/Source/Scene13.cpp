@@ -421,6 +421,7 @@ void Scene13::Update(double dt)
 			if (posX > 30 && posX < 50 && posY > 24 && posY < 40)
 			{
 				transition = true;
+				PlaySound(TEXT("ButtonSound.wav"), NULL, SND_ASYNC);
 			}
 		}
 

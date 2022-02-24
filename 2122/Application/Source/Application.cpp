@@ -136,6 +136,7 @@ void Application::Run()
 		{
 			if (posX > 30 && posX < 50 && posY > 24 && posY < 40)
 			{
+				PlaySound(TEXT("ButtonSound.wav"), NULL, SND_ASYNC);
 				changescene = true;   //trigger user action or function
 			}
 		}
